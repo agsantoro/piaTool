@@ -316,7 +316,9 @@ a {color: black}
                  tabPanel(
                    "Iniciativa Global HEARTS",
                    fluidRow(
-                     column(12,h3("Iniciativa Global HEARTS"))
+                     column(11,h3(tags$b(i18n$t("Iniciativa Global HEARTS"))),
+                            HTML("<h5>Modelo de evaluación del impacto epidemiológico y de costo-efectividad del control de la presión arterial con tratamiento farmacológico en personas con hipertensión arterial ya diagnosticadas en el marco de la iniciativa HEARTS para la reducción de la mortalidad relacionada con enfermedades cardíacas isquémicas (ECI) y accidentes cerebrovasculares (ACV) por país. 
+                               <br>Permite evaluar el impacto del aumento de cobertura del tratamiento farmacológico de personas con hipertensión ya diagnosticadas en la carga de enfermedad cerebro y cardiovascular y sus costos.<h5/>"))
                    ),
                    br(),
                    br(),
@@ -325,7 +327,7 @@ a {color: black}
                                  "Escenario principal", 
                                  br(),
                                  fluidRow(
-                                   column(2,
+                                   column(2,style = "padding-left: 2%;",
                                           pickerInput("hearts_country", 
                                                       "País", 
                                                       multiple = F,
@@ -355,21 +357,16 @@ a {color: black}
                                                       ),
                                                       selected = "Argentina"),
                                           uiOutput("hearts_inputs")),
-                                   column(6,
+                                   column(1),
+                                   column(8,
+                                          h3(tags$b("Resultados generales")),
+                                          br(),
+                                          htmlOutput("hearts_resultados"),
                                           br(),
                                           highchartOutput("hearts_grafico_1"),
                                           hr(),
-                                          highchartOutput("hearts_grafico_2"))
-                                   
-                                   
-                                 ),
-                                 fluidRow(
-                                   column(2),
-                                   column(8,
+                                          highchartOutput("hearts_grafico_2"),
                                           br(),
-                                          h4("Resultados generales"),
-                                          br(),
-                                          htmlOutput("hearts_resultados"),
                                           fluidRow(
                                             column(4,
                                                    br(),
@@ -388,8 +385,11 @@ a {color: black}
                                                    actionButton("hearts_saveScenario","Guardar escenario"),
                                                    br(),
                                                    align = "Right")
-                                          ))
-                                 ),
+                                          ), align = "center"),
+                                   column(1)
+                                   
+                                   
+                                 )
                                  
                                  
                                ),
@@ -1314,10 +1314,10 @@ server <- function(input, output, session) {
   output$hearts_inputs = renderUI({
     
     input_names = c(
-      "Prevalence of hypertension among adults aged 30-79 years, age-standardized",
-      "Prevalence of previous diagnosis of hypertension among adults aged 30-79 with hypertension, age-standardized",
-      "Treatment among those aware of the condition (%)",
-      "Hypertension control among those treated (%)"
+      "Prevalencia de hipertensión entre adultos de 30-79 años, estandarizada por edad",
+      "Prevalencia de diagnóstico previo de hipertensión entre adultos de 30-79 años con hipertensión, estandarizada por edad.",
+      "Tratamiento entre diagnosticados (%)",
+      "Control de la hipertensión entre los tratados (%)"
     )
     
     names(input_names) = colnames(base_line)[-1]
