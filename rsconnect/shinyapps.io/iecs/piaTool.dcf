@@ -1,0 +1,13 @@
+name: piaTool
+title: piaTool
+username:
+account: iecs
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 9994908
+bundleId: 7730685
+url: https://iecs.shinyapps.io/piaTool/
+when: 1695754117.3597
+lastSyncTime: 1695754117.35971
+asMultiple: FALSE
+asStatic: FALSE

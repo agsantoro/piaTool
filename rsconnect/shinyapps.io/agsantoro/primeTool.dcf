@@ -1,0 +1,13 @@
+name: primeTool
+title: primeTool
+username:
+account: agsantoro
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 9249774
+bundleId: 7719328
+url: https://agsantoro.shinyapps.io/primeTool/
+when: 1695488770.53544
+lastSyncTime: 1695488770.53545
+asMultiple: FALSE
+asStatic: FALSE
