@@ -361,10 +361,13 @@ a {color: black}
                                    column(8,
                                           h3(tags$b("Resultados generales")),
                                           br(),
-                                          htmlOutput("hearts_resultados"),
+                                          reactableOutput("hearts_resultados"),
+                                          br(),
+                                          br(),
                                           br(),
                                           highchartOutput("hearts_grafico_1"),
                                           hr(),
+                                          br(),
                                           highchartOutput("hearts_grafico_2"),
                                           br(),
                                           fluidRow(
@@ -1090,7 +1093,7 @@ server <- function(input, output, session) {
         ),
         columns = list(
           cat = colDef(name = "Categoría", align = "left"),
-          Outcomes = colDef(name = "Resultados", align = "right"),
+          Outcomes = colDef(name = "Resultados", align = "left"),
           Undiscounted = colDef(name = "Sin descontar", align = "right"),
           Discounted = colDef(name = "Descontados", align = "right")
         ),
@@ -1374,41 +1377,6 @@ server <- function(input, output, session) {
     )
     
     
-    # tagList(
-    #   column(6,
-    #          br(),
-    #          h4("Base-line"),
-    #          lapply(seq_along(input_names), function (i) {
-    #            column(12,
-    #                   sliderInput(paste0("hearts_input_base_",i),
-    #                               input_names[i],
-    #                               value = base_line[base_line$country==input$hearts_country,names(input_names[i])],
-    #                               min=0,
-    #                               max=1,
-    #                               step=.001),
-    #                   hr()
-    #            )
-    #            
-    #          })),
-    #   column(6,
-    #          br(),
-    #          h4("Target"),
-    #          lapply(seq_along(input_names), function (i) {
-    #            column(12,
-    #                   sliderInput(paste0("hearts_input_target_",i),
-    #                               input_names[i],
-    #                               value = targets_default[targets_default$country==input$hearts_country,names(input_names[i])],
-    #                               min=0,
-    #                               max=1,
-    #                               step=.001),
-    #                   hr()
-    #            )
-    #            
-    #          }))
-    #   
-    # )
-    # 
-    
   })
   
   run_hearts = reactive({
@@ -1525,7 +1493,7 @@ server <- function(input, output, session) {
     
   })
   
-  output$hearts_resultados = renderText({
+  output$hearts_resultados = renderReactable({
     if(length(run_hearts())>0) {
       metrica_baseline = names(run_hearts()$run[[input$hearts_country]]$baseline)
       valores_baseline = unname(unlist(run_hearts()$run[[input$hearts_country]]$baseline))
@@ -1558,17 +1526,38 @@ server <- function(input, output, session) {
         table,
         epi,
         costos
-      )
+      ) %>% as.data.frame()
       
       table$Valor = round(table$Valor,1)
+      table$Valor = format(table$Valor, big.mark = ".", decimal.mark = ",")
       
-      kableExtra::kable(table,
-                        row.names = F,
-                        align = c("l","r")) %>%
-        kable_styling(
-          font_size = 15,
-          bootstrap_options = c("striped", "hover", "condensed")
-        )
+      cat_epi = 1:12
+      cat_costos = 13:15
+      
+      table$cat=""
+      table$cat[cat_epi] = "Resultados epidemiológicos"
+      table$cat[cat_costos] = "Resultados económicos"
+      
+      rownames(table) = NULL
+      
+      reactable(
+        table,
+        groupBy = "cat",
+        defaultExpanded = T,
+        pagination = F,
+        defaultColDef = colDef(
+          minWidth = 70,
+          headerStyle = list(background = "#236292", color = "white")
+        ),
+        columns = list(
+          cat = colDef(name = "Categoría", align = "left"),
+          Indicador = colDef(name = "Indicador", align = "left"),
+          Valor = colDef(name = "Valor", align = "right")
+        ),
+        bordered = TRUE,
+        highlight = TRUE
+      )
+      
       
     }
     
