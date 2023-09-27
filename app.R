@@ -522,7 +522,7 @@ a {color: black}
                                           column(2,
                                                  selectizeInput("hpp_savedScenarios", "Escenarios guardados",choices=c(), multiple = T)),
                                           column(10,
-                                                 htmlOutput("hpp_table_saved")))),
+                                                 reactableOutput("hpp_table_saved")))),
                                tabPanel("Metodología",
                                         br(),
                                         fluidRow(
@@ -2020,23 +2020,51 @@ server <- function(input, output, session) {
   })
   
   
-  output$hpp_table_saved = renderText({
-    
+  output$hpp_table_saved = renderReactable({
     if (length(input$hpp_savedScenarios)>0) {
       enable("hpp_savedScenarios")
       table = data.frame(Indicador=hpp_run()$Indicador)
+      
       for (i in input$hpp_savedScenarios) {
         scn_name = i
         table[[i]] = hpp_scenarios$savedScenarios[[i]]$Valor
       }
       
-      kableExtra::kable(table,
-                        row.names = F
-      ) %>%
-        kable_styling(
-          font_size = 15,
-          bootstrap_options = c("striped", "hover", "condensed")
-        )
+      cat_epi = c(2,4:8)
+      cat_costos = c(1,3)
+      
+      table$cat=""
+      table$cat[cat_epi] = "Resultados epidemiológicos"
+      table$cat[cat_costos] = "Resultados económicos"
+      
+      columns = list(
+        cat = colDef(name = "Categoría", align = "left"),
+        Indicador = colDef(name = "Indicador", align = "left")
+      )
+      
+      for (i in setdiff(1:ncol(table),c(1,ncol(table)))) {
+        table[i] = format(table[i], bigmark=",", decimalmark=".") 
+        columns[[colnames(table)[i]]] = colDef(name = colnames(table)[i], align = "right")
+      }
+      reactable(
+        table,
+        groupBy = "cat",
+        defaultExpanded = T,
+        pagination = F,
+        columnGroups = list(
+          colGroup("Escenarios", columns = colnames(table)[setdiff(1:ncol(table),c(1,ncol(table)))], sticky = "left",
+                   headerStyle = list(background = "#236292", color = "white", borderWidth = "0"))
+        ),
+        defaultColDef = colDef(
+          align = "center",
+          minWidth = 70,
+          headerStyle = list(background = "#236292", color = "white")
+        ),
+        columns = columns,
+        bordered = TRUE,
+        highlight = TRUE
+      )
+      
       
     } else {disable("hpp_savedScenarios")}
     
