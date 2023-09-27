@@ -1356,7 +1356,7 @@ server <- function(input, output, session) {
   })
   
   output$manual <- renderUI({
-    manual <- tags$iframe(src='manual.html', 
+    manual <- tags$iframe(src='modelCards/prueba-prime.html', 
                           height=600, 
                           width="100%",
                           frameBorder="0")
@@ -1509,7 +1509,7 @@ server <- function(input, output, session) {
           mode = "line",
           type = 'scatter',
           line = list(
-            color = '#FF691D',
+            color = 'red',
             width = 1,
             dash = 'dash'
           ),
@@ -1520,7 +1520,7 @@ server <- function(input, output, session) {
           type = 'scatter',
           mode = "line",
           line = list(
-            color = '#0a94d6',
+            color = 'blue',
             width = 1,
             dash = 'dash'
           ),
@@ -1532,7 +1532,7 @@ server <- function(input, output, session) {
           type = 'scatter',
           mode = "line",
           line = list(
-            color = '#FF691D',
+            color = 'red',
             width = 1,
             dash = 'dash'
           ),
@@ -1544,7 +1544,7 @@ server <- function(input, output, session) {
           type = 'scatter',
           mode = "line",
           line = list(
-            color = '#0a94d6',
+            color = 'blue',
             width = 1,
             dash = 'dash'
           ),
@@ -1557,11 +1557,9 @@ server <- function(input, output, session) {
           name = 'trace 0',
           type = 'scatter',
           mode = "line",
-
-                line = list(color = 'black', width = 2),
+          line = list(color = 'green', width = 2),
           hovertemplate = paste("Para una prevalencia estandarizada por edad del control de la HTA en la población de %{x:,}%<br>",
                                 " se espera una mortalidad por enfermedad isquémica del corazón de %{y:.1f} por 100 000 habitantes<extra></extra> ")
-
         ) %>%
         add_annotations(
           x = 3,
