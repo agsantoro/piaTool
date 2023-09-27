@@ -63,7 +63,16 @@ i18n$set_translation_language('sp')
 
 ui <- navbarPage(title = "Evaluación de programas e intervenciones priorizadas",
                  
-                 tags$style(HTML("
+                 
+                 theme = shinythemes::shinytheme("united"),
+                 
+                 
+                 
+                 tabPanel(
+                   
+                   "Vacuna contra el HPV",
+                   fluidRow(
+                     tags$style(HTML("
                  @import url('https://fonts.googleapis.com/css2?family=Istok+Web&display=swap');
 
 body {
@@ -174,15 +183,6 @@ a {color: black}
 
 
 ")),
-                 theme = shinythemes::shinytheme("united"),
-                 
-                 
-                 
-                 tabPanel(
-                   
-                   "Vacuna contra el HPV",
-                   fluidRow(
-                     
                      useShinyjs(),
                      
                      shiny.i18n::usei18n(i18n),
@@ -414,7 +414,11 @@ a {color: black}
                    "Hemorragia postparto",
                    fluidRow(
                      shiny.i18n::usei18n(i18n),
-                     column(11, h3(("Hemorragia Posparto"))),
+                     column(11, 
+                            h3(tags$b(i18n$t("Hemorragia posparto"))),
+                            HTML("<h5>Modelo de evaluación del impacto epidemiológico del uso de oxitocina durante el parto para la prevención de hemorragia postparto y mortalidad materna por país.
+                               <br>Permite evaluar el impacto del aumento de cobertura del uso de oxitocina durante el parto en la carga de enfermedad por hemorragia posparto.<h5/>")
+                            ),
                      
                      column(1,
                             pickerInput("selectedLanguage", "",
@@ -429,7 +433,7 @@ a {color: black}
                                                             }, SIMPLIFY = FALSE, USE.NAMES = FALSE)
                                                           
                                         )),
-                            align="center")
+                            align="center"),
                    ),
                    
                    br(),
@@ -439,46 +443,70 @@ a {color: black}
                                  "Escenario principal", 
                                  br(),
                                  fluidRow(
-                                   column(4,
-                                          selectInput(
-                                            "hpp_country",
-                                            "Seleccionar país",
-                                            base_line$country,
-                                            selected = "Argentina"
-                                          ),
+                                   column(2,style = "padding-left: 2%;",
+                                          pickerInput("hpp_country", 
+                                                      "País", 
+                                                      multiple = F,
+                                                      choices = c("Argentina",
+                                                                  "Brazil",
+                                                                  "Chile", 
+                                                                  "Colombia",
+                                                                  "Costa Rica",
+                                                                  "Ecuador", 
+                                                                  "Mexico",
+                                                                  "Peru"),
+                                                      choicesOpt = list(content =  
+                                                                          mapply(c("Argentina" ="ARGENTINA",
+                                                                                   "Brazil" = "BRAZIL",
+                                                                                   "Chile" = "CHILE", 
+                                                                                   "Colombia"="COLOMBIA",
+                                                                                   "Costa Rica" = "COSTA RICA",
+                                                                                   "Ecuador" = "ECUADOR", 
+                                                                                   "Mexico" = "MEXICO",
+                                                                                   "Peru" = "PERU"), flagsDropdown, FUN = function(country, flagUrl) {
+                                                                                     HTML(paste(
+                                                                                       tags$img(src=flagUrl, width=20, height=15),
+                                                                                       str_to_title(country)
+                                                                                     ))
+                                                                                   }, SIMPLIFY = FALSE, USE.NAMES = FALSE)
+                                                                        
+                                                      )),
                                           uiOutput("hpp_inputs")),
-                                   column(6,
-                                          DT::dataTableOutput("hpp_summaryTable"))
-                                   
-                                   
-                                 ),
-                                 fluidRow(
-                                   column(4),
-                                   column(6,
+                                   column(1),
+                                   column(8,
+                                          h3(tags$b("Resultados generales")),
                                           br(),
-                                          br(),
-                                          
-                                          
+                                          reactableOutput("hpp_summaryTable"),
                                           fluidRow(
-                                            column(6,
+                                            column(12,
                                                    br(),
-                                                   textAreaInput("hpp_scenarioName","Nombre:"),
+                                                   br(),
                                                    fluidRow(
-                                                     column(12,
-                                                            actionButton("hpp_saveScenario2","Guardar"),
+                                                     column(6,
                                                             br(),
+                                                            textAreaInput("hpp_scenarioName","Nombre:"),
+                                                            fluidRow(
+                                                              column(12,
+                                                                     actionButton("hpp_saveScenario2","Guardar"),
+                                                                     br(),
+                                                                     br(),
+                                                                     br(),
+                                                                     align = "left")
+                                                            ),
+                                                            align = "left"),
+                                                     column(6,
                                                             br(),
+                                                            actionButton("hpp_saveScenario","Guardar escenario"),
                                                             br(),
-                                                            align = "right")
-                                                   ),
-                                                   align = "left"),
-                                            column(6,
-                                                   br(),
-                                                   actionButton("hpp_saveScenario","Guardar escenario"),
-                                                   br(),
-                                                   align = "Right")
-                                          ))
+                                                            align = "Right")
+                                                   ))
+                                          )
+                                          ), align="center",
+                                   column(2)
+                                   
+                                   
                                  ),
+                                 
                                  
                                  
                                ),
@@ -743,16 +771,59 @@ server <- function(input, output, session) {
     )
     
     tagList(
-      lapply(seq_along(nombres_input), function(i) {
-        numericInput(nombres_input[i],label_inputs[i],defaults[i])
-      })
+      bsCollapse(
+        id="hpp_collapse",
+        open="Parámetros básicos",
+        bsCollapsePanel(
+          title = "Parámetros básicos",
+          lapply(3:4, function(i) {
+            numericInput(nombres_input[i],label_inputs[i],defaults[i])
+          })    
+        ),
+        bsCollapsePanel(
+          title = "Parámetros avanzados",
+          lapply(1:2, function(i) {
+            numericInput(nombres_input[i],label_inputs[i],defaults[i])
+          })    
+        )
+      )
+      
     )
     
     
   })
   
-  output$hpp_summaryTable = renderDataTable({
-    DT::datatable(hpp_run(), rownames = F)
+  output$hpp_summaryTable = renderReactable({
+    if (length(hpp_run())>1) {
+      table = hpp_run()
+      table$Valor = format(round(table$Valor,1),big.mark = ".",decimal.mark = ",")
+      
+      cat_epi = c(2,4:8)
+      cat_costos = c(1,3)
+      
+      table$cat=""
+      table$cat[cat_epi] = "Resultados epidemiológicos"
+      table$cat[cat_costos] = "Resultados económicos"
+      
+      reactable(
+        table,
+        groupBy = "cat",
+        defaultExpanded = T,
+        pagination = F,
+        defaultColDef = colDef(
+          align = "center",
+          minWidth = 70,
+          headerStyle = list(background = "#236292", color = "white")
+        ),
+        columns = list(
+          cat = colDef(name = "Categoría", align = "left"),
+          Indicador = colDef(name = "Indicador", align = "left"),
+          Valor = colDef(name = "Valor", align = "right")
+        ),
+        bordered = TRUE,
+        highlight = TRUE
+      )
+    }
     
   })
   
@@ -1519,7 +1590,6 @@ server <- function(input, output, session) {
         Valor=unname(unlist(run_hearts()$costs_outcomes))
         
       ) 
-      
       table = rbind(
         table,
         epi,
