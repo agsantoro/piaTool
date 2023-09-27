@@ -298,7 +298,7 @@ a {color: black}
                                  br(),
                                  fluidRow(
                                    column(12,
-                                          downloadButton("downloadReport", "Descargar .pdf"),
+                                          actionButton("downloadReport", "Descargar .pdf"),
                                           align = "right"
                                    )
                                  ),
@@ -408,7 +408,20 @@ a {color: black}
                                           column(2,
                                                  selectizeInput("hearts_savedScenarios", "Escenarios guardados",choices=c(), multiple = T)),
                                           column(10,
-                                                 reactableOutput("hearts_table_saved")))),
+                                                 reactableOutput("hearts_table_saved"))),
+                                        br(),
+                                        fluidRow(
+                                          column(12,
+                                                 actionButton("hearts_downloadReport", "Descargar .pdf"),
+                                                 br(),
+                                                 br(),
+                                                 align = "right"
+                                          )
+                                        ),
+                                        
+                                        
+                                        
+                                        ),
                                tabPanel("Metodología",
                                         br(),
                                         fluidRow(
@@ -522,7 +535,16 @@ a {color: black}
                                           column(2,
                                                  selectizeInput("hpp_savedScenarios", "Escenarios guardados",choices=c(), multiple = T)),
                                           column(10,
-                                                 reactableOutput("hpp_table_saved")))),
+                                                 reactableOutput("hpp_table_saved"))),
+                                        br(),
+                                        fluidRow(
+                                          column(12,
+                                                 actionButton("hpp_downloadReport", "Descargar .pdf"),
+                                                 br(),
+                                                 br(),
+                                                 align = "right"
+                                          )
+                                        )),
                                tabPanel("Metodología",
                                         br(),
                                         fluidRow(
@@ -563,16 +585,42 @@ a {color: black}
                                  "Escenario principal", 
                                  br(),
                                  fluidRow(
-                                   column(4,
-                                          selectInput(
-                                            "hepC_country",
-                                            "Seleccionar país",
-                                            c("Brazil","Colombia"),
-                                            selected = "Brazil"
-                                          ),
+                                   column(2, tags$style("padding: 2%;)"),
+                                          pickerInput("hepC_country", 
+                                                      "País", 
+                                                      multiple = F,
+                                                      choices = c(#"Argentina",
+                                                                  "Brazil",
+                                                                  #"Chile", 
+                                                                  "Colombia"#,
+                                                                  #"Costa Rica",
+                                                                  #"Ecuador", 
+                                                                  #"Mexico",
+                                                                  #"Peru"
+                                                                  ),
+                                                      choicesOpt = list(content =  
+                                                                          mapply(c(#"Argentina" ="ARGENTINA",
+                                                                                   "Brazil" = "BRAZIL",
+                                                                                   #"Chile" = "CHILE", 
+                                                                                   "Colombia"="COLOMBIA"#,
+                                                                                   #"Costa Rica" = "COSTA RICA",
+                                                                                   #"Ecuador" = "ECUADOR", 
+                                                                                   #"Mexico" = "MEXICO",
+                                                                                   #"Peru" = "PERU"
+                                                                                   ), flagsDropdown[c(2,4)], FUN = function(country, flagUrl) {
+                                                                                     HTML(paste(
+                                                                                       tags$img(src=flagUrl, width=20, height=15),
+                                                                                       str_to_title(country)
+                                                                                     ))
+                                                                                   }, SIMPLIFY = FALSE, USE.NAMES = FALSE)
+                                                                        
+                                                      )),
                                           uiOutput("hepC_inputs")),
-                                   column(6,
-                                          DT::dataTableOutput("hepC_summaryTable"),
+                                   column(1),        
+                                   column(8,
+                                          h3(tags$b("Resultados generales")),
+                                          br(),
+                                          reactableOutput("hepC_summaryTable"),
                                           
                                           column(12,
                                                  br(),
@@ -583,18 +631,11 @@ a {color: black}
                                             column(6,
                                                    br(),
                                                    textAreaInput("hepC_scenarioName","Nombre:"),
-                                                   
-                                                   align = "left"),
-                                            fluidRow(
-                                              column(12,
-                                                     actionButton("hepC_saveScenario2","Guardar"),
-                                                     br(),
-                                                     br(),
-                                                     br(),
-                                                     align = "right")
-                                            )
+                                                   actionButton("hepC_saveScenario2","Guardar"),
+                                                   align = "left")
                                           )
-                                   )
+                                   ),
+                                   column(1)
                                  ),
                                  fluidRow(
                                    column(4),
@@ -604,7 +645,7 @@ a {color: black}
                                           
                                           
                                    )
-                                 ),
+                                 )
                                  
                                  
                                ),
@@ -614,7 +655,16 @@ a {color: black}
                                           column(2,
                                                  selectizeInput("hepC_savedScenarios", "Escenarios guardados",choices=c(), multiple = T)),
                                           column(10,
-                                                 htmlOutput("hepC_table_saved")))),
+                                                 reactableOutput("hepC_table_saved"))),
+                                        br(),
+                                        fluidRow(
+                                          column(12,
+                                                 actionButton("hepC_downloadReport", "Descargar .pdf"),
+                                                 br(),
+                                                 br(),
+                                                 align = "right"
+                                          )
+                                        )),
                                tabPanel("Metodología",
                                         br(),
                                         fluidRow(
@@ -631,9 +681,26 @@ a {color: black}
 server <- function(input, output, session) {
   
   output$hepC_inputs = renderUI({
-    input_names = c("aCostoDC", "aCostoF0F2", "aCostoF3", "aCostoF4", "aCostoHCC", "AtasaDescuento", 
-                    "cohorte", "Costo_Evaluacion", "Costo_Tratamiento", "F0", "F1", "F2", "F3", "F4", 
-                    "pAbandono", "pais", "pSVR", "tDuracion_Meses")
+    input_names = c(
+      "Costos de fibrosis descompensada" = "aCostoDC", 
+      "Costos de estadíos de fibrosis F0 a F2" = "aCostoF0F2", 
+      "Costos de estadío de fibrosis F3" = "aCostoF3", 
+      "Costos de estadío de fibrosis F4" = "aCostoF4", 
+      "Costos de carcinoma hepatocelular" = "aCostoHCC", 
+      "Tasa de descuento" = "AtasaDescuento", 
+      "Tamaño de la cohorte" = "cohorte", 
+      "Costo de la evaluación de la respuesta al tratamiento" = "Costo_Evaluacion", 
+      "Costo de tratamiento de 4 semanas de Epclusa" = "Costo_Tratamiento", 
+      "Probabilidad de encontrarse en estadio de fibrosis F0 al diagnóstico" = "F0", 
+      "Probabilidad de encontrarse en estadio de fibrosis F1 al diagnóstico" = "F1", 
+      "Probabilidad de encontrarse en estadio de fibrosis F2 al diagnóstico" = "F2", 
+      "Probabilidad de encontrarse en estadio de fibrosis F3 al diagnóstico" = "F3", 
+      "Probabilidad de encontrarse en estadio de fibrosis F4 al diagnóstico" = "F4", 
+      "Proporción de pacientes que abandonan el tratamiento." = "pAbandono", 
+      "Eficacia de Sofosbuvir / velpatasvir" = "pSVR", 
+      "Duración del tratamiento" = "tDuracion_Meses"
+      )
+    
     default = list()
     default$cohorte = datosPais$valor[datosPais$pais==input$hepC_country & datosPais$dimension=="epi" & datosPais$indicador=="Cohorte"]
     default$AtasaDescuento = datosPais$valor[datosPais$pais==input$hepC_country & datosPais$dimension=="epi" & datosPais$indicador=="Descuento"]
@@ -653,16 +720,34 @@ server <- function(input, output, session) {
     default$Costo_Tratamiento = datosPais$valor[datosPais$pais==input$hepC_country & datosPais$dimension=="costos" & datosPais$indicador=="Costo Mensual"]
     default$Costo_Evaluacion = datosPais$valor[datosPais$pais==input$hepC_country & datosPais$dimension=="costos" & datosPais$indicador=="Assesment"]
     
-    tagList({
-      lapply(input_names, function(i) {
-        numericInput(
-          i,
-          i,
-          default[[i]]
-          
+    tagList(
+      bsCollapse(
+        id="hepC_collapse",
+        open="Parámetros básicos",
+        bsCollapsePanel(
+          title = "Parámetros básicos",
+          lapply(input_names[15:17], function(i) {
+            numericInput(
+              i,
+              names(input_names[input_names==i]),
+              default[[i]]
+              
+            )
+          })
+        ),
+        bsCollapsePanel(
+          title = "Parámetros avanzados",
+          lapply(input_names[1:14], function(i) {
+            numericInput(
+              i,
+              names(input_names[input_names==i]),
+              default[[i]]
+              
+            )
+          })
         )
-      })
-    })
+      )
+    )
   })
   
   hepC_run = reactive({
@@ -706,9 +791,42 @@ server <- function(input, output, session) {
     
   })
   
-  output$hepC_summaryTable = DT::renderDataTable({
+  output$hepC_summaryTable = renderReactable({
     
-    DT::datatable(hepC_run())
+    
+    
+    
+    if (length(hepC_run())>1) {
+      table = hepC_run()
+      table$Valor = format(round(table$Valor,1),big.mark = ".",decimal.mark = ",")
+      
+      cat_epi = 1:4
+      cat_costos = c()
+      
+      table$cat=""
+      table$cat[cat_epi] = "Resultados epidemiológicos"
+      table$cat[cat_costos] = "Resultados económicos"
+      
+      reactable(
+        table,
+        groupBy = "cat",
+        defaultExpanded = T,
+        pagination = F,
+        defaultColDef = colDef(
+          align = "center",
+          minWidth = 70,
+          headerStyle = list(background = "#236292", color = "white")
+        ),
+        columns = list(
+          cat = colDef(name = "Categoría", align = "left"),
+          Indicador = colDef(name = "Indicador", align = "left"),
+          Valor = colDef(name = "Valor", align = "right")
+        ),
+        bordered = TRUE,
+        highlight = TRUE
+      )
+    }
+    
   })
   
   hpp_run = reactive({
@@ -1292,67 +1410,111 @@ server <- function(input, output, session) {
       } else {disable("savedScenarios")}
     })
     
-    output$downloadReport <- downloadHandler(
-      filename = function() {
-        "report.pdf"
-      },
-      content = function(file) {
-        
-        tableScn <- scenarios$summaryTable
-        tableScn <<- tableScn
-        
-        dataPlot = data.frame(Scenario = NA,
-                              Age = NA,
-                              Undiscounted = NA)
-        
-        dataInputs = data.frame(
-          Scenario = NA,
-          Input = NA,
-          Value = NA
-        )
-        for (i in input$savedScenarios) {
-          dataPlot = union_all(
-            data.frame(Scenario = i,
-                       Age = scenarios$savedScenarios[[i]][["dataPlot"]]$x,
-                       Undiscounted = scenarios$savedScenarios[[i]][["dataPlot"]]$y1),
-            dataPlot)
-          
-          dataInputs = union_all(
-            data.frame(Scenario = i,
-                       Input = scenarios$savedScenarios[[i]][["inputsTable"]]$Input,
-                       Value = scenarios$savedScenarios[[i]][["inputsTable"]]$Value),
-            dataInputs)
-        }
-        
-        dataInputs <<- pivot_wider(
-          dataInputs %>% dplyr::filter(is.na(Scenario)==F),
-          names_from = "Scenario",
-          values_from = Value) 
-        
-        plotUndisc <<- ggplot(
-          dataPlot[is.na(dataPlot$Scenario)==F,],
-          aes(
-            x=Age,
-            y=Undiscounted,
-            color = factor(Scenario)
-          )) + geom_line() + theme_minimal() + theme(legend.title=element_blank()) +
-          labs(x = "Age", y = "Scenario") 
-        
-        title <- "Scenario report"
-        intro <- "Description: Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Donec odio. Quisque volutpat mattis eros. Nullam malesuada erat ut turpis. Suspendisse urna nibh, viverra non, semper suscipit, posuere a, pede."
-        author <- "Prime tool"
-        outputFormat <- "pdf_document"
-        plotChunk <- 'plotUndisc'
-        tableChunk1 <- "knitr::kable(dataInputs, format = 'latex')"
-        tableChunk2 <- "knitr::kable(tableScn,format = 'latex')"
-        rendered_file <- generateRMD(title, author, intro, outputFormat, plotChunk, tableChunk1, tableChunk2)
-        
-        filePath <- "scenarioReport.pdf"
-        file.copy(filePath, file)
-      }
+  #   output$downloadReport <- downloadHandler(
+  #     filename = function() {
+  #       "report.pdf"
+  #     },
+  #     content = function(file) {
+  #       
+  #       tableScn <- scenarios$summaryTable
+  #       tableScn <<- tableScn
+  #       
+  #       dataPlot = data.frame(Scenario = NA,
+  #                             Age = NA,
+  #                             Undiscounted = NA)
+  #       
+  #       dataInputs = data.frame(
+  #         Scenario = NA,
+  #         Input = NA,
+  #         Value = NA
+  #       )
+  #       for (i in input$savedScenarios) {
+  #         dataPlot = union_all(
+  #           data.frame(Scenario = i,
+  #                      Age = scenarios$savedScenarios[[i]][["dataPlot"]]$x,
+  #                      Undiscounted = scenarios$savedScenarios[[i]][["dataPlot"]]$y1),
+  #           dataPlot)
+  #         
+  #         dataInputs = union_all(
+  #           data.frame(Scenario = i,
+  #                      Input = scenarios$savedScenarios[[i]][["inputsTable"]]$Input,
+  #                      Value = scenarios$savedScenarios[[i]][["inputsTable"]]$Value),
+  #           dataInputs)
+  #       }
+  #       
+  #       dataInputs <<- pivot_wider(
+  #         dataInputs %>% dplyr::filter(is.na(Scenario)==F),
+  #         names_from = "Scenario",
+  #         values_from = Value) 
+  #       
+  #       plotUndisc <<- ggplot(
+  #         dataPlot[is.na(dataPlot$Scenario)==F,],
+  #         aes(
+  #           x=Age,
+  #           y=Undiscounted,
+  #           color = factor(Scenario)
+  #         )) + geom_line() + theme_minimal() + theme(legend.title=element_blank()) +
+  #         labs(x = "Age", y = "Scenario") 
+  #       
+  #       title <- "Scenario report"
+  #       intro <- "Description: Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Donec odio. Quisque volutpat mattis eros. Nullam malesuada erat ut turpis. Suspendisse urna nibh, viverra non, semper suscipit, posuere a, pede."
+  #       author <- "Prime tool"
+  #       outputFormat <- "pdf_document"
+  #       plotChunk <- 'plotUndisc'
+  #       tableChunk1 <- "knitr::kable(dataInputs, format = 'latex')"
+  #       tableChunk2 <- "knitr::kable(tableScn,format = 'latex')"
+  #       rendered_file <- generateRMD(title, author, intro, outputFormat, plotChunk, tableChunk1, tableChunk2)
+  #       
+  #       filePath <- "scenarioReport.pdf"
+  #       file.copy(filePath, file)
+  #     }
+  #   )
+  #  
+
+  })
+
+  observeEvent(input$downloadReport, {
+    
+    sendSweetAlert(
+      session = session,
+      title = "Descarga de reporte en .pdf",
+      text = "Funcionalidad en desarrollo.",
+      type = "info",
+      btn_labels = "Continuar"
     )
+  })
+  
+  observeEvent(input$hearts_downloadReport, {
     
+    sendSweetAlert(
+      session = session,
+      title = "Descarga de reporte en .pdf",
+      text = "Funcionalidad en desarrollo.",
+      type = "info",
+      btn_labels = "Continuar"
+    )
+  })
+  
+  observeEvent(input$hpp_downloadReport, {
     
+    sendSweetAlert(
+      session = session,
+      title = "Descarga de reporte en .pdf",
+      text = "Funcionalidad en desarrollo.",
+      type = "info",
+      btn_labels = "Continuar"
+    )
+  })
+  
+  observeEvent(input$hepC_downloadReport, {
+    
+    sendSweetAlert(
+      session = session,
+      title = "Descarga de reporte en .pdf",
+      text = "Funcionalidad en desarrollo.",
+      type = "info",
+      btn_labels = "Continuar"
+    )
   })
   
   output$manual <- renderUI({
@@ -2130,25 +2292,55 @@ server <- function(input, output, session) {
   })
   
   
-  output$hepC_table_saved = renderText({
+  output$hepC_table_saved = renderReactable({
     
     if (length(input$hepC_savedScenarios)>0) {
       enable("hepC_savedScenarios")
       table = data.frame(Indicador=hepC_run()$Indicador)
+      
       for (i in input$hepC_savedScenarios) {
         scn_name = i
         table[[i]] = hepC_scenarios$savedScenarios[[i]]$Valor
       }
       
-      kableExtra::kable(table,
-                        row.names = F
-      ) %>%
-        kable_styling(
-          font_size = 15,
-          bootstrap_options = c("striped", "hover", "condensed")
-        )
+      cat_epi = 1:4
+      cat_costos = c()
       
-    } else {disable("hepC_savedScenarios")}
+      table$cat=""
+      table$cat[cat_epi] = "Resultados epidemiológicos"
+      table$cat[cat_costos] = "Resultados económicos"
+      
+      columns = list(
+        cat = colDef(name = "Categoría", align = "left"),
+        Indicador = colDef(name = "Indicador", align = "left")
+      )
+      
+      for (i in setdiff(1:ncol(table),c(1,ncol(table)))) {
+        table[i] = format(table[i], bigmark=",", decimalmark=".") 
+        columns[[colnames(table)[i]]] = colDef(name = colnames(table)[i], align = "right")
+      }
+      reactable(
+        table,
+        groupBy = "cat",
+        defaultExpanded = T,
+        pagination = F,
+        columnGroups = list(
+          colGroup("Escenarios", columns = colnames(table)[setdiff(1:ncol(table),c(1,ncol(table)))], sticky = "left",
+                   headerStyle = list(background = "#236292", color = "white", borderWidth = "0"))
+        ),
+        defaultColDef = colDef(
+          align = "center",
+          minWidth = 70,
+          headerStyle = list(background = "#236292", color = "white")
+        ),
+        columns = columns,
+        bordered = TRUE,
+        highlight = TRUE
+      )
+      
+      
+    } else {disable("hpp_savedScenarios")}
+    
     
   })
   
