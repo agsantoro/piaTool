@@ -363,9 +363,9 @@ a {color: black}
                                           br(),
                                           htmlOutput("hearts_resultados"),
                                           br(),
-                                          highchartOutput("hearts_grafico_1"),
+                                          plotlyOutput("hearts_grafico_1"),
                                           hr(),
-                                          highchartOutput("hearts_grafico_2"),
+                                          plotlyOutput("hearts_grafico_2"),
                                           br(),
                                           fluidRow(
                                             column(4,
@@ -1440,7 +1440,7 @@ server <- function(input, output, session) {
     
   })
   
-  output$hearts_grafico_1 = renderHighchart({
+  output$hearts_grafico_1 = renderPlotly({
     if (length(run_hearts())>0) {
       x = 0:100
       y = c()
@@ -1455,35 +1455,115 @@ server <- function(input, output, session) {
       x1 = round(run_hearts()$run[[input$hearts_country]]$baseline$`Prevalence of controlled hypertension among adults aged 30-79 years with hypertension, age- standardized`*100,1)
       x2 = round(run_hearts()$run[[input$hearts_country]]$target$`Prevalence of controlled hypertension among adults aged 30-79 years with hypertension, age- standardized`*100,1)
       
-      highchart() %>% hc_chart(type = "line") %>%
-        hc_add_series(y, name = "Predictive model") %>% 
-        hc_add_series(rep(y1,100), yAxis = 0, name = "Inicial") %>%
-        hc_add_series(rep(y2,100), yAxis = 0, name = "Resultado") %>%
-        hc_yAxis(
-          title = list(text="Tasa por 100.000 habitantes")
+      data <- data.frame(x,y,y1,y2,x1,x2)
+      
+      fig <-
+        plot_ly(
+          data)%>%
+        add_trace(
+          y = ~ y1,
+          name = 'trace 1',
+          mode = "line",
+          type = 'scatter',
+          line = list(
+            color = 'red',
+            width = 1,
+            dash = 'dash'
+          ),
+          hoverinfo = 'none'
         ) %>%
-        hc_xAxis(
-          title = list(text="Prevalencia de control de HTA en la población (%)"),
-          plotLines = list(
-            list(color = "#25252550",
-                 width = 1,
-                 value = x1,
-                 dashStyle = "longdash"),
-            list(color = "red",
-                 width = 1,
-                 value = x2,
-                 dashStyle = "longdash")
-          )) %>% hc_title(text = "Modelo predictivo para la mortalidad por enfermedad isquémica del corazón")
+        add_trace(
+          y = ~ y2,
+          type = 'scatter',
+          mode = "line",
+          line = list(
+            color = 'blue',
+            width = 1,
+            dash = 'dash'
+          ),
+          hoverinfo = 'skip'
+        ) %>%
+        add_trace(
+          x = ~ x1,
+          y=~ y,
+          type = 'scatter',
+          mode = "line",
+          line = list(
+            color = 'red',
+            width = 1,
+            dash = 'dash'
+          ),
+          hoverinfo = 'skip'
+        ) %>%
+        add_trace(
+          x = ~ x2,
+          y=~ y,
+          type = 'scatter',
+          mode = "line",
+          line = list(
+            color = 'blue',
+            width = 1,
+            dash = 'dash'
+          ),
+          hoverinfo = 'skip'
+        )  %>% 
+        add_trace(
+          
+          x = ~ x,
+          y = ~ y,
+          name = 'trace 0',
+          type = 'scatter',
+          mode = "line",
+          line = list(color = 'green', width = 2),
+          hovertemplate = paste("For an age standarized prevalence of population HTN control of %{x:,}%<br>",
+                                " it is expected an IHD mortality of %{y:.1f} per 100k population<extra></extra> ")
+        ) %>%
+        add_annotations(
+          x = 3,
+          y = data$y1[1] + 3,
+          text = data$y1[1],
+          showarrow = F
+        ) %>% add_annotations(
+          x = 3,
+          y = data$y2[1] + 3,
+          text = data$y2[1],
+          showarrow = F
+        ) %>% add_annotations(
+          y = 15,
+          x = data$x1[1] + 1,
+          text = data$x1[1],
+          textangle=90,
+          showarrow = F
+        ) %>% add_annotations(
+          y = 15,
+          x = data$x2[1] + 1,
+          text = data$x2[1],
+          textangle=90,
+          showarrow = F
+        ) %>% config(displayModeBar = FALSE) %>% layout(
+          showlegend = FALSE,
+          title = '<b>Modelo predictivo para la mortalidad por enfermedad isquémica del corazón<b>',
+          xaxis = list(title = "Prevalencia de control de HTA en la población (%)",
+                       zeroline = FALSE,           
+                       zerolinecolor = "gray",
+                       showline= F),
+          yaxis = list(title = "Tasa por 100.000 habitantes",
+                       tickfont = list(color = "gray"),
+                       linecolor = "gray",
+                       showline= F),
+          zeroline = FALSE,           
+          zerolinecolor = "gray"
+        )
+      fig
       
-      
-      
-    }
+    
+      }
     
     
   })
   
   
-  output$hearts_grafico_2 = renderHighchart({
+  output$hearts_grafico_2 = renderPlotly({
     if (length(run_hearts())>0) {
       x = 0:100
       y = c()
@@ -1497,27 +1577,129 @@ server <- function(input, output, session) {
       
       x1 = round(run_hearts()$run[[input$hearts_country]]$baseline$`Prevalence of controlled hypertension among adults aged 30-79 years with hypertension, age- standardized`*100,1)
       x2 = round(run_hearts()$run[[input$hearts_country]]$target$`Prevalence of controlled hypertension among adults aged 30-79 years with hypertension, age- standardized`*100,1)
+      data <- data.frame(x,y,y1,y2,x1,x2)
       
-      highchart() %>% hc_chart(type = "line") %>%
-        hc_add_series(y, name = "Predictive model") %>% 
-        hc_add_series(rep(y1,100), yAxis = 0, name = "Inicial") %>%
-        hc_add_series(rep(y2,100), yAxis = 0, name = "Resultado") %>%
-        hc_yAxis(
-          title = list(text="Tasa por 100.000 habitantes")
+      fig <-
+        plot_ly(
+          data)%>%
+        add_trace(
+          y = ~ y1,
+          name = 'trace 1',
+          mode = "line",
+          type = 'scatter',
+          line = list(
+            color = 'red',
+            width = 1,
+            dash = 'dash'
+          ),
+          hoverinfo = 'none'
         ) %>%
-        hc_xAxis(
-          title = list(text="Prevalencia de control de HTA en la población (%)"),
-          plotLines = list(
-            list(color = "#25252550",
-                 width = 1,
-                 value = x1,
-                 dashStyle = "longdash"),
-            list(color = "red",
-                 width = 1,
-                 value = x2,
-                 dashStyle = "longdash")
-          )) %>% hc_title(text = "Modelo predictivo para la mortalidad por accidente cerebrovascular")
+        add_trace(
+          y = ~ y2,
+          type = 'scatter',
+          mode = "line",
+          line = list(
+            color = 'blue',
+            width = 1,
+            dash = 'dash'
+          ),
+          hoverinfo = 'skip'
+        ) %>%
+        add_trace(
+          x = ~ x1,
+          y=~ y,
+          type = 'scatter',
+          mode = "line",
+          line = list(
+            color = 'red',
+            width = 1,
+            dash = 'dash'
+          ),
+          hoverinfo = 'skip'
+        ) %>%
+        add_trace(
+          x = ~ x2,
+          y=~ y,
+          type = 'scatter',
+          mode = "line",
+          line = list(
+            color = 'blue',
+            width = 1,
+            dash = 'dash'
+          ),
+          hoverinfo = 'skip'
+        )  %>% 
+        add_trace(
+          
+          x = ~ x,
+          y = ~ y,
+          name = 'trace 0',
+          type = 'scatter',
+          mode = "line",
+          line = list(color = 'green', width = 2),
+          hovertemplate = paste("For an age standarized prevalence of population HTN control of %{x:,}%<br>",
+                                " it is expected an stroke mortality of %{y:.1f} per 100k population<extra></extra> ")
+        ) %>%
+        add_annotations(
+          x = 3,
+          y = data$y1[1] + 3,
+          text = data$y1[1],
+          showarrow = F
+        ) %>% add_annotations(
+          x = 3,
+          y = data$y2[1] + 3,
+          text = data$y2[1],
+          showarrow = F
+        ) %>% add_annotations(
+          y = 15,
+          x = data$x1[1] + 1,
+          text = data$x1[1],
+          textangle=90,
+          showarrow = F
+        ) %>% add_annotations(
+          y = 15,
+          x = data$x2[1] + 1,
+          text = data$x2[1],
+          textangle=90,
+          showarrow = F
+        ) %>% config(displayModeBar = FALSE) %>%
+        layout(
+          showlegend = FALSE,
+          title = list(text='<b>Modelo predictivo para la mortalidad por accidente cerebrovascular<b>'
+                       ),
+          xaxis = list(title = "Prevalencia de control de HTA en la población (%)",
+                       zeroline = FALSE,           
+                       zerolinecolor = "gray",
+                       showline= F),
+          yaxis = list(title = "Tasa por 100.000 habitantes",
+                       tickfont = list(color = "gray"),
+                       linecolor = "gray",
+                       showline= F),
+          zeroline = FALSE,           
+          zerolinecolor = "gray"
+        )
+      fig
       
+      # highchart() %>% hc_chart(type = "line") %>%
+      #   hc_add_series(y, name = "Predictive model") %>% 
+      #   hc_add_series(rep(y1,100), yAxis = 0, name = "Inicial") %>%
+      #   hc_add_series(rep(y2,100), yAxis = 0, name = "Resultado") %>%
+      #   hc_yAxis(
+      #     title = list(text="Tasa por 100.000 habitantes")
+      #   ) %>%
+      #   hc_xAxis(
+      #     title = list(text="Prevalencia de control de HTA en la población (%)"),
+      #     plotLines = list(
+      #       list(color = "#25252550",
+      #            width = 1,
+      #            value = x1,
+      #            dashStyle = "longdash"),
+      #       list(color = "red",
+      #            width = 1,
+      #            value = x2,
+      #            dashStyle = "longdash")
+      #     )) %>% hc_title(text = "Modelo predictivo para la mortalidad por accidente cerebrovascular")
+      # 
       
       
     }
