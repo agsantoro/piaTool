@@ -1558,8 +1558,8 @@ server <- function(input, output, session) {
           type = 'scatter',
           mode = "line",
           line = list(color = 'green', width = 2),
-          hovertemplate = paste("For an age standarized prevalence of population HTN control of %{x:,}%<br>",
-                                " it is expected an IHD mortality of %{y:.1f} per 100k population<extra></extra> ")
+          hovertemplate = paste("Para una prevalencia estandarizada por edad del control de la HTA en la población de %{x:,}%<br>",
+                                " se espera una mortalidad por enfermedad isquémica del corazón de %{y:.1f} por 100 000 habitantes<extra></extra> ")
         ) %>%
         add_annotations(
           x = 3,
@@ -1585,7 +1585,7 @@ server <- function(input, output, session) {
           showarrow = F
         ) %>% config(displayModeBar = FALSE) %>% layout(
           showlegend = FALSE,
-          title = '<b>Modelo predictivo para la mortalidad por enfermedad isquémica del corazón<b>',
+          title = 'Modelo predictivo para la mortalidad por enfermedad isquémica del corazón',
           xaxis = list(title = "Prevalencia de control de HTA en la población (%)",
                        zeroline = FALSE,           
                        zerolinecolor = "gray",
@@ -1680,8 +1680,8 @@ server <- function(input, output, session) {
           type = 'scatter',
           mode = "line",
           line = list(color = 'green', width = 2),
-          hovertemplate = paste("For an age standarized prevalence of population HTN control of %{x:,}%<br>",
-                                " it is expected an stroke mortality of %{y:.1f} per 100k population<extra></extra> ")
+          hovertemplate = paste("Para una prevalencia estandarizada por edad del control de la HTA en la población de %{x:,}%<br>",
+                                " se espera una mortalidad por accidente cerebrovascular de %{y:.1f} por 100 000 habitantes<extra></extra>")
         ) %>%
         add_annotations(
           x = 3,
@@ -1708,7 +1708,7 @@ server <- function(input, output, session) {
         ) %>% config(displayModeBar = FALSE) %>%
         layout(
           showlegend = FALSE,
-          title = list(text='<b>Modelo predictivo para la mortalidad por accidente cerebrovascular<b>'
+          title = list(text='Modelo predictivo para la mortalidad por accidente cerebrovascular'
                        ),
           xaxis = list(title = "Prevalencia de control de HTA en la población (%)",
                        zeroline = FALSE,           
