@@ -365,9 +365,12 @@ a {color: black}
                                           br(),
                                           br(),
                                           br(),
+                                          br(),
+                                          br(),
                                           plotlyOutput("hearts_grafico_1"),
+                                          br(),
                                           hr(),
-
+                                          br(),
                                           plotlyOutput("hearts_grafico_2"),
 
                                           br(),
@@ -1594,7 +1597,7 @@ server <- function(input, output, session) {
           zeroline = FALSE,           
           zerolinecolor = "gray"
         )
-      fig
+      fig %>% layout(font = list(family ="Istok Web"))
       
     
       }
