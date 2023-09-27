@@ -582,8 +582,8 @@ a {color: black}
                      column(11, 
                             h3(tags$b("Evaluación del impacto epidemiológico y de costo efectividad del tratamiento de Hepatitis C crónica")),
                             HTML('<p style="text-align:justify">
-  Modelo de evaluación del impacto epidemiológico y de costo-efectividad del tratamiento de Hepatitis C crónica para la reducción de la morbimortalidad por Hepatitis C por país. Permite evaluar el impacto del aumento de la cobertura de tratamiento de Hepatitis C crónica para personas ya diagnosticadas, con distintos estadíos de fibrosis hepática y que nunca han realizado tratamiento, en la carga de enfermedad por Hepatitis C Crónica.
-  Basado en el modelo <a href="https://www.hepccalculator.org/about-the-calculators/calculator" target="_blank" style="text-decoration: underline;">“Hep C Calculator”</a>.
+  Modelo de evaluación del impacto epidemiológico y de costo-efectividad del tratamiento de Hepatitis C crónica para la reducción de la morbimortalidad por Hepatitis C por país. <br>Permite evaluar el impacto del aumento de la cobertura de tratamiento de Hepatitis C crónica para personas ya diagnosticadas, con distintos estadíos de fibrosis hepática y que nunca han realizado tratamiento, en la carga de enfermedad por Hepatitis C Crónica.
+  <br>Basado en el modelo <a href="https://www.hepccalculator.org/about-the-calculators/calculator" target="_blank" style="text-decoration: underline;">“Hep C Calculator”</a>.
 </p>')),
                      
                      column(1,
@@ -1295,7 +1295,7 @@ server <- function(input, output, session) {
       
       
       reactable(
-        table,
+        table[table$cat!="Inputs",],
         groupBy = "cat",
         defaultExpanded = T,
         pagination = F,
@@ -2361,6 +2361,8 @@ server <- function(input, output, session) {
     
     
   })
+  
+  session$onSessionEnded(function () {stopApp()})
   
 }
 
