@@ -63,7 +63,16 @@ i18n$set_translation_language('sp')
 
 ui <- navbarPage(title = "Evaluación de programas e intervenciones priorizadas",
                  
-                 tags$style(HTML("
+                 
+                 theme = shinythemes::shinytheme("united"),
+                 
+                 
+                 
+                 tabPanel(
+                   
+                   "Vacuna contra el HPV",
+                   fluidRow(
+                     tags$style(HTML("
                  @import url('https://fonts.googleapis.com/css2?family=Istok+Web&display=swap');
 
 body {
@@ -174,15 +183,6 @@ a {color: black}
 
 
 ")),
-                 theme = shinythemes::shinytheme("united"),
-                 
-                 
-                 
-                 tabPanel(
-                   
-                   "Vacuna contra el HPV",
-                   fluidRow(
-                     
                      useShinyjs(),
                      
                      shiny.i18n::usei18n(i18n),
@@ -365,9 +365,12 @@ a {color: black}
                                           br(),
                                           br(),
                                           br(),
+                                          br(),
+                                          br(),
                                           plotlyOutput("hearts_grafico_1"),
+                                          br(),
                                           hr(),
-
+                                          br(),
                                           plotlyOutput("hearts_grafico_2"),
 
                                           br(),
@@ -417,7 +420,11 @@ a {color: black}
                    "Hemorragia postparto",
                    fluidRow(
                      shiny.i18n::usei18n(i18n),
-                     column(11, h3(("Hemorragia Posparto"))),
+                     column(11, 
+                            h3(tags$b(i18n$t("Hemorragia posparto"))),
+                            HTML("<h5>Modelo de evaluación del impacto epidemiológico del uso de oxitocina durante el parto para la prevención de hemorragia postparto y mortalidad materna por país.
+                               <br>Permite evaluar el impacto del aumento de cobertura del uso de oxitocina durante el parto en la carga de enfermedad por hemorragia posparto.<h5/>")
+                            ),
                      
                      column(1,
                             pickerInput("selectedLanguage", "",
@@ -432,7 +439,7 @@ a {color: black}
                                                             }, SIMPLIFY = FALSE, USE.NAMES = FALSE)
                                                           
                                         )),
-                            align="center")
+                            align="center"),
                    ),
                    
                    br(),
@@ -442,46 +449,70 @@ a {color: black}
                                  "Escenario principal", 
                                  br(),
                                  fluidRow(
-                                   column(4,
-                                          selectInput(
-                                            "hpp_country",
-                                            "Seleccionar país",
-                                            base_line$country,
-                                            selected = "Argentina"
-                                          ),
+                                   column(2,style = "padding-left: 2%;",
+                                          pickerInput("hpp_country", 
+                                                      "País", 
+                                                      multiple = F,
+                                                      choices = c("Argentina",
+                                                                  "Brazil",
+                                                                  "Chile", 
+                                                                  "Colombia",
+                                                                  "Costa Rica",
+                                                                  "Ecuador", 
+                                                                  "Mexico",
+                                                                  "Peru"),
+                                                      choicesOpt = list(content =  
+                                                                          mapply(c("Argentina" ="ARGENTINA",
+                                                                                   "Brazil" = "BRAZIL",
+                                                                                   "Chile" = "CHILE", 
+                                                                                   "Colombia"="COLOMBIA",
+                                                                                   "Costa Rica" = "COSTA RICA",
+                                                                                   "Ecuador" = "ECUADOR", 
+                                                                                   "Mexico" = "MEXICO",
+                                                                                   "Peru" = "PERU"), flagsDropdown, FUN = function(country, flagUrl) {
+                                                                                     HTML(paste(
+                                                                                       tags$img(src=flagUrl, width=20, height=15),
+                                                                                       str_to_title(country)
+                                                                                     ))
+                                                                                   }, SIMPLIFY = FALSE, USE.NAMES = FALSE)
+                                                                        
+                                                      )),
                                           uiOutput("hpp_inputs")),
-                                   column(6,
-                                          DT::dataTableOutput("hpp_summaryTable"))
-                                   
-                                   
-                                 ),
-                                 fluidRow(
-                                   column(4),
-                                   column(6,
+                                   column(1),
+                                   column(8,
+                                          h3(tags$b("Resultados generales")),
                                           br(),
-                                          br(),
-                                          
-                                          
+                                          reactableOutput("hpp_summaryTable"),
                                           fluidRow(
-                                            column(6,
+                                            column(12,
                                                    br(),
-                                                   textAreaInput("hpp_scenarioName","Nombre:"),
+                                                   br(),
                                                    fluidRow(
-                                                     column(12,
-                                                            actionButton("hpp_saveScenario2","Guardar"),
+                                                     column(6,
                                                             br(),
+                                                            textAreaInput("hpp_scenarioName","Nombre:"),
+                                                            fluidRow(
+                                                              column(12,
+                                                                     actionButton("hpp_saveScenario2","Guardar"),
+                                                                     br(),
+                                                                     br(),
+                                                                     br(),
+                                                                     align = "left")
+                                                            ),
+                                                            align = "left"),
+                                                     column(6,
                                                             br(),
+                                                            actionButton("hpp_saveScenario","Guardar escenario"),
                                                             br(),
-                                                            align = "right")
-                                                   ),
-                                                   align = "left"),
-                                            column(6,
-                                                   br(),
-                                                   actionButton("hpp_saveScenario","Guardar escenario"),
-                                                   br(),
-                                                   align = "Right")
-                                          ))
+                                                            align = "Right")
+                                                   ))
+                                          )
+                                          ), align="center",
+                                   column(2)
+                                   
+                                   
                                  ),
+                                 
                                  
                                  
                                ),
@@ -491,7 +522,7 @@ a {color: black}
                                           column(2,
                                                  selectizeInput("hpp_savedScenarios", "Escenarios guardados",choices=c(), multiple = T)),
                                           column(10,
-                                                 htmlOutput("hpp_table_saved")))),
+                                                 reactableOutput("hpp_table_saved")))),
                                tabPanel("Metodología",
                                         br(),
                                         fluidRow(
@@ -746,16 +777,59 @@ server <- function(input, output, session) {
     )
     
     tagList(
-      lapply(seq_along(nombres_input), function(i) {
-        numericInput(nombres_input[i],label_inputs[i],defaults[i])
-      })
+      bsCollapse(
+        id="hpp_collapse",
+        open="Parámetros básicos",
+        bsCollapsePanel(
+          title = "Parámetros básicos",
+          lapply(3:4, function(i) {
+            numericInput(nombres_input[i],label_inputs[i],defaults[i])
+          })    
+        ),
+        bsCollapsePanel(
+          title = "Parámetros avanzados",
+          lapply(1:2, function(i) {
+            numericInput(nombres_input[i],label_inputs[i],defaults[i])
+          })    
+        )
+      )
+      
     )
     
     
   })
   
-  output$hpp_summaryTable = renderDataTable({
-    DT::datatable(hpp_run(), rownames = F)
+  output$hpp_summaryTable = renderReactable({
+    if (length(hpp_run())>1) {
+      table = hpp_run()
+      table$Valor = format(round(table$Valor,1),big.mark = ".",decimal.mark = ",")
+      
+      cat_epi = c(2,4:8)
+      cat_costos = c(1,3)
+      
+      table$cat=""
+      table$cat[cat_epi] = "Resultados epidemiológicos"
+      table$cat[cat_costos] = "Resultados económicos"
+      
+      reactable(
+        table,
+        groupBy = "cat",
+        defaultExpanded = T,
+        pagination = F,
+        defaultColDef = colDef(
+          align = "center",
+          minWidth = 70,
+          headerStyle = list(background = "#236292", color = "white")
+        ),
+        columns = list(
+          cat = colDef(name = "Categoría", align = "left"),
+          Indicador = colDef(name = "Indicador", align = "left"),
+          Valor = colDef(name = "Valor", align = "right")
+        ),
+        bordered = TRUE,
+        highlight = TRUE
+      )
+    }
     
   })
   
@@ -1483,9 +1557,11 @@ server <- function(input, output, session) {
           name = 'trace 0',
           type = 'scatter',
           mode = "line",
-          line = list(color = 'black', width = 2),
-          hovertemplate = paste("For an age standarized prevalence of population HTN control of %{x:,}%<br>",
-                                " it is expected an IHD mortality of %{y:.1f} per 100k population<extra></extra> ")
+
+                line = list(color = 'black', width = 2),
+          hovertemplate = paste("Para una prevalencia estandarizada por edad del control de la HTA en la población de %{x:,}%<br>",
+                                " se espera una mortalidad por enfermedad isquémica del corazón de %{y:.1f} por 100 000 habitantes<extra></extra> ")
+
         ) %>%
         add_annotations(
           x = 3,
@@ -1511,7 +1587,7 @@ server <- function(input, output, session) {
           showarrow = F
         ) %>% config(displayModeBar = FALSE) %>% layout(
           showlegend = FALSE,
-          title = '<b>Modelo predictivo para la mortalidad por enfermedad isquémica del corazón<b>',
+          title = 'Modelo predictivo para la mortalidad por enfermedad isquémica del corazón',
           xaxis = list(title = "Prevalencia de control de HTA en la población (%)",
                        zeroline = FALSE,           
                        zerolinecolor = "gray",
@@ -1523,7 +1599,7 @@ server <- function(input, output, session) {
           zeroline = FALSE,           
           zerolinecolor = "gray"
         )
-      fig
+      fig %>% layout(font = list(family ="Istok Web"))
       
     
       }
@@ -1606,8 +1682,8 @@ server <- function(input, output, session) {
           type = 'scatter',
           mode = "line",
           line = list(color = 'green', width = 2),
-          hovertemplate = paste("For an age standarized prevalence of population HTN control of %{x:,}%<br>",
-                                " it is expected an stroke mortality of %{y:.1f} per 100k population<extra></extra> ")
+          hovertemplate = paste("Para una prevalencia estandarizada por edad del control de la HTA en la población de %{x:,}%<br>",
+                                " se espera una mortalidad por accidente cerebrovascular de %{y:.1f} por 100 000 habitantes<extra></extra>")
         ) %>%
         add_annotations(
           x = 3,
@@ -1634,7 +1710,7 @@ server <- function(input, output, session) {
         ) %>% config(displayModeBar = FALSE) %>%
         layout(
           showlegend = FALSE,
-          title = list(text='<b>Modelo predictivo para la mortalidad por accidente cerebrovascular<b>'
+          title = list(text='Modelo predictivo para la mortalidad por accidente cerebrovascular'
                        ),
           xaxis = list(title = "Prevalencia de control de HTA en la población (%)",
                        zeroline = FALSE,           
@@ -1704,7 +1780,6 @@ server <- function(input, output, session) {
         Valor=unname(unlist(run_hearts()$costs_outcomes))
         
       ) 
-      
       table = rbind(
         table,
         epi,
@@ -1947,23 +2022,51 @@ server <- function(input, output, session) {
   })
   
   
-  output$hpp_table_saved = renderText({
-    
+  output$hpp_table_saved = renderReactable({
     if (length(input$hpp_savedScenarios)>0) {
       enable("hpp_savedScenarios")
       table = data.frame(Indicador=hpp_run()$Indicador)
+      
       for (i in input$hpp_savedScenarios) {
         scn_name = i
         table[[i]] = hpp_scenarios$savedScenarios[[i]]$Valor
       }
       
-      kableExtra::kable(table,
-                        row.names = F
-      ) %>%
-        kable_styling(
-          font_size = 15,
-          bootstrap_options = c("striped", "hover", "condensed")
-        )
+      cat_epi = c(2,4:8)
+      cat_costos = c(1,3)
+      
+      table$cat=""
+      table$cat[cat_epi] = "Resultados epidemiológicos"
+      table$cat[cat_costos] = "Resultados económicos"
+      
+      columns = list(
+        cat = colDef(name = "Categoría", align = "left"),
+        Indicador = colDef(name = "Indicador", align = "left")
+      )
+      
+      for (i in setdiff(1:ncol(table),c(1,ncol(table)))) {
+        table[i] = format(table[i], bigmark=",", decimalmark=".") 
+        columns[[colnames(table)[i]]] = colDef(name = colnames(table)[i], align = "right")
+      }
+      reactable(
+        table,
+        groupBy = "cat",
+        defaultExpanded = T,
+        pagination = F,
+        columnGroups = list(
+          colGroup("Escenarios", columns = colnames(table)[setdiff(1:ncol(table),c(1,ncol(table)))], sticky = "left",
+                   headerStyle = list(background = "#236292", color = "white", borderWidth = "0"))
+        ),
+        defaultColDef = colDef(
+          align = "center",
+          minWidth = 70,
+          headerStyle = list(background = "#236292", color = "white")
+        ),
+        columns = columns,
+        bordered = TRUE,
+        highlight = TRUE
+      )
+      
       
     } else {disable("hpp_savedScenarios")}
     
