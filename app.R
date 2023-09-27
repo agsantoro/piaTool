@@ -361,11 +361,17 @@ a {color: black}
                                    column(8,
                                           h3(tags$b("Resultados generales")),
                                           br(),
-                                          htmlOutput("hearts_resultados"),
+                                          reactableOutput("hearts_resultados"),
+                                          br(),
+                                          br(),
                                           br(),
                                           plotlyOutput("hearts_grafico_1"),
                                           hr(),
+
                                           plotlyOutput("hearts_grafico_2"),
+
+                                          br(),
+
                                           br(),
                                           fluidRow(
                                             column(4,
@@ -399,7 +405,7 @@ a {color: black}
                                           column(2,
                                                  selectizeInput("hearts_savedScenarios", "Escenarios guardados",choices=c(), multiple = T)),
                                           column(10,
-                                                 htmlOutput("hearts_table_saved")))),
+                                                 reactableOutput("hearts_table_saved")))),
                                tabPanel("Metodología",
                                         br(),
                                         fluidRow(
@@ -1090,7 +1096,7 @@ server <- function(input, output, session) {
         ),
         columns = list(
           cat = colDef(name = "Categoría", align = "left"),
-          Outcomes = colDef(name = "Resultados", align = "right"),
+          Outcomes = colDef(name = "Resultados", align = "left"),
           Undiscounted = colDef(name = "Sin descontar", align = "right"),
           Discounted = colDef(name = "Descontados", align = "right")
         ),
@@ -1182,18 +1188,21 @@ server <- function(input, output, session) {
         
         columns = list(
           cat = colDef(name = "Categoría", align = "left"),
-          Outcomes = colDef(name = "Resultados", align = "right")
+          Outcomes = colDef(name = "Indicador", align = "left")
         )
         
         for (i in setdiff(1:ncol(table),c(1,ncol(table)))) {
           columns[[colnames(table)[i]]] = colDef(name = colnames(table)[i], align = "right")
         }
-        
         reactable(
           table,
           groupBy = "cat",
           defaultExpanded = T,
           pagination = F,
+          columnGroups = list(
+            colGroup("Escenarios", columns = colnames(table)[setdiff(1:ncol(table),c(1,ncol(table)))], sticky = "left",
+                     headerStyle = list(background = "#236292", color = "white", borderWidth = "0"))
+          ),
           defaultColDef = colDef(
             align = "center",
             minWidth = 70,
@@ -1204,12 +1213,7 @@ server <- function(input, output, session) {
           highlight = TRUE
         )
         
-        # kableExtra::kable(scenarios$summaryTable[,snSelected], align = c("l",rep("r",ncol(scenarios$summaryTable[,snSelected])))) %>%
-        #   add_header_above(c(" ","Scenario"=(ncol(scenarios$summaryTable[,snSelected]))-1)) %>%
-        #   kable_styling(
-        #     font_size = 15,
-        #     bootstrap_options = c("striped", "hover", "condensed"))
-        # 
+       
         
       } else {disable("savedScenarios")}
     })
@@ -1373,41 +1377,6 @@ server <- function(input, output, session) {
       
     )
     
-    
-    # tagList(
-    #   column(6,
-    #          br(),
-    #          h4("Base-line"),
-    #          lapply(seq_along(input_names), function (i) {
-    #            column(12,
-    #                   sliderInput(paste0("hearts_input_base_",i),
-    #                               input_names[i],
-    #                               value = base_line[base_line$country==input$hearts_country,names(input_names[i])],
-    #                               min=0,
-    #                               max=1,
-    #                               step=.001),
-    #                   hr()
-    #            )
-    #            
-    #          })),
-    #   column(6,
-    #          br(),
-    #          h4("Target"),
-    #          lapply(seq_along(input_names), function (i) {
-    #            column(12,
-    #                   sliderInput(paste0("hearts_input_target_",i),
-    #                               input_names[i],
-    #                               value = targets_default[targets_default$country==input$hearts_country,names(input_names[i])],
-    #                               min=0,
-    #                               max=1,
-    #                               step=.001),
-    #                   hr()
-    #            )
-    #            
-    #          }))
-    #   
-    # )
-    # 
     
   })
   
@@ -1707,7 +1676,7 @@ server <- function(input, output, session) {
     
   })
   
-  output$hearts_resultados = renderText({
+  output$hearts_resultados = renderReactable({
     if(length(run_hearts())>0) {
       metrica_baseline = names(run_hearts()$run[[input$hearts_country]]$baseline)
       valores_baseline = unname(unlist(run_hearts()$run[[input$hearts_country]]$baseline))
@@ -1740,17 +1709,38 @@ server <- function(input, output, session) {
         table,
         epi,
         costos
-      )
+      ) %>% as.data.frame()
       
       table$Valor = round(table$Valor,1)
+      table$Valor = format(table$Valor, big.mark = ".", decimal.mark = ",")
       
-      kableExtra::kable(table,
-                        row.names = F,
-                        align = c("l","r")) %>%
-        kable_styling(
-          font_size = 15,
-          bootstrap_options = c("striped", "hover", "condensed")
-        )
+      cat_epi = 1:12
+      cat_costos = 13:15
+      
+      table$cat=""
+      table$cat[cat_epi] = "Resultados epidemiológicos"
+      table$cat[cat_costos] = "Resultados económicos"
+      
+      rownames(table) = NULL
+      
+      reactable(
+        table,
+        groupBy = "cat",
+        defaultExpanded = T,
+        pagination = F,
+        defaultColDef = colDef(
+          minWidth = 70,
+          headerStyle = list(background = "#236292", color = "white")
+        ),
+        columns = list(
+          cat = colDef(name = "Categoría", align = "left"),
+          Indicador = colDef(name = "Indicador", align = "left"),
+          Valor = colDef(name = "Valor", align = "right")
+        ),
+        bordered = TRUE,
+        highlight = TRUE
+      )
+      
       
     }
     
@@ -1906,7 +1896,7 @@ server <- function(input, output, session) {
     
   })
   
-  output$hearts_table_saved = renderText({
+  output$hearts_table_saved = renderReactable({
     
     if (length(input$hearts_savedScenarios)>0) {
       table = data.frame(Indicador=hearts_scenarios$savedScenarios[[1]]$Indicador)
@@ -1915,13 +1905,42 @@ server <- function(input, output, session) {
         table[[i]] = hearts_scenarios$savedScenarios[[i]]$Valor
       }
       
-      kableExtra::kable(table,
-                        row.names = F,
-      ) %>%
-        kable_styling(
-          font_size = 15,
-          bootstrap_options = c("striped", "hover", "condensed")
-        )
+      cat_epi = 1:12
+      cat_costos = 13:15
+      
+      table$cat=""
+      table$cat[cat_epi] = "Resultados epidemiológicos"
+      table$cat[cat_costos] = "Resultados económicos"
+      
+      columns = list(
+        cat = colDef(name = "Categoría", align = "left"),
+        Indicador = colDef(name = "Indicador", align = "left")
+      )
+      
+      for (i in setdiff(1:ncol(table),c(1,ncol(table)))) {
+        table[i] = format(table[i], bigmark=",", decimalmark=".") 
+        columns[[colnames(table)[i]]] = colDef(name = colnames(table)[i], align = "right")
+      }
+      reactable(
+        table,
+        groupBy = "cat",
+        defaultExpanded = T,
+        pagination = F,
+        columnGroups = list(
+          colGroup("Escenarios", columns = colnames(table)[setdiff(1:ncol(table),c(1,ncol(table)))], sticky = "left",
+                   headerStyle = list(background = "#236292", color = "white", borderWidth = "0"))
+        ),
+        defaultColDef = colDef(
+          align = "center",
+          minWidth = 70,
+          headerStyle = list(background = "#236292", color = "white")
+        ),
+        columns = columns,
+        bordered = TRUE,
+        highlight = TRUE
+      )
+      
+      
       
     } else {disable("hearts_savedScenarios")}
     
