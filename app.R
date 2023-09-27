@@ -1435,7 +1435,7 @@ server <- function(input, output, session) {
           mode = "line",
           type = 'scatter',
           line = list(
-            color = 'red',
+            color = '#FF691D',
             width = 1,
             dash = 'dash'
           ),
@@ -1446,7 +1446,7 @@ server <- function(input, output, session) {
           type = 'scatter',
           mode = "line",
           line = list(
-            color = 'blue',
+            color = '#0a94d6',
             width = 1,
             dash = 'dash'
           ),
@@ -1458,7 +1458,7 @@ server <- function(input, output, session) {
           type = 'scatter',
           mode = "line",
           line = list(
-            color = 'red',
+            color = '#FF691D',
             width = 1,
             dash = 'dash'
           ),
@@ -1470,7 +1470,7 @@ server <- function(input, output, session) {
           type = 'scatter',
           mode = "line",
           line = list(
-            color = 'blue',
+            color = '#0a94d6',
             width = 1,
             dash = 'dash'
           ),
@@ -1483,7 +1483,7 @@ server <- function(input, output, session) {
           name = 'trace 0',
           type = 'scatter',
           mode = "line",
-          line = list(color = 'green', width = 2),
+          line = list(color = 'black', width = 2),
           hovertemplate = paste("For an age standarized prevalence of population HTN control of %{x:,}%<br>",
                                 " it is expected an IHD mortality of %{y:.1f} per 100k population<extra></extra> ")
         ) %>%
