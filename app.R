@@ -38,6 +38,7 @@ flags <- c(
 )
 
 # load functions
+
 source("functions/getPrime.R")
 source("functions/roundUpNice.R")
 source("functions/generateRMD.R")
@@ -188,9 +189,11 @@ a {color: black}
                      shiny.i18n::usei18n(i18n),
                      
                      column(11, 
-                            h3(tags$b(i18n$t("HPV Vaccination cost-effective assessment from the World Health Organisation"))),
-                            HTML("<h5>Modelo de evaluación del impacto epidemiológico y de costo-efectividad de la vacunación contra el virus del papiloma humano (VPH) en niñas para la prevención del cáncer de cuello uterino por país. 
-                               <br>Permite evaluar el impacto del aumento de cobertura de la vacunación contra el VPH para las niñas en la carga del cáncer cervicouterino y sus costos.<h5/>")),
+                            h3(tags$b("Evaluación del impacto epidemiológico y de costo-efectividad de la vacunación contra el VPH")),
+                            div(HTML("<p>Modelo de evaluación del impacto epidemiológico y de costo-efectividad de la vacunación contra el virus del papiloma humano (VPH) en niñas para la prevención del cáncer de cuello uterino por país. 
+                                  <br>Permite evaluar el impacto del aumento de cobertura de vacunación contra el VPH para las niñas en la carga de enfermedad por cáncer de cuello uterino.
+                                  <br>Modelo basado en la herramienta Papillomavirus Rapid Interface for Modelling and Economics "),
+                                  a(href="https://pubmed.ncbi.nlm.nih.gov/25103394/", "(PRIME)", target = "_blank", style = "text-decoration: underline;"))),
                      
                      column(1,
                             pickerInput("selectedLanguage", "",
@@ -212,7 +215,7 @@ a {color: black}
                    br(),
                    tabsetPanel(id="TSP",
                                tabPanel(
-                                 "Escenario principal",
+                                 "Parámetros del modelo",
                                  br(),
                                  fluidRow(
                                    column(2, style = "padding-left: 2%;",
@@ -306,7 +309,7 @@ a {color: black}
                                  br()
                                  
                                ),
-                               tabPanel("Metodología",
+                               tabPanel("Documentación",
                                         br(),
                                         fluidRow(
                                           htmlOutput("manual")
@@ -316,15 +319,30 @@ a {color: black}
                  tabPanel(
                    "Iniciativa Global HEARTS",
                    fluidRow(
-                     column(11,h3(tags$b(i18n$t("Iniciativa Global HEARTS"))),
-                            HTML("<h5>Modelo de evaluación del impacto epidemiológico y de costo-efectividad del control de la presión arterial con tratamiento farmacológico en personas con hipertensión arterial ya diagnosticadas en el marco de la iniciativa HEARTS para la reducción de la mortalidad relacionada con enfermedades cardíacas isquémicas (ECI) y accidentes cerebrovasculares (ACV) por país. 
-                               <br>Permite evaluar el impacto del aumento de cobertura del tratamiento farmacológico de personas con hipertensión ya diagnosticadas en la carga de enfermedad cerebro y cardiovascular y sus costos.<h5/>"))
-                   ),
+                     column(11,
+                            h3(tags$b("Evaluación del impacto epidemiológico y de costo-efectividad del tratamiento farmacológico de la hipertensión arterial en el marco de la iniciativa Global HEARTS")),
+                            HTML('<p>Modelo de evaluación del impacto epidemiológico y de costo-efectividad del control de la presión arterial con tratamiento farmacológico en personas con hipertensión arterial ya diagnosticadas en el marco de la iniciativa HEARTS para la reducción de la mortalidad relacionada con enfermedades cardíacas isquémicas (ECI) y accidentes cerebrovasculares (ACV) por país.<br>Permite evaluar el impacto del aumento de cobertura del tratamiento farmacológico de personas con hipertensión ya diagnosticadas en la carga de enfermedad cardio y cerebrovascular.<br>Modelo basado en las herramientas <a href="https://www.paho.org/es/enlace/herramienta-para-estimar-impacto-control-poblacional-hipertension-mortalidad-por-ecv" target="_blank" style="text-decoration: underline;">"Hypertension: cardiovascular disease EstimaTool (HTN: CVD EstimaTool)"</a> y <a href="https://www.tephinet.org/tephinet-learning-center/tephinet-library/hearts-costing-tool?" target="_blank" style="text-decoration: underline;">"Global HEARTS Costing Tool Version 5.4"</a></p>')
+                            ),
+                     column(1,
+                            pickerInput("selectedLanguage", "",
+                                        multiple = F,
+                                        choices = c( "en","sp"),
+                                        choicesOpt = list(content =
+                                                            mapply(c("en","sp"), flags, FUN = function(country, flagUrl) {
+                                                              HTML(paste(
+                                                                tags$img(src=flagUrl, width=20, height=15),
+                                                                country
+                                                              ))
+                                                            }, SIMPLIFY = FALSE, USE.NAMES = FALSE)
+                                                          
+                                        ),
+                                        selected = "sp"))
+                     ),
                    br(),
                    br(),
                    tabsetPanel(id="TSP_HEARTS",
                                tabPanel(
-                                 "Escenario principal", 
+                                 "Parámetros del modelo", 
                                  br(),
                                  fluidRow(
                                    column(2,style = "padding-left: 2%;",
@@ -422,7 +440,7 @@ a {color: black}
                                         
                                         
                                         ),
-                               tabPanel("Metodología",
+                               tabPanel("Documentación",
                                         br(),
                                         fluidRow(
                                           htmlOutput("hearts_manual")
@@ -434,9 +452,9 @@ a {color: black}
                    fluidRow(
                      shiny.i18n::usei18n(i18n),
                      column(11, 
-                            h3(tags$b(i18n$t("Hemorragia posparto"))),
-                            HTML("<h5>Modelo de evaluación del impacto epidemiológico del uso de oxitocina durante el parto para la prevención de hemorragia postparto y mortalidad materna por país.
-                               <br>Permite evaluar el impacto del aumento de cobertura del uso de oxitocina durante el parto en la carga de enfermedad por hemorragia posparto.<h5/>")
+                            h3(tags$b("Evaluación del impacto epidemiológico del tratamiento con oxitocina durante el parto")),
+                            HTML('<p>Modelo de evaluación del impacto epidemiológico del uso de oxitocina durante el parto para la prevención de hemorragia postparto y mortalidad materna por país. 
+                                 <br>Permite evaluar el impacto del aumento de cobertura del uso de oxitocina durante el parto en la carga de enfermedad por hemorragia postparto.</p>')
                             ),
                      
                      column(1,
@@ -451,7 +469,8 @@ a {color: black}
                                                               ))
                                                             }, SIMPLIFY = FALSE, USE.NAMES = FALSE)
                                                           
-                                        )),
+                                        ),
+                                        selected="sp"),
                             align="center"),
                    ),
                    
@@ -459,7 +478,7 @@ a {color: black}
                    
                    tabsetPanel(id="TSP_HPP",
                                tabPanel(
-                                 "Escenario principal", 
+                                 "Parámetros del modelo", 
                                  br(),
                                  fluidRow(
                                    column(2,style = "padding-left: 2%;",
@@ -545,7 +564,7 @@ a {color: black}
                                                  align = "right"
                                           )
                                         )),
-                               tabPanel("Metodología",
+                               tabPanel("Documentación",
                                         br(),
                                         fluidRow(
                                           htmlOutput("hpp_manual")
@@ -560,7 +579,12 @@ a {color: black}
                    "Hepatitis C",
                    fluidRow(
                      shiny.i18n::usei18n(i18n),
-                     column(11, h3(("Hepatitis C"))),
+                     column(11, 
+                            h3(tags$b("Evaluación del impacto epidemiológico y de costo efectividad del tratamiento de Hepatitis C crónica")),
+                            HTML('<p style="text-align:justify">
+  Modelo de evaluación del impacto epidemiológico y de costo-efectividad del tratamiento de Hepatitis C crónica para la reducción de la morbimortalidad por Hepatitis C por país. Permite evaluar el impacto del aumento de la cobertura de tratamiento de Hepatitis C crónica para personas ya diagnosticadas, con distintos estadíos de fibrosis hepática y que nunca han realizado tratamiento, en la carga de enfermedad por Hepatitis C Crónica.
+  Basado en el modelo <a href="https://www.hepccalculator.org/about-the-calculators/calculator" target="_blank" style="text-decoration: underline;">“Hep C Calculator”</a>.
+</p>')),
                      
                      column(1,
                             pickerInput("selectedLanguage", "",
@@ -574,7 +598,8 @@ a {color: black}
                                                               ))
                                                             }, SIMPLIFY = FALSE, USE.NAMES = FALSE)
                                                           
-                                        )),
+                                        ),
+                                        selected="sp"),
                             align="center")
                    ),
                    
@@ -582,7 +607,7 @@ a {color: black}
                    
                    tabsetPanel(id="TSP_HEPC",
                                tabPanel(
-                                 "Escenario principal", 
+                                 "Parámetros del modelo", 
                                  br(),
                                  fluidRow(
                                    column(2, tags$style("padding: 2%;)"),
@@ -665,7 +690,7 @@ a {color: black}
                                                  align = "right"
                                           )
                                         )),
-                               tabPanel("Metodología",
+                               tabPanel("Documentación",
                                         br(),
                                         fluidRow(
                                           htmlOutput("hepC_manual")
@@ -1156,22 +1181,23 @@ server <- function(input, output, session) {
     )
     
     inputs_hover = c(
-      "The number of female newborns in the country in the base year",
-      "The number of females in the country at the age at which routine vaccination is given (based on the age in 'Target age group')",
-      "The expected proportion of girls in the relevant age group who will receive the full course of the vaccine (either 2 or 3 doses)",
-      "The proportionate reduction in risk of cervical cancers due to HPV 16/18 in vaccinees. This should normally be 100%",
-      "The age at which HPV vaccines are normally given. Note that PRIME is only suitable to be used to look at HPV vaccines delivered to girls in the WHO recommended ages of 9-13 years old",
-      "The procurement cost to purchase enough vaccines (either 2 or 3 doses) to fully vaccinate one girl",
-      "The cost of delivering and administering enough vaccines (either 2 or 3 doses) to fully vaccinate one girl",
-      "The total cost to purchase enough vaccines (either 2 or 3 doses) to fully vaccinate on girl. This is automatically calculated as the sum of the procurement and delivery cost",
-      "The cost on average to treat a woman with cervical cancer, from diagnosis to death",
-      "DALYS incurred for a year of life in which cervical cancer is diagnosed. Advice from a health economist is recommended before altering this parameter",
-      "DALYS incurred for a year of life following the year in which cervical cancer is diagnosed, assuming the cancer is non-terminal. This may vary depending on the country. Advice from a health economist is recommended before altering this parameter",
-      "DALYS incurred for a year of life immediately prior to dying from terminal cervical cancer. Advice from a health economist is recommended before altering this parameter",
-      "The rate representing society’s preference for consumption and health gains in the present rather than in the future. WHO recommends a rate of 3% per annum",
-      "The proportion of cervical cancer cases diagnosed in the base year that are caused by HPV 16 or 18 infection",
-      "The value of all the goods and services produced in the country divided by the total population"
+      "El número de recién nacidas mujeres en el país en el año base",
+      "El número de mujeres en el país a la edad en que se administra la vacunación de rutina (basado en la edad en 'Grupo de edad objetivo')",
+      "La proporción esperada de niñas en el grupo de edad relevante que recibirán el curso completo de la vacuna (ya sea 2 o 3 dosis)",
+      "La reducción proporcional en el riesgo de cáncer cervical debido al HPV 16/18 en las personas vacunadas. Esto normalmente debería ser del 100%",
+      "La edad a la que normalmente se administran las vacunas contra el HPV. Tenga en cuenta que PRIME solo es adecuado para evaluar las vacunas contra el HPV administradas a niñas en las edades recomendadas por la OMS, de 9 a 13 años",
+      "El costo de adquisición para comprar suficientes vacunas (ya sea 2 o 3 dosis) para vacunar completamente a una niña",
+      "El costo de entrega y administración de suficientes vacunas (ya sea 2 o 3 dosis) para vacunar completamente a una niña",
+      "El costo total de adquisición para comprar suficientes vacunas (ya sea 2 o 3 dosis) para vacunar completamente a una niña. Esto se calcula automáticamente como la suma del costo de adquisición y entrega",
+      "El costo promedio de tratar a una mujer con cáncer cervical, desde el diagnóstico hasta la muerte",
+      "DALYs incurridos por un año de vida en el que se diagnostica cáncer cervical. Se recomienda consultar a un economista de la salud antes de modificar este parámetro",
+      "DALYs incurridos por un año de vida después del año en que se diagnostica el cáncer cervical, asumiendo que el cáncer no es terminal. Esto puede variar según el país. Se recomienda consultar a un economista de la salud antes de modificar este parámetro",
+      "DALYs incurridos por un año de vida inmediatamente antes de morir a causa de cáncer cervical terminal. Se recomienda consultar a un economista de la salud antes de modificar este parámetro",
+      "La tasa que representa la preferencia de la sociedad por el consumo y las ganancias en salud en el presente en lugar del futuro. La OMS recomienda una tasa del 3% anual",
+      "La proporción de casos de cáncer cervical diagnosticados en el año base que son causados por la infección de HPV 16 o 18",
+      "El valor de todos los bienes y servicios producidos en el país dividido por la población total"
     )
+    
     
     tagList(
       bsCollapse(
@@ -1180,28 +1206,24 @@ server <- function(input, output, session) {
         bsCollapsePanel(
           
           title = "Parámetros básicos",
+          
           lapply(1:3, function (i) {
             if (!i %in% c(3,4)) {
               numericInput(input=names(parametersReactive())[i],
                            tags$div(
                              inputs_names[i],
-                             tags$i(
-                               class = "fas fa-circle-info",
-                               style = "color:#0072B2;",
-                               title = inputs_hover[i]
-                             )
-                           )
-                           ,
+                             icon("circle-info", 
+                                  "fa-1x",
+                                  title = inputs_hover[i])
+                           ),
                            value = parametersReactive()[[i]])
             } else {
               sliderInput(input=names(parametersReactive())[i],
                           label=tags$div(
                             inputs_names[i],
-                            tags$i(
-                              class = "fas fa-circle-info",
-                              style = "color:#0072B2;",
-                              title = inputs_hover[i]
-                            )
+                            icon("circle-info", 
+                                 "fa-1x",
+                                 title = inputs_hover[i])
                           ),
                           min = 0,
                           max= 1,
@@ -1219,11 +1241,9 @@ server <- function(input, output, session) {
               numericInput(input=names(parametersReactive())[i],
                            tags$div(
                              inputs_names[i],
-                             tags$i(
-                               class = "fas fa-circle-info",
-                               style = "color:#0072B2;",
-                               title = inputs_hover[i]
-                             )
+                             icon("circle-info", 
+                                  "fa-1x",
+                                  title = inputs_hover[i])
                            )
                            ,
                            value = parametersReactive()[[i]])
@@ -1231,11 +1251,9 @@ server <- function(input, output, session) {
               sliderInput(input=names(parametersReactive())[i],
                           label=tags$div(
                             inputs_names[i],
-                            tags$i(
-                              class = "fas fa-circle-info",
-                              style = "color:#0072B2;",
-                              title = inputs_hover[i]
-                            )
+                            icon("circle-info", 
+                                 "fa-1x",
+                                 title = inputs_hover[i])
                           ),
                           min = 0,
                           max= 1,
@@ -1526,7 +1544,7 @@ server <- function(input, output, session) {
   })
   
   output$hpp_manual <- renderUI({
-    manual <- tags$iframe(src='manual.html', 
+    manual <- tags$iframe(src='modelCards/documentacion-hemorragiapp.html', 
                           height=600, 
                           width="100%",
                           frameBorder="0")
@@ -1534,7 +1552,7 @@ server <- function(input, output, session) {
   })
   
   output$hepC_manual <- renderUI({
-    manual <- tags$iframe(src='manual.html', 
+    manual <- tags$iframe(src='modelCards/Documentación---HepC.html', 
                           height=600, 
                           width="100%",
                           frameBorder="0")
@@ -1542,7 +1560,7 @@ server <- function(input, output, session) {
   })
   
   output$hearts_manual <- renderUI({
-    manual <- tags$iframe(src='manual.html', 
+    manual <- tags$iframe(src='modelCards/documentacion-estimatool.html', 
                           height=600, 
                           width="100%",
                           frameBorder="0")
