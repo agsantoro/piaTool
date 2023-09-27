@@ -1565,32 +1565,62 @@ server <- function(input, output, session) {
           x = 3,
           y = data$y1[1] + 3,
           text = data$y1[1],
+          font =list(
+            color = '#265787',
+            family = "Istok Web",
+            size = 10
+          ),
           showarrow = F
         ) %>% add_annotations(
           x = 3,
           y = data$y2[1] + 3,
           text = data$y2[1],
+          font =list(
+            color = '#265787',
+            family = "Istok Web",
+            size = 10
+          ),
           showarrow = F
         ) %>% add_annotations(
           y = 15,
-          x = data$x1[1] + 1,
+          x = data$x1[1] + 0.5,
           text = data$x1[1],
           textangle=90,
+          font =list(
+            color = '#265787',
+            family = "Istok Web",
+            size = 10
+          ),
           showarrow = F
         ) %>% add_annotations(
           y = 15,
-          x = data$x2[1] + 1,
+          x = data$x2[1] + 0.5,
           text = data$x2[1],
+          font =list(
+            color = '#265787',
+            family = "Istok Web",
+            size = 10
+            ),
           textangle=90,
           showarrow = F
         ) %>% config(displayModeBar = FALSE) %>% layout(
           showlegend = FALSE,
-          title = 'Modelo predictivo para la mortalidad por enfermedad isquémica del corazón',
-          xaxis = list(title = "Prevalencia de control de HTA en la población (%)",
+          title = list(text='<b>Modelo predictivo para la mortalidad por enfermedad isquémica del corazón<b>',
+                       font=
+                         list(color = '#265787',
+                              family = "Istok Web")),
+          xaxis = list(title =list(text="Prevalencia de control de HTA en la población (%)",
+            font=list(
+            family = "Istok Web",
+            size = 14,
+            color = '#265787')) ,
                        zeroline = FALSE,           
                        zerolinecolor = "gray",
                        showline= F),
-          yaxis = list(title = "Tasa por 100.000 habitantes",
+          yaxis = list(title =list(text="Tasa por 100.000 habitantes", font=list(
+            family = "Istok Web",
+            size = 14,
+            color = '#265787')) ,
                        tickfont = list(color = "gray"),
                        linecolor = "gray",
                        showline= F),
@@ -1631,7 +1661,7 @@ server <- function(input, output, session) {
           mode = "line",
           type = 'scatter',
           line = list(
-            color = 'red',
+            color = '#FF691D',
             width = 1,
             dash = 'dash'
           ),
@@ -1642,7 +1672,7 @@ server <- function(input, output, session) {
           type = 'scatter',
           mode = "line",
           line = list(
-            color = 'blue',
+            color = '#0a94d6',
             width = 1,
             dash = 'dash'
           ),
@@ -1654,7 +1684,7 @@ server <- function(input, output, session) {
           type = 'scatter',
           mode = "line",
           line = list(
-            color = 'red',
+            color = '#FF691D',
             width = 1,
             dash = 'dash'
           ),
@@ -1666,7 +1696,7 @@ server <- function(input, output, session) {
           type = 'scatter',
           mode = "line",
           line = list(
-            color = 'blue',
+            color = '#0a94d6',
             width = 1,
             dash = 'dash'
           ),
@@ -1679,42 +1709,71 @@ server <- function(input, output, session) {
           name = 'trace 0',
           type = 'scatter',
           mode = "line",
-          line = list(color = 'green', width = 2),
+          line = list(color = 'black', width = 2),
           hovertemplate = paste("Para una prevalencia estandarizada por edad del control de la HTA en la población de %{x:,}%<br>",
                                 " se espera una mortalidad por accidente cerebrovascular de %{y:.1f} por 100 000 habitantes<extra></extra>")
         ) %>%
         add_annotations(
           x = 3,
-          y = data$y1[1] + 3,
+          y = data$y1[1]+ 1 ,
           text = data$y1[1],
+          font =list(
+            color = '#265787',
+            family = "Istok Web",
+            size = 10
+          ),
           showarrow = F
         ) %>% add_annotations(
           x = 3,
-          y = data$y2[1] + 3,
+          y = data$y2[1]+ 1,
           text = data$y2[1],
+          font =list(
+            color = '#265787',
+            family = "Istok Web",
+            size = 10
+          ),
           showarrow = F
         ) %>% add_annotations(
           y = 15,
-          x = data$x1[1] + 1,
+          x = data$x1[1] + 0.5,
           text = data$x1[1],
           textangle=90,
+          font =list(
+            color = '#265787',
+            family = "Istok Web",
+            size = 10
+          ),
           showarrow = F
         ) %>% add_annotations(
           y = 15,
-          x = data$x2[1] + 1,
+          x = data$x2[1] + 0.5,
           text = data$x2[1],
+          font =list(
+            color = '#265787',
+            family = "Istok Web",
+            size = 10
+          ),
           textangle=90,
           showarrow = F
-        ) %>% config(displayModeBar = FALSE) %>%
+        )%>% config(displayModeBar = FALSE) %>%
         layout(
           showlegend = FALSE,
-          title = list(text='Modelo predictivo para la mortalidad por accidente cerebrovascular'
+          title = list(text='<b>Modelo predictivo para la mortalidad por accidente cerebrovascular<b>',
+                       font=
+                         list(color = '#265787',
+                              family = "Istok Web")
                        ),
-          xaxis = list(title = "Prevalencia de control de HTA en la población (%)",
+          xaxis = list(title = list(text="Prevalencia de control de HTA en la población (%)",font=list(
+            family = "Istok Web",
+            size = 14,
+            color = '#265787')),
                        zeroline = FALSE,           
                        zerolinecolor = "gray",
                        showline= F),
-          yaxis = list(title = "Tasa por 100.000 habitantes",
+          yaxis = list(title = list( text="Tasa por 100.000 habitantes",font=list(
+            family = "Istok Web",
+            size = 14,
+            color = '#265787')),
                        tickfont = list(color = "gray"),
                        linecolor = "gray",
                        showline= F),
