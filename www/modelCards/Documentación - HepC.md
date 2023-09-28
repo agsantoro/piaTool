@@ -34,85 +34,312 @@ Los pacientes que logran la RVS en el tratamiento, cuando están en las etapas d
 
 ## 2. Descripción general de los parámetros
 
-+-------------------------------------------------------------+
-| **Tabla 1. Parámetros por países.**                         |
-+-------------------------------------------------------------+
-| **Parámetro**                                               |
-+-------------------------------------------------------------+
-| Prevalencia de Hepatitis C^a^                               |
-+-------------------------------------------------------------+
-| Probabilidad de mortalidad general por edad                 |
-+-------------------------------------------------------------+
-| F0                                                          |
-+-------------------------------------------------------------+
-| F1                                                          |
-+-------------------------------------------------------------+
-| F2                                                          |
-+-------------------------------------------------------------+
-| F3                                                          |
-+-------------------------------------------------------------+
-| F4                                                          |
-+-------------------------------------------------------------+
-| Costos de fibrosis F0 a F2                                  |
-+-------------------------------------------------------------+
-| Costo de fibrosis F3                                        |
-+-------------------------------------------------------------+
-| Costo de cirrosis compensada                                |
-+-------------------------------------------------------------+
-| Costo de cirrosis descompensada                             |
-+-------------------------------------------------------------+
-| Costo de cáncer de hígado                                   |
-+-------------------------------------------------------------+
-| Régimen de AAD (antivirales de acción directa) de 4 semanas |
-+-------------------------------------------------------------+
-| Costo de evaluación de la respuesta al tratamiento          |
-+-------------------------------------------------------------+
+<table>
+  <tr>
+   <td colspan="3" >
+    <strong>Tabla 1. Parámetros por países.</strong>
+   </td>
+  </tr>
+  <tr>
+   <td>
+    <strong>Parámetro</strong>
+   </td>
+   <td>
+<strong>Descripción</strong>
+   </td>
+   <td><strong>Fuente</strong>
+   </td>
+  </tr>
+  <tr>
+   <td>Prevalencia de Hepatitis C<sup>a</sup>
+   </td>
+   <td>Porcentaje de personas infectadas con el VHC (mayores de 0 años).
+   </td>
+   <td>Polaris Observatory HCV Collaborator<sup><a href="https://paperpile.com/c/6pF7hc/7JzD">3</a></sup>
+   </td>
+  </tr>
+  <tr>
+   <td>Probabilidad de mortalidad general por edad
+   </td>
+   <td>Probabilidad de morir debido a causa general por edad simple.
+   </td>
+   <td>NU<sup><a href="https://paperpile.com/c/6pF7hc/61Bp">4</a></sup>
+   </td>
+  </tr>
+  <tr>
+   <td>F0
+   </td>
+   <td>Probabilidad de encontrarse en estadio de fibrosis F0 al diagnóstico. 
+   </td>
+   <td>Mendizabal y cols.<sup><a href="https://paperpile.com/c/6pF7hc/DIXL">5</a></sup>
+   </td>
+  </tr>
+  <tr>
+   <td>F1
+   </td>
+   <td>Probabilidad de encontrarse en estadio de fibrosis F1 al diagnóstico.
+   </td>
+   <td>Mendizabal y cols.<sup><a href="https://paperpile.com/c/6pF7hc/DIXL">5</a></sup>
+   </td>
+  </tr>
+  <tr>
+   <td>F2
+   </td>
+   <td>Probabilidad de encontrarse en estadio de fibrosis F2 al diagnóstico. 
+   </td>
+   <td>Mendizabal y cols.<sup><a href="https://paperpile.com/c/6pF7hc/DIXL">5</a></sup>
+   </td>
+  </tr>
+  <tr>
+   <td>F3
+   </td>
+   <td>Probabilidad de encontrarse en estadio de fibrosis F3 al diagnóstico. 
+   </td>
+   <td>Mendizabal y cols.<sup><a href="https://paperpile.com/c/6pF7hc/DIXL">5</a></sup>
+   </td>
+  </tr>
+  <tr>
+   <td>F4
+   </td>
+   <td>Probabilidad de encontrarse en estadio de fibrosis F4 al diagnóstico. 
+   </td>
+   <td>Mendizabal y cols.<sup><a href="https://paperpile.com/c/6pF7hc/DIXL">5</a></sup>
+   </td>
+  </tr>
+  <tr>
+   <td>Costos de fibrosis F0 a F2
+   </td>
+   <td>Costos de estadíos de fibrosis F0 a F2 en el país para julio de 2023. 
+   </td>
+   <td>Valores ajustados por inflación<sup><a href="https://paperpile.com/c/6pF7hc/gAh8+Dgjp+xBdG+Vphr+xDQe+zu0f+CNRG">6–12</a></sup> en dólares<sup><a href="https://paperpile.com/c/6pF7hc/sfBC+cva4+vPVZ+hMs3+gf3s+NJ5n+FXvt">13–19</a></sup> para: ARG,<sup><a href="https://paperpile.com/c/6pF7hc/SUOL">20</a></sup>, BRA,<sup><a href="https://paperpile.com/c/6pF7hc/WwlU">21</a></sup> COL,<sup><a href="https://paperpile.com/c/6pF7hc/SUOL">20</a></sup> y CHL.<sup><a href="https://paperpile.com/c/6pF7hc/NZ6o">22</a></sup>
+<p>
+Estimación indirecta: CRC, MEX, ECU y PER.<sup>*</sup>
+   </td>
+  </tr>
+  <tr>
+   <td>Costo de fibrosis F3
+   </td>
+   <td>Costo de estadio de fibrosis F3 en el país para julio de 2023. 
+   </td>
+   <td>Valores ajustados por inflación<sup><a href="https://paperpile.com/c/6pF7hc/gAh8+Dgjp+xBdG+Vphr+xDQe+zu0f+CNRG">6–12</a></sup> en dólares<sup><a href="https://paperpile.com/c/6pF7hc/sfBC+cva4+vPVZ+hMs3+gf3s+NJ5n+FXvt">13–19</a></sup> para: ARG,<sup><a href="https://paperpile.com/c/6pF7hc/SUOL">20</a></sup> BRA,<sup><a href="https://paperpile.com/c/6pF7hc/WwlU">21</a></sup> COL,<sup><a href="https://paperpile.com/c/6pF7hc/SUOL">20</a></sup> y CHL.<sup><a href="https://paperpile.com/c/6pF7hc/NZ6o">22</a></sup>
+<p>
+Estimación indirecta: CRC, MEX, ECU y PER.<sup>*</sup>
+   </td>
+  </tr>
+  <tr>
+   <td>Costo de cirrosis compensada
+   </td>
+   <td>Costo de cirrosis compensada en el país para julio 2023. 
+   </td>
+   <td>Valores ajustados por inflación<sup><a href="https://paperpile.com/c/6pF7hc/gAh8+Dgjp+xBdG+Vphr+xDQe+zu0f+CNRG">6–12</a></sup> en dólares<sup><a href="https://paperpile.com/c/6pF7hc/sfBC+cva4+vPVZ+hMs3+gf3s+NJ5n+FXvt">13–19</a></sup> para: ARG,<sup><a href="https://paperpile.com/c/6pF7hc/SUOL">20</a></sup>, BRA,<sup><a href="https://paperpile.com/c/6pF7hc/WwlU">21</a></sup> COL,<sup><a href="https://paperpile.com/c/6pF7hc/SUOL">20</a></sup> y CHL.<sup><a href="https://paperpile.com/c/6pF7hc/NZ6o">22</a></sup>
+<p>
+Estimación indirecta: CRC, MEX, ECU y PER.<sup>*</sup>
+   </td>
+  </tr>
+  <tr>
+   <td>Costo de cirrosis descompensada
+   </td>
+   <td>Costo de cirrosis descompensada en el país para julio 2023.
+   </td>
+   <td>Valores ajustados por inflación<sup><a href="https://paperpile.com/c/6pF7hc/gAh8+Dgjp+xBdG+Vphr+xDQe+zu0f+CNRG">6–12</a></sup> en dólares<sup><a href="https://paperpile.com/c/6pF7hc/sfBC+cva4+vPVZ+hMs3+gf3s+NJ5n+FXvt">13–19</a></sup> para: ARG,<sup><a href="https://paperpile.com/c/6pF7hc/SUOL">20</a></sup>, BRA,<sup><a href="https://paperpile.com/c/6pF7hc/WwlU">21</a></sup> COL,<sup><a href="https://paperpile.com/c/6pF7hc/SUOL">20</a></sup>CHL<sup><a href="https://paperpile.com/c/6pF7hc/NZ6o">22</a></sup> y MEX.<sup><a href="https://paperpile.com/c/6pF7hc/Nxtq">23</a></sup>
+<p>
+Estimación indirecta: CRC, MEX, ECU y PER.<sup>*</sup>
+   </td>
+  </tr>
+  <tr>
+   <td>Costo de cáncer de hígado
+   </td>
+   <td>Costo de cáncer de hígado en el país para julio de 2023.
+   </td>
+   <td>Valores ajustados por inflación<sup><a href="https://paperpile.com/c/6pF7hc/gAh8+Dgjp+xBdG+Vphr+xDQe+zu0f+CNRG">6–12</a></sup> en dólares<sup><a href="https://paperpile.com/c/6pF7hc/sfBC+cva4+vPVZ+hMs3+gf3s+NJ5n+FXvt">13–19</a></sup> para: ARG,<sup><a href="https://paperpile.com/c/6pF7hc/SUOL">20</a></sup>, BRA,<sup><a href="https://paperpile.com/c/6pF7hc/WwlU">21</a></sup> COL,<sup><a href="https://paperpile.com/c/6pF7hc/SUOL">20</a></sup>CHL<sup><a href="https://paperpile.com/c/6pF7hc/NZ6o">22</a></sup> y MEX.<sup><a href="https://paperpile.com/c/6pF7hc/Nxtq">23</a></sup>
+<p>
+Estimación indirecta: CRC, MEX, ECU y PER.<sup>*</sup>
+   </td>
+  </tr>
+  <tr>
+   <td>Régimen de AAD (antivirales de acción directa) de 4 semanas
+   </td>
+   <td>Costo de tratamiento de 4 semanas de Epclusa para julio de 2023. 
+   </td>
+   <td>Organización Panamericana de la Salud<sup><a href="https://paperpile.com/c/6pF7hc/NSWF">24</a></sup>.
+   </td>
+  </tr>
+  <tr>
+   <td>Costo de evaluación de la respuesta al tratamiento
+   </td>
+   <td>Costo de la evaluación de la respuesta al tratamiento (incluye consulta con especialista, laboratorio general, entre otras) en el país para julio de 2023.
+   </td>
+   <td>Valores ajustados por inflación<sup><a href="https://paperpile.com/c/6pF7hc/xBdG+Dgjp">7,8</a></sup> en dólares<sup><a href="https://paperpile.com/c/6pF7hc/sfBC+cva4+vPVZ+hMs3+gf3s+NJ5n+FXvt">13–19</a></sup> para: ARG, BRA, CHL y COL.
+<p>
+Estimación indirecta: CRC, MEX, ECU y PER.<sup>*</sup>
+   </td>
+  </tr>
+</table>
 
-<br /> <br />
 
-+-------------------------------------+
-| **Tabla 2. Parámetros globales**    |
-+-------------------------------------+
-| **Parámetro**                       |
-+-------------------------------------+
-| Eficacia de Sofosbuvir/ velpatasvir |
-|                                     |
-| (Epclusa®)                          |
-+-------------------------------------+
-| Porcentaje de abandono terapéutico  |
-+-------------------------------------+
-| Disability Weight de CHC            |
-+-------------------------------------+
-| Disability Weight de CD             |
-+-------------------------------------+
-| pF0_F1                              |
-+-------------------------------------+
-| pF1_F2                              |
-+-------------------------------------+
-| pF2_F3                              |
-+-------------------------------------+
-| pF3_F4                              |
-+-------------------------------------+
-| pF4_CD                              |
-+-------------------------------------+
-| pF4_CHC                             |
-+-------------------------------------+
-| pCD_CHC                             |
-+-------------------------------------+
-| pCD_MH                              |
-+-------------------------------------+
-| pCD1_CHC                            |
-+-------------------------------------+
-| pCD1_MH                             |
-+-------------------------------------+
-| pCHC_MH                             |
-+-------------------------------------+
-| pF4RVS_CD                           |
-+-------------------------------------+
-| pF4RVS_CHC                          |
-+-------------------------------------+
+
+<table>
+  <tr>
+   <td colspan="3" >
+    <strong>Tabla 2. Parámetros globales</strong>
+   </td>
+  </tr>
+  <tr>
+   <td>
+    <strong>Parámetro</strong>
+   </td>
+   <td><strong>Descripción</strong>
+   </td>
+   <td><strong>Fuente</strong>
+   </td>
+  </tr>
+  <tr>
+   <td>Eficacia de Sofosbuvir/ velpatasvir
+<p>
+(Epclusa®)
+   </td>
+   <td>Porcentaje de la capacidad de un tratamiento antiviral específico que combina los medicamentos Sofosbuvir y Velpatasvir para eliminar o reducir la carga viral del VHC. 
+   </td>
+   <td>Mendizabal y cols.<sup><a href="https://paperpile.com/c/6pF7hc/DIXL">5</a></sup>
+   </td>
+  </tr>
+  <tr>
+   <td>Porcentaje de abandono terapéutico
+   </td>
+   <td>Proporción de pacientes que abandonan el tratamiento.
+   </td>
+   <td>Mendizabal y cols.<sup><a href="https://paperpile.com/c/6pF7hc/DIXL">5</a></sup>
+   </td>
+  </tr>
+  <tr>
+   <td>Disability Weight de CHC
+   </td>
+   <td>Carga de discapacidad asociada al CHC en términos de la pérdida de calidad de vida que esta enfermedad puede causar en una persona.
+   </td>
+   <td>OMS<sup>31</sup>
+   </td>
+  </tr>
+  <tr>
+   <td>Disability Weight de CD
+   </td>
+   <td>Carga de discapacidad asociada a la CD en términos de la pérdida de calidad de vida que esta enfermedad puede causar en una persona.
+   </td>
+   <td>OMS<sup>31</sup>
+   </td>
+  </tr>
+  <tr>
+   <td>pF0_F1
+   </td>
+   <td>Probabilidad de F0 de pasar a F1.
+   </td>
+   <td>
+    Thein y cols.<sup>27</sup>
+   </td>
+  </tr>
+  <tr>
+   <td>pF1_F2
+   </td>
+   <td>Probabilidad de F1 de pasar a F2.
+   </td>
+   <td>
+    Thein y cols.<sup>27</sup>
+   </td>
+  </tr>
+  <tr>
+   <td>pF2_F3
+   </td>
+   <td>Probabilidad de F2 de pasar a F3.
+   </td>
+   <td>
+    Thein y cols.<sup>27</sup>
+   </td>
+  </tr>
+  <tr>
+   <td>pF3_F4
+   </td>
+   <td>Probabilidad de F3 de pasar a F4.
+   </td>
+   <td>
+    Thein y cols.<sup>27</sup>
+   </td>
+  </tr>
+  <tr>
+   <td>pF4_CD
+   </td>
+   <td>Probabilidad de F4 de pasar a CD.
+   </td>
+   <td>Fattovich y cols. <sup>28</sup>
+   </td>
+  </tr>
+  <tr>
+   <td>pF4_CHC
+   </td>
+   <td>Probabilidad de F4 de pasar a CHC.
+   </td>
+   <td>Fattovich y cols. <sup>28</sup>
+   </td>
+  </tr>
+  <tr>
+   <td>pCD_CHC
+   </td>
+   <td>Probabilidad de CD de pasar a CHC.
+   </td>
+   <td>Planas y cols.<sup>30</sup>
+   </td>
+  </tr>
+  <tr>
+   <td>pCD_MH
+   </td>
+   <td>Probabilidad de CD de pasar a MH.
+   </td>
+   <td>Planas y cols.<sup>30</sup>
+   </td>
+  </tr>
+  <tr>
+   <td>pCD1_CHC
+   </td>
+   <td>Probabilidad de CD de pasar a CHC
+   </td>
+   <td>Planas y cols.<sup>30</sup>
+   </td>
+  </tr>
+  <tr>
+   <td>pCD1_MH
+   </td>
+   <td>Probabilidad de CD de pasar a MH
+   </td>
+   <td>Planas y cols.<sup>30</sup>
+   </td>
+  </tr>
+  <tr>
+   <td>pCHC_MH
+   </td>
+   <td>Probabilidad de CHC de pasar a MH.
+   </td>
+   <td>Fattovich y cols. <sup>28</sup>
+   </td>
+  </tr>
+  <tr>
+   <td>pF4RVS_CD
+   </td>
+   <td>Probabilidad de F4RVS de pasar a CD.
+   </td>
+   <td>Cardoso y cols.<sup>29</sup>
+   </td>
+  </tr>
+  <tr>
+   <td>pF4RVS_CHC
+   </td>
+   <td>Probabilidad de F4RVS de pasar a CHC.
+   </td>
+   <td>Cardoso y cols.<sup>29</sup>
+   </td>
+  </tr>
+</table>
+
 
 <sup>a</sup>Se dividió la proporción de F0-F1 por dos para obtener dos estadios distintos.
+
 
 ## 3. Lista de indicadores
 
