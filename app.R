@@ -704,7 +704,7 @@ a {color: black}
 )
 
 server <- function(input, output, session) {
-  
+  disable("hearts_savedScenarios")
   output$hepC_inputs = renderUI({
     input_names = c(
       "Costos de fibrosis descompensada" = "aCostoDC", 
@@ -2362,7 +2362,7 @@ server <- function(input, output, session) {
     
   })
   
-  session$onSessionEnded(function () {stopApp()})
+  session$onSessionEnded(function() {stopApp()})
   
 }
 
