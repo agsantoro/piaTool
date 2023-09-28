@@ -11,7 +11,6 @@ library(shinyWidgets)
 library(uuid)
 library(shiny.i18n)
 library(kableExtra)
-library(prime)
 library(bsplus)
 library(shinyBS)
 library(bslib)
@@ -38,7 +37,7 @@ flags <- c(
 )
 
 # load functions
-
+source("functions/textoIntro.R")
 source("functions/getPrime.R")
 source("functions/roundUpNice.R")
 source("functions/generateRMD.R")
@@ -84,6 +83,39 @@ body {
     color: white;
     background-color: #1D9ADD;
     border-color: white
+                 }
+
+.custom-div {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 100px; /* Adjust the width as needed */
+    height: 100px; /* Adjust the height as needed */
+    background-color: red;
+}
+  
+#fullpage_popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  z-index: 9999;
+  display: none;
+}
+
+.popup-content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80%; /* Adjust the width as needed */
+  max-width: 400px; /* Optionally set a max-width for larger screens */
+  background-color: white;
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
 }
                  
                  .navbar {background-color:#1D9ADD !important;
@@ -178,7 +210,7 @@ a {color: black}
 .btn-default:hover {
     color: black;
     background-color: #f0f0f0;
-    border-color: #92897e
+    border-color: #92897e;
 }
 
 
@@ -189,6 +221,17 @@ a {color: black}
                      shiny.i18n::usei18n(i18n),
                      
                      column(11, 
+                            div(
+                              id = "fullpage_popup",
+                              style = "display: none;",
+                              div(
+                                class = "popup-content",
+                                getTextoIntro(),
+                                br(),
+                                
+                                actionButton("volver", "Continuar")
+                              )
+                            ),
                             h3(tags$b("Evaluación del impacto epidemiológico y de costo-efectividad de la vacunación contra el VPH")),
                             div(HTML("<p>Modelo de evaluación del impacto epidemiológico y de costo-efectividad de la vacunación contra el virus del papiloma humano (VPH) en niñas para la prevención del cáncer de cuello uterino por país. 
                                   <br>Permite evaluar el impacto del aumento de cobertura de vacunación contra el VPH para las niñas en la carga de enfermedad por cáncer de cuello uterino.
@@ -196,6 +239,8 @@ a {color: black}
                                   a(href="https://pubmed.ncbi.nlm.nih.gov/25103394/", "(PRIME)", target = "_blank", style = "text-decoration: underline;"))),
                      
                      column(1,
+                            
+                            
                             pickerInput("selectedLanguage", "",
                                         multiple = F,
                                         choices = c( "en","sp"),
@@ -696,14 +741,20 @@ a {color: black}
                                           htmlOutput("hepC_manual")
                                         ))
                    )
-                   
                  )
+                 
+                   
+                 
                  
                  
                  
 )
 
 server <- function(input, output, session) {
+  observeEvent(input$volver,{
+    shinyjs::toggle("fullpage_popup", anim = T, animType = "fade")
+  })
+  shinyjs::toggle("fullpage_popup", anim = T, animType = "fade")
   disable("hearts_savedScenarios")
   output$hepC_inputs = renderUI({
     input_names = c(

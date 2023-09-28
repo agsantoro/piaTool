@@ -321,7 +321,6 @@ getPrime = function (
     Input = inputsNames,
     Value = inputsValues
   )
-  browser()
   return(
     list(
       model=model,
