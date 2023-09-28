@@ -236,7 +236,7 @@ a {color: black}
                             div(HTML("<p>Modelo de evaluación del impacto epidemiológico y de costo-efectividad de la vacunación contra el virus del papiloma humano (VPH) en niñas para la prevención del cáncer de cuello uterino por país. 
                                   <br>Permite evaluar el impacto del aumento de cobertura de vacunación contra el VPH para las niñas en la carga de enfermedad por cáncer de cuello uterino.
                                   <br>Modelo basado en la herramienta Papillomavirus Rapid Interface for Modelling and Economics "),
-                                  a(href="https://pubmed.ncbi.nlm.nih.gov/25103394/", "(PRIME)", target = "_blank", style = "text-decoration: underline;"))),
+                                a(href="https://pubmed.ncbi.nlm.nih.gov/25103394/", "(PRIME)", target = "_blank", style = "text-decoration: underline;"))),
                      
                      column(1,
                             
@@ -284,11 +284,11 @@ a {color: black}
                                                                                    "Ecuador" = "ECUADOR", 
                                                                                    "Mexico" = "MEXICO",
                                                                                    "Peru" = "PERU"), flagsDropdown, FUN = function(country, flagUrl) {
-                                                                            HTML(paste(
-                                                                              tags$img(src=flagUrl, width=20, height=15),
-                                                                              str_to_title(country)
-                                                                            ))
-                                                                          }, SIMPLIFY = FALSE, USE.NAMES = FALSE)
+                                                                                     HTML(paste(
+                                                                                       tags$img(src=flagUrl, width=20, height=15),
+                                                                                       str_to_title(country)
+                                                                                     ))
+                                                                                   }, SIMPLIFY = FALSE, USE.NAMES = FALSE)
                                                                         
                                                       ),
                                                       selected = "Argentina"),
@@ -357,7 +357,10 @@ a {color: black}
                                tabPanel("Documentación",
                                         br(),
                                         fluidRow(
-                                          htmlOutput("manual")
+                                          column(2),
+                                          column(8,htmlOutput("manual")),
+                                          column(2, downloadButton("descargaManual","Descargar manual de usuario"))
+                                          
                                         ))
                    )
                  ),
@@ -367,7 +370,7 @@ a {color: black}
                      column(11,
                             h3(tags$b("Evaluación del impacto epidemiológico y de costo-efectividad del tratamiento farmacológico de la hipertensión arterial en el marco de la iniciativa Global HEARTS")),
                             HTML('<p>Modelo de evaluación del impacto epidemiológico y de costo-efectividad del control de la presión arterial con tratamiento farmacológico en personas con hipertensión arterial ya diagnosticadas en el marco de la iniciativa HEARTS para la reducción de la mortalidad relacionada con enfermedades cardíacas isquémicas (ECI) y accidentes cerebrovasculares (ACV) por país.<br>Permite evaluar el impacto del aumento de cobertura del tratamiento farmacológico de personas con hipertensión ya diagnosticadas en la carga de enfermedad cardio y cerebrovascular.<br>Modelo basado en las herramientas <a href="https://www.paho.org/es/enlace/herramienta-para-estimar-impacto-control-poblacional-hipertension-mortalidad-por-ecv" target="_blank" style="text-decoration: underline;">"Hypertension: cardiovascular disease EstimaTool (HTN: CVD EstimaTool)"</a> y <a href="https://www.tephinet.org/tephinet-learning-center/tephinet-library/hearts-costing-tool?" target="_blank" style="text-decoration: underline;">"Global HEARTS Costing Tool Version 5.4"</a></p>')
-                            ),
+                     ),
                      column(1,
                             pickerInput("selectedLanguage", "",
                                         multiple = F,
@@ -382,7 +385,7 @@ a {color: black}
                                                           
                                         ),
                                         selected = "sp"))
-                     ),
+                   ),
                    br(),
                    br(),
                    tabsetPanel(id="TSP_HEARTS",
@@ -435,9 +438,9 @@ a {color: black}
                                           hr(),
                                           br(),
                                           plotlyOutput("hearts_grafico_2"),
-
+                                          
                                           br(),
-
+                                          
                                           br(),
                                           fluidRow(
                                             column(4,
@@ -484,12 +487,17 @@ a {color: black}
                                         
                                         
                                         
-                                        ),
+                               ),
                                tabPanel("Documentación",
                                         br(),
                                         fluidRow(
-                                          htmlOutput("hearts_manual")
-                                        ))
+                                          column(2),
+                                          column(8,htmlOutput("hearts_manual")),
+                                          column(2, downloadButton("descargaManual_hearts","Descargar manual de usuario"))
+                                          
+                                        )
+                                        )
+                               
                    )
                  ),
                  tabPanel(
@@ -500,7 +508,7 @@ a {color: black}
                             h3(tags$b("Evaluación del impacto epidemiológico del tratamiento con oxitocina durante el parto")),
                             HTML('<p>Modelo de evaluación del impacto epidemiológico del uso de oxitocina durante el parto para la prevención de hemorragia postparto y mortalidad materna por país. 
                                  <br>Permite evaluar el impacto del aumento de cobertura del uso de oxitocina durante el parto en la carga de enfermedad por hemorragia postparto.</p>')
-                            ),
+                     ),
                      
                      column(1,
                             pickerInput("selectedLanguage", "",
@@ -584,7 +592,7 @@ a {color: black}
                                                             align = "Right")
                                                    ))
                                           )
-                                          ), align="center",
+                                   ), align="center",
                                    column(2)
                                    
                                    
@@ -612,8 +620,12 @@ a {color: black}
                                tabPanel("Documentación",
                                         br(),
                                         fluidRow(
-                                          htmlOutput("hpp_manual")
-                                        ))
+                                          column(2),
+                                          column(8,htmlOutput("hpp_manual")),
+                                          column(2, downloadButton("descargaManual_hpp","Descargar manual de usuario"))
+                                          
+                                        )
+                               )
                    )
                    
                  ),
@@ -660,29 +672,29 @@ a {color: black}
                                                       "País", 
                                                       multiple = F,
                                                       choices = c(#"Argentina",
-                                                                  "Brazil",
-                                                                  #"Chile", 
-                                                                  "Colombia"#,
-                                                                  #"Costa Rica",
-                                                                  #"Ecuador", 
-                                                                  #"Mexico",
-                                                                  #"Peru"
-                                                                  ),
+                                                        "Brazil",
+                                                        #"Chile", 
+                                                        "Colombia"#,
+                                                        #"Costa Rica",
+                                                        #"Ecuador", 
+                                                        #"Mexico",
+                                                        #"Peru"
+                                                      ),
                                                       choicesOpt = list(content =  
                                                                           mapply(c(#"Argentina" ="ARGENTINA",
-                                                                                   "Brazil" = "BRAZIL",
-                                                                                   #"Chile" = "CHILE", 
-                                                                                   "Colombia"="COLOMBIA"#,
-                                                                                   #"Costa Rica" = "COSTA RICA",
-                                                                                   #"Ecuador" = "ECUADOR", 
-                                                                                   #"Mexico" = "MEXICO",
-                                                                                   #"Peru" = "PERU"
-                                                                                   ), flagsDropdown[c(2,4)], FUN = function(country, flagUrl) {
-                                                                                     HTML(paste(
-                                                                                       tags$img(src=flagUrl, width=20, height=15),
-                                                                                       str_to_title(country)
-                                                                                     ))
-                                                                                   }, SIMPLIFY = FALSE, USE.NAMES = FALSE)
+                                                                            "Brazil" = "BRAZIL",
+                                                                            #"Chile" = "CHILE", 
+                                                                            "Colombia"="COLOMBIA"#,
+                                                                            #"Costa Rica" = "COSTA RICA",
+                                                                            #"Ecuador" = "ECUADOR", 
+                                                                            #"Mexico" = "MEXICO",
+                                                                            #"Peru" = "PERU"
+                                                                          ), flagsDropdown[c(2,4)], FUN = function(country, flagUrl) {
+                                                                            HTML(paste(
+                                                                              tags$img(src=flagUrl, width=20, height=15),
+                                                                              str_to_title(country)
+                                                                            ))
+                                                                          }, SIMPLIFY = FALSE, USE.NAMES = FALSE)
                                                                         
                                                       )),
                                           uiOutput("hepC_inputs")),
@@ -738,12 +750,16 @@ a {color: black}
                                tabPanel("Documentación",
                                         br(),
                                         fluidRow(
-                                          htmlOutput("hepC_manual")
-                                        ))
+                                          column(2),
+                                          column(8,htmlOutput("hepC_manual")),
+                                          column(2, downloadButton("descargaManual_hepC","Descargar manual de usuario"))
+                                          
+                                        )
+                               )
                    )
                  )
                  
-                   
+                 
                  
                  
                  
@@ -775,7 +791,7 @@ server <- function(input, output, session) {
       "Proporción de pacientes que abandonan el tratamiento." = "pAbandono", 
       "Eficacia de Sofosbuvir / velpatasvir" = "pSVR", 
       "Duración del tratamiento" = "tDuracion_Meses"
-      )
+    )
     
     default = list()
     default$cohorte = datosPais$valor[datosPais$pais==input$hepC_country & datosPais$dimension=="epi" & datosPais$indicador=="Cohorte"]
@@ -1163,7 +1179,7 @@ server <- function(input, output, session) {
         type = "success",
         btn_labels = "Continuar",
         btn_colors = "#E95420"
-        
+          
       )
       
       hide("scenarioName", anim = T, animType = "fade")
@@ -1313,7 +1329,7 @@ server <- function(input, output, session) {
         )
         
       )
-
+      
     )
     
   })
@@ -1474,74 +1490,74 @@ server <- function(input, output, session) {
           highlight = TRUE
         )
         
-       
+        
         
       } else {disable("savedScenarios")}
     })
     
-  #   output$downloadReport <- downloadHandler(
-  #     filename = function() {
-  #       "report.pdf"
-  #     },
-  #     content = function(file) {
-  #       
-  #       tableScn <- scenarios$summaryTable
-  #       tableScn <<- tableScn
-  #       
-  #       dataPlot = data.frame(Scenario = NA,
-  #                             Age = NA,
-  #                             Undiscounted = NA)
-  #       
-  #       dataInputs = data.frame(
-  #         Scenario = NA,
-  #         Input = NA,
-  #         Value = NA
-  #       )
-  #       for (i in input$savedScenarios) {
-  #         dataPlot = union_all(
-  #           data.frame(Scenario = i,
-  #                      Age = scenarios$savedScenarios[[i]][["dataPlot"]]$x,
-  #                      Undiscounted = scenarios$savedScenarios[[i]][["dataPlot"]]$y1),
-  #           dataPlot)
-  #         
-  #         dataInputs = union_all(
-  #           data.frame(Scenario = i,
-  #                      Input = scenarios$savedScenarios[[i]][["inputsTable"]]$Input,
-  #                      Value = scenarios$savedScenarios[[i]][["inputsTable"]]$Value),
-  #           dataInputs)
-  #       }
-  #       
-  #       dataInputs <<- pivot_wider(
-  #         dataInputs %>% dplyr::filter(is.na(Scenario)==F),
-  #         names_from = "Scenario",
-  #         values_from = Value) 
-  #       
-  #       plotUndisc <<- ggplot(
-  #         dataPlot[is.na(dataPlot$Scenario)==F,],
-  #         aes(
-  #           x=Age,
-  #           y=Undiscounted,
-  #           color = factor(Scenario)
-  #         )) + geom_line() + theme_minimal() + theme(legend.title=element_blank()) +
-  #         labs(x = "Age", y = "Scenario") 
-  #       
-  #       title <- "Scenario report"
-  #       intro <- "Description: Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Donec odio. Quisque volutpat mattis eros. Nullam malesuada erat ut turpis. Suspendisse urna nibh, viverra non, semper suscipit, posuere a, pede."
-  #       author <- "Prime tool"
-  #       outputFormat <- "pdf_document"
-  #       plotChunk <- 'plotUndisc'
-  #       tableChunk1 <- "knitr::kable(dataInputs, format = 'latex')"
-  #       tableChunk2 <- "knitr::kable(tableScn,format = 'latex')"
-  #       rendered_file <- generateRMD(title, author, intro, outputFormat, plotChunk, tableChunk1, tableChunk2)
-  #       
-  #       filePath <- "scenarioReport.pdf"
-  #       file.copy(filePath, file)
-  #     }
-  #   )
-  #  
-
+    #   output$downloadReport <- downloadHandler(
+    #     filename = function() {
+    #       "report.pdf"
+    #     },
+    #     content = function(file) {
+    #       
+    #       tableScn <- scenarios$summaryTable
+    #       tableScn <<- tableScn
+    #       
+    #       dataPlot = data.frame(Scenario = NA,
+    #                             Age = NA,
+    #                             Undiscounted = NA)
+    #       
+    #       dataInputs = data.frame(
+    #         Scenario = NA,
+    #         Input = NA,
+    #         Value = NA
+    #       )
+    #       for (i in input$savedScenarios) {
+    #         dataPlot = union_all(
+    #           data.frame(Scenario = i,
+    #                      Age = scenarios$savedScenarios[[i]][["dataPlot"]]$x,
+    #                      Undiscounted = scenarios$savedScenarios[[i]][["dataPlot"]]$y1),
+    #           dataPlot)
+    #         
+    #         dataInputs = union_all(
+    #           data.frame(Scenario = i,
+    #                      Input = scenarios$savedScenarios[[i]][["inputsTable"]]$Input,
+    #                      Value = scenarios$savedScenarios[[i]][["inputsTable"]]$Value),
+    #           dataInputs)
+    #       }
+    #       
+    #       dataInputs <<- pivot_wider(
+    #         dataInputs %>% dplyr::filter(is.na(Scenario)==F),
+    #         names_from = "Scenario",
+    #         values_from = Value) 
+    #       
+    #       plotUndisc <<- ggplot(
+    #         dataPlot[is.na(dataPlot$Scenario)==F,],
+    #         aes(
+    #           x=Age,
+    #           y=Undiscounted,
+    #           color = factor(Scenario)
+    #         )) + geom_line() + theme_minimal() + theme(legend.title=element_blank()) +
+    #         labs(x = "Age", y = "Scenario") 
+    #       
+    #       title <- "Scenario report"
+    #       intro <- "Description: Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Donec odio. Quisque volutpat mattis eros. Nullam malesuada erat ut turpis. Suspendisse urna nibh, viverra non, semper suscipit, posuere a, pede."
+    #       author <- "Prime tool"
+    #       outputFormat <- "pdf_document"
+    #       plotChunk <- 'plotUndisc'
+    #       tableChunk1 <- "knitr::kable(dataInputs, format = 'latex')"
+    #       tableChunk2 <- "knitr::kable(tableScn,format = 'latex')"
+    #       rendered_file <- generateRMD(title, author, intro, outputFormat, plotChunk, tableChunk1, tableChunk2)
+    #       
+    #       filePath <- "scenarioReport.pdf"
+    #       file.copy(filePath, file)
+    #     }
+    #   )
+    #  
+    
   })
-
+  
   observeEvent(input$downloadReport, {
     
     sendSweetAlert(
@@ -1640,7 +1656,7 @@ server <- function(input, output, session) {
           title = "Parámetros básicos",
           h4("Línea de base"),
           lapply(input_names[3], function (i) {
-        
+            
             sliderInput(paste0("hearts_input_base_",which(input_names==i)),
                         input_names[input_names==i],
                         value = base_line[base_line$country==input$hearts_country,names(input_names[input_names==i])],
@@ -1831,7 +1847,7 @@ server <- function(input, output, session) {
             color = '#265787',
             family = "Istok Web",
             size = 10
-            ),
+          ),
           textangle=90,
           showarrow = F
         ) %>% config(displayModeBar = FALSE) %>% layout(
@@ -1841,10 +1857,10 @@ server <- function(input, output, session) {
                          list(color = '#265787',
                               family = "Istok Web")),
           xaxis = list(title =list(text="Prevalencia de control de HTA en la población (%)",
-            font=list(
-            family = "Istok Web",
-            size = 14,
-            color = '#265787')) ,
+                                   font=list(
+                                     family = "Istok Web",
+                                     size = 14,
+                                     color = '#265787')) ,
                        zeroline = FALSE,           
                        zerolinecolor = "gray",
                        showline= F),
@@ -1852,16 +1868,16 @@ server <- function(input, output, session) {
             family = "Istok Web",
             size = 14,
             color = '#265787')) ,
-                       tickfont = list(color = "gray"),
-                       linecolor = "gray",
-                       showline= F),
+            tickfont = list(color = "gray"),
+            linecolor = "gray",
+            showline= F),
           zeroline = FALSE,           
           zerolinecolor = "gray"
         )
       fig %>% layout(font = list(family ="Istok Web"))
       
-    
-      }
+      
+    }
     
     
   })
@@ -1993,21 +2009,21 @@ server <- function(input, output, session) {
                        font=
                          list(color = '#265787',
                               family = "Istok Web")
-                       ),
+          ),
           xaxis = list(title = list(text="Prevalencia de control de HTA en la población (%)",font=list(
             family = "Istok Web",
             size = 14,
             color = '#265787')),
-                       zeroline = FALSE,           
-                       zerolinecolor = "gray",
-                       showline= F),
+            zeroline = FALSE,           
+            zerolinecolor = "gray",
+            showline= F),
           yaxis = list(title = list( text="Tasa por 100.000 habitantes",font=list(
             family = "Istok Web",
             size = 14,
             color = '#265787')),
-                       tickfont = list(color = "gray"),
-                       linecolor = "gray",
-                       showline= F),
+            tickfont = list(color = "gray"),
+            linecolor = "gray",
+            showline= F),
           zeroline = FALSE,           
           zerolinecolor = "gray"
         )
@@ -2414,9 +2430,58 @@ server <- function(input, output, session) {
     
   })
   
+  output$descargaManual <- downloadHandler(
+    filename = function() {
+      paste('PIA Tool - Manual de Usuario', '.pdf', sep='')
+    },
+    content = function(file) {
+      file.copy("www/Manual/PIA Tool - Manual de Usuario.pdf", file)
+      
+    }
+  )
+  
+  output$descargaManual <- downloadHandler(
+    filename = function() {
+      paste('PIA Tool - Manual de Usuario', '.pdf', sep='')
+    },
+    content = function(file) {
+      file.copy("www/Manual/PIA Tool - Manual de Usuario.pdf", file)
+      
+    }
+  )
+  
+  output$descargaManual_hearts <- downloadHandler(
+    filename = function() {
+      paste('PIA Tool - Manual de Usuario', '.pdf', sep='')
+    },
+    content = function(file) {
+      file.copy("www/Manual/PIA Tool - Manual de Usuario.pdf", file)
+      
+    }
+  )
+  
+  output$descargaManual_hepC <- downloadHandler(
+    filename = function() {
+      paste('PIA Tool - Manual de Usuario', '.pdf', sep='')
+    },
+    content = function(file) {
+      file.copy("www/Manual/PIA Tool - Manual de Usuario.pdf", file)
+      
+    }
+  )
+  
+  output$descargaManual_hpp <- downloadHandler(
+    filename = function() {
+      paste('PIA Tool - Manual de Usuario', '.pdf', sep='')
+    },
+    content = function(file) {
+      file.copy("www/Manual/PIA Tool - Manual de Usuario.pdf", file)
+      
+    }
+  )
+  
   session$onSessionEnded(function() {stopApp()})
   
 }
 
 shinyApp(ui, server)
-
