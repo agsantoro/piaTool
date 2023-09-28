@@ -1,6 +1,6 @@
 ---
 title: "Manual de Usuario - Versión preliminar"
-author: "IECS - CIIPS"
+
 date: "2023-09-28"
 output:
   html_document:
@@ -42,10 +42,10 @@ Para garantizar un funcionamiento óptimo de nuestra herramienta web es importan
 ### Requisitos de Software
 
   * **Navegador Web**: La herramienta está completamente basada en web y se ejecuta en navegadores web modernos. Se ha probado y es compatible con los siguientes navegadores web:
-        * Google Chrome (versión más reciente)
-        * Mozilla Firefox (versión más reciente)
-        * Microsoft Edge (versión más reciente)
-        * Asegúrese de tener uno de estos navegadores web instalados y actualizados en su sistema.
+    * Google Chrome (versión más reciente)
+    * Mozilla Firefox (versión más reciente)
+    * Microsoft Edge (versión más reciente)
+    * Asegúrese de tener uno de estos navegadores web instalados y actualizados en su sistema.
         
 * **Compatibilidad Móvil**
     * Esta herramienta web es completamente compatible con dispositivos móviles, como teléfonos celulares y tabletas. Puede acceder y utilizar la herramienta de manera efectiva desde su dispositivo móvil, lo que le brinda la flexibilidad de analizar datos y visualizar sus resultados.
@@ -75,6 +75,7 @@ Cuando seleccione una de estas intervenciones, se abrirá una pantalla que const
 ![**Figura 2. Breve descripción del modelo.**](images/image_2.png)
 
 <br>
+
 * **Menú de Opciones (figura 3)**: Justo debajo de la descripción del modelo, encontrará un segundo menú con las siguientes opciones:
     * **Parámetros del modelo**: Esta opción le permite explorar y configurar el modelo, ajustando los parámetros según sea necesario. Desde el panel lateral izquierdo, podrá seleccionar el país con el que desea trabajar en ese escenario. Además, podrá visualizar debajo los parámetros utilizados y modificarlos si lo considera necesario. Los parámetros se dividen en dos categorías: "Parámetros Básicos" y "Parámetros Avanzados". Los parámetros avanzados ofrecen un mayor nivel de control y personalización del modelo. A la derecha, en la sección de “Resultados generales” se muestran las estimaciones del modelo en base a los parámetros seleccionados. Una vez que haya seleccionado el país y modificado los parámetros según sus necesidades, puede proceder a guardar el escenario haciendo clic en el botón ubicado al final de la página.
     * **Escenarios Guardados**: En esta sección, puede acceder a los escenarios previamente guardados para comparar resultados o hacer un seguimiento de sus análisis anteriores. El botón de descarga le permite obtener informes en formato PDF de los escenarios guardados. Desde el panel lateral izquierdo, podrá ver los escenarios guardados junto con los nombres que usted eligió. También tendrá la opción de eliminarlos desde esta sección si necesita descartarlos para que no aparezcan en los informes. Tenga en cuenta que una vez eliminado un escenario, no podrá recuperarlo y deberá generar uno nuevo desde la página principal si así lo requiere.
@@ -89,10 +90,11 @@ Estimar un escenario en nuestra herramienta es un proceso fundamental que le per
 
 
 ### Configuración de Parámetros (figura 4)
-    1. **Seleccionar País**: En el panel lateral izquierdo de la pantalla de "Escenario Principal," comience seleccionando el país con el que desea trabajar en su análisis.
-    2. **Ajuste de Parámetros**: Debajo de la selección del país, encontrará una lista de parámetros que influyen en el modelo.  Los parámetros difieren entre las diferentes intervenciones y todos contienen valores predeterminados que usted podrá modificar. Estos parámetros se dividen en dos categorías: "Parámetros Básicos" y "Parámetros Avanzados."
-    3. **Parámetros Básicos**: Estos son los factores esenciales para su análisis. Puede ajustarlos según sus necesidades y preferencias. Haga clic en los campos correspondientes y modifique los valores según sea necesario.
-    4. **Parámetros Avanzados**: Si busca un mayor nivel de control y parametrización del modelo, expanda la sección de "Parámetros Avanzados." Aquí, encontrará opciones adicionales que permiten una personalización más detallada. Al igual que con los parámetros básicos, ajuste los valores según sus requisitos específicos.
+
+  1. **Seleccionar País**: En el panel lateral izquierdo de la pantalla de "Escenario Principal," comience seleccionando el país con el que desea trabajar en su análisis.
+  2. **Ajuste de Parámetros**: Debajo de la selección del país, encontrará una lista de parámetros que influyen en el modelo.  Los parámetros difieren entre las diferentes intervenciones y todos contienen valores predeterminados que usted podrá modificar. Estos parámetros se dividen en dos categorías: "Parámetros Básicos" y "Parámetros Avanzados."
+  3. **Parámetros Básicos**: Estos son los factores esenciales para su análisis. Puede ajustarlos según sus necesidades y preferencias. Haga clic en los campos correspondientes y modifique los valores según sea necesario.
+  4. **Parámetros Avanzados**: Si busca un mayor nivel de control y parametrización del modelo, expanda la sección de "Parámetros Avanzados." Aquí, encontrará opciones adicionales que permiten una personalización más detallada. Al igual que con los parámetros básicos, ajuste los valores según sus requisitos específicos.
 
 ### Información sobre Parámetros (figura 4): 
 Para obtener una comprensión más completa de cada parámetro, coloque el cursor sobre el icono de información (i) junto al nombre del parámetro. Esto le proporcionará definiciones y detalles importantes sobre el parámetro correspondiente. Podrá encontrar información adicional sobre el modelo en el menú, solapa “Documentación”.
@@ -105,7 +107,10 @@ Con cada cambio de los parámetros el modelo estima los resultados que se verán
 
 
 <br>
-4. **Guardado de un escenario (figura 5-7):** Una vez que haya configurado todos los parámetros según sus necesidades, proceda a guardar el escenario haciendo clic en el botón correspondiente al final de la página, sobre el lado derecho (figura 5). Una vez presionado el botón **se desplegará un campo para asignar un nombre a ese escenario guardado** (figura 6). Esto almacenará su configuración para futuras referencias y análisis dentro de esta misma sesión. Se recomienda que el nombre del escenario contenga el nombre del país sobre el cual se realizó seguido de un número o letra como referencia ya que podrá generar más de un escenario por país. Ej. “Brazil_1.1”, “Brazil_1.2”. Los escenarios permanecerán guardados mientras se continúe con la sesión activa (duración sin actividad de 15 minutos). La herramienta permite guardar hasta 6 escenarios diferentes. Finalmente aparecerá un mensaje confirmando que el escenario fue guardado (figura 7).
+
+### Guardado de un escenario 
+
+Guardado de un escenario: **(figura 5-7)** Una vez que haya configurado todos los parámetros según sus necesidades, proceda a guardar el escenario haciendo clic en el botón correspondiente al final de la página, sobre el lado derecho (figura 5). Una vez presionado el botón **se desplegará un campo para asignar un nombre a ese escenario guardado** (figura 6). Esto almacenará su configuración para futuras referencias y análisis dentro de esta misma sesión. Se recomienda que el nombre del escenario contenga el nombre del país sobre el cual se realizó seguido de un número o letra como referencia ya que podrá generar más de un escenario por país. Ej. “Brazil_1.1”, “Brazil_1.2”. Los escenarios permanecerán guardados mientras se continúe con la sesión activa (duración sin actividad de 15 minutos). La herramienta permite guardar hasta 6 escenarios diferentes. Finalmente aparecerá un mensaje confirmando que el escenario fue guardado (figura 7).
 
 
 ![**Figura 5. Botón de guardado de escenarios.**](images/image_5.png)
@@ -136,9 +141,13 @@ Con cada cambio de los parámetros el modelo estima los resultados que se verán
 
 
 <br>
-5. **Visualización de Outputs (figura 8)**: Después de estimar un escenario con los parámetros configurados, la herramienta generará una serie de resultados en el panel principal (“Resultados Generales”) que le proporcionarán información valiosa sobre los resultados de su análisis. Estos pueden variar según la intervención y los parámetros seleccionados, pero en general, incluye lo siguiente:
-    5. **Tablas de indicadores**: Además de los gráficos, se proporcionará información detallada sobre los resultados en formato de tablas, con los indicadores clasificados en resultados económicos y resultados epidemiológicos.
-    6. **Gráficos Interactivos**: La herramienta generará gráficos interactivos que representan visualmente los resultados de su escenario. Puede explorar estos gráficos para comprender mejor las tendencias y patrones.
+
+### Visualización de Outputs
+
+**Visualización de Outputs (figura 8)**: Después de estimar un escenario con los parámetros configurados, la herramienta generará una serie de resultados en el panel principal (“Resultados Generales”) que le proporcionarán información valiosa sobre los resultados de su análisis. Estos pueden variar según la intervención y los parámetros seleccionados, pero en general, incluye lo siguiente:
+
+* **Tablas de indicadores**: Además de los gráficos, se proporcionará información detallada sobre los resultados en formato de tablas, con los indicadores clasificados en resultados económicos y resultados epidemiológicos.
+* **Gráficos Interactivos**: La herramienta generará gráficos interactivos que representan visualmente los resultados de su escenario. Puede explorar estos gráficos para comprender mejor las tendencias y patrones.
 
 
 ![**Figura 8. Resultados de los modelos.**](images/image_8.png)
