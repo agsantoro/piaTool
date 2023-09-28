@@ -365,7 +365,7 @@ a {color: black}
                    )
                  ),
                  tabPanel(
-                   "Iniciativa Global HEARTS",
+                   "HEARTS",
                    fluidRow(
                      column(11,
                             h3(tags$b("Evaluación del impacto epidemiológico y de costo-efectividad del tratamiento farmacológico de la hipertensión arterial en el marco de la iniciativa Global HEARTS")),
