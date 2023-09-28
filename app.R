@@ -85,6 +85,15 @@ body {
     border-color: white
                  }
 
+.custom-div {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 100px; /* Adjust the width as needed */
+    height: 100px; /* Adjust the height as needed */
+    background-color: red;
+}
+  
 #fullpage_popup {
   position: fixed;
   top: 0;
@@ -230,6 +239,8 @@ a {color: black}
                                   a(href="https://pubmed.ncbi.nlm.nih.gov/25103394/", "(PRIME)", target = "_blank", style = "text-decoration: underline;"))),
                      
                      column(1,
+                            
+                            
                             pickerInput("selectedLanguage", "",
                                         multiple = F,
                                         choices = c( "en","sp"),
@@ -730,8 +741,10 @@ a {color: black}
                                           htmlOutput("hepC_manual")
                                         ))
                    )
-                   
                  )
+                 
+                   
+                 
                  
                  
                  
