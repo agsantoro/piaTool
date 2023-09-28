@@ -30,16 +30,16 @@ epi_model <- function(run, x1, x2, country) {
 estimaToolCosts = function(
     
   country = input$Country,
-    Population = input$Population,
-    `BASELINE_Prevalencia de hipertensión entre adultos de 30-79 años, estandarizada por edad` = input$Prevalence_baseline,
-    `TARGET_Prevalencia de hipertensión entre adultos de 30-79 años, estandarizada por edad` = input$Prevalence_target,
-    `BASELINE_Prevalence of previous diagnosis of hypertension among adults aged 30-79 with hypertension, age-standardized` = input$Diagnosis_baseline,
-    `TARGET_Prevalence of previous diagnosis of hypertension among adults aged 30-79 with hypertension, age-standardized` = input$Diagnosis_target,
-    `BASELINE_Treatment among those aware of the condition (%)`= input$Treatment_baseline,
-    `TARGET_Treatment among those aware of the condition (%)`= input$Treatment_target,
-    `BASELINE_Hypertension control among those treated (%)` = input$Control_baseline,
-    `TARGET_Hypertension control among those treated (%)` = input$Control_target
-    ) {
+  Population = input$Population,
+  `BASELINE_Prevalencia de hipertensión entre adultos de 30-79 años, estandarizada por edad` = input$Prevalence_baseline,
+  `TARGET_Prevalencia de hipertensión entre adultos de 30-79 años, estandarizada por edad` = input$Prevalence_target,
+  `BASELINE_Prevalencia de diagnóstico previo de hipertensión entre adultos de 30-79 años con hipertensión, estandarizada por edad` = input$Diagnosis_baseline,
+  `TARGET_Prevalencia de diagnóstico previo de hipertensión entre adultos de 30-79 años con hipertensión, estandarizada por edad` = input$Diagnosis_target,
+  `BASELINE_Tratamiento entre los diagnosticados (%)`= input$Treatment_baseline,
+  `TARGET_Tratamiento entre los diagnosticados (%)`= input$Treatment_target,
+  `BASELINE_Control de la hipertensión entre los tratados (%)` = input$Control_baseline,
+  `TARGET_Control de la hipertensión entre los tratados (%)` = input$Control_target
+) {
   ##### MORTALITY DATA #####
   # loading data
   load("estimaTool/mortality_data.RData")
@@ -51,7 +51,7 @@ estimaToolCosts = function(
       mortality_data %>% group_by(location,sex="Both",age,cause,metric,year) %>%
         summarise(val=sum(val))
     )
-
+  
   # summarizing metrics
   mortality_data = mortality_data %>%
     left_join(
@@ -59,7 +59,7 @@ estimaToolCosts = function(
         summarise(sum = sum(val))
     ) %>% mutate(proporcion = val/sum)
   
-
+  
   ##### FATALITY DATA #####
   
   # loading fatality data
@@ -110,49 +110,49 @@ estimaToolCosts = function(
   run[[country]]$target = list()
   
   run[[country]]$baseline$`Prevalencia de hipertensión entre adultos de 30-79 años, estandarizada por edad` = `BASELINE_Prevalencia de hipertensión entre adultos de 30-79 años, estandarizada por edad`
-  run[[country]]$baseline$`Prevalence of previous diagnosis of hypertension among adults aged 30-79 with hypertension, age-standardized` = `BASELINE_Prevalence of previous diagnosis of hypertension among adults aged 30-79 with hypertension, age-standardized`
-  run[[country]]$baseline$`Treatment among those aware of the condition (%)` = `BASELINE_Treatment among those aware of the condition (%)`
-  run[[country]]$baseline$`Hypertension control among those treated (%)` = `BASELINE_Hypertension control among those treated (%)`
-  run[[country]]$target$`Prevalence of previous diagnosis of hypertension among adults aged 30-79 with hypertension, age-standardized` = `TARGET_Prevalence of previous diagnosis of hypertension among adults aged 30-79 with hypertension, age-standardized`
-  run[[country]]$target$`Treatment among those aware of the condition (%)` = `TARGET_Treatment among those aware of the condition (%)`
-  run[[country]]$target$`Hypertension control among those treated (%)` = `TARGET_Hypertension control among those treated (%)`
-  run[[country]]$baseline$`Prevalence of treatment (taking medicine) for hypertension among adults aged 30-79 with hypertension, age-standardized` = run[[country]]$baseline$`Prevalence of previous diagnosis of hypertension among adults aged 30-79 with hypertension, age-standardized` * run[[country]]$baseline$`Treatment among those aware of the condition (%)`
-  run[[country]]$baseline$`Prevalence of controlled hypertension among adults aged 30-79 years with hypertension, age- standardized` = run[[country]]$baseline$`Prevalence of treatment (taking medicine) for hypertension among adults aged 30-79 with hypertension, age-standardized` * run[[country]]$baseline$`Hypertension control among those treated (%)`
-  run[[country]]$target$`Prevalence of treatment (taking medicine) for hypertension among adults aged 30-79 with hypertension, age-standardized` = run[[country]]$target$`Prevalence of previous diagnosis of hypertension among adults aged 30-79 with hypertension, age-standardized` * run[[country]]$target$`Treatment among those aware of the condition (%)`
-  run[[country]]$target$`Prevalence of controlled hypertension among adults aged 30-79 years with hypertension, age- standardized` = run[[country]]$target$`Prevalence of treatment (taking medicine) for hypertension among adults aged 30-79 with hypertension, age-standardized` * run[[country]]$target$`Hypertension control among those treated (%)`
+  run[[country]]$baseline$`Prevalencia de diagnóstico previo de hipertensión entre adultos de 30-79 años con hipertensión, estandarizada por edad` = `BASELINE_Prevalencia de diagnóstico previo de hipertensión entre adultos de 30-79 años con hipertensión, estandarizada por edad`
+  run[[country]]$baseline$`Tratamiento entre los diagnosticados (%)` = `BASELINE_Tratamiento entre los diagnosticados (%)`
+  run[[country]]$baseline$`Control de la hipertensión entre los tratados (%)` = `BASELINE_Control de la hipertensión entre los tratados (%)`
+  run[[country]]$target$`Prevalencia de diagnóstico previo de hipertensión entre adultos de 30-79 años con hipertensión, estandarizada por edad` = `TARGET_Prevalencia de diagnóstico previo de hipertensión entre adultos de 30-79 años con hipertensión, estandarizada por edad`
+  run[[country]]$target$`Tratamiento entre los diagnosticados (%)` = `TARGET_Tratamiento entre los diagnosticados (%)`
+  run[[country]]$target$`Control de la hipertensión entre los tratados (%)` = `TARGET_Control de la hipertensión entre los tratados (%)`
+  run[[country]]$baseline$`Prevalence of treatment (taking medicine) for hypertension among adults aged 30-79 with hypertension, age-standardized` = run[[country]]$baseline$`Prevalencia de diagnóstico previo de hipertensión entre adultos de 30-79 años con hipertensión, estandarizada por edad` * run[[country]]$baseline$`Tratamiento entre los diagnosticados (%)`
+  run[[country]]$baseline$`Prevalence of controlled hypertension among adults aged 30-79 years with hypertension, age- standardized` = run[[country]]$baseline$`Prevalence of treatment (taking medicine) for hypertension among adults aged 30-79 with hypertension, age-standardized` * run[[country]]$baseline$`Control de la hipertensión entre los tratados (%)`
+  run[[country]]$target$`Prevalence of treatment (taking medicine) for hypertension among adults aged 30-79 with hypertension, age-standardized` = run[[country]]$target$`Prevalencia de diagnóstico previo de hipertensión entre adultos de 30-79 años con hipertensión, estandarizada por edad` * run[[country]]$target$`Tratamiento entre los diagnosticados (%)`
+  run[[country]]$target$`Prevalence of controlled hypertension among adults aged 30-79 years with hypertension, age- standardized` = run[[country]]$target$`Prevalence of treatment (taking medicine) for hypertension among adults aged 30-79 with hypertension, age-standardized` * run[[country]]$target$`Control de la hipertensión entre los tratados (%)`
   
   valor_x1 <- run[[country]]$baseline$`Prevalence of controlled hypertension among adults aged 30-79 years with hypertension, age- standardized`*100
   valor_x2 <- run[[country]]$target$`Prevalence of controlled hypertension among adults aged 30-79 years with hypertension, age- standardized`*100
-
+  
   outcomesEpi = epi_model(
     run,
     round(valor_x1,1),
     round(valor_x2,1),
     country)
   
-  run[[country]]$baseline$`Muertes por IHD por cada 100.000 habitantes que podrían evitarse` = round(outcomesEpi$dif_1,1)
-  run[[country]]$baseline$`Muertes por IHD que podrían evitarse` = round(outcomesEpi$dif_1_pob,0)
-  run[[country]]$baseline$`Muertes por stroke por cada 100.000 habitantes que podrían evitarse` = round(outcomesEpi$dif_2,1)
-  run[[country]]$baseline$`Muertes por stroke que podrían evitarse` = round(outcomesEpi$dif_2_pob,0)
-  run[[country]]$baseline$`Población (N) de nuevos hipertensos tratados entre adultos de 30-79 años con diagnóstico de hipertensión` = run[[country]]$population$`Población total` * run[[country]]$baseline$`Prevalencia de hipertensión entre adultos de 30-79 años, estandarizada por edad` * run[[country]]$baseline$`Prevalence of previous diagnosis of hypertension among adults aged 30-79 with hypertension, age-standardized` * run[[country]]$baseline$`Treatment among those aware of the condition (%)`
+  run[[country]]$baseline$`Muertes por ECI por cada 100.000 habitantes que podrían evitarse` = round(outcomesEpi$dif_1,1)
+  run[[country]]$baseline$`Muertes por ECI que podrían evitarse` = round(outcomesEpi$dif_1_pob,0)
+  run[[country]]$baseline$`Muertes por ACV por cada 100.000 habitantes que podrían evitarse` = round(outcomesEpi$dif_2,1)
+  run[[country]]$baseline$`Muertes por ACV que podrían evitarse` = round(outcomesEpi$dif_2_pob,0)
+  run[[country]]$baseline$`Población (N) de nuevos hipertensos tratados entre adultos de 30-79 años con diagnóstico de hipertensión` = run[[country]]$population$`Población total` * run[[country]]$baseline$`Prevalencia de hipertensión entre adultos de 30-79 años, estandarizada por edad` * run[[country]]$baseline$`Prevalencia de diagnóstico previo de hipertensión entre adultos de 30-79 años con hipertensión, estandarizada por edad` * run[[country]]$baseline$`Tratamiento entre los diagnosticados (%)`
   run[[country]]$baseline$`Población (N) de hipertensos controlados entre adultos de 30-79 años con hipertensión` = run[[country]]$baseline$`Prevalence of controlled hypertension among adults aged 30-79 years with hypertension, age- standardized` * run[[country]]$baseline$`Prevalencia de hipertensión entre adultos de 30-79 años, estandarizada por edad` * run[[country]]$population$`Población total`
-  run[[country]]$baseline$`IHD total de nuevos eventos evitados` = run[[country]]$baseline$`Muertes por IHD que podrían evitarse` / (sum(as.numeric(fatality_weighted$fatality_weighted[fatality_weighted$cause == "Ischemic heart disease" & fatality_weighted$gender == "Male"])) * sum(as.numeric(fatality_weighted$deaths[fatality_weighted$cause == "Ischemic heart disease" & fatality_weighted$gender == "Male"])) / (sum(as.numeric(fatality_weighted$deaths[fatality_weighted$cause == "Ischemic heart disease" & fatality_weighted$gender == "Male"]))  +  sum(as.numeric(fatality_weighted$deaths[fatality_weighted$cause == "Ischemic heart disease" & fatality_weighted$gender == "Female"]))) + sum(as.numeric(fatality_weighted$fatality_weighted[fatality_weighted$cause == "Ischemic heart disease" & fatality_weighted$gender == "Female"])) * sum(as.numeric(fatality_weighted$deaths[fatality_weighted$cause == "Ischemic heart disease" & fatality_weighted$gender == "Female"])) / (sum(as.numeric(fatality_weighted$deaths[fatality_weighted$cause == "Ischemic heart disease" & fatality_weighted$gender == "Male"]))  + sum(as.numeric(fatality_weighted$deaths[fatality_weighted$cause == "Ischemic heart disease" & fatality_weighted$gender == "Female"]))))
-  run[[country]]$baseline$`IHD Rate 100k Incident events averted` = run[[country]]$baseline$`Muertes por IHD por cada 100.000 habitantes que podrían evitarse` / (sum(as.numeric(fatality_weighted$fatality_weighted[fatality_weighted$cause == "Ischemic heart disease" & fatality_weighted$gender == "Male"])) * sum(as.numeric(fatality_weighted$deaths[fatality_weighted$cause == "Ischemic heart disease" & fatality_weighted$gender == "Male"])) / (sum(as.numeric(fatality_weighted$deaths[fatality_weighted$cause == "Ischemic heart disease" & fatality_weighted$gender == "Male"]))  +  sum(as.numeric(fatality_weighted$deaths[fatality_weighted$cause == "Ischemic heart disease" & fatality_weighted$gender == "Female"]))) + sum(as.numeric(fatality_weighted$fatality_weighted[fatality_weighted$cause == "Ischemic heart disease" & fatality_weighted$gender == "Female"])) * sum(as.numeric(fatality_weighted$deaths[fatality_weighted$cause == "Ischemic heart disease" & fatality_weighted$gender == "Female"])) / (sum(as.numeric(fatality_weighted$deaths[fatality_weighted$cause == "Ischemic heart disease" & fatality_weighted$gender == "Male"]))  + sum(as.numeric(fatality_weighted$deaths[fatality_weighted$cause == "Ischemic heart disease" & fatality_weighted$gender == "Female"]))))
-  run[[country]]$baseline$`Stroke total nuevos evitados` = run[[country]]$baseline$`Muertes por stroke que podrían evitarse` / (sum(as.numeric(fatality_weighted$fatality_weighted[fatality_weighted$cause == "Stroke" & fatality_weighted$gender == "Male"])) * sum(as.numeric(fatality_weighted$deaths[fatality_weighted$cause == "Stroke" & fatality_weighted$gender == "Male"])) / (sum(as.numeric(fatality_weighted$deaths[fatality_weighted$cause == "Stroke" & fatality_weighted$gender == "Male"]))  +  sum(as.numeric(fatality_weighted$deaths[fatality_weighted$cause == "Stroke" & fatality_weighted$gender == "Female"]))) + sum(as.numeric(fatality_weighted$fatality_weighted[fatality_weighted$cause == "Stroke" & fatality_weighted$gender == "Female"])) * sum(as.numeric(fatality_weighted$deaths[fatality_weighted$cause == "Stroke" & fatality_weighted$gender == "Female"])) / (sum(as.numeric(fatality_weighted$deaths[fatality_weighted$cause == "Stroke" & fatality_weighted$gender == "Male"]))  + sum(as.numeric(fatality_weighted$deaths[fatality_weighted$cause == "Stroke" & fatality_weighted$gender == "Female"]))))
-  run[[country]]$baseline$`Tasa de stroke por 100 000 incidentes evitados` = run[[country]]$baseline$`Muertes por stroke por cada 100.000 habitantes que podrían evitarse` / (sum(as.numeric(fatality_weighted$fatality_weighted[fatality_weighted$cause == "Stroke" & fatality_weighted$gender == "Male"])) * sum(as.numeric(fatality_weighted$deaths[fatality_weighted$cause == "Stroke" & fatality_weighted$gender == "Male"])) / (sum(as.numeric(fatality_weighted$deaths[fatality_weighted$cause == "Stroke" & fatality_weighted$gender == "Male"]))  +  sum(as.numeric(fatality_weighted$deaths[fatality_weighted$cause == "Stroke" & fatality_weighted$gender == "Female"]))) + sum(as.numeric(fatality_weighted$fatality_weighted[fatality_weighted$cause == "Stroke" & fatality_weighted$gender == "Female"])) * sum(as.numeric(fatality_weighted$deaths[fatality_weighted$cause == "Stroke" & fatality_weighted$gender == "Female"])) / (sum(as.numeric(fatality_weighted$deaths[fatality_weighted$cause == "Stroke" & fatality_weighted$gender == "Male"]))  + sum(as.numeric(fatality_weighted$deaths[fatality_weighted$cause == "Stroke" & fatality_weighted$gender == "Female"]))))
+  run[[country]]$baseline$`Total de nuevos ECI evitados` = run[[country]]$baseline$`Muertes por ECI que podrían evitarse` / (sum(as.numeric(fatality_weighted$fatality_weighted[fatality_weighted$cause == "Ischemic heart disease" & fatality_weighted$gender == "Male"])) * sum(as.numeric(fatality_weighted$deaths[fatality_weighted$cause == "Ischemic heart disease" & fatality_weighted$gender == "Male"])) / (sum(as.numeric(fatality_weighted$deaths[fatality_weighted$cause == "Ischemic heart disease" & fatality_weighted$gender == "Male"]))  +  sum(as.numeric(fatality_weighted$deaths[fatality_weighted$cause == "Ischemic heart disease" & fatality_weighted$gender == "Female"]))) + sum(as.numeric(fatality_weighted$fatality_weighted[fatality_weighted$cause == "Ischemic heart disease" & fatality_weighted$gender == "Female"])) * sum(as.numeric(fatality_weighted$deaths[fatality_weighted$cause == "Ischemic heart disease" & fatality_weighted$gender == "Female"])) / (sum(as.numeric(fatality_weighted$deaths[fatality_weighted$cause == "Ischemic heart disease" & fatality_weighted$gender == "Male"]))  + sum(as.numeric(fatality_weighted$deaths[fatality_weighted$cause == "Ischemic heart disease" & fatality_weighted$gender == "Female"]))))
+  run[[country]]$baseline$`Tasa de nuevos ECI evitados cada 100.00 habitantes` = run[[country]]$baseline$`Muertes por ECI por cada 100.000 habitantes que podrían evitarse` / (sum(as.numeric(fatality_weighted$fatality_weighted[fatality_weighted$cause == "Ischemic heart disease" & fatality_weighted$gender == "Male"])) * sum(as.numeric(fatality_weighted$deaths[fatality_weighted$cause == "Ischemic heart disease" & fatality_weighted$gender == "Male"])) / (sum(as.numeric(fatality_weighted$deaths[fatality_weighted$cause == "Ischemic heart disease" & fatality_weighted$gender == "Male"]))  +  sum(as.numeric(fatality_weighted$deaths[fatality_weighted$cause == "Ischemic heart disease" & fatality_weighted$gender == "Female"]))) + sum(as.numeric(fatality_weighted$fatality_weighted[fatality_weighted$cause == "Ischemic heart disease" & fatality_weighted$gender == "Female"])) * sum(as.numeric(fatality_weighted$deaths[fatality_weighted$cause == "Ischemic heart disease" & fatality_weighted$gender == "Female"])) / (sum(as.numeric(fatality_weighted$deaths[fatality_weighted$cause == "Ischemic heart disease" & fatality_weighted$gender == "Male"]))  + sum(as.numeric(fatality_weighted$deaths[fatality_weighted$cause == "Ischemic heart disease" & fatality_weighted$gender == "Female"]))))
+  run[[country]]$baseline$`Total de nuevos ACV evitados` = run[[country]]$baseline$`Muertes por ACV que podrían evitarse` / (sum(as.numeric(fatality_weighted$fatality_weighted[fatality_weighted$cause == "Stroke" & fatality_weighted$gender == "Male"])) * sum(as.numeric(fatality_weighted$deaths[fatality_weighted$cause == "Stroke" & fatality_weighted$gender == "Male"])) / (sum(as.numeric(fatality_weighted$deaths[fatality_weighted$cause == "Stroke" & fatality_weighted$gender == "Male"]))  +  sum(as.numeric(fatality_weighted$deaths[fatality_weighted$cause == "Stroke" & fatality_weighted$gender == "Female"]))) + sum(as.numeric(fatality_weighted$fatality_weighted[fatality_weighted$cause == "Stroke" & fatality_weighted$gender == "Female"])) * sum(as.numeric(fatality_weighted$deaths[fatality_weighted$cause == "Stroke" & fatality_weighted$gender == "Female"])) / (sum(as.numeric(fatality_weighted$deaths[fatality_weighted$cause == "Stroke" & fatality_weighted$gender == "Male"]))  + sum(as.numeric(fatality_weighted$deaths[fatality_weighted$cause == "Stroke" & fatality_weighted$gender == "Female"]))))
+  run[[country]]$baseline$`Tasa de ACV por 100.000 incidentes evitados` = run[[country]]$baseline$`Muertes por ACV por cada 100.000 habitantes que podrían evitarse` / (sum(as.numeric(fatality_weighted$fatality_weighted[fatality_weighted$cause == "Stroke" & fatality_weighted$gender == "Male"])) * sum(as.numeric(fatality_weighted$deaths[fatality_weighted$cause == "Stroke" & fatality_weighted$gender == "Male"])) / (sum(as.numeric(fatality_weighted$deaths[fatality_weighted$cause == "Stroke" & fatality_weighted$gender == "Male"]))  +  sum(as.numeric(fatality_weighted$deaths[fatality_weighted$cause == "Stroke" & fatality_weighted$gender == "Female"]))) + sum(as.numeric(fatality_weighted$fatality_weighted[fatality_weighted$cause == "Stroke" & fatality_weighted$gender == "Female"])) * sum(as.numeric(fatality_weighted$deaths[fatality_weighted$cause == "Stroke" & fatality_weighted$gender == "Female"])) / (sum(as.numeric(fatality_weighted$deaths[fatality_weighted$cause == "Stroke" & fatality_weighted$gender == "Male"]))  + sum(as.numeric(fatality_weighted$deaths[fatality_weighted$cause == "Stroke" & fatality_weighted$gender == "Female"]))))
   run[[country]]$target$`Prevalencia de hipertensión entre adultos de 30-79 años, estandarizada por edad` = run[[country]]$baseline$`Prevalencia de hipertensión entre adultos de 30-79 años, estandarizada por edad`
-  run[[country]]$target$`Muertes por IHD por cada 100.000 habitantes que podrían evitarse` = run[[country]]$baseline$`Muertes por IHD por cada 100.000 habitantes que podrían evitarse`
-  run[[country]]$target$`Muertes por IHD que podrían evitarse` = run[[country]]$baseline$`Muertes por IHD que podrían evitarse`
-  run[[country]]$target$`Muertes por stroke por cada 100.000 habitantes que podrían evitarse` = run[[country]]$baseline$`Muertes por stroke por cada 100.000 habitantes que podrían evitarse`
-  run[[country]]$target$`Muertes por stroke que podrían evitarse` = run[[country]]$baseline$`Muertes por stroke que podrían evitarse`
-  run[[country]]$target$`Stroke total nuevos evitados` = run[[country]]$baseline$`Stroke total nuevos evitados`
-  run[[country]]$target$`Tasa de stroke por 100 000 incidentes evitados` = run[[country]]$baseline$`Tasa de stroke por 100 000 incidentes evitados`
-  run[[country]]$target$`Población (N) de nuevos hipertensos tratados entre adultos de 30-79 años con diagnóstico de hipertensión` = run[[country]]$population$`Población total` * run[[country]]$target$`Prevalencia de hipertensión entre adultos de 30-79 años, estandarizada por edad` * run[[country]]$target$`Prevalence of previous diagnosis of hypertension among adults aged 30-79 with hypertension, age-standardized` * run[[country]]$target$`Treatment among those aware of the condition (%)`
+  run[[country]]$target$`Muertes por ECI por cada 100.000 habitantes que podrían evitarse` = run[[country]]$baseline$`Muertes por ECI por cada 100.000 habitantes que podrían evitarse`
+  run[[country]]$target$`Muertes por ECI que podrían evitarse` = run[[country]]$baseline$`Muertes por ECI que podrían evitarse`
+  run[[country]]$target$`Muertes por ACV por cada 100.000 habitantes que podrían evitarse` = run[[country]]$baseline$`Muertes por ACV por cada 100.000 habitantes que podrían evitarse`
+  run[[country]]$target$`Muertes por ACV que podrían evitarse` = run[[country]]$baseline$`Muertes por ACV que podrían evitarse`
+  run[[country]]$target$`Total de nuevos ACV evitados` = run[[country]]$baseline$`Total de nuevos ACV evitados`
+  run[[country]]$target$`Tasa de ACV por 100.000 incidentes evitados` = run[[country]]$baseline$`Tasa de ACV por 100.000 incidentes evitados`
+  run[[country]]$target$`Población (N) de nuevos hipertensos tratados entre adultos de 30-79 años con diagnóstico de hipertensión` = run[[country]]$population$`Población total` * run[[country]]$target$`Prevalencia de hipertensión entre adultos de 30-79 años, estandarizada por edad` * run[[country]]$target$`Prevalencia de diagnóstico previo de hipertensión entre adultos de 30-79 años con hipertensión, estandarizada por edad` * run[[country]]$target$`Tratamiento entre los diagnosticados (%)`
   run[[country]]$target$`Población (N) de hipertensos controlados entre adultos de 30-79 años con hipertensión` = run[[country]]$target$`Prevalence of controlled hypertension among adults aged 30-79 years with hypertension, age- standardized` * run[[country]]$target$`Prevalencia de hipertensión entre adultos de 30-79 años, estandarizada por edad` * run[[country]]$population$`Población total`
-  run[[country]]$target$`IHD total de nuevos eventos evitados` = run[[country]]$baseline$`IHD total de nuevos eventos evitados` = run[[country]]$baseline$`Muertes por IHD que podrían evitarse` / (sum(as.numeric(fatality_weighted$fatality_weighted[fatality_weighted$cause == "Ischemic heart disease" & fatality_weighted$gender == "Male"])) * sum(as.numeric(fatality_weighted$deaths[fatality_weighted$cause == "Ischemic heart disease" & fatality_weighted$gender == "Male"])) / (sum(as.numeric(fatality_weighted$deaths[fatality_weighted$cause == "Ischemic heart disease" & fatality_weighted$gender == "Male"]))  +  sum(as.numeric(fatality_weighted$deaths[fatality_weighted$cause == "Ischemic heart disease" & fatality_weighted$gender == "Female"]))) + sum(as.numeric(fatality_weighted$fatality_weighted[fatality_weighted$cause == "Ischemic heart disease" & fatality_weighted$gender == "Female"])) * sum(as.numeric(fatality_weighted$deaths[fatality_weighted$cause == "Ischemic heart disease" & fatality_weighted$gender == "Female"])) / (sum(as.numeric(fatality_weighted$deaths[fatality_weighted$cause == "Ischemic heart disease" & fatality_weighted$gender == "Male"]))  + sum(as.numeric(fatality_weighted$deaths[fatality_weighted$cause == "Ischemic heart disease" & fatality_weighted$gender == "Female"]))))
-  run[[country]]$target$`IHD Rate 100k Incident events averted` = run[[country]]$target$`Muertes por IHD por cada 100.000 habitantes que podrían evitarse` / (sum(as.numeric(fatality_weighted$fatality_weighted[fatality_weighted$cause == "Ischemic heart disease" & fatality_weighted$gender == "Male"])) * sum(as.numeric(fatality_weighted$deaths[fatality_weighted$cause == "Ischemic heart disease" & fatality_weighted$gender == "Male"])) / (sum(as.numeric(fatality_weighted$deaths[fatality_weighted$cause == "Ischemic heart disease" & fatality_weighted$gender == "Male"]))  +  sum(as.numeric(fatality_weighted$deaths[fatality_weighted$cause == "Ischemic heart disease" & fatality_weighted$gender == "Female"]))) + sum(as.numeric(fatality_weighted$fatality_weighted[fatality_weighted$cause == "Ischemic heart disease" & fatality_weighted$gender == "Female"])) * sum(as.numeric(fatality_weighted$deaths[fatality_weighted$cause == "Ischemic heart disease" & fatality_weighted$gender == "Female"])) / (sum(as.numeric(fatality_weighted$deaths[fatality_weighted$cause == "Ischemic heart disease" & fatality_weighted$gender == "Male"]))  + sum(as.numeric(fatality_weighted$deaths[fatality_weighted$cause == "Ischemic heart disease" & fatality_weighted$gender == "Female"]))))
-  run[[country]]$baseline$`New population (N) treated / Now controlled from former non-controlled population` = run[[country]]$target$`Población (N) de nuevos hipertensos tratados entre adultos de 30-79 años con diagnóstico de hipertensión` - run[[country]]$baseline$`Población (N) de nuevos hipertensos tratados entre adultos de 30-79 años con diagnóstico de hipertensión`
-  run[[country]]$target$`New population (N) treated / Now controlled from former non-controlled population` =   run[[country]]$target$`Población (N) de hipertensos controlados entre adultos de 30-79 años con hipertensión` - run[[country]]$baseline$`Población (N) de hipertensos controlados entre adultos de 30-79 años con hipertensión`
+  run[[country]]$target$`Total de nuevos ECI evitados` = run[[country]]$baseline$`Total de nuevos ECI evitados` = run[[country]]$baseline$`Muertes por ECI que podrían evitarse` / (sum(as.numeric(fatality_weighted$fatality_weighted[fatality_weighted$cause == "Ischemic heart disease" & fatality_weighted$gender == "Male"])) * sum(as.numeric(fatality_weighted$deaths[fatality_weighted$cause == "Ischemic heart disease" & fatality_weighted$gender == "Male"])) / (sum(as.numeric(fatality_weighted$deaths[fatality_weighted$cause == "Ischemic heart disease" & fatality_weighted$gender == "Male"]))  +  sum(as.numeric(fatality_weighted$deaths[fatality_weighted$cause == "Ischemic heart disease" & fatality_weighted$gender == "Female"]))) + sum(as.numeric(fatality_weighted$fatality_weighted[fatality_weighted$cause == "Ischemic heart disease" & fatality_weighted$gender == "Female"])) * sum(as.numeric(fatality_weighted$deaths[fatality_weighted$cause == "Ischemic heart disease" & fatality_weighted$gender == "Female"])) / (sum(as.numeric(fatality_weighted$deaths[fatality_weighted$cause == "Ischemic heart disease" & fatality_weighted$gender == "Male"]))  + sum(as.numeric(fatality_weighted$deaths[fatality_weighted$cause == "Ischemic heart disease" & fatality_weighted$gender == "Female"]))))
+  run[[country]]$target$`Tasa de nuevos ECI evitados cada 100.00 habitantes` = run[[country]]$target$`Muertes por ECI por cada 100.000 habitantes que podrían evitarse` / (sum(as.numeric(fatality_weighted$fatality_weighted[fatality_weighted$cause == "Ischemic heart disease" & fatality_weighted$gender == "Male"])) * sum(as.numeric(fatality_weighted$deaths[fatality_weighted$cause == "Ischemic heart disease" & fatality_weighted$gender == "Male"])) / (sum(as.numeric(fatality_weighted$deaths[fatality_weighted$cause == "Ischemic heart disease" & fatality_weighted$gender == "Male"]))  +  sum(as.numeric(fatality_weighted$deaths[fatality_weighted$cause == "Ischemic heart disease" & fatality_weighted$gender == "Female"]))) + sum(as.numeric(fatality_weighted$fatality_weighted[fatality_weighted$cause == "Ischemic heart disease" & fatality_weighted$gender == "Female"])) * sum(as.numeric(fatality_weighted$deaths[fatality_weighted$cause == "Ischemic heart disease" & fatality_weighted$gender == "Female"])) / (sum(as.numeric(fatality_weighted$deaths[fatality_weighted$cause == "Ischemic heart disease" & fatality_weighted$gender == "Male"]))  + sum(as.numeric(fatality_weighted$deaths[fatality_weighted$cause == "Ischemic heart disease" & fatality_weighted$gender == "Female"]))))
+  run[[country]]$baseline$`Nueva población (N) tratada / Controlados actualmente previamente no controlados` = run[[country]]$target$`Población (N) de nuevos hipertensos tratados entre adultos de 30-79 años con diagnóstico de hipertensión` - run[[country]]$baseline$`Población (N) de nuevos hipertensos tratados entre adultos de 30-79 años con diagnóstico de hipertensión`
+  run[[country]]$target$`Nueva población (N) tratada / Controlados actualmente previamente no controlados` =   run[[country]]$target$`Población (N) de hipertensos controlados entre adultos de 30-79 años con hipertensión` - run[[country]]$baseline$`Población (N) de hipertensos controlados entre adultos de 30-79 años con hipertensión`
   
   ###### DISABILITY WEIGHT #####
   
@@ -178,9 +178,9 @@ estimaToolCosts = function(
         event = e
         
         if (e == "Deaths") {
-          absolute = if (c=="Stroke") {"Muertes por stroke que podrían evitarse"} else {"Muertes por IHD que podrían evitarse"}
+          absolute = if (c=="Stroke") {"Muertes por ACV que podrían evitarse"} else {"Muertes por ECI que podrían evitarse"}
         } else {
-          absolute = if (c=="Stroke") {"Stroke total nuevos evitados"} else {"IHD total de nuevos eventos evitados"}
+          absolute = if (c=="Stroke") {"Total de nuevos ACV evitados"} else {"Total de nuevos ECI evitados"}
         }
         
         prop = list(
@@ -222,7 +222,7 @@ estimaToolCosts = function(
     mutate(dalys_overall=yll+dalys) %>% arrange(gender,age)
   
   epi_outcomes = data.frame(
-    outcome = "Total Dalys averted",
+    outcome = "Total de AVAD evitados",
     value = sum(dalys_overall$dalys_overall)
   )
   
@@ -238,11 +238,10 @@ estimaToolCosts = function(
   
   load("estimaTool/costs.RData")
   costs_outcomes = list(
-    `Annual intervention cost per average treated hypertensive patient` = costs$value[costs$country==country & costs$parameter ==  "Costo anual de consulta médica en paciente promedio (*)"] + costs$value[costs$country==country & costs$parameter ==  "Costo farmacológico anual por paciente promedio (**)"],
-    `Total annual intervention cost weighted by the target population reached` = run[[country]]$baseline$`New population (N) treated / Now controlled from former non-controlled population` * costs$value[costs$country==country & costs$parameter ==  "Costo anual de consulta médica en paciente promedio (*)"] + run[[country]]$baseline$`New population (N) treated / Now controlled from former non-controlled population` * costs$value[costs$country==country & costs$parameter ==  "Costo farmacológico anual por paciente promedio (**)"],
-    `Direct medical costs avoided due to cardiovascular events (IHD and stroke)` = run[[country]]$baseline$`IHD total de nuevos eventos evitados` * round(costs$value[costs$country==country & costs$parameter ==  "Evento de enfermedad cardiaca isquemica promedio  (***)"],3) + round(costs$value[costs$country==country & costs$parameter ==  "Evento de accidente cerebrovascular"],3) * run[[country]]$baseline$`Stroke total nuevos evitados`
+    `Costo anual de la intervención por paciente promedio  hipertenso tratado` = costs$value[costs$country==country & costs$parameter ==  "Costo anual de consulta médica en paciente promedio (*)"] + costs$value[costs$country==country & costs$parameter ==  "Costo farmacológico anual por paciente promedio (**)"],
+    `Costos totales anuales de la intervención ponderado por la población objetivo alcanzada` = run[[country]]$baseline$`Nueva población (N) tratada / Controlados actualmente previamente no controlados` * costs$value[costs$country==country & costs$parameter ==  "Costo anual de consulta médica en paciente promedio (*)"] + run[[country]]$baseline$`Nueva población (N) tratada / Controlados actualmente previamente no controlados` * costs$value[costs$country==country & costs$parameter ==  "Costo farmacológico anual por paciente promedio (**)"],
+    `Costos médicos directos evitados por evento cardiovasculares (ECI y ACV)` = run[[country]]$baseline$`Total de nuevos ECI evitados` * round(costs$value[costs$country==country & costs$parameter ==  "Evento de enfermedad cardiaca isquemica promedio  (***)"],3) + round(costs$value[costs$country==country & costs$parameter ==  "Evento de accidente cerebrovascular"],3) * run[[country]]$baseline$`Total de nuevos ACV evitados`
   )
-  
   estimaToolModel = list(
     country = country,
     mortality_data = mortality_data,
@@ -263,8 +262,3 @@ estimaToolCosts = function(
 }
 
 #resultado = estimaToolCosts()
-
-
-
-
-
