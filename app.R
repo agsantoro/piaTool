@@ -1456,7 +1456,7 @@ server <- function(input, output, session) {
           columns[[colnames(table)[i]]] = colDef(name = colnames(table)[i], align = "right")
         }
         reactable(
-          table,
+          table[table$cat!="Inputs",],
           groupBy = "cat",
           defaultExpanded = T,
           pagination = F,
@@ -1658,7 +1658,7 @@ server <- function(input, output, session) {
                         step=.001)
           })),
         bsCollapsePanel(
-          title = "Parámetros Secundarios",
+          title = "Parámetros Avanzados",
           h4("Línea de base"),
           lapply(input_names[c(1,2,4)], function (i) {
             
@@ -2083,8 +2083,9 @@ server <- function(input, output, session) {
       table$cat=""
       table$cat[cat_epi] = "Resultados epidemiológicos"
       table$cat[cat_costos] = "Resultados económicos"
-      
       rownames(table) = NULL
+      
+      table$Valor[table$cat=="Resultados económicos"] = paste0("$",table$Valor[table$cat=="Resultados económicos"])
       
       reactable(
         table,
@@ -2274,7 +2275,7 @@ server <- function(input, output, session) {
       table$cat=""
       table$cat[cat_epi] = "Resultados epidemiológicos"
       table$cat[cat_costos] = "Resultados económicos"
-      
+      table[[i]][table$cat=="Resultados económicos"] = paste0("$",table[[2]][table$cat=="Resultados económicos"])
       columns = list(
         cat = colDef(name = "Categoría", align = "left"),
         Indicador = colDef(name = "Indicador", align = "left")
@@ -2322,10 +2323,10 @@ server <- function(input, output, session) {
       
       cat_epi = c(2,4:8)
       cat_costos = c(1,3)
-      
       table$cat=""
       table$cat[cat_epi] = "Resultados epidemiológicos"
       table$cat[cat_costos] = "Resultados económicos"
+      table[[i]][table$cat=="Resultados económicos"] = paste0("$",table[[2]][table$cat=="Resultados económicos"])
       
       columns = list(
         cat = colDef(name = "Categoría", align = "left"),
