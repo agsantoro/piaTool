@@ -741,7 +741,7 @@ server <- function(input, output, session) {
   observeEvent(input$volver,{
     shinyjs::toggle("fullpage_popup", anim = T, animType = "fade")
   })
-  shinyjs::toggle("fullpage_popup")
+  shinyjs::toggle("fullpage_popup", anim = T, animType = "fade")
   disable("hearts_savedScenarios")
   output$hepC_inputs = renderUI({
     input_names = c(

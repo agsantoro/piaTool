@@ -1,0 +1,13 @@
+name: piaTool
+title:
+username:
+account: agsantoro
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 9994908
+bundleId: 7739661
+url: https://iecs.shinyapps.io/piaTool/
+when: 1695918846.99914
+lastSyncTime: 1695918846.99917
+asMultiple: FALSE
+asStatic: FALSE
