@@ -95,6 +95,7 @@ body {
 }
   
 #fullpage_popup {
+  overflow-y: auto;
   position: fixed;
   top: 0;
   left: 0;
