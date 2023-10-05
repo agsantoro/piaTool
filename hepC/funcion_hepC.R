@@ -159,7 +159,7 @@ hepC_conTrat = function (
   SVR_F3 = tratados_F3 * pSVR
   SVR_F4 = tratados_F4 * pSVR
   resSVR = SVR_F0 + SVR_F1 + SVR_F2 + SVR_F3 + SVR_F4
-  
+  conTTo_CostoTTO = CostoTratar_F0 + CostoTratar_F1 + CostoTratar_F2 + CostoTratar_F3 + CostoTratar_F4
   # Se quedan en F0 los que fallaron la pSVR y los que discontinuaron.
   
   arrayModelo = data.frame(
@@ -319,14 +319,14 @@ hepC_conTrat = function (
   resLRD <- arrayModelo[ultimo, "LDR"]
   resDC <- arrayModelo[ultimo, "dcAcumulados"]
   resHcc <- arrayModelo[ultimo, "hccAcumulados"]
-  resCostoD <- arrayModelo[ultimo, "dCostoAcumulado"] / cohorte
-  resQalyD <- arrayModelo[ultimo, "utilidadAcumuladoDescontado"] / cohorte
-  resLYD <- arrayModelo[ultimo, "añosVidaDescontados"] / cohorte
-  resCosto <- arrayModelo[ultimo, "costoAcumulado"] / cohorte
-  resQaly <- arrayModelo[ultimo, "utilidadAcumulado"] / cohorte
-  resLY <- arrayModelo[ultimo, "añosVida"] / cohorte
+  resCostoD <- arrayModelo[ultimo, "dCostoAcumulado"]
+  resQalyD <- arrayModelo[ultimo, "utilidadAcumuladoDescontado"]
+  resLYD <- arrayModelo[ultimo, "añosVidaDescontados"]
+  resCosto <- arrayModelo[ultimo, "costoAcumulado"]
+  resQaly <- arrayModelo[ultimo, "utilidadAcumulado"]
+  resLY <- arrayModelo[ultimo, "añosVida"]
   resCC <- arrayModelo[ultimo, "ccAcumulados"]
-  
+  costoTrat <- conTTo_CostoTTO
   
   resultados = list(
     resCC,
@@ -336,10 +336,11 @@ hepC_conTrat = function (
     resQaly,
     resQalyD,
     resLY,
-    resQalyD,
+    resLYD,
     resCosto,
-    resCostoD
-    
+    resCostoD,
+    resSVR,
+    costoTrat
   )
   
   names(resultados) = c(
@@ -352,7 +353,10 @@ hepC_conTrat = function (
     "Años de vida vividos",
     "Años de vida vividos Descontados",
     "Costos",
-    "Costos Descontados"
+    "Costos Descontados",
+    "SVR Logradas",
+    "Costos Tratamiento"
+    
   )
   
   return(resultados)
@@ -621,12 +625,12 @@ hepC_sinTrat = function (
   resLRD <- arrayModelo[ultimo, "LDR"]
   resDC <- arrayModelo[ultimo, "dcAcumulados"]
   resHcc <- arrayModelo[ultimo, "hccAcumulados"]
-  resCostoD <- arrayModelo[ultimo, "dCostoAcumulado"] / cohorte
-  resQalyD <- arrayModelo[ultimo, "utilidadAcumuladoDescontado"] / cohorte
-  resLYD <- arrayModelo[ultimo, "añosVidaDescontados"] / cohorte
-  resCosto <- arrayModelo[ultimo, "costoAcumulado"] / cohorte
-  resQaly <- arrayModelo[ultimo, "utilidadAcumulado"] / cohorte
-  resLY <- arrayModelo[ultimo, "añosVida"] / cohorte
+  resCostoD <- arrayModelo[ultimo, "dCostoAcumulado"]
+  resQalyD <- arrayModelo[ultimo, "utilidadAcumuladoDescontado"]
+  resLYD <- arrayModelo[ultimo, "añosVidaDescontados"]
+  resCosto <- arrayModelo[ultimo, "costoAcumulado"]
+  resQaly <- arrayModelo[ultimo, "utilidadAcumulado"]
+  resLY <- arrayModelo[ultimo, "añosVida"]
   resCC <- arrayModelo[ultimo, "ccAcumulados"]
   
   resultados = list(
@@ -637,9 +641,11 @@ hepC_sinTrat = function (
     resQaly,
     resQalyD,
     resLY,
-    resQalyD,
+    resLYD,
     resCosto,
-    resCostoD
+    resCostoD,
+    resSVR = NA,
+    costoTrat = 0
     
   )
   
@@ -653,7 +659,9 @@ hepC_sinTrat = function (
     "Años de vida vividos",
     "Años de vida vividos Descontados",
     "Costos",
-    "Costos Descontados"
+    "Costos Descontados",
+    "SVR",
+    "Costos Tratamiento"
   )
   
   return(resultados)
@@ -725,13 +733,60 @@ hepC_full = function(
     "Sin tratamiento" = sinTrat,
     "Con tratamiento" = conTrat
   )
-  
   resultados$Comparacion = list(
+    'SVR logradas' = round(resultados$`Con tratamiento`$`SVR Logradas`,0),
     'Cirrosis Evitadas' = round(resultados$`Sin tratamiento`$Cirrosis - resultados$`Con tratamiento`$Cirrosis,0),
     'Cirrosis Descompensadas Evitadas' = round(resultados$`Sin tratamiento`$`Cirrosis Descompensadas` - resultados$`Con tratamiento`$`Cirrosis Descompensadas`,0),	
     'Hepatocarcinomas Evitados' = round(resultados$`Sin tratamiento`$Hepatocarcinomas - resultados$`Con tratamiento`$Hepatocarcinomas,0),
     'Muertes por Hepatopatias Evitadas'	= round(resultados$`Sin tratamiento`$`Muertes asociadas a Higado` - resultados$`Con tratamiento`$`Muertes asociadas a Higado`,0)
   )
+  
+  dalysDiscEvitados = (resultados$`Con tratamiento`$`Qalys vividos` - resultados$`Con tratamiento`$`Años de vida vividos`) - (resultados$`Sin tratamiento`$`Qalys vividos` - resultados$`Sin tratamiento`$`Años de vida vividos`)
+  dalysDiscEvitadosDesc = (resultados$`Con tratamiento`$`Qalys vividos Descontados` - resultados$`Con tratamiento`$`Años de vida vividos Descontados`) - (resultados$`Sin tratamiento`$`Qalys vividos Descontados` - resultados$`Sin tratamiento`$`Años de vida vividos Descontados`)
+  anosVidaSalvados = resultados$`Con tratamiento`$`Años de vida vividos` - resultados$`Sin tratamiento`$`Años de vida vividos`
+  anosVidaSalvadosDesc = resultados$`Con tratamiento`$`Años de vida vividos Descontados` - resultados$`Sin tratamiento`$`Años de vida vividos Descontados`
+  diferenciaCostos = resultados$`Con tratamiento`$Costos - resultados$`Sin tratamiento`$Costos
+  diferenciaCostosDesc = resultados$`Con tratamiento`$`Costos Descontados` - resultados$`Sin tratamiento`$`Costos Descontados`
+  icerSVR = diferenciaCostos/resultados$`Con tratamiento`$SVR 
+  icerSVRDesc = diferenciaCostosDesc/resultados$`Con tratamiento`$SVR 
+  icerCirrosisEvitada = diferenciaCostos / (resultados$`Sin tratamiento`$Cirrosis - resultados$`Con tratamiento`$Cirrosis)
+  icerCirrosisEvitadaDesc = diferenciaCostosDesc / (resultados$`Sin tratamiento`$`Cirrosis` - resultados$`Con tratamiento`$`Cirrosis`)
+  icerDCEvitada = diferenciaCostos / (resultados$`Sin tratamiento`$`Cirrosis Descompensadas` - resultados$`Con tratamiento`$`Cirrosis Descompensadas`)
+  icerDCEvitadaDesc = diferenciaCostosDesc / (resultados$`Sin tratamiento`$`Cirrosis Descompensadas` - resultados$`Con tratamiento`$`Cirrosis Descompensadas`)
+  icerHCCEvitada = diferenciaCostos / (resultados$`Sin tratamiento`$Hepatocarcinomas - resultados$`Con tratamiento`$Hepatocarcinomas)
+  icerHCCEvitadaDesc = diferenciaCostosDesc / (resultados$`Sin tratamiento`$Hepatocarcinomas - resultados$`Con tratamiento`$Hepatocarcinomas)
+  icerLDREvitada = diferenciaCostos / (resultados$`Sin tratamiento`$`Muertes asociadas a Higado` - resultados$`Con tratamiento`$`Muertes asociadas a Higado`)
+  icerLDREvitadaDesc = diferenciaCostosDesc / (resultados$`Sin tratamiento`$`Muertes asociadas a Higado` - resultados$`Con tratamiento`$`Muertes asociadas a Higado`)
+  icerQalyEvitada = diferenciaCostos / (resultados$`Sin tratamiento`$`Qalys vividos` - resultados$`Con tratamiento`$`Qalys vividos`)
+  icerQalyEvitadaDesc = diferenciaCostosDesc / (resultados$`Sin tratamiento`$`Qalys vividos Descontados` - resultados$`Con tratamiento`$`Qalys vividos Descontados`)
+  icerLYEvitada = diferenciaCostos / (resultados$`Sin tratamiento`$`Años de vida vividos` - resultados$`Con tratamiento`$`Años de vida vividos`)
+  icerLYEvitadaDesc = diferenciaCostosDesc / (resultados$`Sin tratamiento`$`Años de vida vividos Descontados` - resultados$`Con tratamiento`$`Años de vida vividos Descontados`)
+  ROI = ((resultados$`Sin tratamiento`$Costos - resultados$`Con tratamiento`$Costos) - resultados$`Con tratamiento`$`Costos Tratamiento`) / resultados$`Con tratamiento`$`Costos Tratamiento` * 100
+  ROIDesc = ((resultados$`Sin tratamiento`$`Costos Descontados` - resultados$`Con tratamiento`$`Costos Descontados`) - resultados$`Con tratamiento`$`Costos Tratamiento`) / resultados$`Con tratamiento`$`Costos Tratamiento` * 100
+  
+  resultados$Comparacion[[ "Dalys por discapacidad Evitados"]] = dalysDiscEvitados
+  resultados$Comparacion[["Dalys por discapacidad Evitados (descontado)"]] = dalysDiscEvitadosDesc
+  resultados$Comparacion[["Años de vida salvados"]] = anosVidaSalvados
+  resultados$Comparacion[["Años de vida salvados (descontado)"]] = anosVidaSalvadosDesc
+  resultados$Comparacion[["Diferencia de Costos"]] = diferenciaCostos
+  resultados$Comparacion[["Diferencia de Costos (descontado)"]] = diferenciaCostosDesc
+  resultados$Comparacion[["ICER por SVR"]] = icerSVR
+  resultados$Comparacion[["ICER por SVR (descontado)"]] = icerSVRDesc
+  resultados$Comparacion[["ICER por Cirrosis Evitada"]] = icerCirrosisEvitada
+  resultados$Comparacion[["ICER por Cirrosis Evitada (descontado)"]] = icerCirrosisEvitadaDesc
+  resultados$Comparacion[["ICER por DC Evitada"]] = icerHCCEvitada
+  resultados$Comparacion[["ICER por DC Evitada (descontado)"]] = icerHCCEvitadaDesc
+  resultados$Comparacion[["ICER por HCC Evitada"]] = icerDCEvitada
+  resultados$Comparacion[["ICER por HCC Evitada (descontado)"]] = icerDCEvitadaDesc
+  resultados$Comparacion[["ICER por LRD Evitada"]] = icerLDREvitada
+  resultados$Comparacion[["ICER por LRD Evitada (descontado)"]] = icerLDREvitadaDesc
+  resultados$Comparacion[["ICER por QALY"]] = icerQalyEvitada
+  resultados$Comparacion[["ICER por QALY (descontado)"]] = icerQalyEvitadaDesc
+  resultados$Comparacion[["ICER por LY"]] = icerLYEvitada
+  resultados$Comparacion[["ICER por LY (descontado)"]] = icerLYEvitadaDesc
+  resultados$Comparacion[["ROI"]] = ROI
+  resultados$Comparacion[["ROI (descontado)"]] = ROIDesc
+  
   
   return(resultados)
 }

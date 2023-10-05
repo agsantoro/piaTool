@@ -887,14 +887,11 @@ server <- function(input, output, session) {
   output$hepC_summaryTable = renderReactable({
     
     
-    
-    
     if (length(hepC_run())>1) {
       table = hepC_run()
       table$Valor = format(round(table$Valor,1),big.mark = ".",decimal.mark = ",")
-      
-      cat_epi = 1:4
-      cat_costos = c()
+      cat_epi = 1:5
+      cat_costos = 6:nrow(table)
       
       table$cat=""
       table$cat[cat_epi] = "Resultados epidemiológicos"
@@ -2390,8 +2387,8 @@ server <- function(input, output, session) {
         table[[i]] = hepC_scenarios$savedScenarios[[i]]$Valor
       }
       
-      cat_epi = 1:4
-      cat_costos = c()
+      cat_epi = 1:5
+      cat_costos = 6:nrow(table)
       
       table$cat=""
       table$cat[cat_epi] = "Resultados epidemiológicos"
