@@ -28,12 +28,12 @@ hpp = function (pais,
                 descuento = 0.05, #Tasa de descuento (INPUT)
                 costoIntervencion = 0 #Costo de la intervención  (INPUT)
 ) {
+  
   # Carga información de países
   load("hpp/data/datosPais.RData")
   
   # filtra por país seleccionado
   datosPais = datosPais[datosPais$pais==pais,]
-  
   
   #Calculamos el costo promedio de un caso de HPP ponderado por el porcentaje de casos severos y no severos.
   costoHPPNoSevera = datosPais$value[datosPais$indicador == 'COSTO.mHPP']
@@ -44,8 +44,7 @@ hpp = function (pais,
   #Calculamos la perdida de qalys promedio de un caso de HPP ponderado por la probabilidad de muerte y de histerectomia (dado que el caso sea severo).
   #para eso estimamos la probabilidad actual de HPP del pais que estara determinado por la probabilidad de HPP con y sin oxitocina ponderado por el uso de oxitocina basal del pais
   
-  pHPPCountry = (usoOxitocina * eficaciaOxitocina * pHPP) + ((1 - usoOxitocina) * pHPP)
-  
+  pHPPCountry = (datosPais$value[datosPais$indicador=="USO.DE.OXITOCINA"] * eficaciaOxitocina * pHPP) + ((1 - datosPais$value[datosPais$indicador=="USO.DE.OXITOCINA"]) * pHPP)
   #Estimamos el numero de HPP para el pais
   numeroPartos = datosPais$value[datosPais$indicador == "PARTOS.ANUALES"] 
   nHPPCountry = pHPPCountry * numeroPartos 
@@ -60,6 +59,11 @@ hpp = function (pais,
   edadAlParto = datosPais$value[datosPais$indicador == "EDAD.AL.PARTO"]
   añosDescontados = descontarValor(-1, (expectativaAlParto - edadAlParto), descuento)
   
+  ###############
+  añosDescontados =  19.599725447504195 #### PARCHE DEBUG
+  ###############
+  
+  
   #Calculamos el valor descontado de qalys perdidos por una histerectomia
   Dalys_Histerectomia = (1 - uHisterectomia) * añosDescontados
   
@@ -71,15 +75,16 @@ hpp = function (pais,
   
   ####################
   
-  # ramaSecundaria = function (poblacion, pHPP) {
-  #   list (
-  #     poblacion = poblacion,
-  #     pHPP = pHPP,
-  #     noHPP = poblacion * (1 - pHPP),
-  #     siHPP = poblacion * pHPP
-  #   )
-  # }
-  # 
+  ramaSecundaria = function (poblacion, pHPP) {
+    list (
+      poblacion = poblacion,
+      pHPP = pHPP,
+      noHPP = poblacion * (1 - pHPP),
+      siHPP = poblacion * pHPP
+    )
+  }
+
+  
   
   # función almacena datos de corrida
   
@@ -92,12 +97,19 @@ hpp = function (pais,
       costoHPP = 0,
       qalyLost = 0,
       costoIntervencion = costoIntervencion,
-      recibeOxitocina = poblacion * pUsoOxitocina * pHPP * eficaciaOxitocina *.99,
-      noRecibeOxitocina = poblacion * (1-pUsoOxitocina) * pHPP *.99
+      recibeOxitocina = ramaSecundaria(poblacion * pUsoOxitocina, pHPP * eficaciaOxitocina),
+      noRecibeOxitocina = ramaSecundaria(poblacion * (1-pUsoOxitocina), pHPP)
     )
   }
   
-  runRama = rama(usoOxitocina,694000,pHPP,eficaciaOxitocina)
+  
+  if (usoOxitocina == datosPais$value[datosPais$indicador=="USO.DE.OXITOCINA"]) {
+    runRama = rama(usoOxitocina,numeroPartos,pHPP,eficaciaOxitocina)
+  } else {
+    runRama = rama(usoOxitocina * datosPais$value[datosPais$indicador=="pINSTITUCIONALES"],datosPais$value[datosPais$indicador=="PARTOS.ANUALES"], pHPP, eficaciaOxitocina)
+  }
+  
+  
   
   
   # setea parámetros escenario
@@ -131,23 +143,25 @@ hpp = function (pais,
 
   # Calcula indicadores para resultados
   getCosto = function() {
-    (runRama$recibeOxitocina * runSetearCostos$costoHPP + runRama$noRecibeOxitocina * runSetearCostos$costoHPP) + (runSetearCostos[[2]] * runRama$poblacion * runRama$usoOxitocina) + runSetearCostoIntervencion[[1]]
+    (runRama$recibeOxitocina$siHPP * runSetearCostos$costoHPP + runRama$noRecibeOxitocina$siHPP * runSetearCostos$costoHPP) + (runSetearCostos$costoOxitocina * runRama$poblacion * runRama$usoOxitocina) + runSetearCostoIntervencion[[1]]
   }
+  
   
   getQalyLost = function() {
-    runRama$recibeOxitocina * runSetearQalyLost[[1]] + runRama$noRecibeOxitocina * runSetearQalyLost[[1]]
+    runRama$recibeOxitocina$siHPP * runSetearQalyLost$qalyLost + runRama$noRecibeOxitocina$siHPP * runSetearQalyLost$qalyLost
   }
   
+  
   getHPP = function() {
-    runRama$recibeOxitocina + runRama$noRecibeOxitocina
+    runRama$recibeOxitocina$siHPP + runRama$noRecibeOxitocina$siHPP
   }
   
   getMuertes = function() {
-    runRama$recibeOxitocina + runRama$noRecibeOxitocina * pCFR
+    runRama$recibeOxitocina$siHPP + runRama$noRecibeOxitocina$siHPP * pCFR
   }
   
   # Resultados corrida
-  
+  browser()
   resultados = list(
     Dalys_Histerectomia = Dalys_Histerectomia,
     mHPP = getMuertes(),
