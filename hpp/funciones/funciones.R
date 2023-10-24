@@ -109,9 +109,6 @@ hpp = function (pais,
     runRama = rama(usoOxitocina * datosPais$value[datosPais$indicador=="pINSTITUCIONALES"],datosPais$value[datosPais$indicador=="PARTOS.ANUALES"], pHPP, eficaciaOxitocina)
   }
   
-  
-  
-  
   # setea parámetros escenario
   
   setearCostos = function(costoHPP, costoOxitocina) {
@@ -161,8 +158,8 @@ hpp = function (pais,
   }
   
   # Resultados corrida
-  browser()
   resultados = list(
+    costoIntervencion = costoIntervencion,
     Dalys_Histerectomia = Dalys_Histerectomia,
     mHPP = getMuertes(),
     hpp = getHPP(),
@@ -174,7 +171,9 @@ hpp = function (pais,
     pHPP_Severa=pHPP_Severa,
     pHisterectomia=pHisterectomia,
     Dalys_MuertePrematura=Dalys_MuertePrematura,
-    getCosto = getCosto()
+    getCosto = getCosto(),
+    poblacionAfectada = datosPais$value[datosPais$indicador=="PARTOS.ANUALES"] * usoOxitocina
+    
   )
   return(resultados)
 }
@@ -185,6 +184,9 @@ resultados_comparados = function(pais,
                                  uso_oxitocina_target,
                                  descuento,
                                  costoIntervencion) {
+  load("hpp/data/datosPais.RData")
+  datosPais = datosPais[datosPais$pais==pais,]
+  
   base = hpp(
     pais,
     uso_oxitocina_base,
@@ -208,17 +210,63 @@ resultados_comparados = function(pais,
     eficaciaOxitocina = 0.5, #reducción de la probabilidad de HPP ante oxitocina.
     uHisterectomia = 0.985, #Utilidad de una histerectomia.
     descuento = descuento, #Tasa de descuento (INPUT)
-    costoIntervencion = costoIntervencion #Costo de la intervención  (INPUT)
+    costoIntervencion = costoIntervencion #Costo de la intervención  (INPUT),
   )
-  
+
   comparacion = list(
-    "Diferencia de costo" = base$getCosto - target$getCosto,
+    "Diferencia de costo" = target$getCosto - base$getCosto,
+    "Diferencia de Qualys" = target$QalyLost - base$QalyLost,
     "Hemorragias Post Parto Evitadas" = base$hpp-target$hpp,
     "Muertes por Hemorragias Post Parto Evitadas" = (base$hpp-target$hpp) * base$pCFR,
     "Histerectomias por Hemorragias Post Parto Evitadas" = (base$hpp - target$hpp) * (base$pHPP_Severa * base$pHisterectomia),
     "Años de vida por muerte prematura salvados" = base$Dalys_MuertePrematura * ((base$hpp - target$hpp) * base$pCFR),
-    "Años de vida por discapacidad salvados" = base$Dalys_Histerectomia * ((base$hpp - target$hpp) * (base$pHPP_Severa * base$pHisterectomia))
+    "Años de vida por discapacidad salvados" = base$Dalys_Histerectomia * ((base$hpp - target$hpp) * (base$pHPP_Severa * base$pHisterectomia)),
+    "Población base afectada" = datosPais$value[datosPais$indicador=="PARTOS.ANUALES"] * uso_oxitocina_base,
+    "Población intervención afectada" = round(datosPais$value[datosPais$indicador=="PARTOS.ANUALES"] * uso_oxitocina_target * datosPais$value[datosPais$indicador=="pINSTITUCIONALES"],0),
+    "Costo Oxitocina" = paste0("U$S ",datosPais$value[datosPais$indicador=="COSTO.Oxitocina"]),
+    "Ahorro" = -1 * (target$getCosto - base$getCosto)
   )  
+  
+  # costo-efectividad
+  
+  #ICER
+  if (comparacion$`Diferencia de costo` > 0 & comparacion$`Diferencia de Qualys` < 0) {
+    comparacion$ICER <- round(comparacion$`Diferencia de costo` / abs(comparacion$`Diferencia de Qualys`), 3)
+  } else if (comparacion$`Diferencia de costo` <= 0 & comparacion$`Diferencia de Qualys` < 0) {
+    comparacion$ICER <- 'Costo-Ahorrativo'
+  } else {
+    comparacion$ICER <- 'Dominada'
+  }
+  
+  #ICERL
+  if (comparacion$`Diferencia de costo` > 0 & comparacion$`Años de vida por muerte prematura salvados` > 0) {
+    comparacion$ICERL <- round(comparacion$`Diferencia de costo` / comparacion$`Años de vida por muerte prematura salvados`, 3)
+  } else if (comparacion$`Diferencia de costo` <= 0 & comparacion$`Años de vida por muerte prematura salvados` > 0) {
+    comparacion$ICERL <- 'Costo-Ahorrativo'
+  } else {
+    comparacion$ICERL <- 'Dominada'
+  }
+  
+  #ICERM
+  if (comparacion$`Diferencia de costo` > 0 & comparacion$`Muertes por Hemorragias Post Parto Evitadas` > 0) {
+    comparacion$ICERM <- round(comparacion$`Diferencia de costo` / comparacion$`Muertes por Hemorragias Post Parto Evitadas`, 3)
+  } else if (comparacion$`Diferencia de costo` <= 0 & comparacion$`Muertes por Hemorragias Post Parto Evitadas` > 0) {
+    comparacion$ICERM <- 'Costo-Ahorrativo'
+  } else {
+    comparacion$ICERM <- 'Dominada'
+  }
+  
+  # inversión
+  comparacion$Inversion = (target$costoIntervencion + ((comparacion$`Población intervención afectada` - comparacion$`Población base afectada`) * datosPais$value[datosPais$indicador=="COSTO.Oxitocina"]))
+  
+  # ROI
+  comparacion$ROI = round((((-comparacion$`Diferencia de costo`) - comparacion$Inversion) / comparacion$Inversion) * 100, 2)
+  
+  # Costo cada 100 mil
+  comparacion$`Costo cada mil` = round((target$getCosto - base$getCosto) / (datosPais$value[datosPais$indicador=='PARTOS.ANUALES'] * datosPais$value[datosPais$indicador=='pINSTITUCIONALES']) * 1000,1)
+  
+  # Qalys cada 100 mil
+  comparacion$`Qalys cada mil` = round((target$QalyLost - base$QalyLost) / (datosPais$value[datosPais$indicador=='PARTOS.ANUALES'] * datosPais$value[datosPais$indicador=='pINSTITUCIONALES']) * 1000,1)
   
   list(base=base,
        target=target,
