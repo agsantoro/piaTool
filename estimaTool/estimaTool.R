@@ -108,8 +108,7 @@ estimaToolCosts = function(
   run[[country]]$population$`Población total` = as.numeric(Population)
   run[[country]]$baseline = list()
   run[[country]]$target = list()
-  browser()
-  run[[country]]$baseline$`Prevalencia de hipertensión entre adultos de 30-79 años, estandarizada por edad` = `BASELINE_Prevalencia de hipertensión entre adultos de 30-79 años, estandarizada por edad` * modifPrev$modificador[modifPrev$pais==country]
+  run[[country]]$baseline$`Prevalencia de hipertensión entre adultos de 30-79 años, estandarizada por edad` = `BASELINE_Prevalencia de hipertensión entre adultos de 30-79 años, estandarizada por edad` * base_line$modificador[base_line$country==country]
   run[[country]]$baseline$`Prevalencia de diagnóstico previo de hipertensión entre adultos de 30-79 años con hipertensión, estandarizada por edad` = `BASELINE_Prevalencia de diagnóstico previo de hipertensión entre adultos de 30-79 años con hipertensión, estandarizada por edad`
   run[[country]]$baseline$`Tratamiento entre los diagnosticados (%)` = `BASELINE_Tratamiento entre los diagnosticados (%)`
   run[[country]]$baseline$`Control de la hipertensión entre los tratados (%)` = `BASELINE_Control de la hipertensión entre los tratados (%)`

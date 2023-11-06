@@ -1,5 +1,4 @@
 createLifetable = function(country) {
-  
   age = 0:100
   qx = as.numeric(mortall[mortall$`Country ¦ Age [12]`== country,-1])
   px = 1 - qx

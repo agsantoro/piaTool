@@ -37,13 +37,13 @@ flags <- c(
 )
 
 # load functions
-source("functions/textoIntro.R")
-source("functions/getPrime.R")
-source("functions/roundUpNice.R")
-source("functions/generateRMD.R")
-source("estimaTool/estimaTool.R")
-source("hpp/funciones/funciones.R")
-source("hepC/funcion_hepC.R", .GlobalEnv)
+source("functions/textoIntro.R", encoding = "UTF-8")
+source("functions/getPrime.R", encoding = "UTF-8")
+source("functions/roundUpNice.R", encoding = "UTF-8")
+source("functions/generateRMD.R", encoding = "UTF-8")
+source("estimaTool/estimaTool.R", encoding = "UTF-8")
+source("hpp/funciones/funciones.R", encoding = "UTF-8")
+source("hepC/funcion_hepC.R", .GlobalEnv, encoding = "UTF-8")
 
 charts_theme <- hc_theme(
   chart = list(
@@ -1635,7 +1635,6 @@ server <- function(input, output, session) {
   ##### HEARTS #####
   
   output$hearts_inputs = renderUI({
-    
     input_names = c(
       "Prevalencia de hipertensión entre adultos de 30-79 años, estandarizada por edad",
       "Prevalencia de diagnóstico previo de hipertensión entre adultos de 30-79 años con hipertensión, estandarizada por edad.",
@@ -1643,7 +1642,9 @@ server <- function(input, output, session) {
       "Control de la hipertensión entre los tratados (%)"
     )
     
-    names(input_names) = colnames(base_line)[-1]
+    names(input_names) = colnames(base_line)[2:(ncol(base_line)-1)]
+    valores = base_line
+    valores$prevalence_of_hypertension = valores$prevalence_of_hypertension * valores$modificador
     
     tagList(
       bsCollapse(
@@ -1657,7 +1658,7 @@ server <- function(input, output, session) {
             
             sliderInput(paste0("hearts_input_base_",which(input_names==i)),
                         input_names[input_names==i],
-                        value = base_line[base_line$country==input$hearts_country,names(input_names[input_names==i])],
+                        value = valores[valores$country==input$hearts_country,names(input_names[input_names==i])],
                         min=0,
                         max=1,
                         step=.001)
@@ -1678,7 +1679,7 @@ server <- function(input, output, session) {
             
             sliderInput(paste0("hearts_input_base_",which(input_names==i)),
                         input_names[input_names==i],
-                        value = base_line[base_line$country==input$hearts_country,names(input_names[input_names==i])],
+                        value = valores[base_line$country==input$hearts_country,names(input_names[input_names==i])],
                         min=0,
                         max=1,
                         step=.001)

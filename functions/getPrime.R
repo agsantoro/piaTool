@@ -9,7 +9,7 @@ mortcecx = readxl::read_xlsx("xlsx/PRIME_v2.3.xlsx", sheet = "mortcecx")
 mortcecx[is.na(mortcecx)] = 0
 incidence = readxl::read_xlsx("xlsx/PRIME_v2.3.xlsx", sheet = "incidence")
 
-source("functions/createLifetable.R")
+source("functions/createLifetable.R", encoding = "UTF-8")
 
 # dalys params
 dalys = readxl::read_xlsx("xlsx/PRIME_v2.3.xlsx", sheet = "Model", range = "AV2:AW6")
