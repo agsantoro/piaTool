@@ -155,7 +155,9 @@ estimaToolCosts = function(
   
   ###### DISABILITY WEIGHT #####
   
-  disability_weight = 0.0791335
+  disability_weight = list(
+    "Ischemic heart disease"=0.0791335,
+    "Stroke"=0.1057003333)
   
   
   ##### EXPECTATION OF LIFE #####
@@ -206,14 +208,22 @@ estimaToolCosts = function(
     }
   }
   
+  
   averted_by_age = averted_by_age %>% pivot_longer(names_to = "gender", cols = c("Male","Female")) %>% arrange(event,cause,gender)
   
+  
   dalys_by_age = averted_by_age[averted_by_age$event=="Deaths",] %>% left_join(life_exp[life_exp$location==country,]) %>%
-    mutate(yll=value*lex) %>%
-    dplyr::select(cause,age,gender,yll) %>%
+    mutate(yll=value*lex,
+           deaths = value) %>%
+    dplyr::select(cause,age,gender,deaths, yll) %>%
     left_join(averted_by_age[averted_by_age$event=="Events",]) %>%
-    mutate(dalys=value*disability_weight) %>% 
-    dplyr::select(cause,age,gender,yll,dalys) %>% 
+    #left_join(averted_by_age[averted_by_age$event=="Deaths",]) %>%
+    mutate(
+      dalys=
+        case_when(cause == "Ischemic heart disease" ~ (value-deaths)*disability_weight[[1]],
+                  cause == "Stroke" ~ (value-deaths)*disability_weight[[2]]),
+      events=value) %>% 
+    dplyr::select(cause,age,gender,deaths, events,yll,dalys) %>% 
     arrange(cause,gender,age)
   
   dalys_overall = dalys_by_age %>% group_by(age,gender) %>%

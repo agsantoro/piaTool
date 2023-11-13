@@ -24,4 +24,3 @@ getTextoIntro = function () {
   </div>
 ')
 }
-
