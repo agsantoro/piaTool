@@ -1,11 +1,18 @@
 ##### APP #####
+source("functions/getCards.R", encoding = "UTF-8")
+source("functions/getStyle.R", encoding = "UTF-8")
 source("UI/start.R", encoding = "UTF-8")
-source("UI/UI_routes.R", encoding = "UTF-8")
 source("UI/UI_avanzada.R", encoding = "UTF-8")
-
 source("UI/home.R", encoding = "UTF-8")
+source("UI/UI_main.R", encoding = "UTF-8")
+source("UI/UI_routes.R", encoding = "UTF-8")
+
 
 server <- function(input, output, session) {
+  hideTab("TSP","hearts_tab", session)
+  observeEvent(input$country, {
+    hideTab("NLP","HEARTS")
+  })
   router_server()
   observeEvent(input$volver,{
     shinyjs::toggle("fullpage_popup", anim = T, animType = "fade")
