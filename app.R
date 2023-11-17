@@ -6,14 +6,8 @@ source("UI/UI_avanzada.R", encoding = "UTF-8")
 # source("UI/UI_main.R", encoding = "UTF-8")
 source("UI/home.R", encoding = "UTF-8")
 source("UI/UI_hpv.R", encoding = "UTF-8")
-# source("UI/UI_routes.R", encoding = "UTF-8")
-
-ui <- fluidPage(
-  router_ui(
-    route("/", ui_home),
-    route("avanzada", ui_avanzada)
-  )
-)
+source("UI/UI_escenarios.R", encoding = "UTF-8")
+source("UI/UI_routes.R", encoding = "UTF-8")
 
 server <- function(input, output, session) {
   
@@ -173,6 +167,7 @@ server <- function(input, output, session) {
     )
   })
   
+  
   output$resultados_hpv = renderUI({
     if (input$intervencion == "Vacuna contra el HPV") {
       if (is.null(input$birthCohortSizeFemale)) {NULL} else {paste(resultados())}
@@ -184,6 +179,64 @@ server <- function(input, output, session) {
     
   })
   
+  output$select_escenarios_guardados = renderUI({
+    tagList(
+      selectizeInput(
+        "savedScenarios",
+        "Seleccionar escenario guardado",
+        names(scenarios$savedScenarios)
+      )
+    )
+    
+  })
+  
+  output$escenarios_guardados = renderUI({
+    output$grafico = renderHighchart({
+      if (input$intervencion == "Vacuna contra el HPV") {
+        
+        if (length(scenarios$savedScenarios)>0) {
+          maxY = c()
+          for (i in names(scenarios$savedScenarios)) {
+            maxY=c(maxY,scenarios$savedScenarios[[i]]$dataPlot$y1)
+          }
+          
+          for (i in names(scenarios$savedScenarios)) {
+            maxY=c(maxY,scenarios$savedScenarios[[i]]$dataPlot$y2)
+          }
+          
+          maxY = roundUpNice(max(maxY[is.na(maxY)==F]))
+          
+          
+          plot = highchart()
+          
+          if (input$savedScenarios!="") {
+            for (i in input$savedScenarios) {
+              plot = plot %>% hc_add_series(data = scenarios$savedScenarios[[i]]$dataPlot, name=names(scenarios$savedScenarios[i]), type = "line", hcaes(x = x, y = y2)) %>% hc_xAxis(min = 0, max = 80) %>% hc_yAxis(min = 0, max = maxY)
+            }
+          }
+          
+          
+          plot %>% hc_title(
+            text = "Efecto de la vacunación en la incidencia del cáncer de cuello de útero por edad",
+            margin = 20,
+            align = "left",
+            style = list(color = "black", useHTML = TRUE)
+          )
+          
+        } else {disable("savedScenarios")}
+        
+        
+      }
+      
+    })
+    
+    tagList(
+      tags$h1("Hola"),
+      highchartOutput("grafico")
+    )
+    
+  })
+   
 }
 
 shinyApp(ui, server)

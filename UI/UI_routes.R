@@ -1,6 +1,7 @@
 ui <- div(
   router_ui(
-    route("/", ui),
-    route("avanzada", ui_avanzada)
+    route("/", ui_home),
+    route("avanzada", ui_avanzada),
+    route("escenarios_guardados", ui_escenarios)
   )
 )

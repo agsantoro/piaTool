@@ -90,8 +90,9 @@ ui_avanzada <- fluidPage(
                  )
                ),
                tags$div(
+                 id = "ver_escenarios_guardados",
                  class = "inline-block bg-green-500 text-white px-4 py-2 mx-2 hover:bg-green-700 cursor-pointer",
-                 "Ver escenarios guardados"
+                 tags$a(id="ver_escenarios_guardados","Ver escenarios guardados", href = "#!/escenarios_guardados")
                ),
                tags$div(
                  class = "inline-block bg-red-500 text-white px-4 py-2 mx-2 hover:bg-red-700 cursor-pointer",
