@@ -7,10 +7,12 @@ body {
 }                 
                  
                  .panel-default>.panel-heading {
-    color: white;
+    color: blue;
     background-color: #1D9ADD;
     border-color: white
-                 }
+
+                }
+
 
 .custom-div {
     position: absolute;
