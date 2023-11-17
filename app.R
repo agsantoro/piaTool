@@ -33,6 +33,7 @@ server <- function(input, output, session) {
       scnName = input$scenarioName
       scenarios$savedScenarios[[scnName]] <- resultados()
       summaryScenarios = data.frame(outcomes=scenarios$savedScenarios[[1]]$outcomes[[1]])
+      show("ver_escenarios_guardados")
       
       for (i in names(scenarios$savedScenarios)){
         summaryScenarios = cbind(summaryScenarios,data.frame(scenarios$savedScenarios[[i]]$outcomes[,"undisc"]))
@@ -91,7 +92,23 @@ server <- function(input, output, session) {
     
   })
   
+  # decide que ui avanzada muestra según intervención
+  observeEvent(input$intervencion, {
+    if (input$intervencion == "Vacuna contra el HPV") {
+      output$uiOutput_basica <- ui_hpv_basica(parametersReactive(),input,inputs_hpv())
+    } else {
+      output$uiOutput_basica = renderUI({
+        tagList(h1("Hola"))
+      })
+    }
+  })
+  
+  # deshabilita botón para ver escenarios guardados
+  hide("ver_escenarios_guardados")
+  
   ##### HPV #####
+  
+  # lista de parámetros
   parametersReactive <- reactive({
     paramsList = list(
       birthCohortSizeFemale = as.numeric(parameters[parameters$Country==input$country,8]),
@@ -114,16 +131,7 @@ server <- function(input, output, session) {
   })
   
   
-  observeEvent(input$intervencion, {
-    
-    if (input$intervencion == "Vacuna contra el HPV") {
-      output$uiOutput_basica <- ui_hpv_basica(parametersReactive(),input,inputs_hpv())
-    } else {
-      output$uiOutput_basica = renderUI({
-        tagList(h1("Hola"))
-      })
-    }
-  })
+  
   
   observeEvent(input$ver_avanzados_hpv, {
     if (input$ver_avanzados_hpv==F) {
