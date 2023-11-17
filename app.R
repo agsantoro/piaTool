@@ -192,7 +192,9 @@ server <- function(input, output, session) {
       selectizeInput(
         "savedScenarios",
         "Seleccionar escenario guardado",
-        names(scenarios$savedScenarios)
+        names(scenarios$savedScenarios),
+        multiple = T,
+        selected = names(scenarios$savedScenarios)
       )
     )
     
@@ -216,12 +218,14 @@ server <- function(input, output, session) {
           
           
           plot = highchart()
-          
-          if (input$savedScenarios!="") {
-            for (i in input$savedScenarios) {
-              plot = plot %>% hc_add_series(data = scenarios$savedScenarios[[i]]$dataPlot, name=names(scenarios$savedScenarios[i]), type = "line", hcaes(x = x, y = y2)) %>% hc_xAxis(min = 0, max = 80) %>% hc_yAxis(min = 0, max = maxY)
+          if (!is.null(input$savedScenarios)) {
+            if (input$savedScenarios[1]!="") {
+              for (i in input$savedScenarios) {
+                plot = plot %>% hc_add_series(data = scenarios$savedScenarios[[i]]$dataPlot, name=names(scenarios$savedScenarios[i]), type = "line", hcaes(x = x, y = y2)) %>% hc_xAxis(min = 0, max = 80) %>% hc_yAxis(min = 0, max = maxY)
+              }
             }
           }
+          
           
           
           plot %>% hc_title(
