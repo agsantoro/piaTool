@@ -74,7 +74,7 @@ ui_avanzada <- fluidPage(
   fluidRow(
     column(12,
            tags$div(
-             class = "bg-gray-200 p-4 fixed bottom-0 left-0 w-full opacity-80",
+             class = "bg-gray-200 p-4 fixed bottom-0 left-0 w-full opacity-80", style = "z-index: 1;",
              tags$div(
                class = "flex justify-center",
                tags$div(

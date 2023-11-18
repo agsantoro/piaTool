@@ -6,8 +6,10 @@ source("UI/UI_avanzada.R", encoding = "UTF-8")
 # source("UI/UI_main.R", encoding = "UTF-8")
 source("UI/home.R", encoding = "UTF-8")
 source("UI/UI_hpv.R", encoding = "UTF-8")
+source("UI/UI_hearts.R", encoding = "UTF-8")
 source("UI/UI_escenarios.R", encoding = "UTF-8")
 source("UI/UI_routes.R", encoding = "UTF-8")
+source("server/server_hpv.R", encoding = "UTF-8")
 
 server <- function(input, output, session) {
   
@@ -96,18 +98,15 @@ server <- function(input, output, session) {
   observeEvent(input$intervencion, {
     if (input$intervencion == "Vacuna contra el HPV") {
       output$uiOutput_basica <- ui_hpv_basica(parametersReactive(),input,inputs_hpv())
-    } else {
-      output$uiOutput_basica = renderUI({
-        tagList(h1("Hola"))
-      })
-    }
+    } else if (input$intervencion == "HEARTS") {
+      output$uiOutput_basica <- ui_hearts(input, base_line)
+      }
   })
   
   # deshabilita botón para ver escenarios guardados
   hide("ver_escenarios_guardados")
   
   ##### HPV #####
-  
   # lista de parámetros
   parametersReactive <- reactive({
     paramsList = list(
@@ -128,24 +127,6 @@ server <- function(input, output, session) {
       GDPPerCapita = as.numeric(parameters[parameters$Country==input$country,20])
     )
     return(paramsList)
-  })
-  
-  
-  
-  
-  observeEvent(input$ver_avanzados_hpv, {
-    if (input$ver_avanzados_hpv==F) {
-      updatePrettySwitch(session, "ver_avanzados_hpv", label = "Ver configuración avanzada")
-      for (i in names(parametersReactive())[4:15]) {
-        hide(i, anim = T, animType = "fade")
-      }  
-    } else {
-      updatePrettySwitch(session, "ver_avanzados_hpv", label = "Ocultar configuración avanzada")
-      for (i in names(parametersReactive())[4:15]) {
-        show(i, anim = T, animType = "slide")
-        
-      }
-    }
   })
   
   resultados  <-  reactive({
@@ -176,78 +157,8 @@ server <- function(input, output, session) {
   })
   
   
-  output$resultados_hpv = renderUI({
-    if (input$intervencion == "Vacuna contra el HPV") {
-      if (is.null(input$birthCohortSizeFemale)) {NULL} else {paste(resultados())}
-      tagList(
-        ui_grafico_hpv(resultados(),input),
-        ui_tabla_hpv(resultados(),input)
-      )  
-    }
-    
-  })
   
-  output$select_escenarios_guardados = renderUI({
-    tagList(
-      selectizeInput(
-        "savedScenarios",
-        "Seleccionar escenario guardado",
-        names(scenarios$savedScenarios),
-        multiple = T,
-        selected = names(scenarios$savedScenarios)
-      )
-    )
-    
-  })
-  
-  output$escenarios_guardados = renderUI({
-    output$grafico = renderHighchart({
-      if (input$intervencion == "Vacuna contra el HPV") {
-        
-        if (length(scenarios$savedScenarios)>0) {
-          maxY = c()
-          for (i in names(scenarios$savedScenarios)) {
-            maxY=c(maxY,scenarios$savedScenarios[[i]]$dataPlot$y1)
-          }
-          
-          for (i in names(scenarios$savedScenarios)) {
-            maxY=c(maxY,scenarios$savedScenarios[[i]]$dataPlot$y2)
-          }
-          
-          maxY = roundUpNice(max(maxY[is.na(maxY)==F]))
-          
-          
-          plot = highchart()
-          if (!is.null(input$savedScenarios)) {
-            if (input$savedScenarios[1]!="") {
-              for (i in input$savedScenarios) {
-                plot = plot %>% hc_add_series(data = scenarios$savedScenarios[[i]]$dataPlot, name=names(scenarios$savedScenarios[i]), type = "line", hcaes(x = x, y = y2)) %>% hc_xAxis(min = 0, max = 80) %>% hc_yAxis(min = 0, max = maxY)
-              }
-            }
-          }
-          
-          
-          
-          plot %>% hc_title(
-            text = "Efecto de la vacunación en la incidencia del cáncer de cuello de útero por edad",
-            margin = 20,
-            align = "left",
-            style = list(color = "black", useHTML = TRUE)
-          )
-          
-        } else {disable("savedScenarios")}
-        
-        
-      }
-      
-    })
-    
-    tagList(
-      tags$h1("Hola"),
-      highchartOutput("grafico")
-    )
-    
-  })
+  server_hpv(input, output, parametersReactive(), scenarios, resultados)
    
 }
 
