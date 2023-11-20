@@ -2,7 +2,7 @@ getCards = function () {
   div(
     tags$header(class="text-5xl flex justify-between items-center p-8", style="background-color: #1D9ADD; color: white; text-align: center",
                 tags$h1(style="display: inline-block; margin: 0 auto;", class="flex-grow mt-8 mb-8",tags$b("PAHO Programme Impact Assessment Tool (PIA Tool)")),
-                tags$a(class="py-2 px-4 text-3xl text-white focus:text-sky-700 cursor-pointer", href="#!/avanzada", icon("arrow-right"))
+                tags$div(tags$a(id="go",class="py-2 px-4 text-3xl text-white focus:text-sky-700 cursor-pointer", href="#!/avanzada", icon("arrow-right")))
                 ),
     tags$div(class="flex flex-wrap ml-4 my-4",
              tags$div(class="max-w-lg px-2 mb-4",

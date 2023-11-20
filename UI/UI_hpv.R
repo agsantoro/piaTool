@@ -1,5 +1,4 @@
-ui_hpv_basica = function (parametersReactive,input,inputs_hpv) {
-  
+ui_hpv_basica = function (parametersReactive,input,inputs_hpv, run_hearts) {
   inputs_names = c(
     "Tamaño de la cohorte de nacimientos (mujeres)",
     "Tamaño de la cohorte a la edad de vacunación (mujeres)",
@@ -119,6 +118,7 @@ ui_grafico_hpv = function (resultados, input) {
 
 ui_tabla_hpv = function (resultados, input) {
   if (length(input$birthCohortSizeFemale)>0) {
+    
     table = resultados$outcomes
     table$disc = format(round(table$disc,1), nsmall = 1,big.mark = ".", decimal.mark = ",", scientific = FALSE)
     table$undisc = format(round(table$undisc,1), nsmall = 1,big.mark = ".", decimal.mark = ",", scientific = FALSE)

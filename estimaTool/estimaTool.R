@@ -28,8 +28,7 @@ epi_model <- function(run, x1, x2, country) {
 }
 
 estimaToolCosts = function(
-    
-  country = input$Country,
+  country = input$country,
   Population = input$Population,
   `BASELINE_Prevalencia de hipertensión entre adultos de 30-79 años, estandarizada por edad` = input$Prevalence_baseline,
   `TARGET_Prevalencia de hipertensión entre adultos de 30-79 años, estandarizada por edad` = input$Prevalence_target,
@@ -43,7 +42,6 @@ estimaToolCosts = function(
   ##### MORTALITY DATA #####
   # loading data
   load("estimaTool/mortality_data.RData")
-  
   # adding both sexes as rows
   mortality_data = 
     union_all(
@@ -102,7 +100,6 @@ estimaToolCosts = function(
   
   
   #### ESTIMA TOOL RUN #####
-  
   run = list()
   run[[country]] = list()
   run[[country]]$population$`Población total` = as.numeric(Population)
