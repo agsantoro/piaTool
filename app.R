@@ -6,6 +6,7 @@ source("UI/UI_avanzada.R", encoding = "UTF-8")
 # source("UI/UI_main.R", encoding = "UTF-8")
 source("UI/home.R", encoding = "UTF-8")
 source("UI/UI_hpv.R", encoding = "UTF-8")
+source("UI/UI_hpp.R", encoding = "UTF-8")
 source("UI/UI_hearts.R", encoding = "UTF-8")
 source("UI/UI_escenarios.R", encoding = "UTF-8")
 source("UI/UI_routes.R", encoding = "UTF-8")
@@ -26,6 +27,10 @@ server <- function(input, output, session) {
   
   # crea listas para almacenar escenarios guardados
   
+  # hpp
+  hpp_scenarios = reactiveValues()
+  hpp_scenarios$savedScenarios = list()
+  
   # hpv
   scenarios = reactiveValues()
   scenarios$savedScenarios = list()
@@ -34,9 +39,9 @@ server <- function(input, output, session) {
   hearts_scenarios = reactiveValues()
   hearts_scenarios$savedScenarios = list()
   
+  
   # guarda escenarios
   observeEvent(input$saveScenario2, {
-    browser()
     if (input$intervencion == "Vacuna contra el HPV") {
       if (input$scenarioName !="") {
         scnID = UUIDgenerate()
@@ -90,7 +95,7 @@ server <- function(input, output, session) {
         show("saveScenario", anim = T, animType = "slide")
       }
       
-    } else {
+    } else if (input$intervencion == "HEARTS") {
       
       if (input$scenarioName !="") {
         scnID = UUIDgenerate()
@@ -164,6 +169,40 @@ server <- function(input, output, session) {
         
       }
       
+    } else {
+      if (input$scenarioName !="") {
+        scnID = UUIDgenerate()
+        scnName = input$scenarioName
+        
+        table = hpp_run()
+        
+        hpp_scenarios$savedScenarios[[scnName]] <- table
+        
+        sendSweetAlert(
+          session = session,
+          title = "Escenario guardado",
+          text = paste0("Nombre: ",scnName),
+          type = "success"
+        )
+        # oculta div guardar escenario una vez guardado
+        hide("guardar_hpv", anim = T, animType = "slide")
+        hide("scenarioName", anim = T, animType = "slide")
+        hide("saveScenario2", anim = T, animType = "slide")
+        show("saveScenario", anim = T, animType = "fade")
+        updateTextAreaInput(session,"scenarioName",value="")
+        show("ver_escenarios_guardados", anim = T, animType = "fade")
+      } else {
+        sendSweetAlert(
+          session = session,
+          title = "Error",
+          text = "Debe definir un nombre para guardar el escenario.",
+          type = "error"
+        )
+        hide("guardar_hpv", anim = T, animType = "slide")
+        hide("scenarioName", anim = T, animType = "slide")
+        hide("saveScenario2", anim = T, animType = "slide")
+        show("saveScenario", anim = T, animType = "slide")
+      }
     }
     
     
@@ -185,7 +224,9 @@ server <- function(input, output, session) {
       output$uiOutput_basica <- ui_hpv_basica(parametersReactive(),input,inputs_hpv())
     } else if (input$intervencion == "HEARTS") {
       output$uiOutput_basica <- ui_hearts(input, base_line)
-      }
+    } else if (input$intervencion == "Hemorragia postparto") {
+      output$uiOutput_basica <- ui_hpp(input)
+    }
   })
   
   # deshabilita botón para ver escenarios guardados
@@ -247,7 +288,6 @@ server <- function(input, output, session) {
   ##### HEARTS #####
   
   run_hearts <- reactive({
-    
     if (is.null(input$hearts_input_target_4)==F) {
       estimaToolCosts(
         str_to_title(input$country),
@@ -265,16 +305,6 @@ server <- function(input, output, session) {
   })
     
   
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
   observeEvent(input$toggle_avanzado_hearts, {
     inputs_toggle = names(input)[substring(names(input),1,6)=="hearts"]
     inputs_hide = inputs_toggle[-grep(3,inputs_toggle)]
@@ -287,10 +317,55 @@ server <- function(input, output, session) {
   })
   
   
-  server_hpv(input, output, parametersReactive(), scenarios, resultados,run_hearts, hearts_scenarios)
-  onclick("ver_escenarios_guardados", {
-    server_hpv(input, output, parametersReactive(), scenarios, resultados,run_hearts, hearts_scenarios)})
-   
+  server_hpv(input, output, parametersReactive(), scenarios, resultados,run_hearts, hearts_scenarios, hpp_run, hpp_scenarios)
+  # onclick("ver_escenarios_guardados", {
+  #   server_hpv(input, output, parametersReactive(), scenarios, resultados,run_hearts, hearts_scenarios)})
+  #  
+  ##### HPP #####
+  
+  hpp_run = reactive({
+    
+    if (length(input$hpp_costoIntervencion)>0) {
+      resultados = resultados_comparados(str_to_title(input$country),
+                                         input$hpp_uso_oxitocina_base,
+                                         input$hpp_uso_oxitocina_taget,
+                                         input$hpp_descuento,
+                                         input$hpp_costoIntervencion)
+      
+      data.frame(
+        Indicador = c("Costo promedio de un evento de Hemorragia Post Parto",
+                      "Perdida de Qaly por un evento de Hemorragia Post Parto",
+                      "Diferencia de costo",
+                      "Hemorragias Post Parto Evitadas",
+                      "Muertes por Hemorragias Post Parto Evitadas",
+                      "Histerectomias por Hemorragias Post Parto Evitadas",
+                      "Años de vida por muerte prematura salvados",
+                      "Años de vida por discapacidad salvados"),
+        Valor = c(resultados$base$"Costo_HPP",
+                  resultados$base$"Dalys_Total",
+                  resultados[["comparacion"]][["Diferencia de costo"]],
+                  resultados[["comparacion"]][["Hemorragias Post Parto Evitadas"]],
+                  resultados[["comparacion"]][["Muertes por Hemorragias Post Parto Evitadas"]],
+                  resultados[["comparacion"]][["Histerectomias por Hemorragias Post Parto Evitadas"]],
+                  resultados[["comparacion"]][["Años de vida por muerte prematura salvados"]],
+                  resultados[["comparacion"]][["Años de vida por discapacidad salvados"]])
+      )
+    }
+    
+  })
+  
+  
+  observeEvent(input$toggle_avanzado_hpp, {
+    inputs_hide = c("hpp_descuento","hpp_costoIntervencion")
+    
+    
+    for (i in inputs_hide) {
+      isVisible <- shinyjs::toggleState(id = i)
+      toggle(id = i, anim = TRUE, animType = "slide", condition = isVisible)
+      enable(i)
+    }
+  })
+  
 }
 
 shinyApp(ui, server)

@@ -1,4 +1,4 @@
-server_hpv = function (input, output, parameterReactive, scenarios, resultados, run_hearts, hearts_scenarios) {
+server_hpv = function (input, output, parameterReactive, scenarios, resultados, run_hearts, hearts_scenarios, hpp_run, hpp_scenarios) {
   output$resultados_hpv = renderUI({
     if (input$intervencion == "Vacuna contra el HPV") {
       if (is.null(input$birthCohortSizeFemale)) {NULL} else {paste(resultados())}
@@ -6,9 +6,13 @@ server_hpv = function (input, output, parameterReactive, scenarios, resultados, 
         ui_grafico_hpv(resultados(),input),
         ui_tabla_hpv(resultados(),input)
       )  
-    } else {
+    } else if (input$intervencion == "HEARTS") {
       tagList(
         ui_resultados_hearts(input, output, run_hearts),
+      )
+    } else {
+      tagList(
+        ui_resultados_hpp(input, output, hpp_run),
       )
     }
     
@@ -25,15 +29,24 @@ server_hpv = function (input, output, parameterReactive, scenarios, resultados, 
           selected = names(scenarios$savedScenarios)
         )
       )
-    } else {
+    } else if (input$intervencion == "HEARTS") {
       tagList(
-        
         selectizeInput(
           "savedScenarios",
           "Seleccionar escenario guardado",
           names(hearts_scenarios$savedScenarios),
           multiple = T,
           selected = names(hearts_scenarios$savedScenarios)
+        )
+      )
+    } else if (input$intervencion == "Hemorragia postparto") {
+      tagList(
+        selectizeInput(
+          "savedScenarios",
+          "Seleccionar escenario guardado",
+          names(hpp_scenarios$savedScenarios),
+          multiple = T,
+          selected = names(hpp_scenarios$savedScenarios)
         )
       )
     }
@@ -141,21 +154,20 @@ server_hpv = function (input, output, parameterReactive, scenarios, resultados, 
       )
       
       
-    } else {
+    } else if (input$intervencion == "HEARTS") {
       
       output$hearts_table_saved = renderReactable({
         
-        if (length(hearts_scenarios$savedScenarios)>0) {
-          
+        if (length(input$savedScenarios)>0) {
           table = data.frame(Indicador=hearts_scenarios$savedScenarios[[1]]$Indicador)
-          for (i in names(hearts_scenarios$savedScenarios)) {
+          for (i in input$savedScenarios) {
             scn_name = i
-            table[[i]] = hearts_scenarios$savedScenarios[[i]]$Valor
+            table[[i]] = savedScenarios[[i]]$Valor
           }
           
           cat_epi = 1:12
           cat_costos = 13:15
-          browser()
+          
           table$cat=""
           table$cat[cat_epi] = "Resultados epidemiológicos"
           table$cat[cat_costos] = "Resultados económicos"
@@ -169,7 +181,7 @@ server_hpv = function (input, output, parameterReactive, scenarios, resultados, 
             table[i] = format(table[i], bigmark=",", decimalmark=".") 
             columns[[colnames(table)[i]]] = colDef(name = colnames(table)[i], align = "right")
           }
-          browser()
+          
           reactable(
             table,
             groupBy = "cat",
@@ -198,6 +210,61 @@ server_hpv = function (input, output, parameterReactive, scenarios, resultados, 
       tagList(
         reactableOutput("hearts_table_saved")
       )
+    } else {
+      output$hpp_table_saved = renderReactable({
+        if (length(input$savedScenarios)>0) {
+          enable("hpp_savedScenarios")
+          table = data.frame(Indicador=hpp_run()$Indicador)
+          
+          for (i in input$savedScenarios) {
+            scn_name = i
+            table[[i]] = hpp_scenarios$savedScenarios[[i]]$Valor
+          }
+          
+          cat_epi = c(2,4:8)
+          cat_costos = c(1,3)
+          table$cat=""
+          table$cat[cat_epi] = "Resultados epidemiológicos"
+          table$cat[cat_costos] = "Resultados económicos"
+          table[[i]][table$cat=="Resultados económicos"] = paste0("$",table[[2]][table$cat=="Resultados económicos"])
+          
+          columns = list(
+            cat = colDef(name = "Categoría", align = "left"),
+            Indicador = colDef(name = "Indicador", align = "left")
+          )
+          
+          for (i in setdiff(1:ncol(table),c(1,ncol(table)))) {
+            table[i] = format(table[i], bigmark=",", decimalmark=".") 
+            columns[[colnames(table)[i]]] = colDef(name = colnames(table)[i], align = "right")
+          }
+          reactable(
+            table,
+            groupBy = "cat",
+            defaultExpanded = T,
+            pagination = F,
+            columnGroups = list(
+              colGroup("Escenarios", columns = colnames(table)[setdiff(1:ncol(table),c(1,ncol(table)))], sticky = "left",
+                       headerStyle = list(background = "#236292", color = "white", borderWidth = "0"))
+            ),
+            defaultColDef = colDef(
+              align = "center",
+              minWidth = 70,
+              headerStyle = list(background = "#236292", color = "white")
+            ),
+            columns = columns,
+            bordered = TRUE,
+            highlight = TRUE
+          )
+          
+          
+        } else {NULL}
+        
+      })
+      
+      tagList(
+        reactableOutput("hpp_table_saved")
+      )
+      
     }
       
     
