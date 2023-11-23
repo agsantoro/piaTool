@@ -38,7 +38,7 @@ ui_hpv_basica = function (parametersReactive,input,inputs_hpv, run_hearts) {
   renderUI({
     tagList(
       br(),
-      tags$style(getStyle()),
+      #tags$style(getStyle()),
       lapply(1:3, function (i) {
         if (!i %in% c(3,4)) {
           numericInput(input=names(parametersReactive)[i],

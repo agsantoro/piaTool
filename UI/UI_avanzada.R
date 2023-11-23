@@ -53,7 +53,7 @@ ui_avanzada <- fluidPage(
     ),
     column(2,
            theme = shinythemes::shinytheme("united"),
-           tags$style(getStyle()),
+           #tags$style(getStyle()),
            tags$header(class="text-1xl flex justify-between items-center p-5 mt-4", style="background-color: #FF671B; color: white; text-align: center",
                        tags$h1(style="display: inline-block; margin: 0 auto;", class="flex-grow mt-8 mb-8",tags$b("Configuración")),
                        tags$div(class="py-2 px-4 text-3xl text-white focus:text-sky-700")
