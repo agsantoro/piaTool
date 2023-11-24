@@ -7,6 +7,7 @@ source("UI/UI_avanzada.R", encoding = "UTF-8")
 source("UI/home.R", encoding = "UTF-8")
 source("UI/UI_hpv.R", encoding = "UTF-8")
 source("UI/UI_hpp.R", encoding = "UTF-8")
+source("UI/UI_hepC.R", encoding = "UTF-8")
 source("UI/UI_hearts.R", encoding = "UTF-8")
 source("UI/UI_escenarios.R", encoding = "UTF-8")
 source("UI/UI_routes.R", encoding = "UTF-8")
@@ -39,6 +40,9 @@ server <- function(input, output, session) {
   hearts_scenarios = reactiveValues()
   hearts_scenarios$savedScenarios = list()
   
+  # hepc
+  hepC_scenarios = reactiveValues()
+  hepC_scenarios$savedScenarios = list()
   
   # guarda escenarios
   observeEvent(input$saveScenario2, {
@@ -169,7 +173,7 @@ server <- function(input, output, session) {
         
       }
       
-    } else {
+    } else if (input$intervencion == "Hemorragia postparto") {
       if (input$scenarioName !="") {
         scnID = UUIDgenerate()
         scnName = input$scenarioName
@@ -203,6 +207,44 @@ server <- function(input, output, session) {
         hide("saveScenario2", anim = T, animType = "slide")
         show("saveScenario", anim = T, animType = "slide")
       }
+    } else {
+      if (input$scenarioName !="") {
+
+        scnID = UUIDgenerate()
+        scnName = input$scenarioName
+        
+        table = hepC_run()
+        
+        hepC_scenarios$savedScenarios[[scnName]] <- table
+        
+        sendSweetAlert(
+          session = session,
+          title = "Escenario guardado",
+          text = paste0("Nombre: ",scnName),
+          type = "success"
+        )
+        
+        hide("guardar_hpv", anim = T, animType = "slide")
+        hide("scenarioName", anim = T, animType = "slide")
+        hide("saveScenario2", anim = T, animType = "slide")
+        show("saveScenario", anim = T, animType = "fade")
+        updateTextAreaInput(session,"scenarioName",value="")
+        show("ver_escenarios_guardados", anim = T, animType = "fade")
+      } else {
+        sendSweetAlert(
+          session = session,
+          title = "Error",
+          text = "Debe definir un nombre para guardar el escenario.",
+          type = "error"
+        )
+        hide("guardar_hpv", anim = T, animType = "slide")
+        hide("scenarioName", anim = T, animType = "slide")
+        hide("saveScenario2", anim = T, animType = "slide")
+        show("saveScenario", anim = T, animType = "slide")
+      }
+      
+    
+      
     }
     
     
@@ -219,13 +261,16 @@ server <- function(input, output, session) {
   })
   
   # decide que ui avanzada muestra según intervención
-  observeEvent(input$intervencion, {
+  observeEvent(list(input$intervencion,
+                    input$country), {
     if (input$intervencion == "Vacuna contra el HPV") {
       output$uiOutput_basica <- ui_hpv_basica(parametersReactive(),input,inputs_hpv())
     } else if (input$intervencion == "HEARTS") {
       output$uiOutput_basica <- ui_hearts(input, base_line)
     } else if (input$intervencion == "Hemorragia postparto") {
       output$uiOutput_basica <- ui_hpp(input)
+    } else if (input$intervencion == "Hepatitis C") {
+      output$uiOutput_basica <- ui_hepC(input, datosPais)
     }
   })
   
@@ -317,10 +362,18 @@ server <- function(input, output, session) {
   })
   
   
-  server_hpv(input, output, parametersReactive(), scenarios, resultados,run_hearts, hearts_scenarios, hpp_run, hpp_scenarios)
-  # onclick("ver_escenarios_guardados", {
-  #   server_hpv(input, output, parametersReactive(), scenarios, resultados,run_hearts, hearts_scenarios)})
-  #  
+  server_hpv(input, 
+             output, 
+             parametersReactive(), 
+             scenarios, 
+             resultados,
+             run_hearts, 
+             hearts_scenarios, 
+             hpp_run, 
+             hpp_scenarios, 
+             hepC_run,
+             hepC_scenarios)
+  
   ##### HPP #####
   
   hpp_run = reactive({
@@ -365,6 +418,81 @@ server <- function(input, output, session) {
       enable(i)
     }
   })
+  
+  ##### HEP C #####
+  
+  hepC_run = reactive({
+    if (length(input$cohorte) > 0) {
+      hepC = hepC_full(
+        input,
+        output,
+        input_pais = str_to_title(input$country),
+        input_cohorte = input$cohorte,
+        input_AtasaDescuento = input$AtasaDescuento,
+        input_F0 = input$F0,
+        input_F1 = input$F1,
+        input_F2 = input$F2,
+        input_F3 = input$F3,
+        input_F4 = input$F4,
+        input_aCostoF0F2 = input$aCostoF0F2,
+        input_aCostoF3 = input$aCostoF3,
+        input_aCostoF4 = input$aCostoF4,
+        input_aCostoDC = input$aCostoDC,
+        input_aCostoHCC = input$aCostoHCC,
+        input_pSVR = input$pSVR,
+        input_tDuracion_Meses = input$tDuracion_Meses,
+        input_pAbandono = input$pAbandono,
+        input_Costo_Tratamiento = input$Costo_Tratamiento,
+        input_Costo_Evaluacion = input$Costo_Evaluacion
+      )
+      
+      hepC_indicators = names(hepC$Comparacion)
+      hepC_values = unlist(hepC$Comparacion)
+      
+      hepCTable = data.frame(
+        hepC_indicators,
+        hepC_values
+      )
+      
+      rownames(hepCTable) = NULL
+      colnames(hepCTable) = c("Indicador", "Valor")
+      hepCTable
+    }
+    
+    
+  })
+  
+  observeEvent(input$toggle_avanzado_hepC, {
+    input_names = c(
+      "Costos de fibrosis descompensada" = "aCostoDC", 
+      "Costos de estadíos de fibrosis F0 a F2" = "aCostoF0F2", 
+      "Costos de estadío de fibrosis F3" = "aCostoF3", 
+      "Costos de estadío de fibrosis F4" = "aCostoF4", 
+      "Costos de carcinoma hepatocelular" = "aCostoHCC", 
+      "Tasa de descuento" = "AtasaDescuento", 
+      "Tamaño de la cohorte" = "cohorte", 
+      "Costo de la evaluación de la respuesta al tratamiento" = "Costo_Evaluacion", 
+      "Costo de tratamiento de 4 semanas de Epclusa" = "Costo_Tratamiento", 
+      "Probabilidad de encontrarse en estadio de fibrosis F0 al diagnóstico" = "F0", 
+      "Probabilidad de encontrarse en estadio de fibrosis F1 al diagnóstico" = "F1", 
+      "Probabilidad de encontrarse en estadio de fibrosis F2 al diagnóstico" = "F2", 
+      "Probabilidad de encontrarse en estadio de fibrosis F3 al diagnóstico" = "F3", 
+      "Probabilidad de encontrarse en estadio de fibrosis F4 al diagnóstico" = "F4", 
+      "Proporción de pacientes que abandonan el tratamiento." = "pAbandono", 
+      "Eficacia de Sofosbuvir / velpatasvir" = "pSVR", 
+      "Duración del tratamiento" = "tDuracion_Meses"
+    )
+    inputs_hide = input_names[1:14]
+    
+    
+    for (i in inputs_hide) {
+      isVisible <- shinyjs::toggleState(id = i)
+      toggle(id = i, anim = TRUE, animType = "slide", condition = isVisible)
+      enable(i)
+    }
+  })
+  
+  
   
 }
 
