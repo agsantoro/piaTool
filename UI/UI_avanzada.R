@@ -20,18 +20,26 @@ ui_avanzada <- fluidPage(
                        "Seleccionar país:",
                        multiple = F,
                        choices = c("Argentina" ="ARGENTINA",
-                                   "Brazil" = "BRAZIL"
-                                   # "Chile" = "CHILE",
-                                   # "Colombia"="COLOMBIA",
-                                   # "Costa Rica" = "COSTA RICA",
-                                   # "Ecuador" = "ECUADOR",
-                                   # "Mexico" = "MEXICO",
-                                   # "Peru" = "PERU"
+                                   "Brazil" = "BRAZIL",
+                                    "Chile" = "CHILE",
+                                    "Colombia"="COLOMBIA",
+                                    "Costa Rica" = "COSTA RICA",
+                                    "Ecuador" = "ECUADOR",
+                                    "Mexico" = "MEXICO",
+                                    "Peru" = "PERU"
                        ),
                        choicesOpt = list(content =
                                            c(
                                              HTML('<div style="display: flex; align-items: center;"><img src="https://cdn.rawgit.com/lipis/flag-icon-css/master/flags/4x3/ar.svg" alt="Flag" width="20" height="15" style="margin-right: 5px;"><p>Argentina</p></div>'),
-                                             HTML('<div style="display: flex; align-items: center;"><img src="https://cdn.rawgit.com/lipis/flag-icon-css/master/flags/4x3/br.svg" alt="Flag" width="20" height="15" style="margin-right: 5px;"><p>Brazil</p></div>')
+                                             HTML('<div style="display: flex; align-items: center;"><img src="https://cdn.rawgit.com/lipis/flag-icon-css/master/flags/4x3/br.svg" alt="Flag" width="20" height="15" style="margin-right: 5px;"><p>Brazil</p></div>'),
+                                             HTML('<div style="display: flex; align-items: center;"><img src="https://cdn.rawgit.com/lipis/flag-icon-css/master/flags/4x3/cl.svg" alt="Flag" width="20" height="15" style="margin-right: 5px;"><p>Chile</p></div>'),
+                                             HTML('<div style="display: flex; align-items: center;"><img src="https://cdn.rawgit.com/lipis/flag-icon-css/master/flags/4x3/co.svg" alt="Flag" width="20" height="15" style="margin-right: 5px;"><p>Colombia</p></div>'),
+                                             HTML('<div style="display: flex; align-items: center;"><img src="https://cdn.rawgit.com/lipis/flag-icon-css/master/flags/4x3/cr.svg" alt="Flag" width="20" height="15" style="margin-right: 5px;"><p>Costa Rica</p></div>'),
+                                             HTML('<div style="display: flex; align-items: center;"><img src="https://cdn.rawgit.com/lipis/flag-icon-css/master/flags/4x3/ec.svg" alt="Flag" width="20" height="15" style="margin-right: 5px;"><p>Ecuador</p></div>'),
+                                             HTML('<div style="display: flex; align-items: center;"><img src="https://cdn.rawgit.com/lipis/flag-icon-css/master/flags/4x3/mx.svg" alt="Flag" width="20" height="15" style="margin-right: 5px;"><p>Mexico</p></div>'),
+                                             HTML('<div style="display: flex; align-items: center;"><img src="https://cdn.rawgit.com/lipis/flag-icon-css/master/flags/4x3/pe.svg" alt="Flag" width="20" height="15" style="margin-right: 5px;"><p>Peru</p></div>')
+                                             
+                                             
                                            )
                                          
                                          
