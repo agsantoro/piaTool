@@ -40,7 +40,7 @@ ui_home <- fluidPage(
     <div class="h-full bg-[url(https://www.paho.org/sites/default/files/styles/top_hero/public/2022-08/governing-bodies-1400px.jpg?h=5a93717a&itok=NvkSpwB1)] bg-cover bg-center"></div>
     
     <div class="absolute inset-0 flex items-center justify-center">
-      <p class="text-center text-5xl text-white px-4 ">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis fermentum quam in dictum aliquet. Vestibulum non ante a mi bibendum facilisis at vitae libero. Integer id aliquam sapien.</p>
+      <p class="text-center text-6xl text-white px-4 ">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis fermentum quam in dictum aliquet. Vestibulum non ante a mi bibendum facilisis at vitae libero. Integer id aliquam sapien.</p>
     </div>
   </div>
   <div id="div_1" class="h-auto w-1/4 h-auto w-1/4 py-4" style="background-color: #FF671B; display: flex; flex-direction: column; align-items: flex-start;" style="background-color: #FF671B">
