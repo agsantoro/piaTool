@@ -24,7 +24,7 @@ server <- function(input, output, session) {
     show("scenarioName", anim = T, animType = "slide")
     show("saveScenario2", anim = T, animType = "slide")
   })
-
+  
   
   # crea listas para almacenar escenarios guardados
   
@@ -76,7 +76,7 @@ server <- function(input, output, session) {
           type = "success",
           btn_labels = "Continuar",
           btn_colors = "#E95420"
-            
+          
         )
         
         # oculta div guardar escenario una vez guardado
@@ -209,7 +209,7 @@ server <- function(input, output, session) {
       }
     } else {
       if (input$scenarioName !="") {
-
+        
         scnID = UUIDgenerate()
         scnName = input$scenarioName
         
@@ -243,7 +243,7 @@ server <- function(input, output, session) {
         show("saveScenario", anim = T, animType = "slide")
       }
       
-    
+      
       
     }
     
@@ -263,16 +263,16 @@ server <- function(input, output, session) {
   # decide que ui avanzada muestra según intervención
   observeEvent(list(input$intervencion,
                     input$country), {
-    if (input$intervencion == "Vacuna contra el HPV") {
-      output$uiOutput_basica <- ui_hpv_basica(parametersReactive(),input,inputs_hpv())
-    } else if (input$intervencion == "HEARTS") {
-      output$uiOutput_basica <- ui_hearts(input, base_line)
-    } else if (input$intervencion == "Hemorragia postparto") {
-      output$uiOutput_basica <- ui_hpp(input)
-    } else if (input$intervencion == "Hepatitis C") {
-      output$uiOutput_basica <- ui_hepC(input, datosPais)
-    }
-  })
+                      if (input$intervencion == "Vacuna contra el HPV") {
+                        output$uiOutput_basica <- ui_hpv_basica(parametersReactive(),input,inputs_hpv())
+                      } else if (input$intervencion == "HEARTS") {
+                        output$uiOutput_basica <- ui_hearts(input, base_line)
+                      } else if (input$intervencion == "Hemorragia postparto") {
+                        output$uiOutput_basica <- ui_hpp(input)
+                      } else if (input$intervencion == "Hepatitis C") {
+                        output$uiOutput_basica <- ui_hepC(input, datosPais)
+                      }
+                    })
   
   # deshabilita botón para ver escenarios guardados
   hide("ver_escenarios_guardados")
@@ -304,7 +304,7 @@ server <- function(input, output, session) {
     
     getPrime(
       input,
-       input$country,
+      input$country,
       input$birthCohortSizeFemale,
       input$cohortSizeAtVaccinationAgeFemale,
       input$coverageAllDosis,
@@ -348,7 +348,7 @@ server <- function(input, output, session) {
       )
     }
   })
-    
+  
   
   observeEvent(input$toggle_avanzado_hearts, {
     inputs_toggle = names(input)[substring(names(input),1,6)=="hearts"]

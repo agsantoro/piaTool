@@ -7,17 +7,21 @@ ui_avanzada <- navbarPage(
   tabPanel(
     HTML('<div class = "text-white")>Definición de escenarios</div>'),
     tags$style(getStyle()),
-    fluidRow(column(12,
-                    tags$header(class="text-5xl flex justify-between items-center p-8", style="background-color: #1D9ADD; color: white; text-align: center",
-                                tags$h1(style="display: inline-block; margin: 0 auto;", class="flex-grow mt-8 mb-8",tags$b("PAHO Programme Impact Assessment Tool (PIA Tool)")),
-                                tags$a(id="prueba", class="py-2 px-4 text-3xl text-white focus:text-sky-700 cursor-pointer", href="#!/", icon("home"))
-                    ))),
+    # fluidRow(column(12,
+    #                 tags$header(class="text-5xl flex justify-between items-center p-8", style="background-color: #1D9ADD; color: white; text-align: center",
+    #                             tags$h1(style="display: inline-block; margin: 0 auto;", class="flex-grow mt-8 mb-8",tags$b("PAHO Programme Impact Assessment Tool (PIA Tool)")),
+    #                             tags$a(id="prueba", class="py-2 px-4 text-3xl text-white focus:text-sky-700 cursor-pointer", href="#!/", icon("home"))
+    #                 ))),
     fluidRow(
       column(12,
              tags$header(class="text-1xl flex justify-between items-center p-5 mt-4", style="background-color: #FF671B; color: white; text-align: center",
                          tags$h1(style="display: inline-block; margin: 0 auto;", class="flex-grow mt-8 mb-8",tags$b("Intervención")),
                          tags$div(class="py-2 px-4 text-3xl text-white focus:text-sky-700")
-             ),
+             )
+      )
+    ),
+    fluidRow(
+      column(3,
              br(),
              pickerInput("country", 
                          "Seleccionar país:",
@@ -48,6 +52,9 @@ ui_avanzada <- navbarPage(
                                            
                          ),
                          selected = "Argentina"),
+             br()),
+      column(3,
+             br(),
              pickerInput(
                inputId = "intervencion",
                label = "Seleccionar intervención:", 
@@ -61,7 +68,52 @@ ui_avanzada <- navbarPage(
                  )
                )
              )
-      )
+             
+      ),
+      column(2,
+             br(),
+             br(),
+             actionButton("saveScenario",
+                          "Guardar escenario")),
+      column(2,
+             br(),
+             hidden(textInput("scenarioName",'Nombre del escenario'))),
+      column(2,
+             br(),
+             br(),
+             hidden(actionButton("saveScenario2","Guardar")))
+      
+      
+      
+      # fluidRow(
+      #   column(12,
+      #          tags$div(
+      #            class = "bg-gray-200 p-4  w-full opacity-80", style = "z-index: 1;",
+      #            tags$div(
+      #              class = "flex justify-center",
+      #              tags$div(
+      #                class = "inline-block bg-blue-500 text-white px-4 py-2 mx-2 hover:bg-blue-700 cursor-pointer",
+      #                actionLink(inputId = "saveScenario",label="Guardar escenario", class = "text-white hover:text-white")
+      #              ),
+      #              hidden(
+      #                tags$div(
+      #                  id = "guardar_hpv",
+      #                  class = "inline-block bg-slate-500 text-white px-4 py-2 mx-2",
+      #                  textInput("scenarioName",""),
+      #                  actionButton("saveScenario2","Guardar") 
+      #                )
+      #              ),
+      #              tags$div(
+      #                class = "inline-block bg-green-500 text-white px-4 py-2 mx-2 hover:bg-green-700 cursor-pointer",
+      #                tags$a(id="ver_escenarios_guardados","Ver escenarios guardados", href = "#!/escenarios_guardados")
+      #              ),
+      #              tags$div(
+      #                class = "inline-block bg-red-500 text-white px-4 py-2 mx-2 hover:bg-red-700 cursor-pointer",
+      #                "Ver resultados comparados"
+      #              )
+      #            )
+      #          ))
+      # ))
     ),
     fluidRow(
       column(3,
@@ -83,40 +135,21 @@ ui_avanzada <- navbarPage(
              ),
              br(),
              uiOutput("resultados_hpv"))
-    ),
-    fluidRow(
-      column(12,
-             tags$div(
-               class = "bg-gray-200 p-4 fixed bottom-0 left-0 w-full opacity-80", style = "z-index: 1;",
-               tags$div(
-                 class = "flex justify-center",
-                 tags$div(
-                   class = "inline-block bg-blue-500 text-white px-4 py-2 mx-2 hover:bg-blue-700 cursor-pointer",
-                   actionLink(inputId = "saveScenario",label="Guardar escenario", class = "text-white hover:text-white")
-                 ),
-                 hidden(
-                   tags$div(
-                     id = "guardar_hpv",
-                     class = "inline-block bg-slate-500 text-white px-4 py-2 mx-2",
-                     textInput("scenarioName",""),
-                     actionButton("saveScenario2","Guardar") 
-                   )
-                 ),
-                 tags$div(
-                   class = "inline-block bg-green-500 text-white px-4 py-2 mx-2 hover:bg-green-700 cursor-pointer",
-                   tags$a(id="ver_escenarios_guardados","Ver escenarios guardados", href = "#!/escenarios_guardados")
-                 ),
-                 tags$div(
-                   class = "inline-block bg-red-500 text-white px-4 py-2 mx-2 hover:bg-red-700 cursor-pointer",
-                   "Ver resultados comparados"
-                 )
-               )
-             ))
     )
+    
     
   ),
   tabPanel(
-    HTML('<div class = "text-white")>Escenarios guardados</div>')
+    HTML('<div class = "text-white")>Escenarios guardados</div>'),
+    fluidRow(
+      column(12,
+             uiOutput("filtro_intervencion"),
+             uiOutput("select_escenarios_guardados"),
+             
+             uiOutput("escenarios_guardados"))
+      
+    )
+    
   ),
   tabPanel(
     HTML('<div class = "text-white")>Comparados</div>')

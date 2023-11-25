@@ -22,48 +22,81 @@ server_hpv = function (input, output, parameterReactive, scenarios, resultados, 
     
   })
   
+  output$filtro_intervencion = renderUI({
+    browser()
+    
+    intervenciones_con_escenarios_guardados = c(
+      length(scenarios$savedScenarios),
+      length(hearts_scenarios$savedScenarios),
+      length(hpp_scenarios$savedScenarios),
+      length(hepC_scenarios$savedScenarios))
+      
+    intervenciones_con_escenarios_guardados = which(intervenciones_con_escenarios_guardados==1)
+    
+    pickerInput(
+      inputId = "filtro_intervencion",
+      label = "Seleccionar intervención:", 
+      choices = c("Vacuna contra el HPV","HEARTS","Hemorragia postparto","Hepatitis C")[intervenciones_con_escenarios_guardados],
+      choicesOpt = list(
+        content = c(
+          paste(icon("syringe"),"Vacuna contra el HPV"),
+          paste(icon("heart"),"HEARTS"),
+          paste(icon("female"),"Hemorragia postparto"),
+          paste(icon("virus"),"Hepatitis C"))[intervenciones_con_escenarios_guardados]
+                    
+        ),
+      selected=input$intervencion
+      )
+      
+    
+  })
+  
   output$select_escenarios_guardados = renderUI({
-    if (input$intervencion == "Vacuna contra el HPV") {
-      tagList(
-        selectizeInput(
-          "savedScenarios",
-          "Seleccionar escenario guardado",
-          names(scenarios$savedScenarios),
-          multiple = T,
-          selected = names(scenarios$savedScenarios)
+    browser()
+    if (length(input$filtro_intervencion)>0) {
+      if (input$filtro_intervencion == "Vacuna contra el HPV") {
+        tagList(
+          selectizeInput(
+            "savedScenarios",
+            "Seleccionar escenario guardado",
+            names(scenarios$savedScenarios),
+            multiple = T,
+            selected = names(scenarios$savedScenarios)
+          )
         )
-      )
-    } else if (input$intervencion == "HEARTS") {
-      tagList(
-        selectizeInput(
-          "savedScenarios",
-          "Seleccionar escenario guardado",
-          names(hearts_scenarios$savedScenarios),
-          multiple = T,
-          selected = names(hearts_scenarios$savedScenarios)
+      } else if (input$filtro_intervencion == "HEARTS") {
+        tagList(
+          selectizeInput(
+            "savedScenarios",
+            "Seleccionar escenario guardado",
+            names(hearts_scenarios$savedScenarios),
+            multiple = T,
+            selected = names(hearts_scenarios$savedScenarios)
+          )
         )
-      )
-    } else if (input$intervencion == "Hemorragia postparto") {
-      tagList(
-        selectizeInput(
-          "savedScenarios",
-          "Seleccionar escenario guardado",
-          names(hpp_scenarios$savedScenarios),
-          multiple = T,
-          selected = names(hpp_scenarios$savedScenarios)
+      } else if (input$filtro_intervencion == "Hemorragia postparto") {
+        tagList(
+          selectizeInput(
+            "savedScenarios",
+            "Seleccionar escenario guardado",
+            names(hpp_scenarios$savedScenarios),
+            multiple = T,
+            selected = names(hpp_scenarios$savedScenarios)
+          )
         )
-      )
-    } else if (input$intervencion == "Hepatitis C") {
-      tagList(
-        selectizeInput(
-          "savedScenarios",
-          "Seleccionar escenario guardado",
-          names(hepC_scenarios$savedScenarios),
-          multiple = T,
-          selected = names(hepC_scenarios$savedScenarios)
+      } else if (input$filtro_intervencion == "Hepatitis C") {
+        tagList(
+          selectizeInput(
+            "savedScenarios",
+            "Seleccionar escenario guardado",
+            names(hepC_scenarios$savedScenarios),
+            multiple = T,
+            selected = names(hepC_scenarios$savedScenarios)
+          )
         )
-      )
+      }
     }
+    
     
     
   })
