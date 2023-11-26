@@ -2,30 +2,50 @@ library("htmltools")
 library("bsplus")
 
 ui_avanzada <- navbarPage(
-  useShinyjs(),
+  id="NVP",
+  
   title = HTML('<div class = "text-white")>PAHO Programme Impact Assessment Tool (PIA Tool)</div>'),
   tabPanel(
     HTML('<div class = "text-white")>Definición de escenarios</div>'),
-    tags$style(getStyle()),
+    
     # fluidRow(column(12,
     #                 tags$header(class="text-5xl flex justify-between items-center p-8", style="background-color: #1D9ADD; color: white; text-align: center",
     #                             tags$h1(style="display: inline-block; margin: 0 auto;", class="flex-grow mt-8 mb-8",tags$b("PAHO Programme Impact Assessment Tool (PIA Tool)")),
     #                             tags$a(id="prueba", class="py-2 px-4 text-3xl text-white focus:text-sky-700 cursor-pointer", href="#!/", icon("home"))
     #                 ))),
     fluidRow(
-      column(12,
-             tags$header(class="text-1xl flex justify-between items-center p-5 mt-4", style="background-color: #FF671B; color: white; text-align: center",
-                         tags$h1(style="display: inline-block; margin: 0 auto;", class="flex-grow mt-8 mb-8",tags$b("Intervención")),
-                         tags$div(class="py-2 px-4 text-3xl text-white focus:text-sky-700")
-             )
-      )
+      tags$style(getStyle()),
+    #   column(12,
+    #          tags$header(class="text-1xl flex justify-between items-center p-5 mt-4", style="background-color: #FF671B; color: white; text-align: center",
+    #                      tags$h1(style="display: inline-block; margin: 0 auto;", class="flex-grow mt-8 mb-8",tags$b("Intervención")),
+    #                      tags$div(class="py-2 px-4 text-3xl text-white focus:text-sky-700")
+    #          )
+    #   )
     ),
     fluidRow(
-      column(3,
+      column(2,
+             br(),
+             pickerInput(
+               inputId = "intervencion",
+               label = "Seleccionar intervención:", 
+               choices = c("Vacuna contra el HPV","HEARTS","Hemorragia postparto","Hepatitis C"),
+               choicesOpt = list(
+                 content = c(paste(icon("syringe"),"Vacuna contra el HPV"),
+                             paste(icon("heart"),"HEARTS"),
+                             paste(icon("female"),"Hemorragia postparto"),
+                             paste(icon("virus"),"Hepatitis C")
+                             
+                 )
+               ),
+               
+             )
+             
+      ),
+      column(2,
              br(),
              pickerInput("country", 
                          "Seleccionar país:",
-                         multiple = F,
+                         
                          choices = c("Argentina" ="ARGENTINA",
                                      "Brazil" = "BRAZIL",
                                      "Chile" = "CHILE",
@@ -51,25 +71,13 @@ ui_avanzada <- navbarPage(
                                            
                                            
                          ),
-                         selected = "Argentina"),
+                         selected = NULL,
+                         multiple = TRUE,
+                         options = pickerOptions(
+                           maxOptions = 1,
+                           noneSelectedText = "Elegir país")),
              br()),
-      column(3,
-             br(),
-             pickerInput(
-               inputId = "intervencion",
-               label = "Seleccionar intervención:", 
-               choices = c("Vacuna contra el HPV","HEARTS","Hemorragia postparto","Hepatitis C"),
-               choicesOpt = list(
-                 content = c(paste(icon("syringe"),"Vacuna contra el HPV"),
-                             paste(icon("heart"),"HEARTS"),
-                             paste(icon("female"),"Hemorragia postparto"),
-                             paste(icon("virus"),"Hepatitis C")
-                             
-                 )
-               )
-             )
-             
-      ),
+      
       column(2,
              br(),
              br(),
@@ -116,44 +124,58 @@ ui_avanzada <- navbarPage(
       # ))
     ),
     fluidRow(
-      column(3,
+      column(2,
              #theme = shinythemes::shinytheme("united"),
              #tags$style(getStyle()),
-             tags$header(class="text-1xl flex justify-between items-center p-5 mt-4", style="background-color: #FF671B; color: white; text-align: center",
-                         tags$h1(style="display: inline-block; margin: 0 auto;", class="flex-grow mt-8 mb-8",tags$b("Configuración")),
-                         tags$div(class="py-2 px-4 text-3xl text-white focus:text-sky-700")
+             hidden(
+               tags$header(id = "header1", class="text-1xl flex justify-between items-center p-5 mt-4", style="background-color: #FF671B; color: white; text-align: center",
+                           tags$h1(style="display: inline-block; margin: 0 auto;", class="flex-grow mt-8 mb-8",tags$b("Configuración")),
+                           tags$div(class="py-2 px-4 text-3xl text-white focus:text-sky-700")
+               )
              ),
              br(),
              
              
-             uiOutput("uiOutput_basica")
+             hidden(uiOutput("uiOutput_basica"))
       ),
-      column(9,
+      column(10,
              class = "px-20",
-             tags$header(class="text-1xl flex justify-between items-center p-5 mt-4", style="background-color: #FF671B; color: white; text-align: center",
-                         tags$h1(style="display: inline-block; margin: 0 auto;", class="flex-grow mt-8 mb-8",tags$b("Resultados"))
+             hidden(
+               tags$header(id = "header2", class="text-1xl flex justify-between items-center p-5 mt-4", style="background-color: #FF671B; color: white; text-align: center",
+                           tags$h1(style="display: inline-block; margin: 0 auto;", class="flex-grow mt-8 mb-8",tags$b("Resultados"))
+               )
              ),
              br(),
-             uiOutput("resultados_hpv"))
+             hidden(uiOutput("resultados_hpv")))
     )
     
     
   ),
   tabPanel(
+    id = "EG",
     HTML('<div class = "text-white")>Escenarios guardados</div>'),
     fluidRow(
       column(12,
-             uiOutput("filtro_intervencion"),
-             uiOutput("select_escenarios_guardados"),
-             
-             uiOutput("escenarios_guardados"))
+             hidden(uiOutput("filtro_intervencion")),
+             hidden(uiOutput("select_escenarios_guardados")),
+             hidden(uiOutput("escenarios_guardados")))
       
     )
     
   ),
   tabPanel(
-    HTML('<div class = "text-white")>Comparados</div>')
+    HTML('<div class = "text-white")>Comparados</div>'),
+    useShinyjs(),
+    tags$script(HTML("var header = $('.navbar > .container-fluid');
+                      header.append('<div style=\"float:right\"><a href=\"/#!/\"><img src=\"home-solid.svg\" style=\"float:right;width:27px;height:32px;padding-top:8px;\"> </a></div>');
+                    console.log(header)")
+    )
+  ),
+  tabPanel(
+    HTML('<div class = "text-white")>Documentación</div>')
   )
+  
+  
   
   
   

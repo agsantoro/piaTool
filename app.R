@@ -15,6 +15,27 @@ source("server/server_hpv.R", encoding = "UTF-8")
 
 server <- function(input, output, session) {
   
+  hide("saveScenario")
+  
+  
+  observeEvent(input$country, {
+    if (length(input$country)>0) {
+      show("header1", anim = T, animType = "fade")
+      show("header2", anim = T, animType = "fade")
+      delay(500,show("uiOutput_basica", anim = T, animType = "fade"))
+      delay(500,show("resultados_hpv", anim = T, animType = "fade"))
+      delay(500,show("saveScenario", anim = T, animType = "fade"))
+    }
+  })
+  
+  observeEvent(input$NVP, {
+    if (input$NVP == "<div class = \"text-white\")>Escenarios guardados</div>") {
+      delay(500,show("filtro_intervencion", anim = T, animType = "fade"))
+      delay(500,show("select_escenarios_guardados", anim = T, animType = "fade"))
+      delay(500,show("escenarios_guardados", anim = T, animType = "fade"))
+    } 
+  })
+  
   # implementa router
   router_server()
   
@@ -23,6 +44,7 @@ server <- function(input, output, session) {
     show("guardar_hpv", anim = T, animType = "slide")
     show("scenarioName", anim = T, animType = "slide")
     show("saveScenario2", anim = T, animType = "slide")
+    hide("saveScenario", anim = T, animType = "slide")
   })
   
   
@@ -364,6 +386,7 @@ server <- function(input, output, session) {
   
   server_hpv(input, 
              output, 
+             session,
              parametersReactive(), 
              scenarios, 
              resultados,
