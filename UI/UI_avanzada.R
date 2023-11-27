@@ -220,20 +220,21 @@ ui_avanzada <- navbarPage(
                          tags$iframe(src='modelCards/documentacion-estimatool.html', 
                                      height=600, 
                                      width="100%",
-                                     frameBorder="0")
-                ),
+                                     frameBorder="0")),
                 tabPanel("Hemorragia postparto",
                          br(),
                          tags$iframe(src='modelCards/documentacion-hemorragiapp.html', 
                                      height=600, 
                                      width="100%",
                                      frameBorder="0")),
-                tabPanel("Hepatitis C"),
+                tabPanel("Hepatitis C",
+                         br(),
                 tags$iframe(src='modelCards/Documentación---HepC.html', 
                             height=600, 
                             width="100%",
                             frameBorder="0")
                          ))
+    )
     
     
   
