@@ -2,10 +2,9 @@ library("htmltools")
 library("bsplus")
 
 ui_avanzada <- navbarPage(
-  tags$title("eceplp"),
-  id="NVP",
+  id="NVP", 
   
-  title = HTML('PAHO Programme Impact Assessment Tool (PIA Tool)'),
+  title = HTML('Programme Impact Assessment Tool (PIA Tool)'),
   tabPanel(
     HTML('<div class = "text-white")>Definición de escenarios</div>'),
     
@@ -23,7 +22,7 @@ ui_avanzada <- navbarPage(
     #          )
     #   )
     ),
-    fluidRow(
+    fluidRow(class = "bg-slate-200 mb-10",
       column(2,
              br(),
              pickerInput(
@@ -120,8 +119,8 @@ ui_avanzada <- navbarPage(
       #          ))
       # ))
     ),
-    fluidRow(
-      column(2,
+    fluidRow(id = "columna_borde",
+      column(2, style='border-right: 1px solid grey; padding-right: 50px;',
              #theme = shinythemes::shinytheme("united"),
              #tags$style(getStyle()),
              hidden(
@@ -151,14 +150,18 @@ ui_avanzada <- navbarPage(
       ),
       column(10,
              class = "px-20",
+             
              hidden(
+               br(),
                tags$header(id = "header2", class="text-1xl flex justify-between items-center p-5 mt-4", style="background-color: #FF671B; color: white; text-align: center",
                            tags$h1(style="display: inline-block; margin: 0 auto;", class="flex-grow mt-8 mb-8",tags$b("Resultados"), )
                )
              ),
              br(),
              hidden(uiOutput("resultados_hpv")),
-             hidden(actionButton("saveScenario2","Guardar")))
+             hidden(actionButton("saveScenario2","Guardar")),
+             br(),
+             br())
     )
     
     
@@ -166,8 +169,8 @@ ui_avanzada <- navbarPage(
   tabPanel(
     id = "EG",
     HTML('<div class = "text-white")>Escenarios guardados</div>'),
-    fluidRow(
-      column(3,
+    fluidRow(style = "padding-top: 15px;",
+      column(3, 
              hidden(
                tags$header(id = "header_comparacion", class="text-1xl flex justify-between items-center p-5 mt-4", style="background-color: #FF671B; color: white; text-align: center",
                            tags$h1(style="display: inline-block; margin: 0 auto;", class="flex-grow mt-8 mb-8",tags$b("Escenarios guardados")),
@@ -178,7 +181,7 @@ ui_avanzada <- navbarPage(
              hidden(uiOutput("filtro_intervencion")),
              hidden(uiOutput("select_escenarios_guardados")),
              downloadButton("descarga_comp", "Descargar")),
-      column(9,
+      column(9,id="columna_resultados_borde", style='border-left: 1px solid grey; padding-right: 25px;',
              hidden(
                tags$header(id = "header_comparacion_resultados", class="text-1xl flex justify-between items-center p-5 mt-4", style="background-color: #FF671B; color: white; text-align: center",
                            tags$h1(style="display: inline-block; margin: 0 auto;", class="flex-grow mt-8 mb-8",tags$b("Resultados")),
@@ -195,6 +198,7 @@ ui_avanzada <- navbarPage(
   tabPanel(
     HTML('<div class = "text-white")>Escenarios comparados</div>'),
     useShinyjs(),
+    br(),
     tags$script(HTML("var header = $('.navbar > .container-fluid');
                       header.append('<div style=\"float:right\"><a href=\"#!//\"><img src=\"home-solid.svg\" style=\"float:right;width:27px;height:32px;padding-top:8px;\"> </a></div>');
                     console.log(header)")
@@ -202,6 +206,7 @@ ui_avanzada <- navbarPage(
   ),
   tabPanel(
     HTML('<div class = "text-white")>Documentación</div>'),
+    br(),
     tabsetPanel(id = "TSP_Manuales",
                 type = "pills",
                 tabPanel("Vacuna contra el HPV",

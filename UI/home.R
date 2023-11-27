@@ -8,36 +8,41 @@ ui_home <- fluidPage(
   HTML(
     '
 <nav class="sticky top-0" style="z-index: 1;">
-   <div class="flex bg-white p-3">
-      <div class="w-1/4">
-         <div id="this1" class="bg-white p-4">
-            <img src="https://www.paho.org/themes/paho/images/logo-es.png" alt="" />
-         </div>
-      </div>
-      <div class="w-2/4">
-         <div class="p-6 text-center text-5xl">
-            <div style="color: #1D9ADD;"><b>PAHO Programme Impact Assessment Tool</b></div>
-         </div>
-      </div>
-      <div class="w-1/4">
-         <div id="class" ="p-2">
-         <div class="text-right text-base">
-            <a href="https://www.paho.org/es/hearts-americas">Español</a>
-            |
-            <a href="www.infobae.com">Inglés</a>
-         </div>
-      </div>
-   </div>
-   </div>
+    <div class="flex bg-white p-3">
+        <div class="w-1/5 flex items-center"> 
+            <div id="this1" class="bg-white pr-6">
+                <img src="https://www.paho.org/themes/paho/images/logo-es.png" alt="" />
+            </div>
+        </div>
+        <div class="w-3/5">
+            <div class="py-10 text-center text-7xl font-bold border-l-2 ml-6 border-orange-300">
+                <div style="color: #1D9ADD;"><b>Programme Impact Assessment Tool</b></div>
+            </div>
+        </div>
+        <div class="w-1/5">
+            <div id="class"="p-2">
+                <div class="text-right text-lg">
+                    <a href="">Español</a>
+                    |
+                    <a href="">Inglés</a>
+                </div>
+            </div>
+        </div>
+    </div>
 </nav>
 <div class="flex h-screen">
-   <div class="relative h-auto w-3/4 backdrop-blur-md bg-white/30 ">
+   <div class="relative h-auto w-3/4 backdrop-blur-2xl bg-white/30 ">
       <div class="absolute inset-0 backdrop-filter backdrop-blur-sm bg-white/10">
          <!-- Capa para el desenfoque -->
       </div>
-      <div class="h-full bg-[url(https://www.paho.org/sites/default/files/styles/top_hero/public/2022-08/governing-bodies-1400px.jpg?h=5a93717a&itok=NvkSpwB1)] bg-cover bg-center"></div>
+      <div class="h-full brightness-50 bg-[url(https://www.paho.org/sites/default/files/styles/top_hero/public/2022-08/governing-bodies-1400px.jpg?h=5a93717a&itok=NvkSpwB1)] bg-cover bg-center"></div>
       <div class="absolute inset-0 flex items-center justify-center">
-         <p class="text-center text-6xl text-white px-4 ">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis fermentum quam in dictum aliquet. Vestibulum non ante a mi bibendum facilisis at vitae libero. Integer id aliquam sapien.</p>
+         <p class="mx-20 text-left text-6xl text-white px-4 ">
+La Herramienta <b>PIA Tool</b> es una solución interactiva diseñada para guiar a los usuarios en la evaluación del impacto epidemiológico y económico de intervenciones prioritarias identificadas por la Organización Mundial de la Salud (OMS).<br> 
+<br>
+Presenta funcionalidades clave como la exploración intuitiva de datos, la evaluación integral del impacto de las intervenciones y análisis específicos por países, alineándose con las prioridades de la OMS.<br> 
+<br>
+Su objetivo es proporcionar una evaluación completa que contribuya a la reducción de la carga de enfermedad a largo plazo, ofreciendo una visión detallada de la inversión requerida y los posibles ahorros derivados de estas intervenciones en países estratégicos de América Latina y el Caribe.</p>
       </div>
    </div>
    <div id="div_1" class="h-auto w-1/4 h-auto w-1/4 py-4" style="background-color: #FF671B; display: flex; flex-direction: column; align-items: flex-start;" style="background-color: #FF671B">

@@ -15,6 +15,9 @@ source("server/server_hpv.R", encoding = "UTF-8")
 
 server <- function(input, output, session) {
   
+  hide("columna_borde")
+  hide("columna_resultados_borde")
+  
   output$descarga_comp <- downloadHandler(
     filename = function() {
       paste('piaTool-', Sys.Date(), '.xlsx', sep='')
@@ -51,12 +54,14 @@ server <- function(input, output, session) {
   
   observeEvent(input$country, {
     if (length(input$country)>0) {
+      show("columna_borde")
       show("header1", anim = T, animType = "fade")
       show("header2", anim = T, animType = "fade")
       show("saveScenarioDiv", anim = T, animType = "fade")
       delay(500,show("uiOutput_basica", anim = T, animType = "fade"))
       delay(500,show("resultados_hpv", anim = T, animType = "fade"))
       delay(500,show("saveScenario", anim = T, animType = "fade"))
+      show("columna_resultados_borde")
       delay(500,show("header_comparacion", anim = T, animType = "fade"))
     }
   })

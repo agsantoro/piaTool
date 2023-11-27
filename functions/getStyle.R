@@ -37,6 +37,10 @@ body {
   display: none;
 }
 
+#NVP {
+margin-left: 10%;
+
+}
 .popup-content {
   position: absolute;
   top: 50%;
@@ -51,7 +55,9 @@ body {
 }
                  
                  .navbar {background-color:#1D9ADD !important;
-                 border-color: #1D9ADD !important;
+                 border: 0 !important;
+                 margin: 0 !important;
+                 padding-top: 2em;
                  }
                  
                  
