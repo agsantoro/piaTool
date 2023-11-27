@@ -12,7 +12,9 @@ body {
     border-color: white
 
                 }
-
+.navbar-default .navbar-brand {
+  color: white;
+}    
 
 .custom-div {
     position: absolute;

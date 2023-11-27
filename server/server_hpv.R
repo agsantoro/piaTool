@@ -220,8 +220,8 @@ server_hpv = function (input, output, session, parameterReactive, scenarios, res
         })
         
         tagList(
-          
           highchartOutput("grafico"),
+          br(),
           reactableOutput("summaryTableScenarios")
         )
         

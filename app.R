@@ -15,16 +15,49 @@ source("server/server_hpv.R", encoding = "UTF-8")
 
 server <- function(input, output, session) {
   
-  hide("saveScenario")
+  output$descarga_comp <- downloadHandler(
+    filename = function() {
+      paste('piaTool-', Sys.Date(), '.xlsx', sep='')
+    },
+    content = function(file) {
+      list_of_datasets = list()
+          if (input$filtro_intervencion == "Vacuna contra el HPV") {
+            for (i in input$savedScenarios) {
+              list_of_datasets[[i]] = scenarios$savedScenarios[[i]]$outcomes
+            }
+          } else if (input$filtro_intervencion == "HEARTS") {
+            for (i in input$savedScenarios) {
+              list_of_datasets[[i]] = hearts_scenarios$savedScenarios[[i]]
+            }
+          } else if (input$filtro_intervencion == "Hemorragia postparto") {
+            for (i in input$savedScenarios) {
+              list_of_datasets[[i]] = hpp_scenarios$savedScenarios[[i]]
+            }
+          } else if (input$filtro_intervencion == "Hepatitis C") {
+            for (i in input$savedScenarios) {
+              list_of_datasets[[i]] = hepC_scenarios$savedScenarios[[i]]
+            }
+          }
+      data=list_of_datasets
+      write.xlsx(data, file)
+    }
+  )
+
   
+  observeEvent(input$intervencion, {
+    hide("saveScenario2")
+    hide("scenarioName")
+  })
   
   observeEvent(input$country, {
     if (length(input$country)>0) {
       show("header1", anim = T, animType = "fade")
       show("header2", anim = T, animType = "fade")
+      show("saveScenarioDiv", anim = T, animType = "fade")
       delay(500,show("uiOutput_basica", anim = T, animType = "fade"))
       delay(500,show("resultados_hpv", anim = T, animType = "fade"))
       delay(500,show("saveScenario", anim = T, animType = "fade"))
+      delay(500,show("header_comparacion", anim = T, animType = "fade"))
     }
   })
   
@@ -33,6 +66,8 @@ server <- function(input, output, session) {
       delay(500,show("filtro_intervencion", anim = T, animType = "fade"))
       delay(500,show("select_escenarios_guardados", anim = T, animType = "fade"))
       delay(500,show("escenarios_guardados", anim = T, animType = "fade"))
+      delay(500,show("header_comparacion_resultados", anim = T, animType = "fade"))
+      delay(500,show("header_comparacion", anim = T, animType = "fade"))
     } 
   })
   
@@ -44,7 +79,7 @@ server <- function(input, output, session) {
     show("guardar_hpv", anim = T, animType = "slide")
     show("scenarioName", anim = T, animType = "slide")
     show("saveScenario2", anim = T, animType = "slide")
-    hide("saveScenario", anim = T, animType = "slide")
+    #hide("saveScenario", anim = T, animType = "slide")
   })
   
   
@@ -381,6 +416,13 @@ server <- function(input, output, session) {
       toggle(id = i, anim = TRUE, animType = "slide", condition = isVisible)
       enable(i)
     }
+  })
+  
+  observeEvent(input$saveScenario, {
+    
+    show("scenarioName")
+    show("saveScenario")
+    
   })
   
   
