@@ -222,8 +222,17 @@ ui_avanzada <- navbarPage(
                                      width="100%",
                                      frameBorder="0")
                 ),
-                tabPanel("Hemorragia postparto"),
-                tabPanel("Hepatitis C")
+                tabPanel("Hemorragia postparto",
+                         br(),
+                         tags$iframe(src='modelCards/documentacion-hemorragiapp.html', 
+                                     height=600, 
+                                     width="100%",
+                                     frameBorder="0")),
+                tabPanel("Hepatitis C"),
+                tags$iframe(src='modelCards/Documentación---HepC.html', 
+                            height=600, 
+                            width="100%",
+                            frameBorder="0")
                          ))
     
     
