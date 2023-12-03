@@ -201,7 +201,7 @@ ui_avanzada <- navbarPage(
     br(),
     tags$script(HTML("var header = $('.navbar > .container-fluid');
                       header.append('<div style=\"float:right\"><a href=\"#!//\"><img src=\"home-solid.svg\" style=\"float:right;width:27px;height:32px;padding-top:8px;\"> </a></div>');
-                    console.log(header)")
+                      console.log(header)")
     )
   ),
   tabPanel(
