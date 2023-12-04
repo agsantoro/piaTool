@@ -169,6 +169,7 @@ ui_avanzada <- navbarPage(
   tabPanel(
     id = "EG",
     HTML('<div class = "text-white")>Escenarios guardados</div>'),
+    
     fluidRow(style = "padding-top: 15px;",
       column(3, 
              hidden(

@@ -80,9 +80,9 @@ server_hpv = function (input, output, session, parameterReactive, scenarios, res
   
   
   output$select_escenarios_guardados = renderUI({
-    paste(input$NVP)
-    if (length(input$filtro_intervencion)>0) {
-      if (input$filtro_intervencion == "Vacuna contra el HPV") {
+    
+    if (length(input$filtro_intervencion)==1) {
+      if (input$filtro_intervencion[1] == "Vacuna contra el HPV") {
         tagList(
           selectizeInput(
             "savedScenarios",
@@ -92,7 +92,7 @@ server_hpv = function (input, output, session, parameterReactive, scenarios, res
             selected = names(scenarios$savedScenarios)
           )
         )
-      } else if (input$filtro_intervencion == "HEARTS") {
+      } else if (input$filtro_intervencion[1] == "HEARTS") {
         tagList(
           selectizeInput(
             "savedScenarios",
@@ -102,7 +102,7 @@ server_hpv = function (input, output, session, parameterReactive, scenarios, res
             selected = names(hearts_scenarios$savedScenarios)
           )
         )
-      } else if (input$filtro_intervencion == "Hemorragia postparto") {
+      } else if (input$filtro_intervencion[1] == "Hemorragia postparto") {
         tagList(
           selectizeInput(
             "savedScenarios",
@@ -112,7 +112,7 @@ server_hpv = function (input, output, session, parameterReactive, scenarios, res
             selected = names(hpp_scenarios$savedScenarios)
           )
         )
-      } else if (input$filtro_intervencion == "Hepatitis C") {
+      } else if (input$filtro_intervencion[1] == "Hepatitis C") {
         tagList(
           selectizeInput(
             "savedScenarios",
@@ -123,6 +123,39 @@ server_hpv = function (input, output, session, parameterReactive, scenarios, res
           )
         )
       }
+    } else {
+      
+      opciones = c(
+        names(scenarios$savedScenarios),
+        names(hearts_scenarios$savedScenarios),
+        names(hpp_scenarios$savedScenarios),
+        names(hepC_scenarios$savedScenarios)
+      )
+      
+      sub_text = 
+        c(
+          rep("Vacuna contra el HPV", length(names(scenarios$savedScenarios))),
+          rep("HEARTS", length(names(hearts_scenarios$savedScenarios))),
+          rep("Hemorragia postparto", length(names(hpp_scenarios$savedScenarios))),
+          rep("Hepatitis C", length(names(hepC_scenarios$savedScenarios)))
+        )
+      
+      tagList(
+        pickerInput(
+          inputId = "savedScenariosMultiple",
+          label = "Seleccionar escenario guardado",
+          choices = opciones,
+          choicesOpt = list(
+            subtext = sub_text,
+            style = rep("font-weight: bold;", length(opciones))
+          ),
+          multiple = T,
+          selected = opciones
+        )
+      )
+      
+      
+      
     }
     
     
@@ -135,7 +168,6 @@ server_hpv = function (input, output, session, parameterReactive, scenarios, res
       
       output$escenarios_guardados = renderUI({
         # mira intervención seleccionada
-        browser()
         if (length(input$filtro_intervencion)>0) {
           
           if (input$filtro_intervencion == "Vacuna contra el HPV") {
@@ -162,7 +194,6 @@ server_hpv = function (input, output, session, parameterReactive, scenarios, res
                       }
                     }
                   }
-                  browser()
                   plot %>% hc_title(
                     text = "Efecto de la vacunación en la incidencia del cáncer de cuello de útero por edad",
                     margin = 20,
