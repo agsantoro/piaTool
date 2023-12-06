@@ -27,186 +27,187 @@ server_hpv = function (input, output, session, parameterReactive, scenarios, res
     
     tagList(
       selectizeInput(
-        inputId = "prueba_country",
+        inputId = "comparacion_country",
         label = "Seleccionar país",
         choices = unique(table$country),
         multiple = T,
         selected = unique(table$country)
       ),
       selectizeInput(
-        "prueba_intervencion",
+        "comparacion_intervencion",
         "Seleccionar intervención",
         unique(table$intervencion),
         multiple = T
       ),
       selectizeInput(
-        "prueba_escenario",
+        "comparacion_escenario",
         "Seleccionar escenario",
         unique(table$scenarioName),
         multiple = T
       ),
-      hr(),
-      hr(),
-      hr()
+      br(),
+      br()
       
     )
     
   })
   
-  observeEvent(input$prueba_country, {
+  observeEvent(input$comparacion_country, {
     table = summary_scenarios$table
-    table = table[table$country %in% input$prueba_country,]
-    updateSelectizeInput(session,"prueba_intervencion", choices = table$intervencion, selected = table$intervencion)
+    table = table[table$country %in% input$comparacion_country,]
+    updateSelectizeInput(session,"comparacion_intervencion", choices = table$intervencion, selected = table$intervencion)
+    updateSelectizeInput(session,"comparacion_escenario", choices = table$scenarioName[table$intervencion %in% input$comparacion_intervencion], selected = table$intervencion)
     
   })
   
-  observeEvent(input$prueba_intervencion, {
+  observeEvent(input$comparacion_intervencion, {
     table = summary_scenarios$table
-    table = table[table$country %in% input$prueba_country &
-                  table$intervencion %in% input$prueba_intervencion,]
-    updateSelectizeInput(session,"prueba_escenario", choices = table$scenarioName, selected = table$scenarioName)
+    table = table[table$country %in% input$comparacion_country &
+                  table$intervencion %in% input$comparacion_intervencion,]
+    updateSelectizeInput(session,"comparacion_escenario", choices = table$scenarioName, selected = table$scenarioName)
   })
   
-  output$filtro_pais_comparacion = renderUI({
-    tagList(
-      pickerInput(
-        "selectCountrySaved",
-        "Seleccionar país",
-        choices = c()
-      )
-    )
-  })
-  
-  output$filtro_intervencion = renderUI({
-    intervenciones_con_escenarios_guardados = c(
-      length(scenarios$savedScenarios),
-      length(hearts_scenarios$savedScenarios),
-      length(hpp_scenarios$savedScenarios),
-      length(hepC_scenarios$savedScenarios))
-      
+  # output$filtro_pais_comparacion = renderUI({
+  #   tagList(
+  #     pickerInput(
+  #       "selectCountrySaved",
+  #       "Seleccionar país",
+  #       choices = c()
+  #     )
+  #   )
+  # })
+  # 
+  # output$filtro_intervencion = renderUI({
+  #   intervenciones_con_escenarios_guardados = c(
+  #     length(scenarios$savedScenarios),
+  #     length(hearts_scenarios$savedScenarios),
+  #     length(hpp_scenarios$savedScenarios),
+  #     length(hepC_scenarios$savedScenarios))
+  #     
+  #   
+  #   intervenciones_con_escenarios_guardados = which(intervenciones_con_escenarios_guardados!=0)
+  #   
+  #   
+  #   pickerInput(
+  #     inputId = "filtro_intervencion",
+  #     label = "Seleccionar intervención:", 
+  #     choices = c("Vacuna contra el HPV","HEARTS","Hemorragia postparto","Hepatitis C")[intervenciones_con_escenarios_guardados],
+  #     choicesOpt = list(
+  #       content = c(
+  #         paste(icon("syringe"),"Vacuna contra el HPV"),
+  #         paste(icon("heart"),"HEARTS"),
+  #         paste(icon("female"),"Hemorragia postparto"),
+  #         paste(icon("virus"),"Hepatitis C"))[intervenciones_con_escenarios_guardados]
+  #                   
+  #       ),
+  #     options = pickerOptions(
+  #       noneSelectedText = "No hay escenarios guardados"
+  #     ),
+  #     selected=c("Vacuna contra el HPV","HEARTS","Hemorragia postparto","Hepatitis C")[intervenciones_con_escenarios_guardados],
+  #     multiple = T
+  #     )
+  #     
+  # 
+  #   
+  #  
+  # })
+  # 
+  # 
+  # output$select_escenarios_guardados = renderUI({
+  #   
+  #   if (length(input$filtro_intervencion)==1) {
+  #     if (input$filtro_intervencion[1] == "Vacuna contra el HPV") {
+  #       tagList(
+  #         selectizeInput(
+  #           "savedScenarios",
+  #           "Seleccionar escenario guardado",
+  #           names(scenarios$savedScenarios),
+  #           multiple = T,
+  #           selected = names(scenarios$savedScenarios)
+  #         )
+  #       )
+  #     } else if (input$filtro_intervencion[1] == "HEARTS") {
+  #       tagList(
+  #         selectizeInput(
+  #           "savedScenarios",
+  #           "Seleccionar escenario guardado",
+  #           names(hearts_scenarios$savedScenarios),
+  #           multiple = T,
+  #           selected = names(hearts_scenarios$savedScenarios)
+  #         )
+  #       )
+  #     } else if (input$filtro_intervencion[1] == "Hemorragia postparto") {
+  #       tagList(
+  #         selectizeInput(
+  #           "savedScenarios",
+  #           "Seleccionar escenario guardado",
+  #           names(hpp_scenarios$savedScenarios),
+  #           multiple = T,
+  #           selected = names(hpp_scenarios$savedScenarios)
+  #         )
+  #       )
+  #     } else if (input$filtro_intervencion[1] == "Hepatitis C") {
+  #       tagList(
+  #         selectizeInput(
+  #           "savedScenarios",
+  #           "Seleccionar escenario guardado",
+  #           names(hepC_scenarios$savedScenarios),
+  #           multiple = T,
+  #           selected = names(hepC_scenarios$savedScenarios)
+  #         )
+  #       )
+  #     }
+  #   } else {
+  #     
+  #     opciones = c(
+  #       names(scenarios$savedScenarios),
+  #       names(hearts_scenarios$savedScenarios),
+  #       names(hpp_scenarios$savedScenarios),
+  #       names(hepC_scenarios$savedScenarios)
+  #     )
+  #     
+  #     sub_text = 
+  #       c(
+  #         rep("Vacuna contra el HPV", length(names(scenarios$savedScenarios))),
+  #         rep("HEARTS", length(names(hearts_scenarios$savedScenarios))),
+  #         rep("Hemorragia postparto", length(names(hpp_scenarios$savedScenarios))),
+  #         rep("Hepatitis C", length(names(hepC_scenarios$savedScenarios)))
+  #       )
+  #     
+  #     tagList(
+  #       pickerInput(
+  #         inputId = "savedScenariosMultiple",
+  #         label = "Seleccionar escenario guardado",
+  #         choices = opciones,
+  #         choicesOpt = list(
+  #           subtext = sub_text,
+  #           style = rep("font-weight: bold;", length(opciones))
+  #         ),
+  #         multiple = T,
+  #         selected = opciones
+  #       )
+  #     )
+  #     
+  #     
+  #     
+  #   }
+  #   
+  #   
+  #   
+  # })
+  # 
+  # 
+  observeEvent(input$comparacion_intervencion, {
     
-    intervenciones_con_escenarios_guardados = which(intervenciones_con_escenarios_guardados!=0)
-    
-    
-    pickerInput(
-      inputId = "filtro_intervencion",
-      label = "Seleccionar intervención:", 
-      choices = c("Vacuna contra el HPV","HEARTS","Hemorragia postparto","Hepatitis C")[intervenciones_con_escenarios_guardados],
-      choicesOpt = list(
-        content = c(
-          paste(icon("syringe"),"Vacuna contra el HPV"),
-          paste(icon("heart"),"HEARTS"),
-          paste(icon("female"),"Hemorragia postparto"),
-          paste(icon("virus"),"Hepatitis C"))[intervenciones_con_escenarios_guardados]
-                    
-        ),
-      options = pickerOptions(
-        noneSelectedText = "No hay escenarios guardados"
-      ),
-      selected=c("Vacuna contra el HPV","HEARTS","Hemorragia postparto","Hepatitis C")[intervenciones_con_escenarios_guardados],
-      multiple = T
-      )
-      
-  
-    
-   
-  })
-  
-  
-  output$select_escenarios_guardados = renderUI({
-    
-    if (length(input$filtro_intervencion)==1) {
-      if (input$filtro_intervencion[1] == "Vacuna contra el HPV") {
-        tagList(
-          selectizeInput(
-            "savedScenarios",
-            "Seleccionar escenario guardado",
-            names(scenarios$savedScenarios),
-            multiple = T,
-            selected = names(scenarios$savedScenarios)
-          )
-        )
-      } else if (input$filtro_intervencion[1] == "HEARTS") {
-        tagList(
-          selectizeInput(
-            "savedScenarios",
-            "Seleccionar escenario guardado",
-            names(hearts_scenarios$savedScenarios),
-            multiple = T,
-            selected = names(hearts_scenarios$savedScenarios)
-          )
-        )
-      } else if (input$filtro_intervencion[1] == "Hemorragia postparto") {
-        tagList(
-          selectizeInput(
-            "savedScenarios",
-            "Seleccionar escenario guardado",
-            names(hpp_scenarios$savedScenarios),
-            multiple = T,
-            selected = names(hpp_scenarios$savedScenarios)
-          )
-        )
-      } else if (input$filtro_intervencion[1] == "Hepatitis C") {
-        tagList(
-          selectizeInput(
-            "savedScenarios",
-            "Seleccionar escenario guardado",
-            names(hepC_scenarios$savedScenarios),
-            multiple = T,
-            selected = names(hepC_scenarios$savedScenarios)
-          )
-        )
-      }
-    } else {
-      
-      opciones = c(
-        names(scenarios$savedScenarios),
-        names(hearts_scenarios$savedScenarios),
-        names(hpp_scenarios$savedScenarios),
-        names(hepC_scenarios$savedScenarios)
-      )
-      
-      sub_text = 
-        c(
-          rep("Vacuna contra el HPV", length(names(scenarios$savedScenarios))),
-          rep("HEARTS", length(names(hearts_scenarios$savedScenarios))),
-          rep("Hemorragia postparto", length(names(hpp_scenarios$savedScenarios))),
-          rep("Hepatitis C", length(names(hepC_scenarios$savedScenarios)))
-        )
-      
-      tagList(
-        pickerInput(
-          inputId = "savedScenariosMultiple",
-          label = "Seleccionar escenario guardado",
-          choices = opciones,
-          choicesOpt = list(
-            subtext = sub_text,
-            style = rep("font-weight: bold;", length(opciones))
-          ),
-          multiple = T,
-          selected = opciones
-        )
-      )
-      
-      
-      
-    }
-    
-    
-    
-  })
-  
-  
-  observeEvent(input$filtro_intervencion, {
-    if (length(input$filtro_intervencion)==1) {
+    if (length(input$comparacion_intervencion)==1) {
       
       output$escenarios_guardados = renderUI({
         # mira intervención seleccionada
-        if (length(input$filtro_intervencion)>0) {
+        if (length(input$comparacion_intervencion)>0) {
           
-          if (input$filtro_intervencion == "Vacuna contra el HPV") {
+          if (input$comparacion_intervencion[1] == "Vacuna contra el HPV") {
             output$grafico = renderHighchart({
-              if (input$filtro_intervencion == "Vacuna contra el HPV") {
+              if (input$comparacion_intervencion[1] == "Vacuna contra el HPV") {
                 if (length(scenarios$savedScenarios)>0) {
                   maxY = c()
                   for (i in names(scenarios$savedScenarios)) {
@@ -221,9 +222,9 @@ server_hpv = function (input, output, session, parameterReactive, scenarios, res
                   
                   
                   plot = highchart()
-                  if (!is.null(input$savedScenarios)) {
-                    if (input$savedScenarios[1]!="") {
-                      for (i in input$savedScenarios) {
+                  if (!is.null(input$comparacion_escenario)) {
+                    if (input$comparacion_escenario[1]!="") {
+                      for (i in input$comparacion_escenario) {
                         plot = plot %>% hc_add_series(data = scenarios$savedScenarios[[i]]$dataPlot, name=names(scenarios$savedScenarios[i]), type = "line", hcaes(x = x, y = y2)) %>% hc_xAxis(min = 0, max = 80) %>% hc_yAxis(min = 0, max = maxY)
                       }
                     }
@@ -242,13 +243,13 @@ server_hpv = function (input, output, session, parameterReactive, scenarios, res
             })
             
             output$summaryTableScenarios <- renderReactable({
-              paste(input$filtro_intervencion)
-              paste(input$savedScenarios)
-              if (length(scenarios$savedScenarios)>0 & input$filtro_intervencion=="Vacuna contra el HPV") {
-                if (is.null(input$savedScenarios)) {
+              # paste(input$comparacion_intervencion)
+              # paste(input$comparacion_escenario)
+              if (length(scenarios$savedScenarios)>0 & input$comparacion_intervencion[1]=="Vacuna contra el HPV") {
+                if (is.null(input$comparacion_escenario)) {
                   snSelected = colnames(scenarios$summaryTable)
                 } else {
-                  snSelected = c(colnames(scenarios$summaryTable)[1], input$savedScenarios)
+                  snSelected = c(colnames(scenarios$summaryTable)[1], input$comparacion_escenario)
                 }
                 table = scenarios$summaryTable[,snSelected]
                 cat_input = c(1,2,3,14)
@@ -299,7 +300,7 @@ server_hpv = function (input, output, session, parameterReactive, scenarios, res
             )
             
             
-          } else if (input$filtro_intervencion == "HEARTS") {
+          } else if (input$comparacion_intervencion == "HEARTS") {
             output$hearts_table_saved = renderReactable({
               
               if (length(hearts_scenarios$savedScenarios)>0) {
@@ -354,13 +355,13 @@ server_hpv = function (input, output, session, parameterReactive, scenarios, res
             tagList(
               reactableOutput("hearts_table_saved")
             )
-          } else if (input$filtro_intervencion == "Hemorragia postparto") {
+          } else if (input$comparacion_intervencion == "Hemorragia postparto") {
             output$hpp_table_saved = renderReactable({
-              if (length(input$savedScenarios)>0) {
+              if (length(input$comparacion_escenario)>0) {
                 enable("hpp_savedScenarios")
                 table = data.frame(Indicador=hpp_run()$Indicador)
                 
-                for (i in input$savedScenarios) {
+                for (i in input$comparacion_escenario) {
                   scn_name = i
                   table[[i]] = hpp_scenarios$savedScenarios[[i]]$Valor
                 }
@@ -413,10 +414,10 @@ server_hpv = function (input, output, session, parameterReactive, scenarios, res
             
             output$hepC_table_saved = renderReactable({
               
-              if (length(input$savedScenarios)>0) {
+              if (length(input$comparacion_escenario)>0) {
                 table = data.frame(Indicador=hepC_run()$Indicador)
                 
-                for (i in input$savedScenarios) {
+                for (i in input$comparacion_escenario) {
                   scn_name = i
                   table[[i]] = hepC_scenarios$savedScenarios[[i]]$Valor
                 }

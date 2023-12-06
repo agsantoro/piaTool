@@ -180,8 +180,8 @@ ui_avanzada <- navbarPage(
              ),
              br(),
              hidden(uiOutput("prueba")),
-             hidden(uiOutput("filtro_intervencion")),
-             hidden(uiOutput("select_escenarios_guardados")),
+             # hidden(uiOutput("filtro_intervencion")),
+             # hidden(uiOutput("select_escenarios_guardados")),
              downloadButton("descarga_comp", "Descargar")),
       column(9,id="columna_resultados_borde", style='border-left: 1px solid grey; padding-right: 25px;',
              hidden(
