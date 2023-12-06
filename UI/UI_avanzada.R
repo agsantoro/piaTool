@@ -179,6 +179,7 @@ ui_avanzada <- navbarPage(
                ) 
              ),
              br(),
+             hidden(uiOutput("prueba")),
              hidden(uiOutput("filtro_intervencion")),
              hidden(uiOutput("select_escenarios_guardados")),
              downloadButton("descarga_comp", "Descargar")),

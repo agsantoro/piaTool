@@ -1,4 +1,4 @@
-server_hpv = function (input, output, session, parameterReactive, scenarios, resultados, run_hearts, hearts_scenarios, hpp_run, hpp_scenarios, hepC_run, hepC_scenarios) {
+server_hpv = function (input, output, session, parameterReactive, scenarios, resultados, run_hearts, hearts_scenarios, hpp_run, hpp_scenarios, hepC_run, hepC_scenarios, summary_scenarios) {
   output$resultados_hpv = renderUI({
     if (input$intervencion == "Vacuna contra el HPV") {
       if (is.null(input$birthCohortSizeFemale)) {NULL} else {paste(resultados())}
@@ -22,26 +22,60 @@ server_hpv = function (input, output, session, parameterReactive, scenarios, res
     
   })
   
-  # observeEvent(input$NVP, {
-  #   if (input$NVP == "<div class = \"text-white\")>Escenarios guardados</div>") {
-  #   
-  #   disponibles = list(
-  #     "Vacuna contra el HPV" = names(scenarios$savedScenarios),
-  #     "HEARTS" = names(hearts_scenarios$savedScenarios),
-  #     "Hemorragia postparto" = names(hpp_scenarios$savedScenarios),
-  #     "Hepatitis C" = names(hepC_scenarios$savedScenarios)
-  #   )  
-  #   
-  #   default = unlist(lapply(disponibles, function (i){length(i)}))
-  #   choices = names(default[default>0])
-  #   default = first(names(default[default>0]))
-  #   
-  #   
-  #   updatePickerInput(session, "filtro_intervencion", choices = choices, selected = default)
-  #   updateSelectizeInput(session, "savedScenario", choices = disponibles[[default]], selected = disponibles[[default]])
-  #     
-  #   }
-  # })
+  output$prueba = renderUI({
+    table = summary_scenarios$table
+    
+    tagList(
+      selectizeInput(
+        inputId = "prueba_country",
+        label = "Seleccionar país",
+        choices = unique(table$country),
+        multiple = T,
+        selected = unique(table$country)
+      ),
+      selectizeInput(
+        "prueba_intervencion",
+        "Seleccionar intervención",
+        unique(table$intervencion),
+        multiple = T
+      ),
+      selectizeInput(
+        "prueba_escenario",
+        "Seleccionar escenario",
+        unique(table$scenarioName),
+        multiple = T
+      ),
+      hr(),
+      hr(),
+      hr()
+      
+    )
+    
+  })
+  
+  observeEvent(input$prueba_country, {
+    table = summary_scenarios$table
+    table = table[table$country %in% input$prueba_country,]
+    updateSelectizeInput(session,"prueba_intervencion", choices = table$intervencion, selected = table$intervencion)
+    
+  })
+  
+  observeEvent(input$prueba_intervencion, {
+    table = summary_scenarios$table
+    table = table[table$country %in% input$prueba_country &
+                  table$intervencion %in% input$prueba_intervencion,]
+    updateSelectizeInput(session,"prueba_escenario", choices = table$scenarioName, selected = table$scenarioName)
+  })
+  
+  output$filtro_pais_comparacion = renderUI({
+    tagList(
+      pickerInput(
+        "selectCountrySaved",
+        "Seleccionar país",
+        choices = c()
+      )
+    )
+  })
   
   output$filtro_intervencion = renderUI({
     intervenciones_con_escenarios_guardados = c(

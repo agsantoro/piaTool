@@ -68,6 +68,7 @@ server <- function(input, output, session) {
   
   observeEvent(input$NVP, {
     if (input$NVP == "<div class = \"text-white\")>Escenarios guardados</div>") {
+      delay(500,show("prueba", anim = T, animType = "fade"))
       delay(500,show("filtro_intervencion", anim = T, animType = "fade"))
       delay(500,show("select_escenarios_guardados", anim = T, animType = "fade"))
       delay(500,show("escenarios_guardados", anim = T, animType = "fade"))
@@ -90,6 +91,15 @@ server <- function(input, output, session) {
   
   # crea listas para almacenar escenarios guardados
   
+  # lista general
+  summary_scenarios = reactiveValues()
+  summary_scenarios$table = data.frame(
+    country = as.character(),
+    intervencion = as.character(),
+    scenarioName = as.character()
+  )
+
+  
   # hpp
   hpp_scenarios = reactiveValues()
   hpp_scenarios$savedScenarios = list()
@@ -108,6 +118,19 @@ server <- function(input, output, session) {
   
   # guarda escenarios
   observeEvent(input$saveScenario2, {
+    
+    summary_scenarios$table = rbind(
+      summary_scenarios$table,
+      data.frame(
+        country=str_to_title(input$country),
+        intervencion=input$intervencion,
+        scenarioName=input$scenarioName
+      )
+    )
+    
+    
+    print(summary_scenarios$table)
+    
     if (input$intervencion == "Vacuna contra el HPV") {
       if (input$scenarioName !="") {
         scnID = UUIDgenerate()
@@ -442,7 +465,8 @@ server <- function(input, output, session) {
              hpp_run, 
              hpp_scenarios, 
              hepC_run,
-             hepC_scenarios)
+             hepC_scenarios,
+             summary_scenarios)
   
   ##### HPP #####
   
