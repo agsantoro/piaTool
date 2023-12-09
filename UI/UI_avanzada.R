@@ -169,21 +169,27 @@ ui_avanzada <- navbarPage(
   tabPanel(
     id = "EG",
     HTML('<div class = "text-white")>Escenarios guardados</div>'),
+    fluidRow(id = "row_comparacion",
+             class = "bg-slate-200 mb-10",
+             column(10,
+                    br(),
+                    hidden(uiOutput("panel_comparacion"))),
+             br(),
+             column(1),
+             column(1,
+                    fluidRow(
+                      column(6,
+                             hidden(downloadButton("descarga_comp", ""))),
+                      column(6,
+                             hidden(actionButton("restart",icon("redo-alt"))))
+                    )
+            ),
+             br(),
+             br()
+    ),
     
     fluidRow(style = "padding-top: 15px;",
-      column(3, 
-             hidden(
-               tags$header(id = "header_comparacion", class="text-1xl flex justify-between items-center p-5 mt-4", style="background-color: #FF671B; color: white; text-align: center",
-                           tags$h1(style="display: inline-block; margin: 0 auto;", class="flex-grow mt-8 mb-8",tags$b("Escenarios guardados")),
-                           tags$div(class="py-2 px-4 text-3xl text-white focus:text-sky-700")
-               ) 
-             ),
-             br(),
-             hidden(uiOutput("prueba")),
-             # hidden(uiOutput("filtro_intervencion")),
-             # hidden(uiOutput("select_escenarios_guardados")),
-             downloadButton("descarga_comp", "Descargar")),
-      column(9,id="columna_resultados_borde", style='border-left: 1px solid grey; padding-right: 25px;',
+      column(12,id="columna_resultados_borde",
              hidden(
                tags$header(id = "header_comparacion_resultados", class="text-1xl flex justify-between items-center p-5 mt-4", style="background-color: #FF671B; color: white; text-align: center",
                            tags$h1(style="display: inline-block; margin: 0 auto;", class="flex-grow mt-8 mb-8",tags$b("Resultados")),

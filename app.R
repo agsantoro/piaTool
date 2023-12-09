@@ -14,7 +14,7 @@ source("UI/UI_routes.R", encoding = "UTF-8")
 source("server/server_hpv.R", encoding = "UTF-8")
 
 server <- function(input, output, session) {
-  
+  hide("row_comparacion")
   hide("columna_borde")
   hide("columna_resultados_borde")
   
@@ -24,24 +24,24 @@ server <- function(input, output, session) {
     },
     content = function(file) {
       list_of_datasets = list()
-          if (input$filtro_intervencion == "Vacuna contra el HPV") {
-            for (i in input$savedScenarios) {
+          if (length(input$comparacion_intervencion)== 1 & input$comparacion_intervencion[1] == "Vacuna contra el HPV") {
+            for (i in input$comparacion_escenario) {
               list_of_datasets[[i]] = scenarios$savedScenarios[[i]]$outcomes
             }
-          } else if (input$filtro_intervencion == "HEARTS") {
-            for (i in input$savedScenarios) {
+          } else if (length(input$comparacion_intervencion)== 1 & input$comparacion_intervencion[1] == "HEARTS") {
+            for (i in input$comparacion_escenario) {
               list_of_datasets[[i]] = hearts_scenarios$savedScenarios[[i]]
             }
-          } else if (input$filtro_intervencion == "Hemorragia postparto") {
-            for (i in input$savedScenarios) {
+          } else if (length(input$comparacion_intervencion)== 1 & input$comparacion_intervencion[1] == "Hemorragia postparto") {
+            for (i in input$comparacion_escenario) {
               list_of_datasets[[i]] = hpp_scenarios$savedScenarios[[i]]
             }
-          } else if (input$filtro_intervencion == "Hepatitis C") {
-            for (i in input$savedScenarios) {
+          } else if (length(input$comparacion_intervencion)== 1 & input$comparacion_intervencion[1] == "Hepatitis C") {
+            for (i in input$comparacion_escenario) {
               list_of_datasets[[i]] = hepC_scenarios$savedScenarios[[i]]
             }
           }
-      data=list_of_datasets
+      data = list_of_datasets
       write.xlsx(data, file)
     }
   )
@@ -61,19 +61,22 @@ server <- function(input, output, session) {
       delay(500,show("uiOutput_basica", anim = T, animType = "fade"))
       delay(500,show("resultados_hpv", anim = T, animType = "fade"))
       delay(500,show("saveScenario", anim = T, animType = "fade"))
-      show("columna_resultados_borde")
-      delay(500,show("header_comparacion", anim = T, animType = "fade"))
+      #delay(500,show("header_comparacion", anim = T, animType = "fade"))
     }
   })
   
   observeEvent(input$NVP, {
     if (input$NVP == "<div class = \"text-white\")>Escenarios guardados</div>") {
-      delay(500,show("prueba", anim = T, animType = "fade"))
+      if (nrow(summary_scenarios$table)>0) {
+        show("row_comparacion", anim = T, animType = "fade")
+        show("panel_comparacion", anim = T, animType = "fade")
+        #show("columna_resultados_borde")
+      }
       delay(500,show("filtro_intervencion", anim = T, animType = "fade"))
       delay(500,show("select_escenarios_guardados", anim = T, animType = "fade"))
-      delay(500,show("escenarios_guardados", anim = T, animType = "fade"))
-      delay(500,show("inputs_summary_table", anim = T, animType = "fade"))
-      delay(500,show("header_comparacion_resultados", anim = T, animType = "fade"))
+      #delay(500,show("escenarios_guardados", anim = T, animType = "fade"))
+      #delay(500,show("inputs_summary_table", anim = T, animType = "fade"))
+      
       delay(500,show("header_comparacion", anim = T, animType = "fade"))
     } 
   })
@@ -151,7 +154,7 @@ server <- function(input, output, session) {
     )
     
     rownames(inputs_scenarios$table) = 1:nrow(inputs_scenarios$table)
-    print(inputs_scenarios$table)
+    
     
     if (input$intervencion == "Vacuna contra el HPV") {
       if (input$scenarioName !="") {
