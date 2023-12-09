@@ -35,6 +35,36 @@ ui_hpv_basica = function (parametersReactive,input,inputs_hpv, run_hearts) {
     "El valor de todos los bienes y servicios producidos en el país dividido por la población total"
   )
   
+  if (is.null(input$country) == F) {
+    i_names = c()
+    for (i in 1:15) {
+      i_names = c(i_names,inputs_names[i])
+    }
+    
+    i_labels = c()
+    
+    for (i in 1:15) {
+      i_labels = c(i_labels,parametersReactive[i])
+    }
+    
+    hpv_map_inputs = data.frame(
+      intervencion = "Vacuna contra el HPV",
+      i_names,
+      i_labels = names(i_labels)
+    )
+    
+    hpv_map_inputs$avanzado = NA
+    hpv_map_inputs$avanzado[4:15] = T
+    hpv_map_inputs$avanzado[1:3] = F
+    
+    save(
+      hpv_map_inputs,
+      file = "hpv_map_inputs.Rdata"
+    )
+    
+  }
+  
+  
   renderUI({
     tagList(
       br(),

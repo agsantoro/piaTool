@@ -41,6 +41,38 @@ ui_hepC = function (input, datosPais) {
     default$Costo_Tratamiento = datosPais$valor[datosPais$pais==country_sel & datosPais$dimension=="costos" & datosPais$indicador=="Costo Mensual"]
     default$Costo_Evaluacion = datosPais$valor[datosPais$pais==country_sel & datosPais$dimension=="costos" & datosPais$indicador=="Assesment"]
     
+    if (is.null(input$country) == F) {
+      i_names = c()
+      for (i in 1:17) {
+        i_names = c(i_names,input_names[i])
+      }
+      
+      i_labels = c()
+      
+      for (i in 1:17) {
+        i_labels = names(input_names[i])
+      }
+      
+      hepC_map_inputs = data.frame(
+        intervencion = "Hepatitis C",
+        i_names,
+        i_labels
+      )
+      
+      hepC_map_inputs$avanzado = NA
+      hepC_map_inputs$avanzado[15:17] = T
+      hepC_map_inputs$avanzado[1:14] = F
+      
+      rownames(hepC_map_inputs) = 1:nrow(hepC_map_inputs)
+      
+      save(
+        hepC_map_inputs,
+        file = "hepC_map_inputs.Rdata"
+      )
+      
+    }
+    
+    
     tagList(
           lapply(input_names[15:17], function(i) {
             numericInput(

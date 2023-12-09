@@ -72,6 +72,7 @@ server <- function(input, output, session) {
       delay(500,show("filtro_intervencion", anim = T, animType = "fade"))
       delay(500,show("select_escenarios_guardados", anim = T, animType = "fade"))
       delay(500,show("escenarios_guardados", anim = T, animType = "fade"))
+      delay(500,show("inputs_summary_table", anim = T, animType = "fade"))
       delay(500,show("header_comparacion_resultados", anim = T, animType = "fade"))
       delay(500,show("header_comparacion", anim = T, animType = "fade"))
     } 
@@ -98,6 +99,16 @@ server <- function(input, output, session) {
     intervencion = as.character(),
     scenarioName = as.character()
   )
+  
+  # inputs escenarios
+  inputs_scenarios = reactiveValues()
+  inputs_scenarios$table = data.frame(
+    country = as.character(),
+    intervencion = as.character(),
+    scenarioName = as.character(),
+    inputName = as.character(),
+    inputValue = as.numeric()
+  )
 
   
   # hpp
@@ -119,6 +130,17 @@ server <- function(input, output, session) {
   # guarda escenarios
   observeEvent(input$saveScenario2, {
     
+    inputs_scenarios$table = rbind(
+      inputs_scenarios$table,
+      data.frame(
+        country=str_to_title(input$country),
+        intervencion=input$intervencion,
+        scenarioName=input$scenarioName,
+        inputName = names(unlist(reactiveValuesToList(input))),
+        inputValue = unlist(reactiveValuesToList(input))
+      )
+    )
+    
     summary_scenarios$table = rbind(
       summary_scenarios$table,
       data.frame(
@@ -128,8 +150,8 @@ server <- function(input, output, session) {
       )
     )
     
-    
-    print(summary_scenarios$table)
+    rownames(inputs_scenarios$table) = 1:nrow(inputs_scenarios$table)
+    print(inputs_scenarios$table)
     
     if (input$intervencion == "Vacuna contra el HPV") {
       if (input$scenarioName !="") {
@@ -466,7 +488,8 @@ server <- function(input, output, session) {
              hpp_scenarios, 
              hepC_run,
              hepC_scenarios,
-             summary_scenarios)
+             summary_scenarios,
+             inputs_scenarios)
   
   ##### HPP #####
   

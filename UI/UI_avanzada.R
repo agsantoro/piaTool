@@ -192,8 +192,9 @@ ui_avanzada <- navbarPage(
              ),
              br(),
              br(),
-             hidden(uiOutput("escenarios_guardados"))
-             )
+             hidden(uiOutput("escenarios_guardados")),
+             hidden(uiOutput("inputs_summary_table")))
+             
     )
     
   ),

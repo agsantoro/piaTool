@@ -9,7 +9,46 @@ ui_hearts = function (input,base_line) {
       "Tratamiento entre diagnosticados (%)",
       "Control de la hipertensión entre los tratados (%)"
     )
+    
     names(input_names) = colnames(base_line)[2:5]
+    
+    if (is.null(input$country) == F) {
+      i_names = c()
+      for (i in 1:4) {
+        i_names = c(i_names,names(input_names)[i])
+      }
+      
+      i_labels = c()
+      
+      for (i in 1:4) {
+        i_labels = c(i_labels,input_names[i])
+      }
+      
+      hearts_map_inputs = data.frame(
+        intervencion = "HEARTS",
+        i_names,
+        i_labels
+      )
+      
+      hearts_map_inputs$avanzado = NA
+      hearts_map_inputs$avanzado[c(1,2,4)] = T
+      hearts_map_inputs$avanzado[3] = F
+      
+      hearts_map_inputs = union_all(
+        hearts_map_inputs,hearts_map_inputs
+      )
+      
+      hearts_map_inputs$i_names[1:4] = paste0("hearts_input_base_",hearts_map_inputs$i_names[1:4])
+      hearts_map_inputs$i_names[5:8] = str_replace_all(hearts_map_inputs$i_names[1:4],"_base_","_target_")
+      
+      rownames(hearts_map_inputs) = 1:nrow(hearts_map_inputs)
+      
+      save(
+        hearts_map_inputs,
+        file = "hearts_map_inputs.Rdata"
+      )
+      
+    }
     
     tagList(
     

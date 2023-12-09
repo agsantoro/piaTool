@@ -19,6 +19,26 @@ ui_hpp = function (input) {
       "Cobertura esperada del uso de oxitocina (%)"
     )
     
+    if (is.null(input$country) == F) {
+      hpp_map_inputs = data.frame(
+        intervencion = "Hemorragia postparto",
+        nombres_input,
+        label_inputs
+      )
+      
+      hpp_map_inputs$avanzado = NA
+      hpp_map_inputs$avanzado[3:4] = T
+      hpp_map_inputs$avanzado[1:2] = F
+      
+      rownames(hpp_map_inputs) = 1:nrow(hpp_map_inputs)
+      
+      save(
+        hpp_map_inputs,
+        file = "hpp_map_inputs.Rdata"
+      )
+      
+    }
+    
     defaults = c(
       0.05,
       0,
