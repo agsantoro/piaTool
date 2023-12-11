@@ -3,14 +3,14 @@ options(scipen=999)
 library(tidyverse)
 ###Leo los datos
 
-datos_paises <- readxl::read_excel("data/Datos_paises.xlsx")
-utilidades <- readxl::read_excel("data/utilidades.xlsx")
-utilidades2 <- readxl::read_excel("data/utilidades.xlsx", sheet = "Hoja2")
-probabilidades <- readxl::read_excel("data/probabilidades.xlsx")
-parametros <- readxl::read_excel("data/parametros.xlsx")
-costos <- readxl::read_excel("data/Costos.xlsx")
-probabilidad_muerte <- readxl::read_excel("data/PROBABILIDAD_MUERTE.xlsx")
-distribucion_cohortes <- readxl::read_excel("data/DISTRIBUCION_COHORTES.xlsx")
+datos_paises <- readxl::read_excel("prep/data/Datos_paises.xlsx")
+utilidades <- readxl::read_excel("prep/data/utilidades.xlsx")
+utilidades2 <- readxl::read_excel("prep/data/utilidades.xlsx", sheet = "Hoja2")
+probabilidades <- readxl::read_excel("prep/data/probabilidades.xlsx")
+parametros <- readxl::read_excel("prep/data/parametros.xlsx")
+costos <- readxl::read_excel("prep/data/Costos.xlsx")
+probabilidad_muerte <- readxl::read_excel("prep/data/PROBABILIDAD_MUERTE.xlsx")
+distribucion_cohortes <- readxl::read_excel("prep/data/DISTRIBUCION_COHORTES.xlsx")
 
 
 
@@ -89,8 +89,8 @@ cuHIVTTO = uHIVTTO / ciclosPorAño
 
 ##1
 
-uPoblacion <- numeric(101)  # Crear un vector para almacenar los datos
-cuPoblacion <- numeric(101)
+uPoblacion <- numeric(100)  # Crear un vector para almacenar los datos
+cuPoblacion <- numeric(100)
 
 for (z in 0:100) {
   uPoblacion[z + 1] <- utilidades2[z + 2, paisCol]
