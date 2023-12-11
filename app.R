@@ -70,12 +70,16 @@ server <- function(input, output, session) {
       if (nrow(summary_scenarios$table)>0) {
         show("row_comparacion", anim = T, animType = "fade")
         show("panel_comparacion", anim = T, animType = "fade")
+        hide("columna_resultados_borde", anim = T, animType = "fade")
+        hide("inputs_summary_table", anim = T, animType = "fade")
+        shinyjs::click("restart")
+        
         #show("columna_resultados_borde")
       }
       delay(500,show("filtro_intervencion", anim = T, animType = "fade"))
       delay(500,show("select_escenarios_guardados", anim = T, animType = "fade"))
       #delay(500,show("escenarios_guardados", anim = T, animType = "fade"))
-      #delay(500,show("inputs_summary_table", anim = T, animType = "fade"))
+      
       
       delay(500,show("header_comparacion", anim = T, animType = "fade"))
     } 
@@ -367,6 +371,16 @@ server <- function(input, output, session) {
       toggle(id = i, anim = TRUE, animType = "slide", condition = isVisible)
       enable(i)
     }
+    
+  })
+  
+  observeEvent(input$toggle_tabla_inputs, {
+    
+    isVisible <- shinyjs::toggleState(id = "tabla_inputs")
+      
+    toggle(id = "tabla_inputs", anim = TRUE, animType = "slide", condition = isVisible)
+    enable("tabla_inputs")
+    
     
   })
   

@@ -100,7 +100,8 @@ server_hpv = function (input, output, session, parameterReactive, scenarios, res
     hide("escenarios_guardados", anim = T, animType = "fade")
     hide("tabla_inputs", anim = T, animType = "fade")
     hide("header_comparacion_resultados", anim = T, animType = "fade")
-    
+    hide("header_tabla_inputs", anim = T, animType = "fade")
+    hide(500,show("inputs_summary_table", anim = T, animType = "fade"))
   })
   
   observeEvent(input$go_country,{
@@ -164,9 +165,11 @@ server_hpv = function (input, output, session, parameterReactive, scenarios, res
   
   
   observeEvent(input$go_comp, {
+    show(500,show("inputs_summary_table", anim = T, animType = "fade"))
     show("escenarios_guardados")
     show("tabla_inputs")
     show("restart")
+    show("header_tabla_inputs")
     hide("go_comp")
     hide("comparacion_escenario")
     
@@ -437,6 +440,7 @@ server_hpv = function (input, output, session, parameterReactive, scenarios, res
                     table[i] = format(table[i], bigmark=",", decimalmark=".") 
                     columns[[colnames(table)[i]]] = colDef(name = colnames(table)[i], align = "right")
                   }
+                  
                   reactable(
                     table,
                     groupBy = "cat",
@@ -473,31 +477,92 @@ server_hpv = function (input, output, session, parameterReactive, scenarios, res
         
         output$inputs_summary_table = renderUI({
           
-          output$tabla_inputs = renderDataTable({
+          output$tabla_inputs = renderReactable({
+            
             if (is.null(sel_escenario)==F) {
               table_inputs = inputs_scenarios$table
               table_inputs = table_inputs[table_inputs$country %in% sel_country &
-                                            table_inputs$intervencion == sel_intervencion &
-                                            table_inputs$scenarioName %in% sel_escenario,]
+                                          table_inputs$intervencion == sel_intervencion &
+                                          table_inputs$scenarioName %in% sel_escenario,]
               
               
               if (sel_intervencion[1] == "Vacuna contra el HPV") {
-                load("hpv_map_inputs.RData")
+                load("hpv_map_inputs.Rdata")
                 labels_inputs = hpv_map_inputs
+              } else if (sel_intervencion[1] == "HEARTS") {
+                load("hearts_map_inputs.Rdata")
+                labels_inputs = hearts_map_inputs
+              } else if (sel_intervencion[1] == "Hemorragia postparto") {
+                load("hpp_map_inputs.Rdata")
+                labels_inputs = hpp_map_inputs
+              } else if (sel_intervencion[1] == "Hepatitis C") {
+                load("hepC_map_inputs.Rdata")
+                labels_inputs = hepC_map_inputs
               }
               
-              table_inputs = labels_inputs %>% left_join(table_inputs, by = c("i_labels" = "inputName"))
+              browser()
+              table_inputs = labels_inputs %>% left_join(table_inputs, by = c("i_names" = "inputName"))
               
               table_inputs$scenarioName = paste0(table_inputs$scenarioName, " (",table_inputs$country,")")
               
-              table_data = data.frame(
-                Input = unique(table_inputs$i_names)
-              )
+              if (sel_intervencion[1] == "HEARTS") {
+                table_data = data.frame(
+                  Input = rep(unique(table_inputs$i_labels),2)
+                )
+              } else {
+                table_data = data.frame(
+                  Input = unique(table_inputs$i_labels)
+                )
+              }
+              
+              
               
               for (i in unique(table_inputs$scenarioName)) {
-                table_data[[i]] = table_inputs$inputValue[table_inputs$scenarioName==i]
+                table_data[[i]] = format(round(as.numeric(table_inputs$inputValue[table_inputs$scenarioName==i]),2), big.mark = ".", decimal.mark = ",")
               }
-              datatable(table_data)
+              
+              if (sel_intervencion[1] == "HEARTS") {
+                table_data$Input[1:4] = paste0(table_data$Input[1:4]," (base)")
+                table_data$Input[5:8] = paste0(table_data$Input[5:8]," (target)")
+              }
+              
+              table_data = cbind(table_data, labels_inputs$avanzado)
+              
+              table_data$`labels_inputs$avanzado`[table_data$`labels_inputs$avanzado`==T] = "Inputs avazados"
+              table_data$`labels_inputs$avanzado`[table_data$`labels_inputs$avanzado`==F] = "Inputs básicos"
+              colnames(table_data)[colnames(table_data)=="labels_inputs$avanzado"] ="Categoría"
+              
+              columnas = list()
+              
+              for (i in colnames(table_data)) {
+                if (i == "Input") {
+                  
+                  columnas[[i]] = colDef(name = "Input", align = "left")
+                } else if (i == "Categoría") {
+                  NULL
+                } else {
+                  columnas[[i]] = colDef(name = i, align = "right")
+                }
+                
+              }
+              
+              reactable(
+                table_data,
+                groupBy = "Categoría",
+                defaultExpanded = T,
+                pagination = F,
+                columnGroups = list(
+                  colGroup("Escenarios", columns = colnames(table_data)[setdiff(1:ncol(table_data),c(1,ncol(table_data)))], sticky = "left",
+                           headerStyle = list(background = "#236292", color = "white", borderWidth = "0"))
+                ),
+                defaultColDef = colDef(
+                  minWidth = 70,
+                  headerStyle = list(background = "#236292", color = "white")
+                ),
+                columns = columnas,
+                bordered = TRUE,
+                highlight = TRUE
+              )
             }
           })
           
@@ -506,7 +571,16 @@ server_hpv = function (input, output, session, parameterReactive, scenarios, res
           tagList(
             br(),
             br(),
-            dataTableOutput("tabla_inputs")
+            hr(),
+            br(),
+            
+              tags$header(id = "header_tabla_inputs", class="text-1xl flex justify-between items-center p-5 mt-4", style="background-color: #FF671B; color: white; text-align: center", 
+                          tags$h1(style="display: inline-block; margin: 0 auto;", class="flex-grow mt-8 mb-8",tags$b("Descripción de escenarios guardados")),
+                          actionLink(inputId = "toggle_tabla_inputs", label=icon("stream", style = "color: white;"))
+              )
+            ,
+            br(),
+            hidden(reactableOutput("tabla_inputs"))
           )  
           
           

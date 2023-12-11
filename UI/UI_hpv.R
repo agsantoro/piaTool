@@ -34,23 +34,22 @@ ui_hpv_basica = function (parametersReactive,input,inputs_hpv, run_hearts) {
     "La proporción de casos de cáncer cervical diagnosticados en el año base que son causados por la infección de HPV 16 o 18",
     "El valor de todos los bienes y servicios producidos en el país dividido por la población total"
   )
-  
   if (is.null(input$country) == F) {
-    i_names = c()
+    i_labels = c()
     for (i in 1:15) {
-      i_names = c(i_names,inputs_names[i])
+      i_labels = c(i_labels,inputs_names[i])
     }
     
-    i_labels = c()
+    i_names = c()
     
     for (i in 1:15) {
-      i_labels = c(i_labels,parametersReactive[i])
+      i_names = c(i_names,parametersReactive[i])
     }
     
     hpv_map_inputs = data.frame(
       intervencion = "Vacuna contra el HPV",
-      i_names,
-      i_labels = names(i_labels)
+      i_names = names(i_names),
+      i_labels 
     )
     
     hpv_map_inputs$avanzado = NA
