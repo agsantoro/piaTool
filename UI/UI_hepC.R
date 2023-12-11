@@ -50,7 +50,7 @@ ui_hepC = function (input, datosPais) {
       i_labels = c()
       
       for (i in 1:17) {
-        i_labels = names(input_names[i])
+        i_labels = c(i_labels,names(input_names)[i])
       }
       
       hepC_map_inputs = data.frame(

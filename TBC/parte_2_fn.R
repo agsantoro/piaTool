@@ -4,8 +4,8 @@ pExitoso <- 0.661
 pMuerte <- 0.23
 pFalla <- 0.11
 
-DOTrrMuerte  <- 1#avanzado
-DOTrrFalla <- 1#avanzadp
+DOTrrMuerte  <- 1 #avanzado
+DOTrrFalla <- 1 #avanzadp
 DOTadherencia <- 0.31
 
 RR_trat_exitoso_DOT_SAT <- 1.14

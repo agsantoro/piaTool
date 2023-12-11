@@ -1,4 +1,4 @@
-server_hpv = function (input, output, session, parameterReactive, scenarios, resultados, run_hearts, hearts_scenarios, hpp_run, hpp_scenarios, hepC_run, hepC_scenarios, summary_scenarios, inputs_scenarios) {
+server_hpv = function (input, output, session, parameterReactive, scenarios, resultados, run_hearts, hearts_scenarios, hpp_run, hpp_scenarios, hepC_run, hepC_scenarios, summary_scenarios, inputs_table, inputs_columns) {
   output$resultados_hpv = renderUI({
     if (input$intervencion == "Vacuna contra el HPV") {
       if (is.null(input$birthCohortSizeFemale)) {NULL} else {paste(resultados())}
@@ -477,74 +477,16 @@ server_hpv = function (input, output, session, parameterReactive, scenarios, res
         
         output$inputs_summary_table = renderUI({
           
+          inputs_table_generator = function (input, output) {
+            
+          }
+          
           output$tabla_inputs = renderReactable({
             
             if (is.null(sel_escenario)==F) {
-              table_inputs = inputs_scenarios$table
-              table_inputs = table_inputs[table_inputs$country %in% sel_country &
-                                          table_inputs$intervencion == sel_intervencion &
-                                          table_inputs$scenarioName %in% sel_escenario,]
               
-              
-              if (sel_intervencion[1] == "Vacuna contra el HPV") {
-                load("hpv_map_inputs.Rdata")
-                labels_inputs = hpv_map_inputs
-              } else if (sel_intervencion[1] == "HEARTS") {
-                load("hearts_map_inputs.Rdata")
-                labels_inputs = hearts_map_inputs
-              } else if (sel_intervencion[1] == "Hemorragia postparto") {
-                load("hpp_map_inputs.Rdata")
-                labels_inputs = hpp_map_inputs
-              } else if (sel_intervencion[1] == "Hepatitis C") {
-                load("hepC_map_inputs.Rdata")
-                labels_inputs = hepC_map_inputs
-              }
-              
-              browser()
-              table_inputs = labels_inputs %>% left_join(table_inputs, by = c("i_names" = "inputName"))
-              
-              table_inputs$scenarioName = paste0(table_inputs$scenarioName, " (",table_inputs$country,")")
-              
-              if (sel_intervencion[1] == "HEARTS") {
-                table_data = data.frame(
-                  Input = rep(unique(table_inputs$i_labels),2)
-                )
-              } else {
-                table_data = data.frame(
-                  Input = unique(table_inputs$i_labels)
-                )
-              }
-              
-              
-              
-              for (i in unique(table_inputs$scenarioName)) {
-                table_data[[i]] = format(round(as.numeric(table_inputs$inputValue[table_inputs$scenarioName==i]),2), big.mark = ".", decimal.mark = ",")
-              }
-              
-              if (sel_intervencion[1] == "HEARTS") {
-                table_data$Input[1:4] = paste0(table_data$Input[1:4]," (base)")
-                table_data$Input[5:8] = paste0(table_data$Input[5:8]," (target)")
-              }
-              
-              table_data = cbind(table_data, labels_inputs$avanzado)
-              
-              table_data$`labels_inputs$avanzado`[table_data$`labels_inputs$avanzado`==T] = "Inputs avazados"
-              table_data$`labels_inputs$avanzado`[table_data$`labels_inputs$avanzado`==F] = "Inputs básicos"
-              colnames(table_data)[colnames(table_data)=="labels_inputs$avanzado"] ="Categoría"
-              
-              columnas = list()
-              
-              for (i in colnames(table_data)) {
-                if (i == "Input") {
-                  
-                  columnas[[i]] = colDef(name = "Input", align = "left")
-                } else if (i == "Categoría") {
-                  NULL
-                } else {
-                  columnas[[i]] = colDef(name = i, align = "right")
-                }
-                
-              }
+              table_data = inputs_table
+              columnas = inputs_columns
               
               reactable(
                 table_data,

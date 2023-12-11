@@ -1,6 +1,7 @@
 # ##### APP #####
 source("functions/getCards.R", encoding = "UTF-8")
 source("functions/getStyle.R", encoding = "UTF-8")
+source("functions/inputs_table_generator.R", encoding = "UTF-8")
 source("UI/start.R", encoding = "UTF-8")
 source("UI/UI_avanzada.R", encoding = "UTF-8")
 # source("UI/UI_main.R", encoding = "UTF-8")
@@ -41,6 +42,14 @@ server <- function(input, output, session) {
               list_of_datasets[[i]] = hepC_scenarios$savedScenarios[[i]]
             }
           }
+      
+      list_of_datasets[["Inputs"]] = inputs_table_generator(
+        input,
+        output,
+        inputs_scenarios,
+        summary_scenarios
+      )[[1]]
+      
       data = list_of_datasets
       write.xlsx(data, file)
     }
@@ -506,7 +515,8 @@ server <- function(input, output, session) {
              hepC_run,
              hepC_scenarios,
              summary_scenarios,
-             inputs_scenarios)
+             inputs_table = inputs_table_generator(input,output, inputs_scenarios, summary_scenarios)[[1]],
+             inputs_columns = inputs_table_generator(input,output, inputs_scenarios, summary_scenarios)[[2]])
   
   ##### HPP #####
   
