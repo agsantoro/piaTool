@@ -1,5 +1,4 @@
 
-
 ###cargo dos set de datos
 datos_paises <- readxl::read_excel("DATA/datos_paises.xlsx")
 
@@ -13,6 +12,8 @@ VOTadherencia <- 0.78#Adherencia a vDOT (al menos 80% de las observaciones)
 
 
 ##avanzados----
+
+
 pExitoso <- 0.661 #Probabilidad de tratamiento exitoso con SAT
 pMuerte <- 0.23 # Probabilidad de muerte dado tratamiento no exitoso con SAT
 pFalla <- 0.11 # Probabilidad de falla dado tratamiento no exitoso con SAT
