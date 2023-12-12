@@ -9,13 +9,13 @@ ui_hearts = function (input,base_line) {
       "Tratamiento entre diagnosticados (%)",
       "Control de la hipertensión entre los tratados (%)"
     )
-    names(input_names) = colnames(base_line)[2:5]
     
+    names(input_names) = colnames(base_line)[2:5]
     
     if (is.null(input$country) == F) {
       i_names = c()
       for (i in 1:4) {
-        i_names = c(i_names,i)
+        i_names = c(i_names,names(input_names)[i])
       }
       
       i_labels = c()

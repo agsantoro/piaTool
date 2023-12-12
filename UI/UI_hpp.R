@@ -22,8 +22,8 @@ ui_hpp = function (input) {
     if (is.null(input$country) == F) {
       hpp_map_inputs = data.frame(
         intervencion = "Hemorragia postparto",
-        i_names = nombres_input,
-        i_labels = label_inputs
+        nombres_input,
+        label_inputs
       )
       
       hpp_map_inputs$avanzado = NA
