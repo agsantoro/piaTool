@@ -189,7 +189,8 @@ ui_avanzada <- navbarPage(
     ),
     
     fluidRow(style = "padding-top: 15px;",
-      column(12,id="columna_resultados_borde",
+      column(2),
+      column(8,id="columna_resultados_borde",
              hidden(
                tags$header(id = "header_comparacion_resultados", class="text-1xl flex justify-between items-center p-5 mt-4", style="background-color: #FF671B; color: white; text-align: center",
                            tags$h1(style="display: inline-block; margin: 0 auto;", class="flex-grow mt-8 mb-8",tags$b("Resultados")),
@@ -199,22 +200,28 @@ ui_avanzada <- navbarPage(
              br(),
              br(),
              hidden(uiOutput("escenarios_guardados")),
-             hidden(uiOutput("inputs_summary_table")))
+             hidden(uiOutput("inputs_summary_table"))),
+      column(2)
              
     )
     
   ),
+  # tabPanel(
+  #   HTML('<div class = "text-white")>Escenarios comparados</div>'),
+  #   
+  #   br(),
+  #   tags$script(HTML("var header = $('.navbar > .container-fluid');
+  #                     header.append('<div style=\"float:right\"><a href=\"#!//\"><img src=\"home-solid.svg\" style=\"float:right;width:27px;height:32px;padding-top:8px;\"> </a></div>');
+  #                     console.log(header)")
+  #   )
+  # ),
   tabPanel(
-    HTML('<div class = "text-white")>Escenarios comparados</div>'),
+    HTML('<div class = "text-white")>Documentación</div>'),
     useShinyjs(),
-    br(),
     tags$script(HTML("var header = $('.navbar > .container-fluid');
                       header.append('<div style=\"float:right\"><a href=\"#!//\"><img src=\"home-solid.svg\" style=\"float:right;width:27px;height:32px;padding-top:8px;\"> </a></div>');
                       console.log(header)")
-    )
-  ),
-  tabPanel(
-    HTML('<div class = "text-white")>Documentación</div>'),
+    ),
     br(),
     tabsetPanel(id = "TSP_Manuales",
                 type = "pills",

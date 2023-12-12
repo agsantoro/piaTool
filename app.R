@@ -1,6 +1,7 @@
 # ##### APP #####
 source("functions/getCards.R", encoding = "UTF-8")
 source("functions/getStyle.R", encoding = "UTF-8")
+source("functions/inputs_table_generator.R", encoding = "UTF-8")
 source("UI/start.R", encoding = "UTF-8")
 source("UI/UI_avanzada.R", encoding = "UTF-8")
 # source("UI/UI_main.R", encoding = "UTF-8")
@@ -41,6 +42,14 @@ server <- function(input, output, session) {
               list_of_datasets[[i]] = hepC_scenarios$savedScenarios[[i]]
             }
           }
+      
+      list_of_datasets[["Inputs"]] = inputs_table_generator(
+        input,
+        output,
+        inputs_scenarios,
+        summary_scenarios
+      )[[1]]
+      
       data = list_of_datasets
       write.xlsx(data, file)
     }
@@ -70,12 +79,16 @@ server <- function(input, output, session) {
       if (nrow(summary_scenarios$table)>0) {
         show("row_comparacion", anim = T, animType = "fade")
         show("panel_comparacion", anim = T, animType = "fade")
+        hide("columna_resultados_borde", anim = T, animType = "fade")
+        hide("inputs_summary_table", anim = T, animType = "fade")
+        shinyjs::click("restart")
+        
         #show("columna_resultados_borde")
       }
       delay(500,show("filtro_intervencion", anim = T, animType = "fade"))
       delay(500,show("select_escenarios_guardados", anim = T, animType = "fade"))
       #delay(500,show("escenarios_guardados", anim = T, animType = "fade"))
-      #delay(500,show("inputs_summary_table", anim = T, animType = "fade"))
+      
       
       delay(500,show("header_comparacion", anim = T, animType = "fade"))
     } 
@@ -370,6 +383,16 @@ server <- function(input, output, session) {
     
   })
   
+  observeEvent(input$toggle_tabla_inputs, {
+    
+    isVisible <- shinyjs::toggleState(id = "tabla_inputs")
+      
+    toggle(id = "tabla_inputs", anim = TRUE, animType = "slide", condition = isVisible)
+    enable("tabla_inputs")
+    
+    
+  })
+  
   # decide que ui avanzada muestra según intervención
   observeEvent(list(input$intervencion,
                     input$country), {
@@ -492,7 +515,8 @@ server <- function(input, output, session) {
              hepC_run,
              hepC_scenarios,
              summary_scenarios,
-             inputs_scenarios)
+             inputs_table = inputs_table_generator(input,output, inputs_scenarios, summary_scenarios)[[1]],
+             inputs_columns = inputs_table_generator(input,output, inputs_scenarios, summary_scenarios)[[2]])
   
   ##### HPP #####
   
@@ -611,8 +635,6 @@ server <- function(input, output, session) {
       enable(i)
     }
   })
-  
-  
   
 }
 
