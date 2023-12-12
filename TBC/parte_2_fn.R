@@ -1,28 +1,168 @@
 
-pExitoso <- 0.661
 
-pMuerte <- 0.23
-pFalla <- 0.11
+###cargo dos set de datos
+datos_paises <- readxl::read_excel("DATA/datos_paises.xlsx")
 
-DOTrrMuerte  <- 1#avanzado
-DOTrrFalla <- 1#avanzadp
-DOTadherencia <- 0.31
+asunciones <- readxl::read_excel("DATA/asunciones.xlsx")
+#basicos-----
 
-RR_trat_exitoso_DOT_SAT <- 1.14
-VOTrrExito<- 1
-VOTadherencia <- 0.0078
-VOTrrFalla <- 1
-VOTrrMuerte <- 1
-
+DOTrrExito <- 1.14 #Riesgo Relativo (RR) del tratamiento exitoso con DOT vs SAT
 pais_seleccionado <- "ARGENTINA"
+VOTrrExito<- 1 # RR tratamiento exitoso vDOT vs DOT
+VOTadherencia <- 0.78#Adherencia a vDOT (al menos 80% de las observaciones)
 
+
+##avanzados----
+pExitoso <- 0.661 #Probabilidad de tratamiento exitoso con SAT
+pMuerte <- 0.23 # Probabilidad de muerte dado tratamiento no exitoso con SAT
+pFalla <- 0.11 # Probabilidad de falla dado tratamiento no exitoso con SAT
+DOTrrMuerte  <- 1#RR de muerte DOT vs SAT
+DOTrrFalla <- 1#RR de falla DOT vs SAT
+DOTadherencia <- 0.31# Adherencia a DOT (al menos 80% de las observaciones)
+VOTrrMuerte <- 1# RR de muerte vDOT vs DOT
+VOTrrFalla <- 1#RR de falla vDOT vs DOT
+
+cantidad_vot_semana <- 5#Cantidad de dosis supervisadas mediante vDOT  por semana.
+cantidad_dot_semana <- 5#Cantidad de dosis supervisadas mediante DOT por semana.
+
+#Cantidad de meses que dura la inducción
+Induccion_duracion <- asunciones %>%
+  filter(`PARAMETROS GLOBALES`== "Induccion duracion:") %>% 
+  select(valor) %>% 
+  as.numeric()
+
+#Cantidad de meses que dura el esquema básico (Inducción + Consolidación)
+ttoExitoso_Duracion <- asunciones %>%
+  filter(`PARAMETROS GLOBALES`== "Duración tratamiento:") %>% 
+  select(valor) %>% 
+  as.numeric()
+
+prob_internacion_con_falla <- 0.25#Porcentaje de pacientes que se internan dada la falla terapeutica
+
+
+disutilidad_tbc_activa <- 0.219 #Disutilidad de la tuberculosis activa
+
+#Costo tratamiento de inducción
+costo_trat_induccion <- datos_paises %>%
+  filter(PARAMETRO=="Costo mensual del tratamiento inducción:") %>% 
+  select(!!sym(pais_seleccionado)) %>% 
+  as.numeric()
+
+#Costo tratamiento de consolidación
+costo_trat_consolidacion <- datos_paises %>%
+  filter(PARAMETRO=="Costo mensual del tratamiento consolidación:") %>% 
+  select(!!sym(pais_seleccionado)) %>% 
+  as.numeric()
+
+#Costo de seguimiento
+costo_seguimiento <- datos_paises %>%
+  filter(PARAMETRO=="Costo mensual de seguimiento:") %>% 
+  select(!!sym(pais_seleccionado)) %>% 
+  as.numeric()
+
+#Costo de examenes complementarios
+costo_examenes_complemen <- datos_paises %>%
+  filter(PARAMETRO=="Costo mensual de examenes complementarios:") %>% 
+  select(!!sym(pais_seleccionado)) %>% 
+  as.numeric()
+
+#Costo internación por tuberculosis
+costo_internacion_falla_terapeu_a<- datos_paises %>%
+  filter(PARAMETRO=="Costo de 1 día de internación:") %>% 
+  select(!!sym(pais_seleccionado)) %>% 
+  as.numeric()
+
+#Costo de un evento DOT
+costo_evento_DOT<- datos_paises %>%
+  filter(PARAMETRO=="Costo de un evento de DOT:") %>% 
+  select(!!sym(pais_seleccionado)) %>% 
+  as.numeric()
+
+#Costo de un evento vDOT
+costo_evento_VOT<- datos_paises %>%
+  filter(PARAMETRO=="Costo de un evento de VOT:") %>% 
+  select(!!sym(pais_seleccionado)) %>% 
+  as.numeric()
+
+#Costo programático DOT
+costo_intervencion_DOT<- datos_paises %>%
+  filter(PARAMETRO=="Costo de la intervención:") %>% 
+  select(!!sym(pais_seleccionado)) %>% 
+  as.numeric()
+
+#Costo programático de vDOT
+costo_intervencion_VOT <- 0
+
+#Costo de consulta a emergencias
+costoConsulta <- datos_paises %>%
+  filter(PARAMETRO=="Costo consulta a emergencias:") %>% 
+  select(!!sym(pais_seleccionado)) %>% 
+  as.numeric()
+
+
+#Costo tratamiento inducción en MR
+costo_trat_multires_induccion <- datos_paises %>%
+  filter(PARAMETRO=="Costo de tratamiento multiresistente induccion:") %>% 
+  select(!!sym(pais_seleccionado)) %>% 
+  as.numeric()
+
+
+#Costo tratamiento consolidacion en MR
+costo_trat_multires_consolidacion <- datos_paises %>%
+  filter(PARAMETRO=="Costo de tratamiento multiresistente consolidacion:") %>% 
+  select(!!sym(pais_seleccionado)) %>% 
+  as.numeric()
+
+
+#Utilidad de la población general
+utilidad_pob_gral <- 0.919
+
+#Mediana de edad de Tuberculosis
+mediana_edad_paciente <- datos_paises %>%
+  filter(PARAMETRO=="Mediana de edad de paciente con tuberculosis:") %>% 
+  select(!!sym(pais_seleccionado)) %>% 
+  as.numeric()
+
+
+#Esperanza de vida
+esperanza_vida <- datos_paises %>%
+  filter(PARAMETRO=="Esperanza de vida:") %>% 
+  select(!!sym(pais_seleccionado)) %>% 
+  as.numeric()
+
+##funcion-------
 
 modelo_tbc <- function(pExitoso, pMuerte,
                        pFalla, DOTrrMuerte,
                        DOTrrFalla,DOTadherencia,
-                       RR_trat_exitoso_DOT_SAT,
+                       DOTrrExito,
                        VOTrrExito,VOTadherencia,
-                       VOTrrFalla ,VOTrrMuerte,pais_seleccionado){
+                       VOTrrFalla ,VOTrrMuerte,
+                       pais_seleccionado,
+                       cantidad_vot_semana,
+                       cantidad_dot_semana, 
+                       Induccion_duracion,
+                       ttoExitoso_Duracion,
+                       prob_internacion_con_falla,
+                       disutilidad_tbc_activa,
+                       costo_trat_induccion,
+                       costo_trat_consolidacion,
+                       costo_seguimiento,
+                       costo_examenes_complemen,
+                       costo_internacion_falla_terapeu_a,
+                       costo_evento_DOT,
+                       costo_evento_VOT,
+                       costo_intervencion_DOT,
+                       costo_intervencion_VOT,
+                       costoConsulta, 
+                       costo_trat_multires_induccion, 
+                       costo_trat_multires_consolidacion,
+                       utilidad_pob_gral,
+                       mediana_edad_paciente,
+                       esperanza_vida,
+                       #dataframes
+                       datos_paises,
+                       asunciones){
   
   
   Horizonte_temporal_meses <- 12
@@ -30,35 +170,10 @@ modelo_tbc <- function(pExitoso, pMuerte,
   cantidad_vot_semana <- 5
   cantidad_dot_semana <- 5
   
-  datos_paises <- readxl::read_excel("DATA/datos_paises.xlsx")
+  datos_paises <<- datos_paises
+  # 
+  asunciones <<- asunciones
   
-  asunciones <- readxl::read_excel("DATA/asunciones.xlsx")
-  
-  costo_trat_induccion <- datos_paises %>%
-    filter(PARAMETRO=="Costo mensual del tratamiento inducción:") %>% 
-    select(!!sym(pais_seleccionado)) %>% 
-    as.numeric()
-  
-  
-  costo_trat_consolidacion <- datos_paises %>%
-    filter(PARAMETRO=="Costo mensual del tratamiento consolidación:") %>% 
-    select(!!sym(pais_seleccionado)) %>% 
-    as.numeric()
-  
-  costo_seguimiento <- datos_paises %>%
-    filter(PARAMETRO=="Costo mensual de seguimiento:") %>% 
-    select(!!sym(pais_seleccionado)) %>% 
-    as.numeric()
-  
-  costo_examenes_complemen <- datos_paises %>%
-    filter(PARAMETRO=="Costo mensual de examenes complementarios:") %>% 
-    select(!!sym(pais_seleccionado)) %>% 
-    as.numeric()
-  
-  costo_internacion_falla_terapeu_a<- datos_paises %>%
-    filter(PARAMETRO=="Costo de 1 día de internación:") %>% 
-    select(!!sym(pais_seleccionado)) %>% 
-    as.numeric()
   
   costo_internacion_falla_terapeu_b<- datos_paises %>%
     filter(PARAMETRO=="Cantidad de dias promedio de una internación por TBC ante falla") %>% 
@@ -67,51 +182,17 @@ modelo_tbc <- function(pExitoso, pMuerte,
   
   costo_internacion_falla_terapeu <- costo_internacion_falla_terapeu_a*costo_internacion_falla_terapeu_b
   
-  costo_evento_DOT<- datos_paises %>%
-    filter(PARAMETRO=="Costo de un evento de DOT:") %>% 
-    select(!!sym(pais_seleccionado)) %>% 
-    as.numeric()
-  
-  costo_evento_VOT<- datos_paises %>%
-    filter(PARAMETRO=="Costo de un evento de VOT:") %>% 
-    select(!!sym(pais_seleccionado)) %>% 
-    as.numeric()
-  
-  costo_intervencion_DOT<- datos_paises %>%
-    filter(PARAMETRO=="Costo de la intervención:") %>% 
-    select(!!sym(pais_seleccionado)) %>% 
-    as.numeric()
-  
-  
-  
-  costoConsulta <- datos_paises %>%
-    filter(PARAMETRO=="Costo consulta a emergencias:") %>% 
-    select(!!sym(pais_seleccionado)) %>% 
-    as.numeric()
   
   
   ## utilidades-----
   
-  utilidad_pob_gral <- 0.919
-  utilidad_tbc_activa <- 0.7
-  
+
   #configuracion-----
   
   tasa_descuento_anual <- 0.03
   
   # epi demo-----
-  
-  mediana_edad_paciente <- datos_paises %>%
-    filter(PARAMETRO=="Mediana de edad de paciente con tuberculosis:") %>% 
-    select(!!sym(pais_seleccionado)) %>% 
-    as.numeric()
-  
-  esperanza_vida <- datos_paises %>%
-    filter(PARAMETRO=="Esperanza de vida:") %>% 
-    select(!!sym(pais_seleccionado)) %>% 
-    as.numeric()
-  
-  utilidad_restante <- datos_paises %>%
+    utilidad_restante <- datos_paises %>%
     filter(PARAMETRO=="Utilidad restante:") %>% 
     select(!!sym(pais_seleccionado)) %>% 
     as.numeric()
@@ -137,7 +218,7 @@ modelo_tbc <- function(pExitoso, pMuerte,
     select(!!sym(pais_seleccionado)) %>% 
     as.numeric()
   
-  prob_internacion_con_falla <- 0.25
+  
   
   #asunciones#-----
   
@@ -146,12 +227,9 @@ modelo_tbc <- function(pExitoso, pMuerte,
     select(valor) %>% 
     as.numeric()
   
-  Induccion_duracion <- asunciones %>%
-    filter(`PARAMETROS GLOBALES`== "Induccion duracion:") %>% 
-    select(valor) %>% 
-    as.numeric()
   
-  InduccionDuracion <- Induccion_duracion
+  
+
   
   fallaDuracion <- asunciones %>%
     filter(`PARAMETROS GLOBALES`== "Meses que reciben tratamiento el grupo que falla:") %>% 
@@ -168,10 +246,7 @@ modelo_tbc <- function(pExitoso, pMuerte,
     select(valor) %>% 
     as.numeric()
   
-  ttoExitoso_Duracion <- asunciones %>%
-    filter(`PARAMETROS GLOBALES`== "Duración tratamiento exitoso:") %>% 
-    select(valor) %>% 
-    as.numeric()
+
   
   pReinicia <- asunciones %>%
     filter(`PARAMETROS GLOBALES`== "Porcentaje que reinicia el tratamiento en el año:") %>% 
@@ -209,20 +284,11 @@ modelo_tbc <- function(pExitoso, pMuerte,
   
   ###costos###----
   
-  costo_trat_multires_induccion <- datos_paises %>%
-    filter(PARAMETRO=="Costo de tratamiento multiresistente induccion:") %>% 
-    select(!!sym(pais_seleccionado)) %>% 
-    as.numeric()
   
-  costo_trat_multires_consolidacion <- datos_paises %>%
-    filter(PARAMETRO=="Costo de tratamiento multiresistente consolidacion:") %>% 
-    select(!!sym(pais_seleccionado)) %>% 
-    as.numeric()
   
-  costo_intervencion_VOT <- 0
   
-  costo_ponderado_trat_falla <- (pFallaResistencia * ((InduccionDuracion * costo_trat_multires_induccion) + ((12 - fallaDuracion - InduccionDuracion) * costo_trat_multires_consolidacion)) +
-                                   pFallaAdherencia * ((InduccionDuracion * costo_trat_induccion + (12 - fallaDuracion - InduccionDuracion) * costo_trat_consolidacion) * pFallaReinicia + 
+  costo_ponderado_trat_falla <- (pFallaResistencia * ((Induccion_duracion * costo_trat_multires_induccion) + ((12 - fallaDuracion - Induccion_duracion) * costo_trat_multires_consolidacion)) +
+                                   pFallaAdherencia * ((Induccion_duracion * costo_trat_induccion + (12 - fallaDuracion - Induccion_duracion) * costo_trat_consolidacion) * pFallaReinicia + 
                                                          (12 - fallaDuracion) * costo_trat_consolidacion * (1 - pFallaReinicia))) / (12 - fallaDuracion)
   
   
@@ -246,7 +312,8 @@ modelo_tbc <- function(pExitoso, pMuerte,
                             (costo_seguimiento * ttoExitoso_Duracion) +
                             (costo_examenes_complemen * ttoExitoso_Duracion))
   
-  utilidad_a <- trat_exitoso*(((12-ttoExitoso_Duracion) * (utilidad_pob_gral/12))+(ttoExitoso_Duracion*(utilidad_tbc_activa/12)))
+  utilidad_a <- trat_exitoso*(((12-ttoExitoso_Duracion) * (utilidad_pob_gral/12))+
+                                (ttoExitoso_Duracion*((utilidad_pob_gral-disutilidad_tbc_activa)/12)))
   
   ##
   costo_b <- falla_terapeutica * ((((Induccion_duracion * costo_trat_induccion) + ((fallaDuracion-Induccion_duracion) * costo_trat_consolidacion)) +
@@ -254,7 +321,7 @@ modelo_tbc <- function(pExitoso, pMuerte,
                                     (12 * (costo_examenes_complemen + costo_seguimiento)  ) + (prob_internacion_con_falla * costo_internacion_falla_terapeu ))
   
   
-  utilidad_b <- falla_terapeutica*utilidad_tbc_activa
+  utilidad_b <- falla_terapeutica*(utilidad_pob_gral-disutilidad_tbc_activa)
   
   
   ##
@@ -268,7 +335,7 @@ modelo_tbc <- function(pExitoso, pMuerte,
   
   
   
-  utilidad_c <- perdida_seguimiento* utilidad_tbc_activa
+  utilidad_c <- perdida_seguimiento* (utilidad_pob_gral-disutilidad_tbc_activa)
   
   #
   costo_d <- muerte *((costo_trat_induccion*(Induccion_duracion))+
@@ -278,7 +345,7 @@ modelo_tbc <- function(pExitoso, pMuerte,
   
   
   
-  utilidad_d <- muerte*(utilidad_tbc_activa/12)*GrupoMuerte_Meses_Vividos
+  utilidad_d <- muerte*((utilidad_pob_gral-disutilidad_tbc_activa)/12)*GrupoMuerte_Meses_Vividos
   
   ##total SAT------------------
   
@@ -344,7 +411,8 @@ modelo_tbc <- function(pExitoso, pMuerte,
                             (costo_seguimiento * ttoExitoso_Duracion)+
                             (costo_examenes_complemen * ttoExitoso_Duracion))
   
-  utilidad_a <- trat_exitoso*(((12-ttoExitoso_Duracion) * (utilidad_pob_gral/12))+(ttoExitoso_Duracion*(utilidad_tbc_activa/12)))
+  utilidad_a <- trat_exitoso*(((12-ttoExitoso_Duracion) * (utilidad_pob_gral/12))+
+                                (ttoExitoso_Duracion*((utilidad_pob_gral-disutilidad_tbc_activa)/12)))
   
   
   ##
@@ -355,7 +423,7 @@ modelo_tbc <- function(pExitoso, pMuerte,
                                     (prob_internacion_con_falla * costo_internacion_falla_terapeu ))
   
   
-  utilidad_b <- falla_terapeutica*utilidad_tbc_activa
+  utilidad_b <- falla_terapeutica*(utilidad_pob_gral-disutilidad_tbc_activa)
   
   ##
   
@@ -369,7 +437,7 @@ modelo_tbc <- function(pExitoso, pMuerte,
   
   
   
-  utilidad_c <- perdida_seguimiento* utilidad_tbc_activa
+  utilidad_c <- perdida_seguimiento* (utilidad_pob_gral-disutilidad_tbc_activa)
   
   
   ##
@@ -381,7 +449,7 @@ modelo_tbc <- function(pExitoso, pMuerte,
   
   #=($G$32*$G$20*4*GrupoMuerte_Meses_Tratados)+(($G$29+$G$30))
   
-  utilidad_d <- muerte*(utilidad_tbc_activa/12)*GrupoMuerte_Meses_Vividos
+  utilidad_d <- muerte*((utilidad_pob_gral-disutilidad_tbc_activa)/12)*GrupoMuerte_Meses_Vividos
   
   ##DOT total
   
@@ -454,7 +522,7 @@ modelo_tbc <- function(pExitoso, pMuerte,
                             (costo_seguimiento * ttoExitoso_Duracion)+
                             (costo_examenes_complemen * ttoExitoso_Duracion))
   
-  utilidad_a <- trat_exitoso*(((12-ttoExitoso_Duracion) * (utilidad_pob_gral/12))+(ttoExitoso_Duracion*(utilidad_tbc_activa/12)))
+  utilidad_a <- trat_exitoso*(((12-ttoExitoso_Duracion) * (utilidad_pob_gral/12))+(ttoExitoso_Duracion*((utilidad_pob_gral-disutilidad_tbc_activa)/12)))
   
   
   ##
@@ -465,7 +533,7 @@ modelo_tbc <- function(pExitoso, pMuerte,
                                     (prob_internacion_con_falla * costo_internacion_falla_terapeu ))
   
   
-  utilidad_b <- falla_terapeutica*utilidad_tbc_activa
+  utilidad_b <- falla_terapeutica*(utilidad_pob_gral-disutilidad_tbc_activa)
   
   ##
   
@@ -479,7 +547,7 @@ modelo_tbc <- function(pExitoso, pMuerte,
   
   
   
-  utilidad_c <- perdida_seguimiento* utilidad_tbc_activa
+  utilidad_c <- perdida_seguimiento* (utilidad_pob_gral-disutilidad_tbc_activa)
   
   
   ##
@@ -492,7 +560,7 @@ modelo_tbc <- function(pExitoso, pMuerte,
   
   
   
-  utilidad_d <- muerte*(utilidad_tbc_activa/12)*GrupoMuerte_Meses_Vividos
+  utilidad_d <- muerte*((utilidad_pob_gral-disutilidad_tbc_activa)/12)*GrupoMuerte_Meses_Vividos
   
   ##VOT total ------
   
@@ -558,10 +626,36 @@ modelo_tbc <- function(pExitoso, pMuerte,
   
 } 
 
-##aplico la fn
+##aplico la fn---- 
+
 output <- modelo_tbc(pExitoso, pMuerte,
-                  pFalla, DOTrrMuerte,
-                  DOTrrFalla,DOTadherencia,
-                  RR_trat_exitoso_DOT_SAT,
-                  VOTrrExito,VOTadherencia,
-                  VOTrrFalla ,VOTrrMuerte,pais_seleccionado)
+                     pFalla, DOTrrMuerte,
+                     DOTrrFalla,DOTadherencia,
+                     DOTrrExito,
+                     VOTrrExito,VOTadherencia,
+                     VOTrrFalla ,VOTrrMuerte,
+                     pais_seleccionado,
+                     cantidad_vot_semana,
+                     cantidad_dot_semana, 
+                     Induccion_duracion,
+                     ttoExitoso_Duracion,
+                     prob_internacion_con_falla,
+                     disutilidad_tbc_activa,
+                     costo_trat_induccion,
+                     costo_trat_consolidacion,
+                     costo_seguimiento,
+                     costo_examenes_complemen,
+                     costo_internacion_falla_terapeu_a,
+                     costo_evento_DOT,
+                     costo_evento_VOT,
+                     costo_intervencion_DOT,
+                     costo_intervencion_VOT,
+                     costoConsulta, 
+                     costo_trat_multires_induccion, 
+                     costo_trat_multires_consolidacion,
+                     utilidad_pob_gral,
+                     mediana_edad_paciente,
+                     esperanza_vida,
+                     #dataframes
+                     datos_paises,
+                     asunciones)
