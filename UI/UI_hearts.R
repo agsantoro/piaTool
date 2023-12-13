@@ -467,8 +467,7 @@ ui_resultados_hearts = function(input,output,resultados) {
         table$Valor = format(table$Valor, big.mark = ".", decimal.mark = ",")
         
         cat_epi = 1:12
-        cat_costos = 13:15
-        
+        cat_costos = 13:22
         table$cat=""
         table$cat[cat_epi] = "Resultados epidemiológicos"
         table$cat[cat_costos] = "Resultados económicos"

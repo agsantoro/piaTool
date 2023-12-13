@@ -73,16 +73,18 @@ ui_hpp = function (input) {
 
 
 ui_resultados_hpp = function(input,output,resultados) {
+  
   hpp_run = resultados()
   
   output$hpp_summaryTable = renderReactable({
     
     if (length(hpp_run)>1) {
+      browser()
       table = hpp_run
       table$Valor = format(round(table$Valor,1),big.mark = ".",decimal.mark = ",")
       
       cat_epi = c(2,4:8)
-      cat_costos = c(1,3)
+      cat_costos = c(1,3, 9:12)
       
       table$cat=""
       table$cat[cat_epi] = "Resultados epidemiológicos"

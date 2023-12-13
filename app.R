@@ -528,7 +528,7 @@ server <- function(input, output, session) {
                                          input$hpp_uso_oxitocina_taget,
                                          input$hpp_descuento,
                                          input$hpp_costoIntervencion)
-      
+      browser()
       data.frame(
         Indicador = c("Costo promedio de un evento de Hemorragia Post Parto",
                       "Perdida de Qaly por un evento de Hemorragia Post Parto",
@@ -537,7 +537,11 @@ server <- function(input, output, session) {
                       "Muertes por Hemorragias Post Parto Evitadas",
                       "Histerectomias por Hemorragias Post Parto Evitadas",
                       "Años de vida por muerte prematura salvados",
-                      "Años de vida por discapacidad salvados"),
+                      "Años de vida por discapacidad salvados",
+                      "Inversión",
+                      "ROI",
+                      "Costo cada mil",
+                      "Qalys cada mil"),
         Valor = c(resultados$base$"Costo_HPP",
                   resultados$base$"Dalys_Total",
                   resultados[["comparacion"]][["Diferencia de costo"]],
@@ -545,7 +549,13 @@ server <- function(input, output, session) {
                   resultados[["comparacion"]][["Muertes por Hemorragias Post Parto Evitadas"]],
                   resultados[["comparacion"]][["Histerectomias por Hemorragias Post Parto Evitadas"]],
                   resultados[["comparacion"]][["Años de vida por muerte prematura salvados"]],
-                  resultados[["comparacion"]][["Años de vida por discapacidad salvados"]])
+                  resultados[["comparacion"]][["Años de vida por discapacidad salvados"]],
+                  resultados[["comparacion"]][["Inversion"]],
+                  resultados[["comparacion"]][["ROI"]],
+                  resultados[["comparacion"]][["Costo cada mil"]],
+                  resultados[["comparacion"]][["Qalys cada mil"]]
+                  
+                  )
       )
     }
     

@@ -761,8 +761,8 @@ hepC_full = function(
   icerQalyEvitadaDesc = diferenciaCostosDesc / (resultados$`Sin tratamiento`$`Qalys vividos Descontados` - resultados$`Con tratamiento`$`Qalys vividos Descontados`)
   icerLYEvitada = diferenciaCostos / (resultados$`Sin tratamiento`$`Años de vida vividos` - resultados$`Con tratamiento`$`Años de vida vividos`)
   icerLYEvitadaDesc = diferenciaCostosDesc / (resultados$`Sin tratamiento`$`Años de vida vividos Descontados` - resultados$`Con tratamiento`$`Años de vida vividos Descontados`)
-  ROI = ((resultados$`Sin tratamiento`$Costos - resultados$`Con tratamiento`$Costos) - resultados$`Con tratamiento`$`Costos Tratamiento`) / resultados$`Con tratamiento`$`Costos Tratamiento` * 100
-  ROIDesc = ((resultados$`Sin tratamiento`$`Costos Descontados` - resultados$`Con tratamiento`$`Costos Descontados`) - resultados$`Con tratamiento`$`Costos Tratamiento`) / resultados$`Con tratamiento`$`Costos Tratamiento` * 100
+  ROI = (resultados$`Sin tratamiento`$Costos - resultados$`Con tratamiento`$Costos) / resultados$`Con tratamiento`$`Costos Tratamiento`  * 100
+  ROIDesc = (resultados$`Sin tratamiento`$`Costos Descontados` - resultados$`Con tratamiento`$`Costos Descontados`) / resultados$`Con tratamiento`$`Costos Tratamiento` * 100
   
   resultados$Comparacion[[ "Dalys por discapacidad Evitados"]] = dalysDiscEvitados
   resultados$Comparacion[["Dalys por discapacidad Evitados (descontado)"]] = dalysDiscEvitadosDesc

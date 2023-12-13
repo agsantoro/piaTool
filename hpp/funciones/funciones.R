@@ -260,14 +260,14 @@ resultados_comparados = function(pais,
   comparacion$Inversion = (target$costoIntervencion + ((comparacion$`Población intervención afectada` - comparacion$`Población base afectada`) * datosPais$value[datosPais$indicador=="COSTO.Oxitocina"]))
   
   # ROI
-  comparacion$ROI = round((((-comparacion$`Diferencia de costo`) - comparacion$Inversion) / comparacion$Inversion) * 100, 2)
+  comparacion$ROI = round((((-comparacion$`Diferencia de costo`)) / comparacion$Inversion) * 100, 2)
   
   # Costo cada 100 mil
   comparacion$`Costo cada mil` = round((target$getCosto - base$getCosto) / (datosPais$value[datosPais$indicador=='PARTOS.ANUALES'] * datosPais$value[datosPais$indicador=='pINSTITUCIONALES']) * 1000,1)
   
   # Qalys cada 100 mil
   comparacion$`Qalys cada mil` = round((target$QalyLost - base$QalyLost) / (datosPais$value[datosPais$indicador=='PARTOS.ANUALES'] * datosPais$value[datosPais$indicador=='pINSTITUCIONALES']) * 1000,1)
-  
+  browser()
   list(base=base,
        target=target,
        comparacion=comparacion)
