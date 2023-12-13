@@ -92,7 +92,7 @@ cuHIVTTO = uHIVTTO / ciclosPorAño
 uPoblacion <- numeric(100)  # Crear un vector para almacenar los datos
 cuPoblacion <- numeric(100)
 
-for (z in 0:100) {
+for (z in 0:99) {
   uPoblacion[z + 1] <- utilidades2[z + 2, paisCol]
   cuPoblacion[z + 1] <- uPoblacion[[z + 1]] / ciclosPorAño
 }
@@ -263,6 +263,7 @@ modelo$casosHIVDx <-0
 modelo$casosHIV <-0
 finalizados=0
 
+i <- 1
 # Suponiendo que 'escribir' es una variable lógica (TRUE/FALSE)
 modelo$ciclos[[1]]$SanoSinPrEP$Total =0
 #modelo$ciclos[[i]]$InfectadoNoDx$Total=0
@@ -299,29 +300,29 @@ modelo$ciclos[[1]]$SanosOffPrEPTotal<- 0
 modelo$ciclos[[1]]$SanoSinPrEP$Total <- modelo$ciclos[[1]]$SanosTotal * (1 - PrEPuptake)
 modelo$ciclos[[1]]$InfectadosTotal <- cohorteSize * prevalenciaHIV
 modelo$ciclos[[1]]$InfectadoDx$Total <- modelo$ciclos[[1]]$InfectadosTotal * pHIVDiagnosticado
-modelo$ciclos[[1]]$InfectadoNoDx$Total <- modelo$ciclos[[1]]$InfectadosTotal * (1 - pHIVDiagnosticado)
+modelo$ciclos[[1]]$InfectadoNoDxTotal <- modelo$ciclos[[1]]$InfectadosTotal * (1 - pHIVDiagnosticado)
 modelo$ciclos[[1]]$MuerteGeneral$Total <-0
 #modelo$ciclos[[2]]$MuerteGeneral$Total <-0
 modelo$ciclos[[1]]$InfectadoPreDx$Total <- 0
 # Distribuir la población inicial en los estados
 totalCheck <- 0
-length(distribucionCohorte)
-
-edadMinima - edadMaximaInicial
-modelo$ciclos[[2]]$SanosTotal <- cohorteSize * (1 - prevalenciaHIV)
-modelo$ciclos[[2]]$SanosOnPrEPTotal <- modelo$ciclos[[1]]$SanosTotal * PrEPuptake
-modelo$ciclos[[2]]$SanosOffPrEPTotal<- 0
-modelo$ciclos[[2]]$SanoSinPrEP$Total <- modelo$ciclos[[1]]$SanosTotal * (1 - PrEPuptake)
-modelo$ciclos[[2]]$InfectadosTotal <- cohorteSize * prevalenciaHIV
-modelo$ciclos[[2]]$InfectadoDx$Total <- modelo$ciclos[[1]]$InfectadosTotal * pHIVDiagnosticado
-modelo$ciclos[[2]]$InfectadoNoDx$Total <- modelo$ciclos[[1]]$InfectadosTotal * (1 - pHIVDiagnosticado)
+# length(distribucionCohorte)
+# 
+# edadMinima - edadMaximaInicial
+# modelo$ciclos[[2]]$SanosTotal <- cohorteSize * (1 - prevalenciaHIV)
+# modelo$ciclos[[2]]$SanosOnPrEPTotal <- modelo$ciclos[[1]]$SanosTotal * PrEPuptake
+# modelo$ciclos[[2]]$SanosOffPrEPTotal<- 0
+# modelo$ciclos[[2]]$SanoSinPrEP$Total <- modelo$ciclos[[1]]$SanosTotal * (1 - PrEPuptake)
+# modelo$ciclos[[2]]$InfectadosTotal <- cohorteSize * prevalenciaHIV
+# modelo$ciclos[[2]]$InfectadoDx$Total <- modelo$ciclos[[1]]$InfectadosTotal * pHIVDiagnosticado
+# modelo$ciclos[[2]]$InfectadoNoDx$Total <- modelo$ciclos[[1]]$InfectadosTotal * (1 - pHIVDiagnosticado)
 #distribucionCohorte <- c(rep(0,17) ,distribucionCohorte,rep(0,32))
 for (i in 1 : edadMaximaInicial) {
   
   modelo$ciclos[[1]]$SanoOnPrEP[[1]]$Personas[i] <- modelo$ciclos[[1]]$SanosOnPrEPTotal * distribucionCohorte[i]
   modelo$ciclos[[1]]$SanoSinPrEP$Personas[i] <- modelo$ciclos[[1]]$SanoSinPrEP$Total * distribucionCohorte[i]
   modelo$ciclos[[1]]$InfectadoDx$Personas[i] <- modelo$ciclos[[1]]$InfectadoDx$Total * distribucionCohorte[i]
-  modelo$ciclos[[1]]$InfectadoNoDx$Personas[i] <- modelo$ciclos[[1]]$InfectadoNoDx$Total * distribucionCohorte[i]
+  modelo$ciclos[[1]]$InfectadoNoDx$Personas[i] <- modelo$ciclos[[1]]$InfectadoNoDxTotal * distribucionCohorte[i]
   totalCheck <- sum(totalCheck , modelo$ciclos[[1]]$SanoOnPrEP[[1]]$Personas[i] , 
     modelo$ciclos[[1]]$SanoSinPrEP$Personas[i],
     modelo$ciclos[[1]]$InfectadoDx$Personas[i] , 
@@ -343,7 +344,7 @@ if (cohorteDinamica == 1) {
 genteEntrante <- ifelse(cohorteDinamica == 1, cohorteSize * distribucionCohorte[edadMinima], 0)
 
 # Calcular total de infectados
-modelo$ciclos[[1]]$InfectadosTotal <- modelo$ciclos[[1]]$InfectadoDx$Total + modelo$ciclos[[1]]$InfectadoNoDx$Total
+modelo$ciclos[[1]]$InfectadosTotal <- modelo$ciclos[[1]]$InfectadoDx$Total + modelo$ciclos[[1]]$InfectadoNoDxTotal
 
 # Las personas en riesgo son los sanos
 personasRiesgo <- modelo$ciclos[[1]]$SanosTotal
@@ -366,7 +367,7 @@ rrPrEP <- min(max(rrPrEP, 0), 1)
 
 # Asignar la cantidad de individuos diagnosticados contagiosos y no diagnosticados
 DiagnosticadosContagiosos <- modelo$ciclos[[1]]$InfectadoDx$Total
-NoDiagnosticadosContagiosos <- modelo$ciclos[[1]]$InfectadoNoDx$Total +
+NoDiagnosticadosContagiosos <- modelo$ciclos[[1]]$InfectadoNoDxTotal +
   modelo$ciclos[[1]]$InfectadoPreDx$Total
 
 escribir <- TRUE
@@ -378,7 +379,7 @@ if (escribir) {
   # Llamada a la función 'escribirOutput' con los argumentos correspondientes
   # Aquí asumimos que todas las propiedades (.Total, etc.) están definidas adecuadamente
   escribirOutput(1, ciclosPorAño, modelo$ciclos[[i]]$SanoSinPrEP$Total, modelo$ciclos[[i]]$SanosOffPrEPTotal, 
-                 modelo$ciclos[[i]]$SanosOnPrEPTotal, modelo$ciclos[[i]]$InfectadoNoDx$Total, 
+                 modelo$ciclos[[i]]$SanosOnPrEPTotal, modelo$ciclos[[i]]$InfectadoNoDxTotal, 
                  modelo$ciclos[[i]]$InfectadoPreDx$Total, modelo$ciclos[[i]]$InfectadoDx$Total, 
                  modelo$ciclos[[i]]$MuerteGeneral$Total, modelo$ciclos[[i]]$MuerteHIV$Total, 
                  personasRiesgo, modelo$ciclos[[i]]$InfectadosTotal, 0, 0, modelo$ciclos[[i]]$nuevosCasosDx, 
@@ -417,14 +418,14 @@ modelo$anosPerdidosMPHIVD <-0
 
 DiagnosticadosContagiosos <- modelo$ciclos[[1]]$InfectadoDx$Total
 
-NoDiagnosticadosContagiosos <- modelo$ciclos[[1]]$InfectadoNoDx$Total +
+NoDiagnosticadosContagiosos <- modelo$ciclos[[1]]$InfectadoNoDxTotal +
   modelo$ciclos[[1]]$InfectadoPreDx$Total
 
 
 #### inicia loop i #####
 
 #numeroCiclos
-i=2
+
 for (i in 2:(numeroCiclos)) {
   # # Inicializar las estructuras para el i-ésimo ciclo
   
@@ -501,7 +502,7 @@ for (i in 2:(numeroCiclos)) {
   # Cálculo de la probabilidad de tener HIV en el ciclo
   # Verificamos si hay personas en riesgo de contagiarse
   
-  
+  # browser(exp= i==2)
   
   if (personasRiesgo > 0) {
     # Calculamos la probabilidad anual de tener HIV
@@ -588,7 +589,7 @@ for (i in 2:(numeroCiclos)) {
         !(tipoDuracion == 1 && i >= duracionPrEP * ciclosPorAño)) {
       # Si todavía puede reiniciar PrEP
       
-      #browser()
+      
       
       modelo$ciclos[[i]]$SanoSinPrEP$Personas[j] <-
         modelo$ciclos[[i-1]]$SanoSinPrEP$Personas[j] +
@@ -1022,10 +1023,10 @@ for (i in 2:(numeroCiclos)) {
       modelo$ciclos[[i]]$InfectadoDx$Total + modelo$ciclos[[i]]$InfectadoDx$Personas[j]
     modelo$ciclos[[i]]$InfectadoPreDx$Total <-
       modelo$ciclos[[i]]$InfectadoPreDx$Total + modelo$ciclos[[i]]$InfectadoPreDx$Personas[j]
-    modelo$ciclos[[i]]$InfectadoNoDx$Total <-
-      modelo$ciclos[[i]]$InfectadoNoDx$Total + modelo$ciclos[[i]]$InfectadoNoDx$Personas[j]
+    modelo$ciclos[[i]]$InfectadoNoDxTotal <-
+      modelo$ciclos[[i]]$InfectadoNoDxTotal + modelo$ciclos[[i]]$InfectadoNoDx$Personas[j]
     modelo$ciclos[[i]]$SanoSinPrEP$Total <-
-      modelo$ciclos[[i-1]]$SanoSinPrEP$Total + modelo$ciclos[[i]]$SanoSinPrEP$Personas[j]
+      modelo$ciclos[[i-1]]$SanoSinPrEP$Total + modelo$ciclos[[i-1]]$SanoSinPrEP$Personas[j]
     modelo$ciclos[[i]]$SanosOffPrEPTotal <-
       modelo$ciclos[[i]]$SanosOffPrEPTotal + conteoParcialSOFP
     modelo$ciclos[[i]]$SanosOnPrEPTotal <-
@@ -1035,7 +1036,7 @@ for (i in 2:(numeroCiclos)) {
       modelo$ciclos[[i]]$SanosOnPrEPTotal + modelo$ciclos[[i]]$SanosOffPrEPTotal + 
       modelo$ciclos[[i]]$SanoSinPrEP$Total
     modelo$ciclos[[i]]$InfectadosTotal <-
-      modelo$ciclos[[i]]$InfectadoPreDx$Total + modelo$ciclos[[i]]$InfectadoNoDx$Total + modelo$ciclos[[i]]$InfectadoDx$Total
+      modelo$ciclos[[i]]$InfectadoPreDx$Total + modelo$ciclos[[i]]$InfectadoNoDxTotal + modelo$ciclos[[i]]$InfectadoDx$Total
     modelo$ciclos[[i]]$nuevosCasos <-
       modelo$ciclos[[i]]$nuevosCasos + nuevosInfectadosSinPrEP + nuevosInfectadosConPrEP
     modelo$ciclos[[i]]$nuevosCasosDx <-
@@ -1119,7 +1120,7 @@ for (i in 2:(numeroCiclos)) {
           modelo$ciclos[[i]]$SanoSinPrEP$Total,
           modelo$ciclos[[i]]$SanosOffPrEPTotal, 
           modelo$ciclos[[i]]$SanosOnPrEPTotal,
-          modelo$ciclos[[i]]$InfectadoNoDx$Total, 
+          modelo$ciclos[[i]]$InfectadoNoDxTotal, 
           modelo$ciclos[[i]]$InfectadoPreDx$Total,
           modelo$ciclos[[i]]$InfectadoDx$Total, 
           (modelo$ciclos[[i]]$MuerteGeneral$Total + finalizados),
@@ -1170,14 +1171,14 @@ for (i in 2:(numeroCiclos)) {
     modelo$anosVividos + (
       modelo$ciclos[[i]]$SanoSinPrEP$Total +
         modelo$ciclos[[i]]$SanosOffPrEPTotal + modelo$ciclos[[i]]$SanosOnPrEPTotal +
-        modelo$ciclos[[i]]$InfectadoNoDx$Total + modelo$ciclos[[i]]$InfectadoPreDx$Total +
+        modelo$ciclos[[i]]$InfectadoNoDxTotal + modelo$ciclos[[i]]$InfectadoPreDx$Total +
         modelo$ciclos[[i]]$InfectadoDx$Total
     ) / ciclosPorAño
   modelo$anosVividosD <-
     modelo$anosVividosD + (((
       modelo$ciclos[[i]]$SanoSinPrEP$Total +
         modelo$ciclos[[i]]$SanosOffPrEPTotal + modelo$ciclos[[i]]$SanosOnPrEPTotal +
-        modelo$ciclos[[i]]$InfectadoNoDx$Total + modelo$ciclos[[i]]$InfectadoPreDx$Total +
+        modelo$ciclos[[i]]$InfectadoNoDxTotal + modelo$ciclos[[i]]$InfectadoPreDx$Total +
         modelo$ciclos[[i]]$InfectadoDx$Total
     ) / ciclosPorAño
     ) / (1 + tasaDescuento) ^ i)
@@ -1199,7 +1200,7 @@ for (i in 2:(numeroCiclos)) {
     modelo$anosVividos + (
       modelo$ciclos[[i]]$SanoSinPrEP$Total +
         modelo$ciclos[[i]]$SanosOffPrEPTotal + modelo$ciclos[[i]]$SanosOnPrEPTotal +
-        modelo$ciclos[[i]]$InfectadoNoDx$Total + modelo$ciclos[[i]]$InfectadoPreDx$Total +
+        modelo$ciclos[[i]]$InfectadoNoDxTotal + modelo$ciclos[[i]]$InfectadoPreDx$Total +
         modelo$ciclos[[i]]$InfectadoDx$Total
     ) / ciclosPorAño
   
@@ -1207,7 +1208,7 @@ for (i in 2:(numeroCiclos)) {
     modelo$anosVividosD + (((
       modelo$ciclos[[i]]$SanoSinPrEP$Total +
         modelo$ciclos[[i]]$SanosOffPrEPTotal + modelo$ciclos[[i]]$SanosOnPrEPTotal +
-        modelo$ciclos[[i]]$InfectadoNoDx$Total + modelo$ciclos[[i]]$InfectadoPreDx$Total +
+        modelo$ciclos[[i]]$InfectadoNoDxTotal + modelo$ciclos[[i]]$InfectadoPreDx$Total +
         modelo$ciclos[[i]]$InfectadoDx$Total
     ) / ciclosPorAño
     ) / (1 + tasaDescuento) ^ i)
