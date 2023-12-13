@@ -1,20 +1,29 @@
 ##funciones
 
 calcularUtilidadRestante <- function(ciclosPorAño, esperanzaVida, utilidad) {
-  # Inicializar el vector para la utilidad restante
+  # Esta función devuelve un vector de utilidad restante por ciclo.
+  # Para un ciclo dado, el vector contendrá cuánta utilidad (según la población general) le quedaba por vivir
+  # para obtener los qalys perdidos ante una muerte prematura.
+  
+  # Vector que contendrá la utilidad restante de cada ciclo.
   uti <- numeric(101 * ciclosPorAño)
   
-  # Recorrer los ciclos
-  for (i in 1:(101 * ciclosPorAño)) {
-    # Recorrer desde el ciclo siguiente hasta la esperanza de vida
+  # Recorremos desde 0 todos los ciclos comprendidos entre 0 y 100 años.
+  for (i in 0:((101 * ciclosPorAño) - 1)) {
+    # Para cada ciclo recorremos desde el ciclo siguiente hasta la cantidad de ciclos correspondiente a la esperanza de vida del país
     for (z in (i + 1):(esperanzaVida * ciclosPorAño)) {
-      # Calcular la utilidad restante
-      uti[i] <- uti[i] + utilidad[((z - 1) %/% ciclosPorAño) + 1]
+      # A uti le asignamos el valor de la utilidad trimestral del año que corresponde al ciclo.
+      # Ajuste para el índice (R empieza en 1, no en 0 como VBA)
+      idx <- ((z - 1) %/% ciclosPorAño) + 1
+      if (idx <= length(utilidad)) {
+        uti[i + 1] <- uti[i + 1] + utilidad[idx]
+      }
     }
   }
   
   return(uti)
 }
+
 cargarDistribucion <- function(edadMin, edadMax) {
 
   # Edad mínima y máxima con datos disponibles
