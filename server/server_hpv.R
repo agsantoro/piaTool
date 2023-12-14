@@ -600,10 +600,73 @@ server_hpv = function (input, output, session, parameterReactive, scenarios, res
         })  
         
       } else {
-        output$escenarios_guardados = renderUI({
-          tagList(
-            h1("Acá comparacion de escenarios entre intervenciones")
-          )
+        output$escenarios_guardados = renderHighchart({
+          
+          if (length(input$comparacion_intervencion)>1) {
+            intervenciones_seleccionadas = input$comparacion_intervencion
+            escenarios_seleccionados = input$comparacion_escenario
+          
+            core= list()
+            
+            
+            for (i in escenarios_seleccionados) {
+              for (j in escenarios_seleccionados[escenarios_seleccionados %in% summary_scenarios$table$scenarioName[summary_scenarios$table$intervencion=="Vacuna contra el HPV"]]) {
+                core[[j]] = scenarios$savedScenarios[[j]]$outcomes$undisc[scenarios$savedScenarios[[j]]$outcomes$outcomes=="ROI"]
+              }
+              
+              for (j in escenarios_seleccionados[escenarios_seleccionados %in% summary_scenarios$table$scenarioName[summary_scenarios$table$intervencion=="HEARTS"]]) {
+                core[[j]] = hearts_scenarios$savedScenarios[[j]]$Valor[hearts_scenarios$savedScenarios[[j]]$Indicador=="ROI"]
+              }
+              
+              for (j in escenarios_seleccionados[escenarios_seleccionados %in% summary_scenarios$table$scenarioName[summary_scenarios$table$intervencion=="Hemorragia postparto"]]) {
+                core[[j]] = hpp_scenarios$savedScenarios[[j]]$Valor[hpp_scenarios$savedScenarios[[j]]$Indicador=="ROI"]
+              }
+              
+              for (j in escenarios_seleccionados[escenarios_seleccionados %in% summary_scenarios$table$scenarioName[summary_scenarios$table$intervencion=="Hepatitis C"]]) {
+                core[[j]] = hepC_scenarios$savedScenarios[[j]]$Valor[hepC_scenarios$savedScenarios[[j]]$Indicador=="ROI"]
+              }
+              
+              for (j in escenarios_seleccionados[escenarios_seleccionados %in% summary_scenarios$table$scenarioName[summary_scenarios$table$intervencion=="VDOT Tuberculosis"]]) {
+                core[[j]] = tbc_scenarios$savedScenarios[[j]]$VOT[tbc_scenarios$savedScenarios[[j]]$Parametro=="ROI"]
+              }
+              
+              escenarios = names(unlist(core))
+              roi_table = 
+                data.frame(scenarioName = escenarios,
+                           value = unlist(core)) %>% left_join(summary_scenarios$table)
+              
+              roi_table$scenarioName = paste0("<b>",roi_table$scenarioName,"</b> <br>",roi_table$country,"<br>",roi_table$intervencion)
+              
+              roi_table <- roi_table %>% arrange(desc(value))
+              roi_table$value = round(roi_table$value,2)
+              
+              
+              grafico <- highchart() %>%
+                hc_chart(type = "column") %>%
+                hc_title(text = "Comparación del retorno de la inversión entre escenarios guardados") %>%
+                hc_xAxis(categories = roi_table$scenarioName) %>%
+                hc_plotOptions(column = list(
+                  colorByPoint = TRUE,
+                  dataLabels = list(enabled = TRUE)
+                )) %>%
+                hc_add_series(
+                  data = roi_table,
+                  type = "column",
+                  hcaes(y = value, color = intervencion),
+                  name = "ROI"
+                ) 
+              grafico %>% hc_legend(list(
+                enabled = F
+              ))
+                            
+            }
+            
+            tagList(
+              highchartOutput("escenarios_guardados")
+            )
+            
+          }
+          
           
         })
       }
