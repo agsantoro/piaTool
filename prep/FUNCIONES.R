@@ -190,7 +190,7 @@ escribirOutput <- function(ciclo, ciclosPorAño, sanosSinPrep, sanosOffPrep, san
   # resultados_df <- rbind(resultados_df, fila_datos)
   
   # Opción 2: Escribir/adjuntar a un archivo CSV
-  write.table(fila_datos, file = "resultados.csv", append = TRUE, sep = ",", col.names = FALSE, row.names = FALSE)
+  write.table(fila_datos, file = "prep/resultados.csv", append = TRUE, sep = ",", col.names = FALSE, row.names = FALSE)
 }
 
 
@@ -253,7 +253,7 @@ escribirResultadosComparacion <- function(escenario, añosVividos, qalysVividos,
   )
   
   # Escribir el data frame en un archivo Excel
-  nombreArchivo <- paste("Resultados_Escenario_", escenario, ".xlsx", sep = "")
+  nombreArchivo <- paste("prep/Resultados_Escenario_", escenario, ".xlsx", sep = "")
   write.xlsx(resultados, file = nombreArchivo)
   
   return(resultados)
