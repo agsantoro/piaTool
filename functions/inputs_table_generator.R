@@ -32,7 +32,6 @@ inputs_table_generator = function (input, output, inputs_scenarios, summary_scen
     load("tbc_map_inputs.Rdata")
     labels_inputs = tbc_map_inputs
   }
-  browser()
   table_inputs = labels_inputs %>% left_join(table_inputs, by = c("i_names" = "inputName"))
   
   table_inputs$scenarioName = paste0(table_inputs$scenarioName, " (",table_inputs$country,")")

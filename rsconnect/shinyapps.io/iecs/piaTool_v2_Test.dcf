@@ -5,16 +5,9 @@ account: iecs
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 10507325
-<<<<<<< HEAD
-bundleId: 8035379
+bundleId: 8047668
 url: https://iecs.shinyapps.io/piaTool_v2_Test/
-when: 1702306628.25508
-lastSyncTime: 1702306628.25509
-=======
-bundleId: 8014840
-url: https://iecs.shinyapps.io/piaTool_v2_Test/
-when: 1701868726.11948
-lastSyncTime: 1701868726.11949
->>>>>>> f87352199bc8f7f41a67bef19f7c120a9fdef0b9
+when: 1702529962.81458
+lastSyncTime: 1702529962.81459
 asMultiple: FALSE
 asStatic: FALSE
