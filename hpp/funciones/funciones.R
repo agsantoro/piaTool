@@ -60,7 +60,7 @@ hpp = function (pais,
   añosDescontados = descontarValor(-1, (expectativaAlParto - edadAlParto), descuento)
   
   ###############
-  añosDescontados =  19.599725447504195 #### PARCHE DEBUG
+  # añosDescontados =  19.599725447504195 #### PARCHE DEBUG
   ###############
   
   

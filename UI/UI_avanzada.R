@@ -34,7 +34,7 @@ ui_avanzada <- navbarPage(
                              paste(icon("heart"),"HEARTS"),
                              paste(icon("female"),"Hemorragia postparto"),
                              paste(icon("virus"),"Hepatitis C"),
-                             paste(icon("virus"),"VDOT Tuberculosis")
+                             paste(icon("tv"),"VDOT Tuberculosis")
                              
                  )
                ),

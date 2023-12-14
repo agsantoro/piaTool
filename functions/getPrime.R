@@ -1,18 +1,18 @@
 library(readxl)
 
 # parameters
-parameters = readxl::read_xlsx("xlsx/PRIME_v2.3.xlsx", sheet = "Parameters")
+parameters2= readxl::read_xlsx("xlsx/PRIME_v2.3_old.xlsx", sheet = "Parameters")
 
 # mortality and incidence data
-mortall = readxl::read_xlsx("xlsx/PRIME_v2.3.xlsx", sheet = "mortall")
-mortcecx = readxl::read_xlsx("xlsx/PRIME_v2.3.xlsx", sheet = "mortcecx")
+mortall = readxl::read_xlsx("xlsx/PRIME_v2.3_old.xlsx", sheet = "mortall")
+mortcecx = readxl::read_xlsx("xlsx/PRIME_v2.3_old.xlsx", sheet = "mortcecx")
 mortcecx[is.na(mortcecx)] = 0
-incidence = readxl::read_xlsx("xlsx/PRIME_v2.3.xlsx", sheet = "incidence")
+incidence = readxl::read_xlsx("xlsx/PRIME_v2.3_old.xlsx", sheet = "incidence")
 
 source("functions/createLifetable.R", encoding = "UTF-8")
 
 # dalys params
-dalys = readxl::read_xlsx("xlsx/PRIME_v2.3.xlsx", sheet = "Model", range = "AV2:AW6")
+dalys = readxl::read_xlsx("xlsx/PRIME_v2.3_old.xlsx", sheet = "Model", range = "AV2:AW6")
 colnames(dalys)[1]="event"
 
 # model function
@@ -39,7 +39,6 @@ getPrime = function (
     incidence,
     dalys,
     parameters) {
-  
   
   # lifetable
   lifeTable = createLifetable("ARGENTINA")
@@ -238,7 +237,6 @@ getPrime = function (
         text="Incidencia cáncer de cuello uterino relacionado con HPV-16/18"
       )
     )
-  
   undisc = c(
     "Cohort size at birth (female)"=input$birthCohortSizeFemale,
     "Cohort size at vaccination age (female)"=input$cohortSizeAtVaccinationAgeFemale,
@@ -326,16 +324,13 @@ getPrime = function (
     Value = inputsValues
   )
   
-  coreTable = outcomes[c(3,5,11,13,15),]
-    
   return(
     list(
       model=model,
       dataPlot=dataPlot,
       plot=plot,
       outcomes=outcomes,
-      inputsTable = inputsTable,
-      coreTable = coreTable
+      inputsTable = inputsTable
     )
   )
 }

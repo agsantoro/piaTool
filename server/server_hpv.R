@@ -1,4 +1,4 @@
-server_hpv = function (input, output, session, parameterReactive, scenarios, resultados, run_hearts, hearts_scenarios, hpp_run, hpp_scenarios, hepC_run, hepC_scenarios, summary_scenarios, inputs_table, inputs_columns, tbc_run) {
+server_hpv = function (input, output, session, parameterReactive, scenarios, resultados, run_hearts, hearts_scenarios, hpp_run, hpp_scenarios, hepC_run, hepC_scenarios, summary_scenarios, inputs_table, inputs_columns, tbc_run, tbc_scenarios) {
   output$resultados_hpv = renderUI({
     if (input$intervencion == "Vacuna contra el HPV") {
       if (is.null(input$birthCohortSizeFemale)) {NULL} else {paste(resultados())}
@@ -478,11 +478,73 @@ server_hpv = function (input, output, session, parameterReactive, scenarios, res
               
               output$tbc_table_saved = renderReactable({
                 
+                if (length(sel_escenario)>0) {
+                  enable("tbc_savedScenarios")
+                  
+                  table = tbc_run()
+                  table$SAT[c(1:10,12)] = format(round(as.numeric(table$SAT[c(1:10,12)]),1),big.mark = ".",decimal.mark = ",")
+                  table$VOT = format(round(table$VOT,1),big.mark = ".",decimal.mark = ",")
+                  table$DOT = format(round(table$DOT,1),big.mark = ".",decimal.mark = ",")
+                  
+                  table = data.frame(
+                    Parametro = rep(table$Parametro,3),
+                    Clasif = c(rep("SAT",17),rep("DOT",17),rep("VOT",17)),
+                    Valor = c(table$SAT,table$DOT,table$VOT)
+                  )
+                  
+                  cat_epi = 1:9
+                  cat_costos = 10:17
+                  
+                  table$cat=""
+                  table$cat[cat_epi] = "Resultados epidemiológicos"
+                  table$cat[cat_costos] = "Resultados económicos"
+                  table$cat = rep(table$cat[1:17],3)
+                  
+                  columns = list()
+                  
+                  for (i in sel_escenario) {
+                    scn_name = i
+                    col = c(tbc_scenarios$savedScenarios[[i]]$SAT,tbc_scenarios$savedScenarios[[i]]$DOT,tbc_scenarios$savedScenarios[[i]]$VOT)
+                    col[setdiff(1:length(col),c(11,13:17))] = format(round(as.numeric(col[setdiff(1:length(col),c(11,13:17))]),1),big.mark = ".",decimal.mark = ",")
+                    table[[i]] = col  
+                    columns[[i]] = colDef(name = i, align = "right")
+                    
+                  }
+                
+                  columns[["cat"]] = colDef(name = "Categoría", align = "left")
+                  columns[["Parametro"]] = colDef(name = "Parámetro", align = "left")
+                
+                table$Valor = NULL
+                
+                  reactable(
+                    table,
+                    groupBy = "cat",
+                    defaultExpanded = T,
+                    pagination = F,
+                    columnGroups = list(
+                      colGroup("Escenarios", columns = sel_escenario, sticky = "left",
+                               headerStyle = list(background = "#236292", color = "white", borderWidth = "0"))
+                    ),
+                    defaultColDef = colDef(
+                      align = "center",
+                      minWidth = 70,
+                      headerStyle = list(background = "#236292", color = "white")
+                    ),
+                    columns = columns,
+                    bordered = TRUE,
+                    highlight = TRUE
+                  )
+                  
+                  
+                } else {NULL}
                 
               })
               
+                
+              
+              
               renderUI(
-                h1("Aca compara tbc")
+                reactableOutput("tbc_table_saved")
               )
             }
             
@@ -539,6 +601,7 @@ server_hpv = function (input, output, session, parameterReactive, scenarios, res
         
       } else {
         output$escenarios_guardados = renderUI({
+          browser()
           tagList(
             h1("Acá comparacion de escenarios entre intervenciones")
           )

@@ -42,6 +42,10 @@ server <- function(input, output, session) {
             for (i in input$comparacion_escenario) {
               list_of_datasets[[i]] = hepC_scenarios$savedScenarios[[i]]
             }
+          } else if (length(input$comparacion_intervencion)== 1 & input$comparacion_intervencion[1] == "VDOT Tuberculosis") {
+            for (i in input$comparacion_escenario) {
+              list_of_datasets[[i]] = tbc_scenarios$savedScenarios[[i]]
+            }
           }
       
       list_of_datasets[["Inputs"]] = inputs_table_generator(
@@ -585,7 +589,8 @@ server <- function(input, output, session) {
              summary_scenarios,
              inputs_table = inputs_table_generator(input,output, inputs_scenarios, summary_scenarios)[[1]],
              inputs_columns = inputs_table_generator(input,output, inputs_scenarios, summary_scenarios)[[2]],
-             tbc_run)
+             tbc_run,
+             tbc_scenarios)
   
   ##### HPP #####
   

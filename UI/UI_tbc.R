@@ -20,11 +20,6 @@ ui_tbc = function (input) {
       )
 
     }
-    
-    tagList(
-      h1("aca inputs TBC")
-    )
-
 
     tagList(
 
