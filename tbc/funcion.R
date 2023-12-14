@@ -614,13 +614,13 @@ modelo_tbc <- function(pExitoso,
 get_tbc_params = function () {
   params = list()
   params$DOTrrExito = 1.14
-  params$VOTrrExito = 1
+  params$VOTrrExito = 1.36
   params$VOTadherencia = 0.78
   params$pExitoso <- 0.661
   params$pMuerte <- 0.23
   params$pFalla <- 0.11
-  params$DOTrrMuerte  <- 1
-  params$DOTrrFalla <- 1
+  params$DOTrrMuerte  <- 0.45
+  params$DOTrrFalla <- 0.49
   params$DOTadherencia <- 0.31
   params$VOTrrMuerte <- 1
   params$VOTrrFalla <- 1
