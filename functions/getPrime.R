@@ -1,13 +1,17 @@
 library(readxl)
-
 # parameters
-parameters2= readxl::read_xlsx("xlsx/PRIME_v2.3_old.xlsx", sheet = "Parameters")
+parameters = readxl::read_xlsx("xlsx/PRIME_v2.3.xlsx", sheet = "Parameters")
+
 
 # mortality and incidence data
-mortall = readxl::read_xlsx("xlsx/PRIME_v2.3_old.xlsx", sheet = "mortall")
-mortcecx = readxl::read_xlsx("xlsx/PRIME_v2.3_old.xlsx", sheet = "mortcecx")
+mortall = readxl::read_xlsx("xlsx/PRIME_v2.3.xlsx", sheet = "mortall")
+
+
+mortcecx = readxl::read_xlsx("xlsx/PRIME_v2.3.xlsx", sheet = "mortcecx")
+
 mortcecx[is.na(mortcecx)] = 0
-incidence = readxl::read_xlsx("xlsx/PRIME_v2.3_old.xlsx", sheet = "incidence")
+
+incidence = readxl::read_xlsx("xlsx/PRIME_v2.3.xlsx", sheet = "incidence")
 
 source("functions/createLifetable.R", encoding = "UTF-8")
 
@@ -39,7 +43,6 @@ getPrime = function (
     incidence,
     dalys,
     parameters) {
-  
   # lifetable
   lifeTable = createLifetable("ARGENTINA")
   
@@ -79,7 +82,6 @@ getPrime = function (
     ageInt = floor(lifeTable$Ex[i])
     lifeTable$ExDisc[i]=cumDiscFactor[age==ageInt] + (lifeTable$Ex[i] - floor(lifeTable$Ex[i])) * discountFactor[age==ageInt]
   }
-  
   lifeYearsLostPreVac = ceCx16_18MortalityPreVac * lifeTable$Ex
   lifeYearsLostPreVacDisc = ceCx16_18MortalityPreVacDisc * lifeTable$ExDisc
   

@@ -601,7 +601,6 @@ server_hpv = function (input, output, session, parameterReactive, scenarios, res
         
       } else {
         output$escenarios_guardados = renderUI({
-          browser()
           tagList(
             h1("Acá comparacion de escenarios entre intervenciones")
           )
