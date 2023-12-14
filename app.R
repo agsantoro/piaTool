@@ -535,23 +535,27 @@ server <- function(input, output, session) {
   
   tbc_run <- reactive({
     params = get_tbc_params()
-    table = modelo_tbc(params$pExitoso,
-                       params$pMuerte,
-                       params$pFalla,
-                       params$DOTrrMuerte,
-                       params$DOTrrFalla,
-                       params$DOTadherencia,
-                       params$DOTrrExito,
-                       params$VOTrrExito,
-                       params$VOTadherencia,
-                       params$VOTrrFalla,
-                       params$VOTrrMuerte,
-                       input$country,
-                       params$cantidad_vot_semana,
-                       params$cantidad_dot_semana,
-                       datos_paises,
-                       asunciones)
-    table
+    
+    if (length(input$VOTrrExito)!=0) {
+      table = modelo_tbc(input$pExitoso,
+                         input$pMuerte,
+                         input$pFalla,
+                         input$DOTrrMuerte,
+                         input$DOTrrFalla,
+                         input$DOTadherencia,
+                         input$DOTrrExito,
+                         input$VOTrrExito,
+                         input$VOTadherencia,
+                         input$VOTrrFalla,
+                         input$VOTrrMuerte,
+                         input$country,
+                         input$cantidad_vot_semana,
+                         input$cantidad_dot_semana,
+                         datos_paises,
+                         asunciones)
+      table
+    }
+    
   })
   
   

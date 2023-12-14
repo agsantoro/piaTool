@@ -22,7 +22,7 @@ ui_tbc = function (input) {
     }
 
     tagList(
-
+      
       lapply(1:3, function(i) {
         numericInput(tbc_map_inputs$i_names[i],tbc_map_inputs$i_labels[i],get_tbc_params()[[i]])
       }),
