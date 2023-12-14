@@ -38,19 +38,19 @@ ui_hpv_basica = function (parametersReactive,input,inputs_hpv, run_hearts) {
   if (is.null(input$country) == F) {
     i_names = c()
     for (i in 1:15) {
-      i_names = c(i_names,inputs_names[i])
+      i_names = c(i_names,names(parametersReactive[i]))
     }
     
     i_labels = c()
     
     for (i in 1:15) {
-      i_labels = c(i_labels,parametersReactive[i])
+      i_labels = c(i_labels,inputs_names[i])
     }
     
     hpv_map_inputs = data.frame(
       intervencion = "Vacuna contra el HPV",
       i_names,
-      i_labels = names(i_labels)
+      i_labels
     )
     
     hpv_map_inputs$avanzado = NA

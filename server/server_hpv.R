@@ -1,4 +1,4 @@
-server_hpv = function (input, output, session, parameterReactive, scenarios, resultados, run_hearts, hearts_scenarios, hpp_run, hpp_scenarios, hepC_run, hepC_scenarios, summary_scenarios, inputs_table, inputs_columns) {
+server_hpv = function (input, output, session, parameterReactive, scenarios, resultados, run_hearts, hearts_scenarios, hpp_run, hpp_scenarios, hepC_run, hepC_scenarios, summary_scenarios, inputs_table, inputs_columns, tbc_run) {
   output$resultados_hpv = renderUI({
     if (input$intervencion == "Vacuna contra el HPV") {
       if (is.null(input$birthCohortSizeFemale)) {NULL} else {paste(resultados())}
@@ -17,6 +17,10 @@ server_hpv = function (input, output, session, parameterReactive, scenarios, res
     } else if (input$intervencion == "Hepatitis C") {
       tagList(
         ui_resultados_hepC(input, output, hepC_run),
+      )
+    } else if (input$intervencion == "VDOT Tuberculosis") {
+      tagList(
+        ui_resultados_tbc(input, output, tbc_run),
       )
     }
     
@@ -412,7 +416,7 @@ server_hpv = function (input, output, session, parameterReactive, scenarios, res
                 reactableOutput("hpp_table_saved")
               )
               
-            } else {
+            } else if (sel_intervencion == "Hepatitis C") {
               
               output$hepC_table_saved = renderReactable({
                 
@@ -470,6 +474,16 @@ server_hpv = function (input, output, session, parameterReactive, scenarios, res
                 reactableOutput("hepC_table_saved")
               )
               
+            } else {
+              
+              output$tbc_table_saved = renderReactable({
+                
+                
+              })
+              
+              renderUI(
+                h1("Aca compara tbc")
+              )
             }
             
           } 
@@ -477,12 +491,7 @@ server_hpv = function (input, output, session, parameterReactive, scenarios, res
         
         output$inputs_summary_table = renderUI({
           
-          inputs_table_generator = function (input, output) {
-            
-          }
-          
           output$tabla_inputs = renderReactable({
-            
             if (is.null(sel_escenario)==F) {
               
               table_data = inputs_table

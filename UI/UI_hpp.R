@@ -79,7 +79,6 @@ ui_resultados_hpp = function(input,output,resultados) {
   output$hpp_summaryTable = renderReactable({
     
     if (length(hpp_run)>1) {
-      browser()
       table = hpp_run
       table$Valor = format(round(table$Valor,1),big.mark = ".",decimal.mark = ",")
       

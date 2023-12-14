@@ -267,7 +267,6 @@ resultados_comparados = function(pais,
   
   # Qalys cada 100 mil
   comparacion$`Qalys cada mil` = round((target$QalyLost - base$QalyLost) / (datosPais$value[datosPais$indicador=='PARTOS.ANUALES'] * datosPais$value[datosPais$indicador=='pINSTITUCIONALES']) * 1000,1)
-  browser()
   list(base=base,
        target=target,
        comparacion=comparacion)

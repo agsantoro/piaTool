@@ -1,7 +1,7 @@
 library(dplyr)
 
 load("hepC/prob.RData")
-load("hepC/inputsPais.RData")
+#load("hepC/inputsPais.RData")
 load("hepC/datosPais.RData")
 load("hepC/backgroundMortality.RData")
 load("hepC/util.RData")

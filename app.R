@@ -10,6 +10,7 @@ source("UI/UI_hpv.R", encoding = "UTF-8")
 source("UI/UI_hpp.R", encoding = "UTF-8")
 source("UI/UI_hepC.R", encoding = "UTF-8")
 source("UI/UI_hearts.R", encoding = "UTF-8")
+source("UI/UI_tbc.R", encoding = "UTF-8")
 source("UI/UI_escenarios.R", encoding = "UTF-8")
 source("UI/UI_routes.R", encoding = "UTF-8")
 source("server/server_hpv.R", encoding = "UTF-8")
@@ -125,7 +126,10 @@ server <- function(input, output, session) {
     inputName = as.character(),
     inputValue = as.numeric()
   )
-
+  
+  # tbc
+  tbc_scenarios = reactiveValues()
+  tbc_scenarios$savedScenarios = list()
   
   # hpp
   hpp_scenarios = reactiveValues()
@@ -330,7 +334,7 @@ server <- function(input, output, session) {
         hide("saveScenario2", anim = T, animType = "slide")
         show("saveScenario", anim = T, animType = "slide")
       }
-    } else {
+    } else if (input$intervencion == "Hepatitis C") {
       if (input$scenarioName !="") {
         
         scnID = UUIDgenerate()
@@ -339,6 +343,44 @@ server <- function(input, output, session) {
         table = hepC_run()
         
         hepC_scenarios$savedScenarios[[scnName]] <- table
+        
+        sendSweetAlert(
+          session = session,
+          title = "Escenario guardado",
+          text = paste0("Nombre: ",scnName),
+          type = "success"
+        )
+        
+        hide("guardar_hpv", anim = T, animType = "slide")
+        hide("scenarioName", anim = T, animType = "slide")
+        hide("saveScenario2", anim = T, animType = "slide")
+        show("saveScenario", anim = T, animType = "fade")
+        updateTextAreaInput(session,"scenarioName",value="")
+        show("ver_escenarios_guardados", anim = T, animType = "fade")
+      } else {
+        sendSweetAlert(
+          session = session,
+          title = "Error",
+          text = "Debe definir un nombre para guardar el escenario.",
+          type = "error"
+        )
+        hide("guardar_hpv", anim = T, animType = "slide")
+        hide("scenarioName", anim = T, animType = "slide")
+        hide("saveScenario2", anim = T, animType = "slide")
+        show("saveScenario", anim = T, animType = "slide")
+      }
+      
+      
+      
+    } else {
+      if (input$scenarioName !="") {
+        
+        scnID = UUIDgenerate()
+        scnName = input$scenarioName
+        
+        table = tbc_run()
+        
+        tbc_scenarios$savedScenarios[[scnName]] <- table
         
         sendSweetAlert(
           session = session,
@@ -404,6 +446,8 @@ server <- function(input, output, session) {
                         output$uiOutput_basica <- ui_hpp(input)
                       } else if (input$intervencion == "Hepatitis C") {
                         output$uiOutput_basica <- ui_hepC(input, datosPais)
+                      } else if (input$intervencion == "VDOT Tuberculosis") {
+                        output$uiOutput_basica <- ui_tbc(input)
                       }
                     })
   
@@ -483,6 +527,30 @@ server <- function(input, output, session) {
   })
   
   
+  ##### TBC #####
+  
+  tbc_run <- reactive({
+    params = get_tbc_params()
+    table = modelo_tbc(params$pExitoso,
+                       params$pMuerte,
+                       params$pFalla,
+                       params$DOTrrMuerte,
+                       params$DOTrrFalla,
+                       params$DOTadherencia,
+                       params$DOTrrExito,
+                       params$VOTrrExito,
+                       params$VOTadherencia,
+                       params$VOTrrFalla,
+                       params$VOTrrMuerte,
+                       input$country,
+                       params$cantidad_vot_semana,
+                       params$cantidad_dot_semana,
+                       datos_paises,
+                       asunciones)
+    table
+  })
+  
+  
   observeEvent(input$toggle_avanzado_hearts, {
     inputs_toggle = names(input)[substring(names(input),1,6)=="hearts"]
     inputs_hide = inputs_toggle[-grep(3,inputs_toggle)]
@@ -516,7 +584,8 @@ server <- function(input, output, session) {
              hepC_scenarios,
              summary_scenarios,
              inputs_table = inputs_table_generator(input,output, inputs_scenarios, summary_scenarios)[[1]],
-             inputs_columns = inputs_table_generator(input,output, inputs_scenarios, summary_scenarios)[[2]])
+             inputs_columns = inputs_table_generator(input,output, inputs_scenarios, summary_scenarios)[[2]],
+             tbc_run)
   
   ##### HPP #####
   
@@ -528,7 +597,6 @@ server <- function(input, output, session) {
                                          input$hpp_uso_oxitocina_taget,
                                          input$hpp_descuento,
                                          input$hpp_costoIntervencion)
-      browser()
       data.frame(
         Indicador = c("Costo promedio de un evento de Hemorragia Post Parto",
                       "Perdida de Qaly por un evento de Hemorragia Post Parto",
@@ -564,6 +632,17 @@ server <- function(input, output, session) {
   
   observeEvent(input$toggle_avanzado_hpp, {
     inputs_hide = c("hpp_descuento","hpp_costoIntervencion")
+    
+    
+    for (i in inputs_hide) {
+      isVisible <- shinyjs::toggleState(id = i)
+      toggle(id = i, anim = TRUE, animType = "slide", condition = isVisible)
+      enable(i)
+    }
+  })
+  
+  observeEvent(input$toggle_avanzado_tbc, {
+    inputs_hide = names(get_tbc_params())[4:13]
     
     
     for (i in inputs_hide) {

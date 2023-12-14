@@ -22,6 +22,9 @@ ui_hepC = function (input, datosPais) {
       "Eficacia de Sofosbuvir / velpatasvir" = "pSVR", 
       "Duración del tratamiento" = "tDuracion_Meses"
     )
+    
+    unique(datosPais$indicador)
+    
     default = list()
     default$cohorte = datosPais$valor[datosPais$pais==country_sel & datosPais$dimension=="epi" & datosPais$indicador=="Cohorte"]
     default$AtasaDescuento = datosPais$valor[datosPais$pais==country_sel & datosPais$dimension=="epi" & datosPais$indicador=="Descuento"]

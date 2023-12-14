@@ -28,12 +28,13 @@ ui_avanzada <- navbarPage(
              pickerInput(
                inputId = "intervencion",
                label = "Seleccionar intervención:", 
-               choices = c("Vacuna contra el HPV","HEARTS","Hemorragia postparto","Hepatitis C"),
+               choices = c("Vacuna contra el HPV","HEARTS","Hemorragia postparto","Hepatitis C","VDOT Tuberculosis"),
                choicesOpt = list(
                  content = c(paste(icon("syringe"),"Vacuna contra el HPV"),
                              paste(icon("heart"),"HEARTS"),
                              paste(icon("female"),"Hemorragia postparto"),
-                             paste(icon("virus"),"Hepatitis C")
+                             paste(icon("virus"),"Hepatitis C"),
+                             paste(icon("virus"),"VDOT Tuberculosis")
                              
                  )
                ),
