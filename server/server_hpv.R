@@ -697,21 +697,46 @@ server_hpv = function (input, output, session, parameterReactive, scenarios, res
             tabla = lapply(intervenciones, function (i) {
               tabla[[i]] = cbind(int=i,bind_rows(tabla[[i]]))  
             })
-            
+            browser()
             tabla = bind_rows(tabla)
-            reactable(tabla)          
+            
+            tabla$Categoría = NULL
+            
+            tabla$escenario_full = paste0(tabla$int,": ",tabla$escenario)
+            
+            tabla = tabla[,c("Input","valor","escenario_full")]
+            
+            reactable(
+              tabla,
+              groupBy = "escenario_full",
+              pagination = F,
+              columns = list(
+                escenario_full = colDef(name = "Escenario guardado", align = "left"),
+                Input = colDef(name = "Input", align = "left"),
+                valor = colDef(name = "Valor", align = "right")
+              ),
+              defaultColDef = colDef(
+                headerStyle = list(background = "#236292", color = "white", borderWidth = "0")
+              )
+                
+              )          
             
             
           })
           
           shiny::tagList(
-            h1("Hpña"),
+            br(),
             highchartOutput("grafico_multiple"),
+            br(),
+            br(),
             tags$header(id = "header_tabla_inputs_multiple", class="text-1xl flex justify-between items-center p-5 mt-4", style="background-color: #FF671B; color: white; text-align: center", 
                                       tags$h1(style="display: inline-block; margin: 0 auto;", class="flex-grow mt-8 mb-8",tags$b("Descripción de escenarios guardados")),
                                       actionLink(inputId = "toggle_tabla_inputs_multiple", label=icon("stream", style = "color: white;"))
                           ),
-            hidden(reactableOutput("prueba"))
+            br(),
+            hidden(reactableOutput("prueba")),
+            br(),
+            br()
           )
           
           # tagList(
