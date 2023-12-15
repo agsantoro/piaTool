@@ -1,20 +1,19 @@
 ##funciones
-
-calcularUtilidadRestante <- function(ciclosPorAño, esperanzaVida, utilidad) {
+calcularUtilidadRestante <- function(ciclosPorAno, esperanzaVida, utilidad) {
   # Esta función devuelve un vector de utilidad restante por ciclo.
   # Para un ciclo dado, el vector contendrá cuánta utilidad (según la población general) le quedaba por vivir
   # para obtener los qalys perdidos ante una muerte prematura.
   
   # Vector que contendrá la utilidad restante de cada ciclo.
-  uti <- numeric(101 * ciclosPorAño)
+  uti <- numeric(101 * ciclosPorAno)
   
   # Recorremos desde 0 todos los ciclos comprendidos entre 0 y 100 años.
-  for (i in 0:((101 * ciclosPorAño) - 1)) {
+  for (i in 0:((101 * ciclosPorAno) - 1)) {
     # Para cada ciclo recorremos desde el ciclo siguiente hasta la cantidad de ciclos correspondiente a la esperanza de vida del país
-    for (z in (i + 1):(esperanzaVida * ciclosPorAño)) {
+    for (z in (i + 1):(esperanzaVida * ciclosPorAno)) {
       # A uti le asignamos el valor de la utilidad trimestral del año que corresponde al ciclo.
       # Ajuste para el índice (R empieza en 1, no en 0 como VBA)
-      idx <- ((z - 1) %/% ciclosPorAño) + 1
+      idx <- ((z - 1) %/% ciclosPorAno) + 1
       if (idx <= length(utilidad)) {
         uti[i + 1] <- uti[i + 1] + utilidad[idx]
       }
@@ -24,8 +23,90 @@ calcularUtilidadRestante <- function(ciclosPorAño, esperanzaVida, utilidad) {
   return(uti)
 }
 
-cargarDistribucion <- function(edadMin, edadMax) {
+escribirResultadosComparacion <- function(escenario, añosVividos, qalysVividos,
+                                          LyPerdidos, qalysPerdidosMP, QalysPerdidosDIS,
+                                          qalysPerdidos, muertesHIV, muertesTotales,
+                                          casosHIV, casosHIVDx, TiempoSinDx, 
+                                          CostoSano, CostoPrep, CostoHIV, 
+                                          casosTotales, añosVividosD, qalysVividosD,
+                                          añosPerdidosMPD, qalysPerdidosMPD, QalysPerdidosDD,
+                                          qalysPerdidosD, cSanoD, cPrEPD, 
+                                          cHIVd, cohorteSizeFinal) {
+  resultados <- data.frame(
+    Escenario = escenario,
+    AñosVividos = c(añosVividos, añosVividosD),
+    QALYsVividos = c(qalysVividos, qalysVividosD),
+    LyPerdidos = c(LyPerdidos, añosPerdidosMPD),
+    QALYsPerdidosMP = c(qalysPerdidosMP, qalysPerdidosMPD),
+    QALYsPerdidosDIS = c(QalysPerdidosDIS, QalysPerdidosDD),
+    QALYsPerdidos = c(qalysPerdidos, qalysPerdidosD),
+    MuertesHIV = muertesHIV,
+    ProporcionMuertesHIV = muertesHIV / muertesTotales,
+    CasosHIV = casosHIV,
+    CasosHIVDx = casosHIVDx,
+    CasosTotales = casosTotales,
+    TiempoSinDx = TiempoSinDx,
+    CostoSano = c(CostoSano, cSanoD),
+    CostoPrep = c(CostoPrep, cPrEPD),
+    CostoHIV = c(CostoHIV, cHIVd),
+    CostoTotal = c(CostoSano + CostoPrep + CostoHIV, cSanoD + cPrEPD + cHIVd),
+    CohorteSizeFinal = cohorteSizeFinal
+  )
+  
+  # Escribir el data frame en un archivo Excel
+  nombreArchivo <- paste("prep/Resultados_Escenario_", escenario, ".xlsx", sep = "")
+  write.xlsx(resultados, file = nombreArchivo)
+  
+  return(resultados)
+}
 
+
+
+escribirOutput <- function(ciclo, ciclosPorAno, sanosSinPrep, sanosOffPrep, sanosOnPrep, infectadosSinDx,
+                           infectadosPreDx, infectadosDx, muertosNoHiv, MuertosHIV, personasRiesgo, HIVTotales,
+                           CasosNuevos, CasosAcumulados, nuevosDx, qalyNOHIV, qalyHIV, LyPerdidosMP, 
+                           QalyPerdidosMP, Disutilidad, CostoSano, CostoPrep, CostoHIV) {
+  # Crear una fila de datos
+  fila_datos <- data.frame(
+    Ciclo = ciclo,
+    Ano = ciclo %/% ciclosPorAno,
+    SanosSinPrep = sanosSinPrep,
+    SanosOffPrep = sanosOffPrep,
+    SanosOnPrep = sanosOnPrep,
+    InfectadosSinDx = infectadosSinDx,
+    InfectadosPreDx = infectadosPreDx,
+    InfectadosDx = infectadosDx,
+    MuertosNoHiv = muertosNoHiv,
+    MuertosHIV = MuertosHIV,
+    Total = MuertosHIV + muertosNoHiv + infectadosDx + infectadosPreDx + infectadosSinDx + sanosOnPrep + sanosOffPrep + sanosSinPrep,
+    PersonasRiesgo = personasRiesgo,
+    HIVTotales = HIVTotales,
+    CasosNuevos = CasosNuevos,
+    NuevosDx = nuevosDx,
+    CasosAcumulados = CasosAcumulados,
+    QalyNOHIV = qalyNOHIV,
+    QalyHIV = qalyHIV,
+    TotalQALY = qalyHIV + qalyNOHIV,
+    LyPerdidosMP = LyPerdidosMP,
+    QalyPerdidosMP = QalyPerdidosMP,
+    Disutilidad = Disutilidad,
+    CostoSano = CostoSano,
+    CostoPrep = CostoPrep,
+    CostoHIV = CostoHIV
+  )
+  
+  # Agregar la fila a un data frame global o escribir en un archivo
+  # Opción 1: Agregar a un data frame global (debes crear 'resultados_df' antes)
+  # resultados_df <- rbind(resultados_df, fila_datos)
+  
+  # Opción 2: Escribir/adjuntar a un archivo CSV
+  write.table(fila_datos, file = "prep/resultados.csv", append = TRUE, sep = ",", col.names = FALSE, row.names = FALSE)
+  
+  return(fila_datos)
+}
+
+cargarDistribucion <- function(edadMin, edadMax, distribucion_cohortes) {
+  
   # Edad mínima y máxima con datos disponibles
   minDistEdad <- 18
   maxDistEdad <- 50
@@ -46,8 +127,8 @@ cargarDistribucion <- function(edadMin, edadMax) {
     distBasal[18 + i] <- distribucion_cohortes[5 + i, 8]
   }
   
-  # Calcular la diferencia en años entre lo que se tiene y lo que se pide
-  difAños <- 33 - (edadMax - edadMin + 1)
+  # Calcular la diferencia en aos entre lo que se tiene y lo que se pide
+  difAnos <- 33 - (edadMax - edadMin + 1)
   dsAcumulada <- 0
   
   # Crear un vector para almacenar los resultados
@@ -92,170 +173,248 @@ cargarDistribucion <- function(edadMin, edadMax) {
   }
   
   
- return(res) 
+  return(res) 
 }
 
 
-###CARGAR DISTRIBUCION
+####crear parametros
 
-cargarDistribucion2 <- function(edadMin, edadMax) {
-  # Definir las edades mínima y máxima disponibles en los datos
-  minDistEdad <- 18
-  maxDistEdad <- 50
+library(readxl)
+library(dplyr)
+library(rlang)
+
+crearParametros <- function(linea) {
+  # Leer los datos del archivo Excel
+  parametros <- readxl::read_excel("prep/data/parametros.xlsx")
   
-  # Ajustar los rangos según los parámetros y los datos disponibles
-  minR <- ifelse(edadMin <= minDistEdad, minDistEdad, edadMin)
-  maxR <- ifelse(edadMax >= maxDistEdad, maxDistEdad, edadMax)
+  # Lista de nombres de parámetros a extraer
+  nombres_parametros <- c("Tamaño Cohorte:", "Tasa descuento:", "Edad Minima:", 
+                          "Edad Final:", "Tipo Duracion:", "Duracion PrEP:", 
+                          "Edad Maxima Inicial:", "PrEP upTake:", "Edad No Indicacion de PrEP",
+                          "Limite edad Riesgo:", "Eficacia PrEP:", "Adherencia PrEP:",
+                          "Limite edad Contagio:", "Cohorte Dinamica")
   
-  # Inicializar vectores
-  distBasal <- numeric(maxR - minR + 1)
-  names(distBasal) <- minR:maxR
+  nombres_parametros_nuevos <- c("cohorteSize", "tasaDescuento", "edadMinima", 
+                                 "edadFinal", "tipoDuracion", "duracionPrEP", 
+                                 "edadMaximaInicial", "PrEPuptake", "edadFinPrEP",
+                                 "limiteEdadRiesgo", "eficaciaPrEP", "adherenciaPrEP",
+                                 "limiteEdadContagiosos", "tipoCohorte")
   
-  # Asumiendo que los datos se cargan de una hoja de cálculo
-  # Necesitarás adaptar esta parte para cargar los datos correctamente
-  # datos <- readxl::read_excel("ruta/a/tu/archivo.xlsx", sheet = "Hoja5")
+  # Crear una lista vacía para almacenar los parámetros
+  parametro <- list()
   
-  # Cargar los datos en el rango disponible
-  for (i in 1:33) {
-    distBasal[18 + i] <- as.numeric(distribucion_cohortes[5 + i, 8])  # Ajusta los índices según tus datos
+  # Bucle para extraer cada parámetro
+  for (i in seq_along(nombres_parametros)) {
+    nombre_original <- nombres_parametros[i]
+    nombre_nuevo <- nombres_parametros_nuevos[i]
+    
+    parametro[[nombre_nuevo]] <- parametros %>%
+      filter(Parametro == nombre_original) %>%
+      select(!!sym(linea)) %>%
+      as.numeric()
   }
   
-  # Acumular y ajustar la distribución
-  difAños = 33 - (edadMax - edadMin + 1)
-  dsAcumulada <- 0
-  for (i in edadMin:edadMax) {
-    if (i < 18) {
-      distBasal[i] <- distBasal[18]
-      dsAcumulada <- dsAcumulada + distBasal[18]
-    } else if (i > 50) {
-      distBasal[i] <- distBasal[50]
-      dsAcumulada <- dsAcumulada + distBasal[50]
+  return(parametro)
+}
+
+###lista resultados
+
+funcionCalculos <- function(parametros,pais) {
+  
+  parametro1 <- list()
+  parametro2 <- list()
+  
+  # Clasificar los elementos en las dos listas
+  for (nombre in names(parametros)) {
+    if (grepl("_nuevo$", nombre)) {
+      parametro2[[gsub("_nuevo$", "", nombre)]] <- parametros_prep[[nombre]]
+    } else {
+      parametro1[[nombre]] <- parametros_prep[[nombre]]
     }
-    dsAcumulada <- dsAcumulada + distBasal[i]
+  }
+  # Aplica funcionPrincipal para ambos escenarios
+  funcionPrincipal("Baseline", pais, parametro1)
+  resultados_baseline <<- resultados
+  casosTotalesHIV <- resultados$CasosTotales[1]
+  nuevosCasosHivDx <- resultados$CasosHIVDx[1]
+  
+  funcionPrincipal("Nuevo", pais, parametro2)
+  resultados_nuevo <<- resultados
+  casosTotalesHIV2 <- resultados$CasosTotales[1]
+  nuevosCasosHivDx2 <- resultados$CasosHIVDx[1]
+  
+  # Cálculos de promedios, diferencias, etc.
+  #Promedios
+  if (cohorteDinamica == 0) {
+    
+    AñosVividos_prom_escenario1 = resultados_baseline$AñosVividos[1] / parametro1$cohorteSize 
+    AñosVividos_prom_escenario2 = resultados_nuevo$AñosVividos[1] / parametro2$cohorteSize
+    qalysVividos_prom_escenario1 = resultados_baseline$QALYsVividos[1] / parametro1$cohorteSize 
+    qalysVividos_prom_escenario2 = resultados_nuevo$QALYsVividos[1] / parametro2$cohorteSize
   }
   
-  resto <- 1 - dsAcumulada
-  modificacion <- ifelse(resto != 0, resto / (edadMax - edadMin + 1), 0)
+  #32
+  LY_perdidos_MP_prom_escenario1 = resultados_baseline$LyPerdidos[1] / resultados_baseline$CasosTotales
+  LY_perdidos_MP_prom_escenario2 = resultados_nuevo$LyPerdidos[1] / resultados_nuevo$CasosTotales
   
-  drAcumulada <- 0
-  res <- vector("numeric", length = edadMax - edadMin + 1)
-  for (i in edadMin:edadMax) {
-    res[i] <- distBasal[i] + modificacion
-    drAcumulada <- drAcumulada + res[i]
-  }
+  #33
+  qalys_perdidos_disc_prom_escenario1 = resultados_baseline$QALYsPerdidosDIS[1] / resultados_baseline$CasosTotales
+  qalys_perdidos_disc_prom_escenario2 = resultados_nuevo$QALYsPerdidosDIS[1] / resultados_nuevo$CasosTotales
   
-  if (drAcumulada != 1) {
-    res[edadMin] <- res[edadMin] + (1 - drAcumulada)
-  }
+  #34
+  qalys_perdidos_mp_prom_escenario1 = resultados_baseline$QALYsPerdidosMP[1] / resultados_baseline$CasosTotales
+  qalys_perdidos_mp_prom_escenario2 = resultados_nuevo$QALYsPerdidosMP[1] / resultados_nuevo$CasosTotales
   
-  return(res)
-}
-##
-
-escribirOutput <- function(ciclo, ciclosPorAño, sanosSinPrep, sanosOffPrep, sanosOnPrep, infectadosSinDx,
-                           infectadosPreDx, infectadosDx, muertosNoHiv, MuertosHIV, personasRiesgo, HIVTotales,
-                           CasosNuevos, CasosAcumulados, nuevosDx, qalyNOHIV, qalyHIV, LyPerdidosMP, 
-                           QalyPerdidosMP, Disutilidad, CostoSano, CostoPrep, CostoHIV) {
-  # Crear una fila de datos
-  fila_datos <- data.frame(
-    Ciclo = ciclo,
-    Ano = ciclo %/% ciclosPorAño,
-    SanosSinPrep = sanosSinPrep,
-    SanosOffPrep = sanosOffPrep,
-    SanosOnPrep = sanosOnPrep,
-    InfectadosSinDx = infectadosSinDx,
-    InfectadosPreDx = infectadosPreDx,
-    InfectadosDx = infectadosDx,
-    MuertosNoHiv = muertosNoHiv,
-    MuertosHIV = MuertosHIV,
-    Total = MuertosHIV + muertosNoHiv + infectadosDx + infectadosPreDx + infectadosSinDx + sanosOnPrep + sanosOffPrep + sanosSinPrep,
-    PersonasRiesgo = personasRiesgo,
-    HIVTotales = HIVTotales,
-    CasosNuevos = CasosNuevos,
-    NuevosDx = nuevosDx,
-    CasosAcumulados = CasosAcumulados,
-    QalyNOHIV = qalyNOHIV,
-    QalyHIV = qalyHIV,
-    TotalQALY = qalyHIV + qalyNOHIV,
-    LyPerdidosMP = LyPerdidosMP,
-    QalyPerdidosMP = QalyPerdidosMP,
-    Disutilidad = Disutilidad,
-    CostoSano = CostoSano,
-    CostoPrep = CostoPrep,
-    CostoHIV = CostoHIV
+  #35
+  qalys_perdidos_prom_escenario1 = resultados_baseline$QALYsPerdidos[1] / resultados_baseline$CasosTotales
+  qalys_perdidos_prom_escenario2 = resultados_nuevo$QALYsPerdidos[1] / resultados_nuevo$CasosTotales
+  
+  
+  #41
+  qalys_perdidos_prom_escenario1 = resultados_baseline$TiempoSinDx[1] / resultados_baseline$CasosHIVDx
+  qalys_perdidos_prom_escenario2 = resultados_nuevo$TiempoSinDx[1] / resultados_nuevo$CasosHIVDx
+  
+  
+  # ahora diferencias
+  
+  ##Columna total del excel
+  #30
+  AñosVividos_total <- resultados_nuevo$AñosVividos[1]-resultados_baseline$AñosVividos[1]
+  
+  #31
+  qalysVividos_total <- resultados_nuevo$QALYsVividos[1]-resultados_baseline$QALYsVividos[1]
+  
+  #30d
+  AñosVividos_total_d <- resultados_nuevo$AñosVividos[2]-resultados_baseline$AñosVividos[2]
+  
+  #31d
+  qalysVividos_total_d <- resultados_nuevo$QALYsVividos[2]-resultados_baseline$QALYsVividos[2]
+  
+  #32
+  
+  LY_perdidos_MP_total <- resultados_nuevo$LyPerdidos[1]-resultados_baseline$LyPerdidos[1]
+  
+  #33
+  
+  qalys_perdidos_disc_total <-  resultados_nuevo$QALYsPerdidosDIS[1]-resultados_baseline$QALYsPerdidosDIS[1]
+  
+  #34
+  
+  qalys_perdidos_mp_total <-  resultados_nuevo$QALYsPerdidosMP[1]-resultados_baseline$QALYsPerdidosMP[1]
+  
+  #35
+  
+  qalys_perdidos_total <-  resultados_nuevo$QALYsPerdidos[1]-resultados_baseline$QALYsPerdidos[1]
+  
+  #36
+  
+  muertes_hiv_total <-  resultados_nuevo$MuertesHIV[1]-resultados_baseline$MuertesHIV[1]
+  
+  
+  #37
+  
+  muertes_hiv_prop_total <-  resultados_nuevo$ProporcionMuertesHIV[1]-resultados_baseline$ProporcionMuertesHIV[1]
+  #38
+  
+  casos_hiv_nuevos_total <-  resultados_nuevo$CasosHIV[1]-resultados_baseline$CasosHIV[1]
+  
+  #39
+  nuevos_casos_HIV_dx_total= nuevosCasosHivDx2 - nuevosCasosHivDx
+  
+  
+  # 40
+  casos_totales_HIV_total <- casosTotalesHIV2 - casosTotalesHIV
+  
+  #41
+  tiempo_sin_dx_total <-  resultados_nuevo$TiempoSinDx[1]-resultados_baseline$TiempoSinDx[1]
+  
+  #42
+  costo_sano_testeo_total <-  resultados_nuevo$CostoSano[1]-resultados_baseline$CostoSano[1]
+  #43
+  costo_prep_total <-  resultados_nuevo$CostoPrep[1]-resultados_baseline$CostoPrep[1]
+  #44
+  costo_hiv_total <-  resultados_nuevo$CostoHIV[1]-resultados_baseline$CostoHIV[1]
+  
+  #45
+  costo_total <-  resultados_nuevo$CostoTotal[1]-resultados_baseline$CostoTotal[1]
+  
+  
+  costo_sano_testeo_total_d <- resultados_nuevo$CostoSano[2]-resultados_baseline$CostoSano[2]
+  costo_prep_total_d <- resultados_nuevo$CostoPrep[2]-resultados_baseline$CostoPrep[2]
+  costo_hiv_total_d <- resultados_nuevo$CostoHIV[2]-resultados_baseline$CostoHIV[2]
+  costo_total_d <- resultados_nuevo$CostoTotal[2]-resultados_baseline$CostoTotal[2]
+  
+  
+  #46
+  
+  Costo_incremental_Qaly <- costo_total/qalysVividos_total
+  Costo_incremental_Qaly_d <- costo_total_d/qalysVividos_total_d
+  
+  
+  #47  
+  Costo_incremental_Año_vida <- costo_total/AñosVividos_total
+  Costo_incremental_Año_vida_d <- costo_total_d/AñosVividos_total_d
+  
+  ROI <- -costo_total/costo_prep_total*100
+  
+  ROI_d <- -costo_total_d/costo_prep_total_d*100
+  
+  # Crear una lista para almacenar todos los resultados
+  lista_resultados1 <<- data.frame(
+    # AñosVividos_prom_escenario1 = AñosVividos_prom_escenario1,
+    # AñosVividos_prom_escenario2 = AñosVividos_prom_escenario2,
+    # qalysVividos_prom_escenario1 = qalysVividos_prom_escenario1,
+    # qalysVividos_prom_escenario2 = qalysVividos_prom_escenario2,
+    # LY_perdidos_MP_prom_escenario1 = LY_perdidos_MP_prom_escenario1,
+    # LY_perdidos_MP_prom_escenario2 = LY_perdidos_MP_prom_escenario2,
+    # qalys_perdidos_disc_prom_escenario1 = qalys_perdidos_disc_prom_escenario1,
+    # qalys_perdidos_disc_prom_escenario2 = qalys_perdidos_disc_prom_escenario2,
+    # qalys_perdidos_mp_prom_escenario1 = qalys_perdidos_mp_prom_escenario1,
+    # qalys_perdidos_mp_prom_escenario2 = qalys_perdidos_mp_prom_escenario2,
+    # qalys_perdidos_prom_escenario1 = qalys_perdidos_prom_escenario1,
+    # qalys_perdidos_prom_escenario2 = qalys_perdidos_prom_escenario2,
+    # tiempo_sin_dx_prom_escenario1 = tiempo_sin_dx_prom_escenario1,
+    # tiempo_sin_dx_prom_escenario2 = tiempo_sin_dx_prom_escenario2,
+    AñosVividos_total = AñosVividos_total,
+    qalysVividos_total = qalysVividos_total,
+    AñosVividos_total_d = AñosVividos_total_d,
+    qalysVividos_total_d = qalysVividos_total_d,
+    LY_perdidos_MP_total = LY_perdidos_MP_total,
+    qalys_perdidos_disc_total = qalys_perdidos_disc_total,
+    qalys_perdidos_mp_total = qalys_perdidos_mp_total,
+    qalys_perdidos_total = qalys_perdidos_total,
+    muertes_hiv_total = muertes_hiv_total,
+    muertes_hiv_prop_total = muertes_hiv_prop_total,
+    casos_hiv_nuevos_total = casos_hiv_nuevos_total,
+    nuevos_casos_HIV_dx_total = nuevos_casos_HIV_dx_total,
+    casos_totales_HIV_total = casos_totales_HIV_total,
+    tiempo_sin_dx_total = tiempo_sin_dx_total,
+    costo_sano_testeo_total = costo_sano_testeo_total,
+    costo_prep_total = costo_prep_total,
+    costo_hiv_total = costo_hiv_total,
+    costo_total = costo_total,
+    costo_sano_testeo_total_d = costo_sano_testeo_total_d,
+    costo_prep_total_d = costo_prep_total_d,
+    costo_hiv_total_d = costo_hiv_total_d,
+    costo_total_d = costo_total_d,
+    Costo_incremental_Qaly = Costo_incremental_Qaly,
+    Costo_incremental_Qaly_d = Costo_incremental_Qaly_d,
+    Costo_incremental_Año_vida = Costo_incremental_Año_vida,
+    Costo_incremental_Año_vida_d = Costo_incremental_Año_vida_d,
+    ROI = ROI,
+    ROI_d = ROI_d
   )
   
-  # Agregar la fila a un data frame global o escribir en un archivo
-  # Opción 1: Agregar a un data frame global (debes crear 'resultados_df' antes)
-  # resultados_df <- rbind(resultados_df, fila_datos)
+  # Convertir el dataframe a formato largo
+  lista_resultados <- stack(lista_resultados1)
   
-  # Opción 2: Escribir/adjuntar a un archivo CSV
-  write.table(fila_datos, file = "prep/resultados.csv", append = TRUE, sep = ",", col.names = FALSE, row.names = FALSE)
-}
-
-
-
-
-library(openxlsx)
-
-escribirResultadosComparacion <- function(escenario, añosVividos, qalysVividos, LyPerdidos, qalysPerdidosMP, QalysPerdidosDIS, qalysPerdidos, muertesHIV, muertesTotales, casosHIV, casosHIVDx, TiempoSinDx, CostoSano, CostoPrep, CostoHIV, casosTotales, añosVividosD, qalysVividosD, añosPerdidosMPD, qalysPerdidosMPD, QalysPerdidosDD, qalysPerdidosD, cSanoD, cPrEPD, cHIVd, cohorteSizeFinal) {
-  resultados <- data.frame(
-    Escenario = escenario,
-    AñosVividos = c(añosVividos, añosVividosD),
-    QALYsVividos = c(qalysVividos, qalysVividosD),
-    LyPerdidos = c(LyPerdidos, añosPerdidosMPD),
-    QALYsPerdidosMP = c(qalysPerdidosMP, qalysPerdidosMPD),
-    QALYsPerdidosDIS = c(QalysPerdidosDIS, QalysPerdidosDD),
-    QALYsPerdidos = c(qalysPerdidos, qalysPerdidosD),
-    MuertesHIV = muertesHIV,
-    ProporcionMuertesHIV = muertesHIV / muertesTotales,
-    CasosHIV = casosHIV,
-    CasosHIVDx = casosHIVDx,
-    CasosTotales = casosTotales,
-    TiempoSinDx = TiempoSinDx,
-    CostoSano = c(CostoSano, cSanoD),
-    CostoPrep = c(CostoPrep, cPrEPD),
-    CostoHIV = c(CostoHIV, cHIVd),
-    CostoTotal = c(CostoSano + CostoPrep + CostoHIV, cSanoD + cPrEPD + cHIVd),
-    CohorteSizeFinal = cohorteSizeFinal
-  )
+  # Renombrar las columnas
+  names(lista_resultados) <- c("Valor", "Parametro")
   
-  # Escribir el data frame en un archivo Excel
-  nombreArchivo <- paste("Resultados_Escenario_", escenario, ".xlsx", sep = "")
-  write.xlsx(resultados, file = nombreArchivo)
+  # Ordena las columnas para que "Parametro" esté primero
+  lista_resultados<- lista_resultados[, c("Parametro", "Valor")]
   
-  return(resultados)
-}
-
-
-library(openxlsx)
-
-escribirResultadosComparacion <- function(escenario, añosVividos, qalysVividos, LyPerdidos, qalysPerdidosMP, QalysPerdidosDIS, qalysPerdidos, muertesHIV, muertesTotales, casosHIV, casosHIVDx, TiempoSinDx, CostoSano, CostoPrep, CostoHIV, casosTotales, añosVividosD, qalysVividosD, añosPerdidosMPD, qalysPerdidosMPD, QalysPerdidosDD, qalysPerdidosD, cSanoD, cPrEPD, cHIVd, cohorteSizeFinal) {
-  resultados <- data.frame(
-    Escenario = escenario,
-    AñosVividos = c(añosVividos, añosVividosD),
-    QALYsVividos = c(qalysVividos, qalysVividosD),
-    LyPerdidos = c(LyPerdidos, añosPerdidosMPD),
-    QALYsPerdidosMP = c(qalysPerdidosMP, qalysPerdidosMPD),
-    QALYsPerdidosDIS = c(QalysPerdidosDIS, QalysPerdidosDD),
-    QALYsPerdidos = c(qalysPerdidos, qalysPerdidosD),
-    MuertesHIV = muertesHIV,
-    ProporcionMuertesHIV = muertesHIV / muertesTotales,
-    CasosHIV = casosHIV,
-    CasosHIVDx = casosHIVDx,
-    CasosTotales = casosTotales,
-    TiempoSinDx = TiempoSinDx,
-    CostoSano = c(CostoSano, cSanoD),
-    CostoPrep = c(CostoPrep, cPrEPD),
-    CostoHIV = c(CostoHIV, cHIVd),
-    CostoTotal = c(CostoSano + CostoPrep + CostoHIV, cSanoD + cPrEPD + cHIVd),
-    CohorteSizeFinal = cohorteSizeFinal
-  )
   
-  # Escribir el data frame en un archivo Excel
-  nombreArchivo <- paste("prep/Resultados_Escenario_", escenario, ".xlsx", sep = "")
-  write.xlsx(resultados, file = nombreArchivo)
-  
-  return(resultados)
+  return(lista_resultados)
 }
 
