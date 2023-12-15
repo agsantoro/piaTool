@@ -26,36 +26,77 @@ server <- function(input, output, session) {
     },
     content = function(file) {
       list_of_datasets = list()
-          if (length(input$comparacion_intervencion)== 1 & input$comparacion_intervencion[1] == "Vacuna contra el HPV") {
-            for (i in input$comparacion_escenario) {
-              list_of_datasets[[i]] = scenarios$savedScenarios[[i]]$outcomes
-            }
-          } else if (length(input$comparacion_intervencion)== 1 & input$comparacion_intervencion[1] == "HEARTS") {
-            for (i in input$comparacion_escenario) {
-              list_of_datasets[[i]] = hearts_scenarios$savedScenarios[[i]]
-            }
-          } else if (length(input$comparacion_intervencion)== 1 & input$comparacion_intervencion[1] == "Hemorragia postparto") {
-            for (i in input$comparacion_escenario) {
-              list_of_datasets[[i]] = hpp_scenarios$savedScenarios[[i]]
-            }
-          } else if (length(input$comparacion_intervencion)== 1 & input$comparacion_intervencion[1] == "Hepatitis C") {
-            for (i in input$comparacion_escenario) {
-              list_of_datasets[[i]] = hepC_scenarios$savedScenarios[[i]]
-            }
-          } else if (length(input$comparacion_intervencion)== 1 & input$comparacion_intervencion[1] == "VDOT Tuberculosis") {
-            for (i in input$comparacion_escenario) {
-              list_of_datasets[[i]] = tbc_scenarios$savedScenarios[[i]]
-            }
+      if (length(input$comparacion_intervencion)== 1) {
+        if (length(input$comparacion_intervencion)== 1 & input$comparacion_intervencion[1] == "Vacuna contra el HPV") {
+          for (i in input$comparacion_escenario) {
+            list_of_datasets[[i]] = scenarios$savedScenarios[[i]]$outcomes
           }
+        } else if (length(input$comparacion_intervencion)== 1 & input$comparacion_intervencion[1] == "HEARTS") {
+          for (i in input$comparacion_escenario) {
+            list_of_datasets[[i]] = hearts_scenarios$savedScenarios[[i]]
+          }
+        } else if (length(input$comparacion_intervencion)== 1 & input$comparacion_intervencion[1] == "Hemorragia postparto") {
+          for (i in input$comparacion_escenario) {
+            list_of_datasets[[i]] = hpp_scenarios$savedScenarios[[i]]
+          }
+        } else if (length(input$comparacion_intervencion)== 1 & input$comparacion_intervencion[1] == "Hepatitis C") {
+          for (i in input$comparacion_escenario) {
+            list_of_datasets[[i]] = hepC_scenarios$savedScenarios[[i]]
+          }
+        } else if (length(input$comparacion_intervencion)== 1 & input$comparacion_intervencion[1] == "VDOT Tuberculosis") {
+          for (i in input$comparacion_escenario) {
+            list_of_datasets[[i]] = tbc_scenarios$savedScenarios[[i]]
+          }
+        }
+        
+        list_of_datasets[["Inputs"]] = inputs_table_generator(
+          input,
+          output,
+          inputs_scenarios,
+          summary_scenarios
+        )[[1]]
+        
+      } else {
+        browser()
+        
+        list_of_datasets = list()
+        esc_hpv = summary_scenarios$table$scenarioName[summary_scenarios$table$intervencion=="Vacuna contra el HPV"]
+        esc_hearts = summary_scenarios$table$scenarioName[summary_scenarios$table$intervencion=="HEARTS"]
+        esc_hpp = summary_scenarios$table$scenarioName[summary_scenarios$table$intervencion=="Hemorragia postparto"]
+        esc_hepC = summary_scenarios$table$scenarioName[summary_scenarios$table$intervencion=="Hepatitis C"]
+        esc_tbc = summary_scenarios$table$scenarioName[summary_scenarios$table$intervencion=="VDOT Tuberculosis"]
+        
+        if ("Vacuna contra el HPV" %in% input$comparacion_intervencion) {
+          for (i in esc_hpv) {
+            list_of_datasets[[i]] = scenarios$savedScenarios[[i]]$outcomes
+          }
+        }
+        if ("HEARTS" %in% input$comparacion_intervencion) {
+          for (i in esc_hearts) {
+            list_of_datasets[[i]] = hearts_scenarios$savedScenarios[[i]]
+          }
+        } 
+        if ("Hemorragia postpart" %in% input$comparacion_intervencion) {
+          for (i in esc_hpp) {
+            list_of_datasets[[i]] = hpp_scenarios$savedScenarios[[i]]
+          }
+        } 
+        if ("Hepatitis C" %in% input$comparacion_intervencion) {
+          for (i in esc_hepC) {
+            list_of_datasets[[i]] = hepC_scenarios$savedScenarios[[i]]
+          }
+        } 
+        if ("VDOT Tuberculosis" %in% input$comparacion_intervencion) {
+          for (i in esc_tbc) {
+            list_of_datasets[[i]] = tbc_scenarios$savedScenarios[[i]]
+          }
+        }
+        
+      }
       
-      list_of_datasets[["Inputs"]] = inputs_table_generator(
-        input,
-        output,
-        inputs_scenarios,
-        summary_scenarios
-      )[[1]]
-      
+          
       data = list_of_datasets
+      
       write.xlsx(data, file)
     }
   )

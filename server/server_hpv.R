@@ -677,49 +677,52 @@ server_hpv = function (input, output, session, parameterReactive, scenarios, res
           })
           
           output$prueba = renderReactable({
-            
-            tabla = inputs_table_multiple
-            intervenciones = names(tabla)
-            tabla = lapply(intervenciones, function (i) {
-              tabla[[i]] =
-                lapply(tabla[[i]], function (j) {
-                  j = pivot_longer(
-                    j,
-                    names_to = "escenario",
-                    values_to = "valor",
-                    cols = 2
-                  )
-                })
-            })
-            
-            names(tabla) = intervenciones
-            
-            tabla = lapply(intervenciones, function (i) {
-              tabla[[i]] = cbind(int=i,bind_rows(tabla[[i]]))  
-            })
             browser()
-            tabla = bind_rows(tabla)
-            
-            tabla$Categoría = NULL
-            
-            tabla$escenario_full = paste0(tabla$int,": ",tabla$escenario)
-            
-            tabla = tabla[,c("Input","valor","escenario_full")]
-            
-            reactable(
-              tabla,
-              groupBy = "escenario_full",
-              pagination = F,
-              columns = list(
-                escenario_full = colDef(name = "Escenario guardado", align = "left"),
-                Input = colDef(name = "Input", align = "left"),
-                valor = colDef(name = "Valor", align = "right")
-              ),
-              defaultColDef = colDef(
-                headerStyle = list(background = "#236292", color = "white", borderWidth = "0")
-              )
+            if (is.null(sel_escenario)==F & is.null(input$comparacion_intervencion)==F & is.null(input$comparacion_escenario)==F) {
+              tabla = inputs_table_generator_multiple(input,output, inputs_scenarios, summary_scenarios)
+              #tabla = inputs_table_multiple
+              intervenciones = names(tabla)
+              tabla = lapply(intervenciones, function (i) {
+                tabla[[i]] =
+                  lapply(tabla[[i]], function (j) {
+                    j = pivot_longer(
+                      j,
+                      names_to = "escenario",
+                      values_to = "valor",
+                      cols = 2
+                    )
+                  })
+              })
+              
+              names(tabla) = intervenciones
+              
+              tabla = lapply(intervenciones, function (i) {
+                tabla[[i]] = cbind(int=i,bind_rows(tabla[[i]]))  
+              })
+              tabla = bind_rows(tabla)
+              
+              tabla$Categoría = NULL
+              
+              tabla$escenario_full = paste0(tabla$int,": ",tabla$escenario)
+              
+              tabla = tabla[,c("Input","valor","escenario_full")]
+              
+              reactable(
+                tabla,
+                groupBy = "escenario_full",
+                pagination = F,
+                columns = list(
+                  escenario_full = colDef(name = "Escenario guardado", align = "left"),
+                  Input = colDef(name = "Input", align = "left"),
+                  valor = colDef(name = "Valor", align = "right")
+                ),
+                defaultColDef = colDef(
+                  headerStyle = list(background = "#236292", color = "white", borderWidth = "0")
+                )
                 
-              )          
+              ) 
+            }
+                     
             
             
           })
