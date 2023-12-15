@@ -440,7 +440,6 @@ server <- function(input, output, session) {
   })
   
   observeEvent(input$toggle_tabla_inputs_multiple, {
-    browser()
     isVisible <- shinyjs::toggleState(id = "prueba")
     
     toggle(id = "prueba", anim = TRUE, animType = "slide", condition = isVisible)
@@ -601,6 +600,7 @@ server <- function(input, output, session) {
              hepC_run,
              hepC_scenarios,
              summary_scenarios,
+             inputs_scenarios,
              inputs_table = inputs_table_generator(input,output, inputs_scenarios, summary_scenarios)[[1]],
              inputs_columns = inputs_table_generator(input,output, inputs_scenarios, summary_scenarios)[[2]],
              inputs_table_multiple = inputs_table_generator_multiple(input,output, inputs_scenarios, summary_scenarios),

@@ -47,7 +47,6 @@ inputs_table_generator = function (input, output, inputs_scenarios, summary_scen
     )
   }
   
-  
   for (i in unique(table_inputs$scenarioName)) {
     table_data[[i]] = format(round(as.numeric(table_inputs$inputValue[table_inputs$scenarioName==i]),2), big.mark = ".", decimal.mark = ",")
   }

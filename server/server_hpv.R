@@ -1,4 +1,4 @@
-server_hpv = function (input, output, session, parameterReactive, scenarios, resultados, run_hearts, hearts_scenarios, hpp_run, hpp_scenarios, hepC_run, hepC_scenarios, summary_scenarios, inputs_table, inputs_columns, inputs_table_multiple, tbc_run, tbc_scenarios) {
+server_hpv = function (input, output, session, parameterReactive, scenarios, resultados, run_hearts, hearts_scenarios, hpp_run, hpp_scenarios, hepC_run, hepC_scenarios, summary_scenarios, inputs_scenarios, inputs_table, inputs_columns, inputs_table_multiple, tbc_run, tbc_scenarios) {
   output$resultados_hpv = renderUI({
     if (input$intervencion == "Vacuna contra el HPV") {
       if (is.null(input$birthCohortSizeFemale)) {NULL} else {paste(resultados())}
@@ -558,28 +558,32 @@ server_hpv = function (input, output, session, parameterReactive, scenarios, res
         output$inputs_summary_table = renderUI({
           
           output$tabla_inputs = renderReactable({
-            if (is.null(sel_escenario)==F) {
+            if (is.null(sel_escenario)==F & is.null(input$comparacion_intervencion)==F & is.null(input$comparacion_escenario)==F) {
               
-              table_data = inputs_table
-              columnas = inputs_columns
+              if (length(input$comparacion_intervencion)==1) {
+                table_data = inputs_table_generator(input,output, inputs_scenarios, summary_scenarios)[[1]]
+                columnas = inputs_table_generator(input,output, inputs_scenarios, summary_scenarios)[[2]]
+                
+                reactable(
+                  table_data,
+                  groupBy = "Categoría",
+                  defaultExpanded = T,
+                  pagination = F,
+                  columnGroups = list(
+                    colGroup("Escenarios", columns = colnames(table_data)[setdiff(1:ncol(table_data),c(1,ncol(table_data)))], sticky = "left",
+                             headerStyle = list(background = "#236292", color = "white", borderWidth = "0"))
+                  ),
+                  defaultColDef = colDef(
+                    minWidth = 70,
+                    headerStyle = list(background = "#236292", color = "white")
+                  ),
+                  columns = columnas,
+                  bordered = TRUE,
+                  highlight = TRUE
+                )  
+              } else {
+                hide("header_tabla_inputs")}
               
-              reactable(
-                table_data,
-                groupBy = "Categoría",
-                defaultExpanded = T,
-                pagination = F,
-                columnGroups = list(
-                  colGroup("Escenarios", columns = colnames(table_data)[setdiff(1:ncol(table_data),c(1,ncol(table_data)))], sticky = "left",
-                           headerStyle = list(background = "#236292", color = "white", borderWidth = "0"))
-                ),
-                defaultColDef = colDef(
-                  minWidth = 70,
-                  headerStyle = list(background = "#236292", color = "white")
-                ),
-                columns = columnas,
-                bordered = TRUE,
-                highlight = TRUE
-              )
             }
           })
           
@@ -663,7 +667,6 @@ server_hpv = function (input, output, session, parameterReactive, scenarios, res
                   name = "ROI"
                 ) 
               
-              browser() 
               grafico %>% hc_legend(list(
                 enabled = F
               )) %>%
@@ -674,7 +677,6 @@ server_hpv = function (input, output, session, parameterReactive, scenarios, res
           })
           
           output$prueba = renderReactable({
-            browser()
             
             tabla = inputs_table_multiple
             intervenciones = names(tabla)
