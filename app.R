@@ -76,7 +76,7 @@ server <- function(input, output, session) {
             list_of_datasets[[i]] = hearts_scenarios$savedScenarios[[i]]
           }
         } 
-        if ("Hemorragia postpart" %in% input$comparacion_intervencion) {
+        if ("Hemorragia postparto" %in% input$comparacion_intervencion) {
           for (i in esc_hpp) {
             list_of_datasets[[i]] = hpp_scenarios$savedScenarios[[i]]
           }
@@ -94,7 +94,43 @@ server <- function(input, output, session) {
         
       }
       
-          
+      browser()   
+      
+      
+      
+      tabla = inputs_table_generator_multiple(input,output, inputs_scenarios, summary_scenarios)
+      
+      intervenciones = names(tabla)
+      tabla = lapply(intervenciones, function (i) {
+        tabla[[i]] =
+          lapply(tabla[[i]], function (j) {
+            j = pivot_longer(
+              j,
+              names_to = "escenario",
+              values_to = "valor",
+              cols = 2
+            )
+          })
+      })
+      
+      names(tabla) = intervenciones
+      
+      tabla = lapply(intervenciones, function (i) {
+        tabla[[i]] = cbind(int=i,bind_rows(tabla[[i]]))  
+      })
+      
+      nombres_tabla = c()
+      
+      nombres_tabla = lapply(seq_along(tabla), function(i) {
+        nombres_tabla = c(nombres_tabla,paste0(tabla[[i]]$escenario[1],"_Inputs"))
+      })
+      
+      names(tabla) = unlist(nombres_tabla)
+      
+      list_of_datasets = c(list_of_datasets, tabla)
+      
+      list_of_datasets = list_of_datasets[order(names(list_of_datasets))]
+      
       data = list_of_datasets
       
       write.xlsx(data, file)
