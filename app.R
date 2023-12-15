@@ -439,6 +439,16 @@ server <- function(input, output, session) {
     
   })
   
+  observeEvent(input$toggle_tabla_inputs_multiple, {
+    browser()
+    isVisible <- shinyjs::toggleState(id = "prueba")
+    
+    toggle(id = "prueba", anim = TRUE, animType = "slide", condition = isVisible)
+    enable("prueba")
+    
+    
+  })
+  
   # decide que ui avanzada muestra según intervención
   observeEvent(list(input$intervencion,
                     input$country), {
@@ -593,6 +603,7 @@ server <- function(input, output, session) {
              summary_scenarios,
              inputs_table = inputs_table_generator(input,output, inputs_scenarios, summary_scenarios)[[1]],
              inputs_columns = inputs_table_generator(input,output, inputs_scenarios, summary_scenarios)[[2]],
+             inputs_table_multiple = inputs_table_generator_multiple(input,output, inputs_scenarios, summary_scenarios),
              tbc_run,
              tbc_scenarios)
   

@@ -22,6 +22,7 @@ library(stringr)
 library(openxlsx)
 library(shiny.router)
 library(shinyalert)
+library(RColorBrewer)
 
 flagsDropdown <- c(
   "https://cdn.rawgit.com/lipis/flag-icon-css/master/flags/4x3/ar.svg",#argentina

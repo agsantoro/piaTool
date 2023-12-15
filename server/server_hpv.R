@@ -1,4 +1,4 @@
-server_hpv = function (input, output, session, parameterReactive, scenarios, resultados, run_hearts, hearts_scenarios, hpp_run, hpp_scenarios, hepC_run, hepC_scenarios, summary_scenarios, inputs_table, inputs_columns, tbc_run, tbc_scenarios) {
+server_hpv = function (input, output, session, parameterReactive, scenarios, resultados, run_hearts, hearts_scenarios, hpp_run, hpp_scenarios, hepC_run, hepC_scenarios, summary_scenarios, inputs_table, inputs_columns, inputs_table_multiple, tbc_run, tbc_scenarios) {
   output$resultados_hpv = renderUI({
     if (input$intervencion == "Vacuna contra el HPV") {
       if (is.null(input$birthCohortSizeFemale)) {NULL} else {paste(resultados())}
@@ -103,8 +103,10 @@ server_hpv = function (input, output, session, parameterReactive, scenarios, res
     hide("descargar_comp", anim = T, animType = "fade")
     hide("escenarios_guardados", anim = T, animType = "fade")
     hide("tabla_inputs", anim = T, animType = "fade")
+    hide("tabla_inputs_multiple", anim = T, animType = "fade")
     hide("header_comparacion_resultados", anim = T, animType = "fade")
     hide("header_tabla_inputs", anim = T, animType = "fade")
+    hide("header_tabla_inputs_multiple", anim = T, animType = "fade")
     hide(500,show("inputs_summary_table", anim = T, animType = "fade"))
   })
   
@@ -172,8 +174,10 @@ server_hpv = function (input, output, session, parameterReactive, scenarios, res
     show(500,show("inputs_summary_table", anim = T, animType = "fade"))
     show("escenarios_guardados")
     show("tabla_inputs")
+    show("tabla_inputs_multiple")
     show("restart")
     show("header_tabla_inputs")
+    show("header_tabla_inputs_multiple")
     hide("go_comp")
     hide("comparacion_escenario")
     
@@ -600,47 +604,50 @@ server_hpv = function (input, output, session, parameterReactive, scenarios, res
         })  
         
       } else {
-        output$escenarios_guardados = renderHighchart({
+        
+        output$escenarios_guardados = renderUI({
           
-          if (length(input$comparacion_intervencion)>1) {
-            intervenciones_seleccionadas = input$comparacion_intervencion
-            escenarios_seleccionados = input$comparacion_escenario
-          
-            core= list()
-            
-            
-            for (i in escenarios_seleccionados) {
-              for (j in escenarios_seleccionados[escenarios_seleccionados %in% summary_scenarios$table$scenarioName[summary_scenarios$table$intervencion=="Vacuna contra el HPV"]]) {
-                core[[j]] = scenarios$savedScenarios[[j]]$outcomes$undisc[scenarios$savedScenarios[[j]]$outcomes$outcomes=="ROI"]
-              }
+          output$grafico_multiple = renderHighchart({
+            show("escenarios_guardados")
+            if (length(input$comparacion_intervencion)>1) {
+              intervenciones_seleccionadas = input$comparacion_intervencion
+              escenarios_seleccionados = input$comparacion_escenario
               
-              for (j in escenarios_seleccionados[escenarios_seleccionados %in% summary_scenarios$table$scenarioName[summary_scenarios$table$intervencion=="HEARTS"]]) {
-                core[[j]] = hearts_scenarios$savedScenarios[[j]]$Valor[hearts_scenarios$savedScenarios[[j]]$Indicador=="ROI"]
-              }
-              
-              for (j in escenarios_seleccionados[escenarios_seleccionados %in% summary_scenarios$table$scenarioName[summary_scenarios$table$intervencion=="Hemorragia postparto"]]) {
-                core[[j]] = hpp_scenarios$savedScenarios[[j]]$Valor[hpp_scenarios$savedScenarios[[j]]$Indicador=="ROI"]
-              }
-              
-              for (j in escenarios_seleccionados[escenarios_seleccionados %in% summary_scenarios$table$scenarioName[summary_scenarios$table$intervencion=="Hepatitis C"]]) {
-                core[[j]] = hepC_scenarios$savedScenarios[[j]]$Valor[hepC_scenarios$savedScenarios[[j]]$Indicador=="ROI"]
-              }
-              
-              for (j in escenarios_seleccionados[escenarios_seleccionados %in% summary_scenarios$table$scenarioName[summary_scenarios$table$intervencion=="VDOT Tuberculosis"]]) {
-                core[[j]] = tbc_scenarios$savedScenarios[[j]]$VOT[tbc_scenarios$savedScenarios[[j]]$Parametro=="ROI"]
-              }
-              
-              escenarios = names(unlist(core))
-              roi_table = 
-                data.frame(scenarioName = escenarios,
-                           value = unlist(core)) %>% left_join(summary_scenarios$table)
-              
-              roi_table$scenarioName = paste0("<b>",roi_table$scenarioName,"</b> <br>",roi_table$country,"<br>",roi_table$intervencion)
-              
-              roi_table <- roi_table %>% arrange(desc(value))
-              roi_table$value = round(roi_table$value,2)
+              core= list()
               
               
+                for (j in escenarios_seleccionados[escenarios_seleccionados %in% summary_scenarios$table$scenarioName[summary_scenarios$table$intervencion=="Vacuna contra el HPV"]]) {
+                  core[[j]] = scenarios$savedScenarios[[j]]$outcomes$undisc[scenarios$savedScenarios[[j]]$outcomes$outcomes=="ROI"]
+                }
+                
+                for (j in escenarios_seleccionados[escenarios_seleccionados %in% summary_scenarios$table$scenarioName[summary_scenarios$table$intervencion=="HEARTS"]]) {
+                  core[[j]] = hearts_scenarios$savedScenarios[[j]]$Valor[hearts_scenarios$savedScenarios[[j]]$Indicador=="ROI"]
+                }
+                
+                for (j in escenarios_seleccionados[escenarios_seleccionados %in% summary_scenarios$table$scenarioName[summary_scenarios$table$intervencion=="Hemorragia postparto"]]) {
+                  core[[j]] = hpp_scenarios$savedScenarios[[j]]$Valor[hpp_scenarios$savedScenarios[[j]]$Indicador=="ROI"]
+                }
+                
+                for (j in escenarios_seleccionados[escenarios_seleccionados %in% summary_scenarios$table$scenarioName[summary_scenarios$table$intervencion=="Hepatitis C"]]) {
+                  core[[j]] = hepC_scenarios$savedScenarios[[j]]$Valor[hepC_scenarios$savedScenarios[[j]]$Indicador=="ROI"]
+                }
+                
+                for (j in escenarios_seleccionados[escenarios_seleccionados %in% summary_scenarios$table$scenarioName[summary_scenarios$table$intervencion=="VDOT Tuberculosis"]]) {
+                  core[[j]] = tbc_scenarios$savedScenarios[[j]]$VOT[tbc_scenarios$savedScenarios[[j]]$Parametro=="ROI"]
+                }
+                
+                escenarios = names(unlist(core))
+                roi_table = 
+                  data.frame(scenarioName = escenarios,
+                             value = unlist(core)) %>% left_join(summary_scenarios$table)
+                
+                roi_table$scenarioName = paste0("Escenario: ","<b>",roi_table$scenarioName,"</b> <br>",roi_table$country,"<br>",roi_table$intervencion)
+                
+                roi_table <- roi_table %>% arrange(desc(value))
+                roi_table$value = round(roi_table$value,2)
+                
+                
+                
               grafico <- highchart() %>%
                 hc_chart(type = "column") %>%
                 hc_title(text = "Comparación del retorno de la inversión entre escenarios guardados") %>%
@@ -655,17 +662,70 @@ server_hpv = function (input, output, session, parameterReactive, scenarios, res
                   hcaes(y = value, color = intervencion),
                   name = "ROI"
                 ) 
+              
+              browser() 
               grafico %>% hc_legend(list(
                 enabled = F
-              ))
-                            
-            }
+              )) %>%
+                hc_add_theme(hc_theme_elementary())
+              
+              
+           }  
+          })
+          
+          output$prueba = renderReactable({
+            browser()
             
-            tagList(
-              highchartOutput("escenarios_guardados")
-            )
+            tabla = inputs_table_multiple
+            intervenciones = names(tabla)
+            tabla = lapply(intervenciones, function (i) {
+              tabla[[i]] =
+                lapply(tabla[[i]], function (j) {
+                  j = pivot_longer(
+                    j,
+                    names_to = "escenario",
+                    values_to = "valor",
+                    cols = 2
+                  )
+                })
+            })
             
-          }
+            names(tabla) = intervenciones
+            
+            tabla = lapply(intervenciones, function (i) {
+              tabla[[i]] = cbind(int=i,bind_rows(tabla[[i]]))  
+            })
+            
+            tabla = bind_rows(tabla)
+            reactable(tabla)          
+            
+            
+          })
+          
+          shiny::tagList(
+            h1("Hpña"),
+            highchartOutput("grafico_multiple"),
+            tags$header(id = "header_tabla_inputs_multiple", class="text-1xl flex justify-between items-center p-5 mt-4", style="background-color: #FF671B; color: white; text-align: center", 
+                                      tags$h1(style="display: inline-block; margin: 0 auto;", class="flex-grow mt-8 mb-8",tags$b("Descripción de escenarios guardados")),
+                                      actionLink(inputId = "toggle_tabla_inputs_multiple", label=icon("stream", style = "color: white;"))
+                          ),
+            hidden(reactableOutput("prueba"))
+          )
+          
+          # tagList(
+          #   br(),
+          #   br(),
+          #   hr(),
+          #   highchartOutput("grafico_multiple"),
+          #   br(),
+          #   tags$header(id = "header_tabla_inputs_multiple", class="text-1xl flex justify-between items-center p-5 mt-4", style="background-color: #FF671B; color: white; text-align: center", 
+          #               tags$h1(style="display: inline-block; margin: 0 auto;", class="flex-grow mt-8 mb-8",tags$b("Descripción de escenarios guardados")),
+          #               actionLink(inputId = "toggle_tabla_inputs_multiple", label=icon("stream", style = "color: white;"))
+          #   ),
+          #   br(),
+          #   reactableOutput("inputs_summary_table")
+          #   
+          # )
           
           
         })
