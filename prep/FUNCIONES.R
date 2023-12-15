@@ -232,6 +232,10 @@ funcionCalculos <- function(parametros,pais) {
       parametro1[[nombre]] <- parametros_prep[[nombre]]
     }
   }
+  
+  tipoCohorte=1
+  tipoDuracion=1
+  
   # Aplica funcionPrincipal para ambos escenarios
   funcionPrincipal("Baseline", pais, parametro1)
   resultados_baseline <<- resultados
@@ -245,7 +249,7 @@ funcionCalculos <- function(parametros,pais) {
   
   # Cálculos de promedios, diferencias, etc.
   #Promedios
-  if (cohorteDinamica == 0) {
+  if (tipoCohorte == 0) {
     
     AñosVividos_prom_escenario1 = resultados_baseline$AñosVividos[1] / parametro1$cohorteSize 
     AñosVividos_prom_escenario2 = resultados_nuevo$AñosVividos[1] / parametro2$cohorteSize

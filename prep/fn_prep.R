@@ -6,7 +6,8 @@ source("prep/FUNCIONES.R")
 
 
 funcionPrincipal <- function(linea,paisCol, parametro){
-  
+  tipoCohorte=1
+  tipoDuracion=1
 # Usando list2env para crear variables en el entorno global
 list2env(parametro, envir = .GlobalEnv)
   
@@ -295,13 +296,13 @@ for (i in 1 : edadMaximaInicial) {
 
 #[MODIFICADO LEAN]
 #Redundante ya lo hace abajo.
-#if (cohorteDinamica == 1) {
+#if (tipoCohorte == 1) {
 #  genteEntrante <- cohorteSize * distribucionCohorte[edadMinima]
 #}
 #[/MODIFICADO LEAN]
 
 # Manejar la dinámica de la cohorte
-genteEntrante <- ifelse(cohorteDinamica == 1, cohorteSize * distribucionCohorte[edadMinima], 0)
+genteEntrante <- ifelse(tipoCohorte == 1, cohorteSize * distribucionCohorte[edadMinima], 0)
 
 # Calcular total de infectados
 modelo$ciclos[[1]]$InfectadosTotal <- modelo$ciclos[[1]]$InfectadoDx$Total + modelo$ciclos[[1]]$InfectadoNoDxTotal
@@ -441,7 +442,7 @@ for (i in 2:(numeroCiclos+1)) {
     anosPasados <- anosPasados + 1
     # Sumamos un año
     # Si la cohorte es dinámica, la edad inicial del bucle sigue siendo la edad mínima
-    if (cohorteDinamica == 1) {
+    if (tipoCohorte == 1) {
       edadLoopInicial <- edadMinima
       # Ha pasado 1 año, necesitamos ingresar nuevas personas a los estados
       if (tipoDuracion == 0 || (tipoDuracion == 1 && i < ciclosPorAno * duracionPrEP)) {
@@ -452,7 +453,7 @@ for (i in 2:(numeroCiclos+1)) {
       }
       # Ajustamos el tamaño de la cohorte final
       cohorteSizeFinal <- cohorteSizeFinal + genteEntrante
-    } else if (cohorteDinamica == 0) {
+    } else if (tipoCohorte == 0) {
       # Si la cohorte es estática, actualizamos la edad mínima para no iterar en estados vacíos
       edadLoopInicial <- edadMinima + anosPasados
     }
@@ -537,7 +538,7 @@ for (i in 2:(numeroCiclos+1)) {
     }
     
     # Manejo de cohortes dinámicas
-    if (!(cohorteDinamica == 1 && j == edadMinima && anoOffset == 1)) {
+    if (!(tipoCohorte == 1 && j == edadMinima && anoOffset == 1)) {
       
       # Cálculos para los sanos sin PrEP y ajustes por muerte general y contagio de HIV
   
@@ -1198,33 +1199,34 @@ print("fin")
 # parametro2 <- crearParametros(linea)
 
 parametros_prep <- list(cohorteSize = 100000,
-                   tasaDescuento = 0.03,
-                   edadMinima = 18, 
+                   descuento = 0.03,
+                   edadMinima = 18, ## parametro basico
                    edadFinal = 100,
-                   tipoDuracion = 0,
-                   duracionPrEP = 99,
-                   edadMaximaInicial = 50,
-                   PrEPuptake = 0,
+                   #tipoDuracion = 1,##hardcodeada
+                   duracionPrEP = 99,## parametro basico
+                   edadMaximaInicial = 50,##parametro basico
+                   PrEPuptake = 0,##parametro basico
                    edadFinPrEP = 50,
                    limiteEdadRiesgo = 60,
                    eficaciaPrEP = 0,
                    adherenciaPrEP = 0,
                    limiteEdadContagiosos = 65,
-                   tipoCohorte = 0,
+                   #tipoCohorte = 1,#hardcordeada
                    cohorteSize_nuevo = 100000 ,
                    tasaDescuento_nuevo = 0.03, 
-                   edadMinima_nuevo = 18 ,
+                   edadMinima_nuevo = 18 ,## parametro basico
                    edadFinal_nuevo = 100 ,
-                   tipoDuracion_nuevo = 0 ,
-                   duracionPrEP_nuevo = 99 ,
-                   edadMaximaInicial_nuevo = 50 ,
+                   #tipoDuracion_nuevo = 0 ,#hardcodeada
+                   duracionPrEP_nuevo = 99 ,## parametro basico
+                   edadMaximaInicial_nuevo = 50 ,## parametro basico
                    PrEPuptake_nuevo = 0.5, 
-                   edadFinPrEP_nuevo = 50, 
+                   edadFinPrEP_nuevo = 50, ## parametro basico
                    limiteEdadRiesgo_nuevo = 60 ,
                    eficaciaPrEP_nuevo = 0.86, 
                    adherenciaPrEP_nuevo = 0.8 ,
-                   limiteEdadContagiosos_nuevo = 65 ,
-                   tipoCohorte_nuevo = 0 )
+                   limiteEdadContagiosos_nuevo = 65 
+                   #tipoCohorte_nuevo = 1 #harcoddeada
+                   )
 
 
 
