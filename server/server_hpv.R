@@ -1,4 +1,4 @@
-server_hpv = function (input, output, session, parameterReactive, scenarios, resultados, run_hearts, hearts_scenarios, hpp_run, hpp_scenarios, hepC_run, hepC_scenarios, summary_scenarios, inputs_scenarios, inputs_table, inputs_columns, inputs_table_multiple, tbc_run, tbc_scenarios) {
+server_hpv = function (input, output, session, parameterReactive, scenarios, resultados, run_hearts, hearts_scenarios, hpp_run, hpp_scenarios, hepC_run, hepC_scenarios, summary_scenarios, inputs_scenarios, inputs_table, inputs_columns, inputs_table_multiple, tbc_run, tbc_scenarios,prep_run,prep_scenarios) {
   output$resultados_hpv = renderUI({
     if (input$intervencion == "Vacuna contra el HPV") {
       if (is.null(input$birthCohortSizeFemale)) {NULL} else {paste(resultados())}
@@ -21,6 +21,10 @@ server_hpv = function (input, output, session, parameterReactive, scenarios, res
     } else if (input$intervencion == "VDOT Tuberculosis") {
       tagList(
         ui_resultados_tbc(input, output, tbc_run),
+      )
+    } else if (input$intervencion == "Profilaxis Pre Exposición VIH") {
+      tagList(
+        ui_resultados_prep(input, output, prep_run),
       )
     }
     
@@ -478,7 +482,7 @@ server_hpv = function (input, output, session, parameterReactive, scenarios, res
                 reactableOutput("hepC_table_saved")
               )
               
-            } else {
+            } else if (sel_intervencion == "VDOT Tuberculosis") {
               
               output$tbc_table_saved = renderReactable({
                 
@@ -550,14 +554,82 @@ server_hpv = function (input, output, session, parameterReactive, scenarios, res
               renderUI(
                 reactableOutput("tbc_table_saved")
               )
+            } else if (sel_intervencion == "Profilaxis Pre Exposición VIH") {
+              
+              
+              ################################################
+              
+              output$tbc_table_saved = renderReactable({
+                
+                if (length(sel_escenario)>0) {
+                  table = prep_run()
+                  table$Parametro = prep_outcomes_labels()
+                  
+                  table$Valor = format(round(table$Valor,1),big.mark = ".",decimal.mark = ",")
+                  
+                  cat_epi = 1:14
+                  cat_costos = 15:28
+                  
+                  table$cat=""
+                  table$cat[cat_epi] = "Resultados epidemiológicos"
+                  table$cat[cat_costos] = "Resultados económicos"
+                  
+                  columns = list()
+                  for (i in sel_escenario) {
+                    scn_name = i
+                    table[[i]] = prep_scenarios$savedScenarios[[i]]$Valor
+                    table[[i]] = format(round(table[[i]],2),big.mark = ".", decimal.mark = ",")
+                  }
+                  
+                  columns[["cat"]] = colDef(name = "Categoría", align = "left")
+                  columns[["Parametro"]] = colDef(name = "Parámetro", align = "left")
+                  
+                  table$Valor = NULL
+                  
+                  reactable(
+                    table,
+                    groupBy = "cat",
+                    defaultExpanded = T,
+                    pagination = F,
+                    columnGroups = list(
+                      colGroup("Escenarios", columns = sel_escenario, sticky = "left",
+                               headerStyle = list(background = "#236292", color = "white", borderWidth = "0"))
+                    ),
+                    defaultColDef = colDef(
+                      align = "right",
+                      minWidth = 70,
+                      headerStyle = list(background = "#236292", color = "white")
+                    ),
+                    columns = columns,
+                    bordered = TRUE,
+                    highlight = TRUE
+                  )
+                  
+                  
+                } else {NULL}
+                
+              })
+              
+              
+              
+              
+              renderUI(
+                reactableOutput("tbc_table_saved")
+              )
+              
+              ####################################
+              
+              
+              
             }
             
           } 
         })
         
         output$inputs_summary_table = renderUI({
-          
+          browser()
           output$tabla_inputs = renderReactable({
+            browser()
             if (is.null(sel_escenario)==F & is.null(input$comparacion_intervencion)==F & is.null(input$comparacion_escenario)==F) {
               
               if (length(input$comparacion_intervencion)==1) {
@@ -677,7 +749,6 @@ server_hpv = function (input, output, session, parameterReactive, scenarios, res
           })
           
           output$prueba = renderReactable({
-            browser()
             if (is.null(sel_escenario)==F & is.null(input$comparacion_intervencion)==F & is.null(input$comparacion_escenario)==F) {
               tabla = inputs_table_generator_multiple(input,output, inputs_scenarios, summary_scenarios)
               #tabla = inputs_table_multiple

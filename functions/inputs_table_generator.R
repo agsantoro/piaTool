@@ -31,6 +31,9 @@ inputs_table_generator = function (input, output, inputs_scenarios, summary_scen
   } else if (sel_intervencion[1] == "VDOT Tuberculosis") {
     load("tbc_map_inputs.Rdata")
     labels_inputs = tbc_map_inputs
+  } else if (sel_intervencion[1] == "Profilaxis Pre Exposición VIH") {
+    load("prep_map_inputs.Rdata")
+    labels_inputs = prep_map_inputs
   }
   
   table_inputs = labels_inputs %>% left_join(table_inputs, by = c("i_names" = "inputName"))

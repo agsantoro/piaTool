@@ -1,7 +1,4 @@
 options(scipen=999)
-library(tidyverse)
-library(writexl)
-library(openxlsx)
 source("prep/FUNCIONES.R")
 
 
@@ -74,30 +71,40 @@ for (z in 1:5) {
 
 # cargamos costos
 # '////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 cDiagnostico = costos %>% filter(costo=="DIAGNOSTICO") %>%
   select(!!sym(paisCol)) %>%
   as.numeric()
 
-cSeguimientoHIV = costos %>% filter(costo=="SEGUIMIENTO") %>%
+cSeguimientoHIV_anual = costos %>% filter(costo=="SEGUIMIENTO") %>%
   select(!!sym(paisCol)) %>%
   as.numeric()
 
-cTratamientoHIV =costos %>% filter(costo=="TRATAMIENTO") %>%
-select(!!sym(paisCol)) %>%
-  as.numeric() 
+cSeguimientoHIV <- cSeguimientoHIV_anual/ciclosPorAno
 
-cPrEPTratamiento = costos %>% filter(costo=="PREP_TTO") %>%
-select(!!sym(paisCol)) %>%
-  as.numeric() 
-
-cPrEPSeguimiento = costos %>% filter(costo=="PREP_SEGUIMIENTO") %>%
+cTratamientoHIV_anual =costos %>% filter(costo=="TRATAMIENTO") %>%
   select(!!sym(paisCol)) %>%
   as.numeric() 
 
-cPrEPTest = costos %>% filter(costo=="PREP_TEST") %>%
+cTratamientoHIV <- cTratamientoHIV_anual/ciclosPorAno
+
+cPrEPTratamiento_anual = costos %>% filter(costo=="PREP_TTO") %>%
   select(!!sym(paisCol)) %>%
   as.numeric() 
+
+cPrEPTratamiento <- cPrEPTratamiento_anual/ciclosPorAno
+
+
+cPrEPSeguimiento_anual = costos %>% filter(costo=="PREP_SEGUIMIENTO") %>%
+  select(!!sym(paisCol)) %>%
+  as.numeric() 
+
+cPrEPSeguimiento <- cPrEPSeguimiento_anual/ciclosPorAno
+
+cPrEPTest_anual = costos %>% filter(costo=="PREP_TEST") %>%
+  select(!!sym(paisCol)) %>%
+  as.numeric() 
+
+cPrEPTest <-  cPrEPTest_anual/ciclosPorAno
 
 cConsulta = costos %>% filter(costo=="CONSULTA") %>%
   select(!!sym(paisCol)) %>%
@@ -1198,69 +1205,129 @@ print("fin")
 # linea <- "Nuevo" # o "nuevo"
 # parametro2 <- crearParametros(linea)
 
-parametros_prep <- list(cohorteSize = 100000,
-                   descuento = 0.03,
-                   edadMinima = 18, ## parametro basico
-                   edadFinal = 100,
-                   #tipoDuracion = 1,##hardcodeada
-                   duracionPrEP = 99,## parametro basico
-                   edadMaximaInicial = 50,##parametro basico
-                   PrEPuptake = 0,##parametro basico
-                   edadFinPrEP = 50,
-                   limiteEdadRiesgo = 60,
-                   eficaciaPrEP = 0,
-                   adherenciaPrEP = 0,
-                   limiteEdadContagiosos = 65,
-                   #tipoCohorte = 1,#hardcordeada
-                   cohorteSize_nuevo = 100000 ,
-                   tasaDescuento_nuevo = 0.03, 
-                   edadMinima_nuevo = 18 ,## parametro basico
-                   edadFinal_nuevo = 100 ,
-                   #tipoDuracion_nuevo = 0 ,#hardcodeada
-                   duracionPrEP_nuevo = 99 ,## parametro basico
-                   edadMaximaInicial_nuevo = 50 ,## parametro basico
-                   PrEPuptake_nuevo = 0.5, 
-                   edadFinPrEP_nuevo = 50, ## parametro basico
-                   limiteEdadRiesgo_nuevo = 60 ,
-                   eficaciaPrEP_nuevo = 0.86, 
-                   adherenciaPrEP_nuevo = 0.8 ,
-                   limiteEdadContagiosos_nuevo = 65 
-                   #tipoCohorte_nuevo = 1 #harcoddeada
-                   )
+# parametros_prep <- list(cohorteSize = 100000,
+#                    descuento = 0.03,
+#                    edadMinima = 18, ## parametro basico
+#                    edadFinal = 100,
+#                    #tipoDuracion = 1,##hardcodeada
+#                    duracionPrEP = 99,## parametro basico
+#                    edadMaximaInicial = 50,##parametro basico
+#                    PrEPuptake = 0,##parametro basico
+#                    edadFinPrEP = 50,
+#                    limiteEdadRiesgo = 60,
+#                    eficaciaPrEP = 0,
+#                    adherenciaPrEP = 0,
+#                    limiteEdadContagiosos = 65,
+#                    #tipoCohorte = 1,#hardcordeada
+#                    cohorteSize_nuevo = 100000 ,
+#                    tasaDescuento_nuevo = 0.03, 
+#                    edadMinima_nuevo = 18 ,## parametro basico
+#                    edadFinal_nuevo = 100 ,
+#                    #tipoDuracion_nuevo = 0 ,#hardcodeada
+#                    duracionPrEP_nuevo = 99 ,## parametro basico
+#                    edadMaximaInicial_nuevo = 50 ,## parametro basico
+#                    PrEPuptake_nuevo = 0.5, 
+#                    edadFinPrEP_nuevo = 50, ## parametro basico
+#                    limiteEdadRiesgo_nuevo = 60 ,
+#                    eficaciaPrEP_nuevo = 0.86, 
+#                    adherenciaPrEP_nuevo = 0.8 ,
+#                    limiteEdadContagiosos_nuevo = 65 
+#                    #tipoCohorte_nuevo = 1 #harcoddeada
+#                    )
 
+get_prep_params = function () {
+  lista = list(
+    cohorteSize = 100000,
+    descuento = 0.03,
+    edadMinima = 18, ## parametro basico
+    edadFinal = 100,
+    #tipoDuracion = 1,##hardcodeada
+    duracionPrEP = 99,## parametro basico
+    edadMaximaInicial = 50,##parametro basico
+    PrEPuptake = 0,##parametro basico
+    edadFinPrEP = 50,
+    limiteEdadRiesgo = 60,
+    eficaciaPrEP = 0,
+    adherenciaPrEP = 0,
+    limiteEdadContagiosos = 65,
+    #tipoCohorte = 1,#hardcordeada
+    cohorteSize_nuevo = 100000 ,
+    tasaDescuento_nuevo = 0.03,
+    edadMinima_nuevo = 18 ,## parametro basico
+    edadFinal_nuevo = 100 ,
+    #tipoDuracion_nuevo = 0 ,#hardcodeada
+    duracionPrEP_nuevo = 99 ,## parametro basico
+    edadMaximaInicial_nuevo = 50 ,## parametro basico
+    PrEPuptake_nuevo = 0.5,
+    edadFinPrEP_nuevo = 50, ## parametro basico
+    limiteEdadRiesgo_nuevo = 60 ,
+    eficaciaPrEP_nuevo = 0.86,
+    adherenciaPrEP_nuevo = 0.8 ,
+    limiteEdadContagiosos_nuevo = 65
+    #tipoCohorte_nuevo = 1 #harcoddeada
+    )
+  return(lista)
+}
 
+get_prep_params_labels = function () {
+  c(
+    "Tamaño de la chorte (Baseline)",
+    "Tasa de descuento anual (Baseline)",
+    "Edad minima inicial (Baseline)", ## parametro basico
+    "Edad Final",
+    "Duración de PrEP (Baseline)",## parametro basico
+    "Edad máxima inicial (Baseline)",##parametro basico
+    "Aceptabilidad de PrEP en la población (Baseline)",##parametro basico
+    "Edad de fin de indicación de PrEP (Baseline)",
+    "Limite edad de riesgo (Baseline)",
+    "Eficacia PrEP en la población (Baseline)",
+    "Adherencia PrEP en la población (Baseline)",
+    "Limite edad de contagio (Baseline)",
+    "Tamaño de la chorte",
+    "Tasa de descuento anual",
+    "Edad minima inicial", ## parametro basico
+    "Edad final",
+    "Duración de PrEP",## parametro basico
+    "Edad máxima inicial",##parametro basico
+    "Aceptabilidad de PrEP en la población",##parametro basico
+    "Edad de fin de indicación de PrEP",
+    "Limite edad de riesgo",
+    "Eficacia PrEP en la población",
+    "Adherencia PrEP en la población",
+    "Limite edad de contagio"
+  )
+}
 
-######
-lista_resultados <- funcionCalculos(parametros_prep, "ARGENTINA")
-####
-nombres_resultados <- c(
-   "LY VIVIDOS",
-   "QALYS VIVIDOS",
-  "LY VIVIDOS con descuento",
-"QALYS VIVIDOS con descuento",
-  "LY PERDIDOS POR MP POR HIV",
-  "QALYS PERDIDOS POR DISCAPACIDAD",
-  "QALYS PERDIDOS POR MP POR HIV",
-   "QALYS PERDIDOS",
-  "MUERTES POR HIV",
- "% MUERTES HIV",
-  "Casos de HIV ",
- "Nuevos Casos de HIV DX",
-  "Casos totales de HIV",
-  "Tiempo sin Dx (meses)",
-  "Costo SANO",
-  "Costo PREP",
-  "Costo HIV",
-  "Costo Total",
-  "Costo SANO con desc.",
-  "Costo PREP con desc.",
-  "Costo HIV con desc.",
-  "Costo Total con desc.",
-  "Costo incremental por Qaly",
-  "Costo incremental por Qaly con desc.",
-  "Costo incremental por Año de vida",
-  "Costo incremental por Año de vida con dec.",
-  "ROI",
-  "ROI con desc."
-)
+prep_outcomes_labels = function() {
+  c("Años vividos",
+    "QALYS vividos",
+    "Años vividos (descontado)",
+    "QALYS vividos (descontado)",
+    "LY PERDIDOS POR MP POR HIV",
+    "QALYS PERDIDOS POR DISCAPACIDAD",
+    "QALYS PERDIDOS POR MP POR HIV",
+    "QALYS perdidos",
+    "Muertes HIV",
+    "% muertes HIV",
+    "Nuevos casos de HIV ",
+    "Nuevos casos de VIH diagnosticados",
+    "Casos totales de HIV",
+    "Tiempo sin Dx (meses)",
+    "Costo SANO",
+    "Costo PREP",
+    "Costo HIV",
+    "Costo Total de la intervención",
+    "Costo SANO (descontado)",
+    "Costo PREP (descontado)",
+    "Costo HIV (descontado)",
+    "Costo Total de la intervención (descontado)",
+    "Costo incremental por Qaly",
+    "Costo incremental por Qaly (descontado)",
+    "Costo incremental por Año de vida",
+    "Costo incremental por Año de vida (descontado)",
+    "ROI",
+    "ROI (descontado)"
+  )
+}
 
+# lista_resultados <- funcionCalculos(parametros_prep, "ARGENTINA")

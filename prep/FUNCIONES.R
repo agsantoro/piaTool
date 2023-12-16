@@ -220,16 +220,15 @@ crearParametros <- function(linea) {
 ###lista resultados
 
 funcionCalculos <- function(parametros,pais) {
-  
   parametro1 <- list()
   parametro2 <- list()
   
   # Clasificar los elementos en las dos listas
   for (nombre in names(parametros)) {
     if (grepl("_nuevo$", nombre)) {
-      parametro2[[gsub("_nuevo$", "", nombre)]] <- parametros_prep[[nombre]]
+      parametro2[[gsub("_nuevo$", "", nombre)]] <- parametros[[nombre]]
     } else {
-      parametro1[[nombre]] <- parametros_prep[[nombre]]
+      parametro1[[nombre]] <- parametros[[nombre]]
     }
   }
   
