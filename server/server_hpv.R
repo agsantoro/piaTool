@@ -683,7 +683,6 @@ server_hpv = function (input, output, session, parameterReactive, scenarios, res
           
           output$grafico_multiple = renderHighchart({
             show("escenarios_guardados")
-            browser()
             if (length(input$comparacion_intervencion)>1) {
               intervenciones_seleccionadas = input$comparacion_intervencion
               escenarios_seleccionados = input$comparacion_escenario

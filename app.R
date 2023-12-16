@@ -75,7 +75,6 @@ server <- function(input, output, session) {
         write.xlsx(data, file)
         
       } else {
-        browser()
         list_of_datasets = list()
         esc_hpv = summary_scenarios$table$scenarioName[summary_scenarios$table$intervencion=="Vacuna contra el HPV"]
         esc_hearts = summary_scenarios$table$scenarioName[summary_scenarios$table$intervencion=="HEARTS"]
