@@ -155,8 +155,8 @@ ui_tabla_hpv = function (resultados, input) {
     colnames(table) = c("Outcomes", "Undiscounted", "Discounted")
     
     cat_input = c(1,2,3,14)
-    cat_epi = c(6,7,8)
-    cat_costos = c(4,5,9,10,11,12,13,15)
+    cat_epi = c(6,7,8,9)
+    cat_costos = c(4,5,10,11,12,13,15)
     
     table$cat=""
     table$cat[cat_input] = "Inputs"

@@ -453,6 +453,7 @@ ui_resultados_hearts = function(input,output,resultados) {
         epi = run_hearts$epi_outcomes
         colnames(epi) = colnames(table)
         
+        
         costos = data.frame(
           Indicador=names(run_hearts$costs_outcomes),
           Valor=unname(unlist(run_hearts$costs_outcomes))

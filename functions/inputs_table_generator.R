@@ -90,8 +90,8 @@ inputs_table_generator = function (input, output, inputs_scenarios, summary_scen
 inputs_table_generator_multiple = function (input, output, inputs_scenarios, summary_scenarios) {
   seleccion = summary_scenarios$table
   seleccion = seleccion[seleccion$country %in% input$comparacion_country &
-                          seleccion$intervencion %in% input$comparacion_intervencion &
-                          seleccion$scenarioName %in% input$comparacion_escenario,]
+                        seleccion$intervencion %in% input$comparacion_intervencion &
+                        seleccion$scenarioName %in% input$comparacion_escenario,]
   
   sel_intervencion = unique(seleccion$intervencion)
   sel_country = input$comparacion_country
@@ -126,6 +126,9 @@ inputs_table_generator_multiple = function (input, output, inputs_scenarios, sum
       } else if (int == "VDOT Tuberculosis") {
         load("tbc_map_inputs.Rdata")
         labels_inputs = tbc_map_inputs
+      } else if (int == "Profilaxis Pre Exposición VIH") {
+        load("prep_map_inputs.Rdata")
+        labels_inputs = prep_map_inputs
       }
       table_inputs = labels_inputs %>% left_join(table_inputs, by = c("i_names" = "inputName"))
       

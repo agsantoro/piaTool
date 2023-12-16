@@ -243,7 +243,7 @@ estimaToolCosts = function(
   ##### COSTS #####
   
   load("estimaTool/costs.RData")
-
+  
   costs_outcomes = list(
     `Costo anual de la intervención por paciente promedio  hipertenso tratado` = costs$value[costs$country==country & costs$parameter ==  "Costo anual de consulta médica en paciente promedio (*)"] + costs$value[costs$country==country & costs$parameter ==  "Costo farmacológico anual por paciente promedio (**)"],
     `Costos totales anuales de la intervención ponderado por la población objetivo alcanzada` = run[[country]]$baseline$`Nueva población (N) tratada / Controlados actualmente previamente no controlados` * costs$value[costs$country==country & costs$parameter ==  "Costo anual de consulta médica en paciente promedio (*)"] + run[[country]]$baseline$`Nueva población (N) tratada / Controlados actualmente previamente no controlados` * costs$value[costs$country==country & costs$parameter ==  "Costo farmacológico anual por paciente promedio (**)"],

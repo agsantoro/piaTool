@@ -266,8 +266,8 @@ server_hpv = function (input, output, session, parameterReactive, scenarios, res
                   }
                   table = scenarios$summaryTable[,snSelected]
                   cat_input = c(1,2,3,14)
-                  cat_epi = c(6,7,8)
-                  cat_costos = c(4,5,9,10,11,12,13)
+                  cat_epi = c(6,7,8,9)
+                  cat_costos = c(4,5,10,11,12,13)
                   
                   table$cat=""
                   table$cat[cat_input] = "Inputs"
@@ -627,9 +627,7 @@ server_hpv = function (input, output, session, parameterReactive, scenarios, res
         })
         
         output$inputs_summary_table = renderUI({
-          browser()
           output$tabla_inputs = renderReactable({
-            browser()
             if (is.null(sel_escenario)==F & is.null(input$comparacion_intervencion)==F & is.null(input$comparacion_escenario)==F) {
               
               if (length(input$comparacion_intervencion)==1) {
@@ -685,6 +683,7 @@ server_hpv = function (input, output, session, parameterReactive, scenarios, res
           
           output$grafico_multiple = renderHighchart({
             show("escenarios_guardados")
+            browser()
             if (length(input$comparacion_intervencion)>1) {
               intervenciones_seleccionadas = input$comparacion_intervencion
               escenarios_seleccionados = input$comparacion_escenario
@@ -710,6 +709,10 @@ server_hpv = function (input, output, session, parameterReactive, scenarios, res
                 
                 for (j in escenarios_seleccionados[escenarios_seleccionados %in% summary_scenarios$table$scenarioName[summary_scenarios$table$intervencion=="VDOT Tuberculosis"]]) {
                   core[[j]] = tbc_scenarios$savedScenarios[[j]]$VOT[tbc_scenarios$savedScenarios[[j]]$Parametro=="ROI"]
+                }
+              
+                for (j in escenarios_seleccionados[escenarios_seleccionados %in% summary_scenarios$table$scenarioName[summary_scenarios$table$intervencion=="Profilaxis Pre Exposición VIH"]]) {
+                  core[[j]] = prep_scenarios$savedScenarios[[j]]$Valor[prep_scenarios$savedScenarios[[j]]$Parametro=="ROI"]
                 }
                 
                 escenarios = names(unlist(core))

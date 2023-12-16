@@ -27,27 +27,40 @@ server <- function(input, output, session) {
     },
     content = function(file) {
       list_of_datasets = list()
+      
       if (length(input$comparacion_intervencion)== 1) {
+        
         if (length(input$comparacion_intervencion)== 1 & input$comparacion_intervencion[1] == "Vacuna contra el HPV") {
           for (i in input$comparacion_escenario) {
-            list_of_datasets[[i]] = scenarios$savedScenarios[[i]]$outcomes
+            pais = summary_scenarios$table$country[summary_scenarios$table$scenarioName==i]
+            list_of_datasets[[paste0(i," (",pais,") ")]] = scenarios$savedScenarios[[i]]$outcomes
           }
         } else if (length(input$comparacion_intervencion)== 1 & input$comparacion_intervencion[1] == "HEARTS") {
           for (i in input$comparacion_escenario) {
-            list_of_datasets[[i]] = hearts_scenarios$savedScenarios[[i]]
+            pais = summary_scenarios$table$country[summary_scenarios$table$scenarioName==i]
+            list_of_datasets[[paste0(i," (",pais,") ")]] = hearts_scenarios$savedScenarios[[i]]
           }
         } else if (length(input$comparacion_intervencion)== 1 & input$comparacion_intervencion[1] == "Hemorragia postparto") {
           for (i in input$comparacion_escenario) {
-            list_of_datasets[[i]] = hpp_scenarios$savedScenarios[[i]]
+            pais = summary_scenarios$table$country[summary_scenarios$table$scenarioName==i]
+            list_of_datasets[[paste0(i," (",pais,") ")]] = hpp_scenarios$savedScenarios[[i]]
           }
         } else if (length(input$comparacion_intervencion)== 1 & input$comparacion_intervencion[1] == "Hepatitis C") {
           for (i in input$comparacion_escenario) {
-            list_of_datasets[[i]] = hepC_scenarios$savedScenarios[[i]]
+            pais = summary_scenarios$table$country[summary_scenarios$table$scenarioName==i]
+            list_of_datasets[[paste0(i," (",pais,") ")]] = hepC_scenarios$savedScenarios[[i]]
           }
         } else if (length(input$comparacion_intervencion)== 1 & input$comparacion_intervencion[1] == "VDOT Tuberculosis") {
           for (i in input$comparacion_escenario) {
-            list_of_datasets[[i]] = tbc_scenarios$savedScenarios[[i]]
+            pais = summary_scenarios$table$country[summary_scenarios$table$scenarioName==i]
+            list_of_datasets[[paste0(i," (",pais,") ")]] = tbc_scenarios$savedScenarios[[i]]
           }
+        }
+          else if (length(input$comparacion_intervencion)== 1 & input$comparacion_intervencion[1] == "Profilaxis Pre Exposición VIH") {
+            for (i in input$comparacion_escenario) {
+              pais = summary_scenarios$table$country[summary_scenarios$table$scenarioName==i]
+              list_of_datasets[[paste0(i," (",pais,") ")]] = prep_scenarios$savedScenarios[[i]]
+            }
         }
         
         list_of_datasets[["Inputs"]] = inputs_table_generator(
@@ -57,14 +70,19 @@ server <- function(input, output, session) {
           summary_scenarios
         )[[1]]
         
-      } else {
+        data = list_of_datasets
         
+        write.xlsx(data, file)
+        
+      } else {
+        browser()
         list_of_datasets = list()
         esc_hpv = summary_scenarios$table$scenarioName[summary_scenarios$table$intervencion=="Vacuna contra el HPV"]
         esc_hearts = summary_scenarios$table$scenarioName[summary_scenarios$table$intervencion=="HEARTS"]
         esc_hpp = summary_scenarios$table$scenarioName[summary_scenarios$table$intervencion=="Hemorragia postparto"]
         esc_hepC = summary_scenarios$table$scenarioName[summary_scenarios$table$intervencion=="Hepatitis C"]
         esc_tbc = summary_scenarios$table$scenarioName[summary_scenarios$table$intervencion=="VDOT Tuberculosis"]
+        esc_prep = summary_scenarios$table$scenarioName[summary_scenarios$table$intervencion=="Profilaxis Pre Exposición VIH"]
         
         if ("Vacuna contra el HPV" %in% input$comparacion_intervencion) {
           for (i in esc_hpv) {
@@ -91,8 +109,13 @@ server <- function(input, output, session) {
             list_of_datasets[[i]] = tbc_scenarios$savedScenarios[[i]]
           }
         }
+        if ("Profilaxis Pre Exposición VIH" %in% input$comparacion_intervencion) {
+          for (i in esc_prep) {
+            list_of_datasets[[i]] = prep_scenarios$savedScenarios[[i]]
+          }
+        }
         
-      }
+      
       
       tabla = inputs_table_generator_multiple(input,output, inputs_scenarios, summary_scenarios)
       
@@ -115,21 +138,37 @@ server <- function(input, output, session) {
         tabla[[i]] = cbind(int=i,bind_rows(tabla[[i]]))  
       })
       
-      nombres_tabla = c()
       
-      nombres_tabla = lapply(seq_along(tabla), function(i) {
-        nombres_tabla = c(nombres_tabla,paste0(tabla[[i]]$escenario[1],"_Inputs"))
-      })
+      tabla = bind_rows(tabla)
       
-      names(tabla) = unlist(nombres_tabla)
+      list_of_inputs = list()
       
-      list_of_datasets = c(list_of_datasets, tabla)
+      
+      for (i in unique(tabla$int)) {
+        for (j in unique(tabla$escenario)) {
+          if (nrow(tabla[tabla$int==i & tabla$escenario==j,])>0) {
+            list_of_inputs[[paste(j,"Inputs")]] = tabla[tabla$int==i & tabla$escenario==j,]
+          }
+        }
+      }
+      
+      
+      
+      # nombres_tabla = c()
+      # 
+      # 
+      # nombres_tabla = lapply(seq_along(tabla), function(i) {
+      #   nombres_tabla = c(nombres_tabla,paste0(tabla[[i]]$escenario[1],"_Inputs"))
+      # })
+      
+      list_of_datasets = c(list_of_datasets, list_of_inputs)
       
       list_of_datasets = list_of_datasets[order(names(list_of_datasets))]
       
       data = list_of_datasets
-      
+      names(data) = substring(names(data),1,28)
       write.xlsx(data, file)
+      }
     }
   )
 
@@ -232,306 +271,316 @@ server <- function(input, output, session) {
   
   # guarda escenarios
   observeEvent(input$saveScenario2, {
-    inputs_scenarios$table = rbind(
-      inputs_scenarios$table,
-      data.frame(
-        country=str_to_title(input$country),
-        intervencion=input$intervencion,
-        scenarioName=input$scenarioName,
-        inputName = names(unlist(reactiveValuesToList(input))),
-        inputValue = unlist(reactiveValuesToList(input))
+    if (input$scenarioName %in% summary_scenarios$table$scenarioName == F) {
+      inputs_scenarios$table = rbind(
+        inputs_scenarios$table,
+        data.frame(
+          country=str_to_title(input$country),
+          intervencion=input$intervencion,
+          scenarioName=input$scenarioName,
+          inputName = names(unlist(reactiveValuesToList(input))),
+          inputValue = unlist(reactiveValuesToList(input))
+        )
       )
-    )
-    
-    summary_scenarios$table = rbind(
-      summary_scenarios$table,
-      data.frame(
-        country=str_to_title(input$country),
-        intervencion=input$intervencion,
-        scenarioName=input$scenarioName
+      
+      summary_scenarios$table = rbind(
+        summary_scenarios$table,
+        data.frame(
+          country=str_to_title(input$country),
+          intervencion=input$intervencion,
+          scenarioName=input$scenarioName
+        )
       )
-    )
-    
-    rownames(inputs_scenarios$table) = 1:nrow(inputs_scenarios$table)
-    
-    
-    if (input$intervencion == "Vacuna contra el HPV") {
-      if (input$scenarioName !="") {
-        scnID = UUIDgenerate()
-        scnName = input$scenarioName
-        scenarios$savedScenarios[[scnName]] <- resultados()
-        summaryScenarios = data.frame(outcomes=scenarios$savedScenarios[[1]]$outcomes[[1]])
-        show("ver_escenarios_guardados")
-        
-        for (i in names(scenarios$savedScenarios)){
-          summaryScenarios = cbind(summaryScenarios,data.frame(scenarios$savedScenarios[[i]]$outcomes[,"undisc"]))
-        }
-        
-        colnames(summaryScenarios)[2:ncol(summaryScenarios)] = names(scenarios$savedScenarios)
-        colnames(summaryScenarios)[1] = "Outcomes"
-        summaryScenarios = summaryScenarios %>% mutate(across(c(2:ncol(summaryScenarios)), function(x) format(round(x,1), nsmall = 1,big.mark = ".", decimal.mark = ",", scientific = FALSE)))
-        
-        if (is.null(input$savedScenarios)) {
-          scenarios$summaryTable = summaryScenarios   
+      
+      rownames(inputs_scenarios$table) = 1:nrow(inputs_scenarios$table)
+      
+      
+      if (input$intervencion == "Vacuna contra el HPV") {
+        if (input$scenarioName !="") {
+          scnID = UUIDgenerate()
+          scnName = input$scenarioName
+          scenarios$savedScenarios[[scnName]] <- resultados()
+          summaryScenarios = data.frame(outcomes=scenarios$savedScenarios[[1]]$outcomes[[1]])
+          show("ver_escenarios_guardados")
+          
+          for (i in names(scenarios$savedScenarios)){
+            summaryScenarios = cbind(summaryScenarios,data.frame(scenarios$savedScenarios[[i]]$outcomes[,"undisc"]))
+          }
+          
+          colnames(summaryScenarios)[2:ncol(summaryScenarios)] = names(scenarios$savedScenarios)
+          colnames(summaryScenarios)[1] = "Outcomes"
+          summaryScenarios = summaryScenarios %>% mutate(across(c(2:ncol(summaryScenarios)), function(x) format(round(x,1), nsmall = 1,big.mark = ".", decimal.mark = ",", scientific = FALSE)))
+          
+          if (is.null(input$savedScenarios)) {
+            scenarios$summaryTable = summaryScenarios   
+          } else {
+            scenarios$summaryTable = summaryScenarios[,c("Outcomes",names(scenarios$savedScenarios))]   
+          }
+          
+          # envía aviso de escenario guardado
+          sendSweetAlert(
+            session = session,
+            title = "Escenario guardado",
+            text = paste0("Nombre: ",scnName),
+            type = "success",
+            btn_labels = "Continuar",
+            btn_colors = "#E95420"
+              
+          )
+          
+          # oculta div guardar escenario una vez guardado
+          hide("guardar_hpv", anim = T, animType = "slide")
+          hide("scenarioName", anim = T, animType = "slide")
+          hide("saveScenario2", anim = T, animType = "slide")
+          show("saveScenario", anim = T, animType = "fade")
+          updateTextAreaInput(session,"scenarioName",value="")  
+          
         } else {
-          scenarios$summaryTable = summaryScenarios[,c("Outcomes",names(scenarios$savedScenarios))]   
+          sendSweetAlert(
+            session = session,
+            title = "",
+            text = "Debe definir un nombre para guardar el escenario.",
+            type = "error"
+          )
+          hide("guardar_hpv", anim = T, animType = "slide")
+          hide("scenarioName", anim = T, animType = "slide")
+          hide("saveScenario2", anim = T, animType = "slide")
+          show("saveScenario", anim = T, animType = "slide")
         }
         
-        # envía aviso de escenario guardado
-        sendSweetAlert(
-          session = session,
-          title = "Escenario guardado",
-          text = paste0("Nombre: ",scnName),
-          type = "success",
-          btn_labels = "Continuar",
-          btn_colors = "#E95420"
+      } else if (input$intervencion == "HEARTS") {
+        
+        if (input$scenarioName !="") {
+          scnID = UUIDgenerate()
+          scnName = input$scenarioName
+          country_sel = str_to_title(input$country)
           
-        )
-        
-        # oculta div guardar escenario una vez guardado
-        hide("guardar_hpv", anim = T, animType = "slide")
-        hide("scenarioName", anim = T, animType = "slide")
-        hide("saveScenario2", anim = T, animType = "slide")
-        show("saveScenario", anim = T, animType = "fade")
-        updateTextAreaInput(session,"scenarioName",value="")  
-        
-      } else {
-        sendSweetAlert(
-          session = session,
-          title = "",
-          text = "Debe definir un nombre para guardar el escenario.",
-          type = "error"
-        )
-        hide("guardar_hpv", anim = T, animType = "slide")
-        hide("scenarioName", anim = T, animType = "slide")
-        hide("saveScenario2", anim = T, animType = "slide")
-        show("saveScenario", anim = T, animType = "slide")
-      }
-      
-    } else if (input$intervencion == "HEARTS") {
-      
-      if (input$scenarioName !="") {
-        scnID = UUIDgenerate()
-        scnName = input$scenarioName
-        country_sel = str_to_title(input$country)
-        
-        metrica_baseline = names(run_hearts()$run[[country_sel]]$baseline)
-        valores_baseline = unname(unlist(run_hearts()$run[[country_sel]]$baseline))
-        metrica_target = names(run_hearts()$run[[country_sel]]$target)
-        valores_target = unname(unlist(run_hearts()$run[[country_sel]]$target))
-        
-        table = left_join(
-          data.frame(
-            metrica = metrica_baseline,
-            valores_baseline
-          ),
-          data.frame(
-            metrica = metrica_target,
-            valores_target
-          ))
-        
-        table = table[7:17,c("metrica","valores_target")]
-        colnames(table) = c("Indicador","Valor")  
-        
-        epi = run_hearts()$epi_outcomes
-        colnames(epi) = colnames(table)
-        
-        costos = data.frame(
-          Indicador=names(run_hearts()$costs_outcomes),
-          Valor=unname(unlist(run_hearts()$costs_outcomes))
+          metrica_baseline = names(run_hearts()$run[[country_sel]]$baseline)
+          valores_baseline = unname(unlist(run_hearts()$run[[country_sel]]$baseline))
+          metrica_target = names(run_hearts()$run[[country_sel]]$target)
+          valores_target = unname(unlist(run_hearts()$run[[country_sel]]$target))
           
-        ) 
+          table = left_join(
+            data.frame(
+              metrica = metrica_baseline,
+              valores_baseline
+            ),
+            data.frame(
+              metrica = metrica_target,
+              valores_target
+            ))
+          
+          table = table[7:17,c("metrica","valores_target")]
+          colnames(table) = c("Indicador","Valor")  
+          
+          epi = run_hearts()$epi_outcomes
+          colnames(epi) = colnames(table)
+          
+          costos = data.frame(
+            Indicador=names(run_hearts()$costs_outcomes),
+            Valor=unname(unlist(run_hearts()$costs_outcomes))
+            
+          ) 
+          
+          table = rbind(
+            table,
+            epi,
+            costos
+          )
+          
+          table$Valor = round(table$Valor,1)
+          
+          hearts_scenarios$savedScenarios[[scnName]] <- table
+          
+          sendSweetAlert(
+            session = session,
+            title = "Escenario guardado",
+            text = paste0("Nombre: ",scnName),
+            type = "success"
+          )
+          
+          # oculta div guardar escenario una vez guardado
+          hide("guardar_hpv", anim = T, animType = "slide")
+          hide("scenarioName", anim = T, animType = "slide")
+          hide("saveScenario2", anim = T, animType = "slide")
+          show("saveScenario", anim = T, animType = "fade")
+          updateTextAreaInput(session,"scenarioName",value="")
+          show("ver_escenarios_guardados", anim = T, animType = "fade")
+          
+        } else {
+          sendSweetAlert(
+            session = session,
+            title = "Error",
+            text = "Debe definir un nombre para guardar el escenario.",
+            type = "error"
+          )
+          
+          hide("guardar_hpv", anim = T, animType = "slide")
+          hide("scenarioName", anim = T, animType = "slide")
+          hide("saveScenario2", anim = T, animType = "slide")
+          show("saveScenario", anim = T, animType = "slide")
+          
+        }
         
-        table = rbind(
-          table,
-          epi,
-          costos
-        )
+      } else if (input$intervencion == "Hemorragia postparto") {
+        if (input$scenarioName !="") {
+          scnID = UUIDgenerate()
+          scnName = input$scenarioName
+          
+          table = hpp_run()
+          
+          hpp_scenarios$savedScenarios[[scnName]] <- table
+          
+          sendSweetAlert(
+            session = session,
+            title = "Escenario guardado",
+            text = paste0("Nombre: ",scnName),
+            type = "success"
+          )
+          # oculta div guardar escenario una vez guardado
+          hide("guardar_hpv", anim = T, animType = "slide")
+          hide("scenarioName", anim = T, animType = "slide")
+          hide("saveScenario2", anim = T, animType = "slide")
+          show("saveScenario", anim = T, animType = "fade")
+          updateTextAreaInput(session,"scenarioName",value="")
+          show("ver_escenarios_guardados", anim = T, animType = "fade")
+        } else {
+          sendSweetAlert(
+            session = session,
+            title = "Error",
+            text = "Debe definir un nombre para guardar el escenario.",
+            type = "error"
+          )
+          hide("guardar_hpv", anim = T, animType = "slide")
+          hide("scenarioName", anim = T, animType = "slide")
+          hide("saveScenario2", anim = T, animType = "slide")
+          show("saveScenario", anim = T, animType = "slide")
+        }
+      } else if (input$intervencion == "Hepatitis C") {
+        if (input$scenarioName !="") {
+          
+          scnID = UUIDgenerate()
+          scnName = input$scenarioName
+          
+          table = hepC_run()
+          
+          hepC_scenarios$savedScenarios[[scnName]] <- table
+          
+          sendSweetAlert(
+            session = session,
+            title = "Escenario guardado",
+            text = paste0("Nombre: ",scnName),
+            type = "success"
+          )
+          
+          hide("guardar_hpv", anim = T, animType = "slide")
+          hide("scenarioName", anim = T, animType = "slide")
+          hide("saveScenario2", anim = T, animType = "slide")
+          show("saveScenario", anim = T, animType = "fade")
+          updateTextAreaInput(session,"scenarioName",value="")
+          show("ver_escenarios_guardados", anim = T, animType = "fade")
+        } else {
+          sendSweetAlert(
+            session = session,
+            title = "Error",
+            text = "Debe definir un nombre para guardar el escenario.",
+            type = "error"
+          )
+          hide("guardar_hpv", anim = T, animType = "slide")
+          hide("scenarioName", anim = T, animType = "slide")
+          hide("saveScenario2", anim = T, animType = "slide")
+          show("saveScenario", anim = T, animType = "slide")
+        }
         
-        table$Valor = round(table$Valor,1)
         
-        hearts_scenarios$savedScenarios[[scnName]] <- table
         
-        sendSweetAlert(
-          session = session,
-          title = "Escenario guardado",
-          text = paste0("Nombre: ",scnName),
-          type = "success"
-        )
+      } else if (input$intervencion == "VDOT Tuberculosis") {
+        if (input$scenarioName !="") {
+          
+          scnID = UUIDgenerate()
+          scnName = input$scenarioName
+          
+          table = tbc_run()
+          
+          tbc_scenarios$savedScenarios[[scnName]] <- table
+          
+          sendSweetAlert(
+            session = session,
+            title = "Escenario guardado",
+            text = paste0("Nombre: ",scnName),
+            type = "success"
+          )
+          
+          hide("guardar_hpv", anim = T, animType = "slide")
+          hide("scenarioName", anim = T, animType = "slide")
+          hide("saveScenario2", anim = T, animType = "slide")
+          show("saveScenario", anim = T, animType = "fade")
+          updateTextAreaInput(session,"scenarioName",value="")
+          show("ver_escenarios_guardados", anim = T, animType = "fade")
+        } else {
+          sendSweetAlert(
+            session = session,
+            title = "Error",
+            text = "Debe definir un nombre para guardar el escenario.",
+            type = "error"
+          )
+          hide("guardar_hpv", anim = T, animType = "slide")
+          hide("scenarioName", anim = T, animType = "slide")
+          hide("saveScenario2", anim = T, animType = "slide")
+          show("saveScenario", anim = T, animType = "slide")
+        }
         
-        # oculta div guardar escenario una vez guardado
-        hide("guardar_hpv", anim = T, animType = "slide")
-        hide("scenarioName", anim = T, animType = "slide")
-        hide("saveScenario2", anim = T, animType = "slide")
-        show("saveScenario", anim = T, animType = "fade")
-        updateTextAreaInput(session,"scenarioName",value="")
-        show("ver_escenarios_guardados", anim = T, animType = "fade")
         
-      } else {
-        sendSweetAlert(
-          session = session,
-          title = "Error",
-          text = "Debe definir un nombre para guardar el escenario.",
-          type = "error"
-        )
         
-        hide("guardar_hpv", anim = T, animType = "slide")
-        hide("scenarioName", anim = T, animType = "slide")
-        hide("saveScenario2", anim = T, animType = "slide")
-        show("saveScenario", anim = T, animType = "slide")
+      } else if (input$intervencion == "Profilaxis Pre Exposición VIH") {
+        if (input$scenarioName !="") {
+          scnID = UUIDgenerate()
+          scnName = input$scenarioName
+          
+          table = prep_run()
+          table$Parametro = prep_outcomes_labels()
+          
+          prep_scenarios$savedScenarios[[scnName]] <- table
+          
+          sendSweetAlert(
+            session = session,
+            title = "Escenario guardado",
+            text = paste0("Nombre: ",scnName),
+            type = "success"
+          )
+          
+          hide("guardar_hpv", anim = T, animType = "slide")
+          hide("scenarioName", anim = T, animType = "slide")
+          hide("saveScenario2", anim = T, animType = "slide")
+          show("saveScenario", anim = T, animType = "fade")
+          updateTextAreaInput(session,"scenarioName",value="")
+          show("ver_escenarios_guardados", anim = T, animType = "fade")
+        } else {
+          sendSweetAlert(
+            session = session,
+            title = "Error",
+            text = "Debe definir un nombre para guardar el escenario.",
+            type = "error"
+          )
+          hide("guardar_hpv", anim = T, animType = "slide")
+          hide("scenarioName", anim = T, animType = "slide")
+          hide("saveScenario2", anim = T, animType = "slide")
+          show("saveScenario", anim = T, animType = "slide")
+        }
+        
+        
         
       }
       
-    } else if (input$intervencion == "Hemorragia postparto") {
-      if (input$scenarioName !="") {
-        scnID = UUIDgenerate()
-        scnName = input$scenarioName
-        
-        table = hpp_run()
-        
-        hpp_scenarios$savedScenarios[[scnName]] <- table
-        
-        sendSweetAlert(
-          session = session,
-          title = "Escenario guardado",
-          text = paste0("Nombre: ",scnName),
-          type = "success"
-        )
-        # oculta div guardar escenario una vez guardado
-        hide("guardar_hpv", anim = T, animType = "slide")
-        hide("scenarioName", anim = T, animType = "slide")
-        hide("saveScenario2", anim = T, animType = "slide")
-        show("saveScenario", anim = T, animType = "fade")
-        updateTextAreaInput(session,"scenarioName",value="")
-        show("ver_escenarios_guardados", anim = T, animType = "fade")
-      } else {
-        sendSweetAlert(
-          session = session,
-          title = "Error",
-          text = "Debe definir un nombre para guardar el escenario.",
-          type = "error"
-        )
-        hide("guardar_hpv", anim = T, animType = "slide")
-        hide("scenarioName", anim = T, animType = "slide")
-        hide("saveScenario2", anim = T, animType = "slide")
-        show("saveScenario", anim = T, animType = "slide")
-      }
-    } else if (input$intervencion == "Hepatitis C") {
-      if (input$scenarioName !="") {
-        
-        scnID = UUIDgenerate()
-        scnName = input$scenarioName
-        
-        table = hepC_run()
-        
-        hepC_scenarios$savedScenarios[[scnName]] <- table
-        
-        sendSweetAlert(
-          session = session,
-          title = "Escenario guardado",
-          text = paste0("Nombre: ",scnName),
-          type = "success"
-        )
-        
-        hide("guardar_hpv", anim = T, animType = "slide")
-        hide("scenarioName", anim = T, animType = "slide")
-        hide("saveScenario2", anim = T, animType = "slide")
-        show("saveScenario", anim = T, animType = "fade")
-        updateTextAreaInput(session,"scenarioName",value="")
-        show("ver_escenarios_guardados", anim = T, animType = "fade")
-      } else {
-        sendSweetAlert(
-          session = session,
-          title = "Error",
-          text = "Debe definir un nombre para guardar el escenario.",
-          type = "error"
-        )
-        hide("guardar_hpv", anim = T, animType = "slide")
-        hide("scenarioName", anim = T, animType = "slide")
-        hide("saveScenario2", anim = T, animType = "slide")
-        show("saveScenario", anim = T, animType = "slide")
-      }
       
-      
-      
-    } else if (input$intervencion == "VDOT Tuberculosis") {
-      if (input$scenarioName !="") {
-        
-        scnID = UUIDgenerate()
-        scnName = input$scenarioName
-        
-        table = tbc_run()
-        
-        tbc_scenarios$savedScenarios[[scnName]] <- table
-        
-        sendSweetAlert(
-          session = session,
-          title = "Escenario guardado",
-          text = paste0("Nombre: ",scnName),
-          type = "success"
-        )
-        
-        hide("guardar_hpv", anim = T, animType = "slide")
-        hide("scenarioName", anim = T, animType = "slide")
-        hide("saveScenario2", anim = T, animType = "slide")
-        show("saveScenario", anim = T, animType = "fade")
-        updateTextAreaInput(session,"scenarioName",value="")
-        show("ver_escenarios_guardados", anim = T, animType = "fade")
-      } else {
-        sendSweetAlert(
-          session = session,
-          title = "Error",
-          text = "Debe definir un nombre para guardar el escenario.",
-          type = "error"
-        )
-        hide("guardar_hpv", anim = T, animType = "slide")
-        hide("scenarioName", anim = T, animType = "slide")
-        hide("saveScenario2", anim = T, animType = "slide")
-        show("saveScenario", anim = T, animType = "slide")
-      }
-      
-      
-      
-    } else if (input$intervencion == "Profilaxis Pre Exposición VIH") {
-      if (input$scenarioName !="") {
-        scnID = UUIDgenerate()
-        scnName = input$scenarioName
-        
-        table = prep_run()
-        table$Parametro = prep_outcomes_labels()
-        
-        prep_scenarios$savedScenarios[[scnName]] <- table
-        
-        sendSweetAlert(
-          session = session,
-          title = "Escenario guardado",
-          text = paste0("Nombre: ",scnName),
-          type = "success"
-        )
-        
-        hide("guardar_hpv", anim = T, animType = "slide")
-        hide("scenarioName", anim = T, animType = "slide")
-        hide("saveScenario2", anim = T, animType = "slide")
-        show("saveScenario", anim = T, animType = "fade")
-        updateTextAreaInput(session,"scenarioName",value="")
-        show("ver_escenarios_guardados", anim = T, animType = "fade")
-      } else {
-        sendSweetAlert(
-          session = session,
-          title = "Error",
-          text = "Debe definir un nombre para guardar el escenario.",
-          type = "error"
-        )
-        hide("guardar_hpv", anim = T, animType = "slide")
-        hide("scenarioName", anim = T, animType = "slide")
-        hide("saveScenario2", anim = T, animType = "slide")
-        show("saveScenario", anim = T, animType = "slide")
-      }
-      
-      
-      
+    } else {
+      sendSweetAlert(
+        session = session,
+        title = "Error",
+        text = "Ya existe un escenario con ese nombre.",
+        type = "error"
+      )
     }
-    
     
   })
   
