@@ -32,7 +32,6 @@ server_hpv = function (input, output, session, parameterReactive, scenarios, res
   
   output$panel_comparacion = renderUI({
     table = summary_scenarios$table
-    
     tagList(
       # column(3,
       #   pickerInput(

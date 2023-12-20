@@ -253,7 +253,8 @@ ui_resultados_hearts = function(input,output,resultados) {
             title = list(text='<b>Modelo predictivo para la mortalidad por enfermedad isquémica del corazón<b>',
                          font=
                            list(color = '#265787',
-                                family = "Istok Web")),
+                                family = "Istok Web",
+                                size=15)),
             xaxis = list(title =list(text="Prevalencia de control de HTA en la población (%)",
                                      font=list(
                                        family = "Istok Web",
@@ -402,10 +403,11 @@ ui_resultados_hearts = function(input,output,resultados) {
           )%>% config(displayModeBar = FALSE) %>%
           layout(
             showlegend = FALSE,
-            title = list(text='<b>Modelo predictivo para la mortalidad por accidente cerebrovascular<b>',
+            title = list(text='<b>Modelo predictivo para la mortalidad por accidente cerebrovascular',
                          font=
                            list(color = '#265787',
-                                family = "Istok Web")
+                                family = "Istok Web",
+                                size = 15)
             ),
             xaxis = list(title = list(text="Prevalencia de control de HTA en la población (%)",font=list(
               family = "Istok Web",
@@ -501,9 +503,22 @@ ui_resultados_hearts = function(input,output,resultados) {
     })
     
     tagList(
-      plotlyOutput("hearts_grafico_1"),
-      plotlyOutput("hearts_grafico_2"),
-      reactableOutput("hearts_resultados")
+      fluidRow(
+        column(6,
+               plotlyOutput("hearts_grafico_1")),
+        column(6,
+               plotlyOutput("hearts_grafico_2"))
+      ),
+      br(),
+      br(),
+      fluidRow(
+        column(12,
+               reactableOutput("hearts_resultados"))
+        
+      )
+      
+      
+      
     )
     
     

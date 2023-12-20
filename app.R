@@ -17,7 +17,7 @@ source("UI/UI_routes.R", encoding = "UTF-8")
 source("server/server_hpv.R", encoding = "UTF-8")
 
 server <- function(input, output, session) {
-  hide("row_comparacion")
+  #hide("row_comparacion")
   hide("columna_borde")
   hide("columna_resultados_borde")
   
@@ -191,6 +191,7 @@ server <- function(input, output, session) {
   })
   
   observeEvent(input$NVP, {
+    if (nrow(summary_scenarios$table)!=0) {hide("no_esc")}
     if (input$NVP == "<div class = \"text-white\")>Escenarios guardados</div>") {
       if (nrow(summary_scenarios$table)>0) {
         show("row_comparacion", anim = T, animType = "fade")

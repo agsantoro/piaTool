@@ -173,8 +173,10 @@ ui_avanzada <- navbarPage(
     HTML('<div class = "text-white")>Escenarios guardados</div>'),
     fluidRow(id = "row_comparacion",
              class = "bg-slate-200 mb-10",
+             
              column(10,
                     br(),
+                    h1(id = "no_esc", "Defina un escenario para ver los resultados"),
                     hidden(uiOutput("panel_comparacion"))),
              br(),
              column(1),
@@ -229,30 +231,46 @@ ui_avanzada <- navbarPage(
                 type = "pills",
                 tabPanel("Vacuna contra el HPV",
                          br(),
-                         tags$iframe(src='modelCards/prueba-prime.html', 
+                         tags$iframe(src='modelCards/model_card_vacuna_vph.html', 
                                      height=600, 
                                      width="100%",
                                      frameBorder="0")),
                 tabPanel("HEARTS",
                          br(),
-                         tags$iframe(src='modelCards/documentacion-estimatool.html', 
+                         tags$iframe(src='modelCards/model_card_hearts.html', 
                                      height=600, 
                                      width="100%",
                                      frameBorder="0")),
-                tabPanel("Hemorragia postparto",
-                         br(),
-                         tags$iframe(src='modelCards/documentacion-hemorragiapp.html', 
-                                     height=600, 
-                                     width="100%",
-                                     frameBorder="0")),
+                
                 tabPanel("Hepatitis C",
                          br(),
-                tags$iframe(src='modelCards/Documentación---HepC.html', 
+                tags$iframe(src='modelCards/model_card_hepc.html', 
                             height=600, 
                             width="100%",
                             frameBorder="0")
-                         ))
+                         ),
+                tabPanel("Hemorragia postparto",
+                         br(),
+                         tags$iframe(src='modelCards/model_card_hpp.html', 
+                                     height=600, 
+                                     width="100%",
+                                     frameBorder="0")),
+                tabPanel("Profilaxis Pre Exposición VIH",
+                         br(),
+                         tags$iframe(src='modelCards/model_card_prep_vih.html', 
+                                     height=600, 
+                                     width="100%",
+                                     frameBorder="0")
+                          ),
+                tabPanel("VDOT Tuberculosis",
+                         br(),
+                         tags$iframe(src='modelCards/model_card_vdot_tbc.html', 
+                                     height=600, 
+                                     width="100%",
+                                     frameBorder="0")
+                )
     )
+  )
     
     
   
