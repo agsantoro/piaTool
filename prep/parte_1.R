@@ -17,7 +17,7 @@ distribucion_cohortes <- readxl::read_excel("prep/data/DISTRIBUCION_COHORTES.xls
 
 
 pais_select <- "ARGENTINA"
-casosIncidentes = datos_paises %>%  filter(pais_select==pais) %>% select(`Nuevos casos HIV en población`) %>% as.numeric()
+casosIncidentes = datos_paises %>%  filter(pais_select==pais) %>% select(`Nuevos casos HIV en poblacion`) %>% as.numeric()
 casosIncidentes
 casosPrevalentes = datos_paises %>%  filter(pais_select==pais) %>% select(`Casos Prevalentes HIV en población`) %>% as.numeric()
 prevalenciaHIV = datos_paises %>%  filter(pais_select==pais) %>% select(`% de HIV en la población`) %>% as.numeric()
@@ -1270,10 +1270,10 @@ for (i in 2:(numeroCiclos+1)) {
     modelo$costoSanoD + (modelo$ciclos[[i-1]]$CostoSano / (1 + tasaDescuento) ^ i)
   
   
-  modelo$costoPrEP <-
-    modelo$costoPrEP + modelo$ciclos[[i]]$costoPrEP
-  modelo$costoPrEPD <-
-    modelo$costoPrEPD + (modelo$ciclos[[i]]$costoPrEP / (1 + tasaDescuento) ^ i)
+  modelo$CostoPrEP <-
+    modelo$CostoPrEP + modelo$ciclos[[i]]$CostoPrEP
+  modelo$CostoPrEPD <-
+    modelo$CostoPrEPD + (modelo$ciclos[[i]]$CostoPrEP / (1 + tasaDescuento) ^ i)
   
   # Actualizar tiempo sin diagnóstico
   modelo$TiempoSinDx <-
@@ -1312,7 +1312,7 @@ resultados <- escribirResultadosComparacion(
   modelo$casosHIVDx, 
   modelo$TiempoSinDx, 
   modelo$CostoSano, 
-  modelo$costoPrEP, 
+  modelo$CostoPrEP, 
   modelo$CostoHIV, 
   modelo$casosHIV + modelo$ciclos[[1]]$InfectadosTotal, 
   modelo$anosVividosD, 
