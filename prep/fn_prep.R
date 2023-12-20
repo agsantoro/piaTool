@@ -8,39 +8,47 @@ funcionPrincipal <- function(linea,paisCol, parametro){
 # Usando list2env para crear variables en el entorno global
 list2env(parametro, envir = .GlobalEnv)
   
-  names(parametro)
-  
-datos_paises <- readxl::read_excel("prep/data/Datos_paises.xlsx")
-utilidades <- readxl::read_excel("prep/data/utilidades.xlsx")
-utilidades2 <- readxl::read_excel("prep/data/utilidades.xlsx", sheet = "Hoja2")
+
+input_prep <- readxl::read_excel("prep/data/inputs_prep.xlsx")
+
+# datos_paises <- readxl::read_excel("prep/data/Datos_paises.xlsx")
+# utilidades <- readxl::read_excel("prep/data/utilidades.xlsx")
+# utilidades2 <- readxl::read_excel("prep/data/utilidades.xlsx", sheet = "Hoja2")
 probabilidades <- readxl::read_excel("prep/data/probabilidades.xlsx")
-#parametros <- readxl::read_excel("prep/data/parametros.xlsx")
-costos <- readxl::read_excel("prep/data/Costos.xlsx")
-probabilidad_muerte <- readxl::read_excel("prep/data/PROBABILIDAD_MUERTE.xlsx")
+parametros <- readxl::read_excel("prep/data/parametros.xlsx")
+#costos <- readxl::read_excel("prep/data/Costos.xlsx")
+#probabilidad_muerte <- readxl::read_excel("prep/data/PROBABILIDAD_MUERTE.xlsx")
+probabilidad_muerte <-input_prep %>% filter(PAIS==paisCol & tipo=="PROBABILIDAD_MUERTE") %>% select(VALOR) %>% as.data.frame()
 distribucion_cohortes <- readxl::read_excel("prep/data/DISTRIBUCION_COHORTES.xlsx")
+utilidades2 <- input_prep %>% filter(PAIS==paisCol & tipo=="UTILIDAD") %>% select(VALOR) %>% as.data.frame()
 
 
-casosIncidentes = datos_paises %>%  filter(paisCol==pais) %>% select(`Nuevos casos HIV en poblacion`) %>% as.numeric()
-casosIncidentes
-casosPrevalentes = datos_paises %>%  filter(paisCol==pais) %>% select(`Casos Prevalentes HIV en poblacion`) %>% as.numeric()
-prevalenciaHIV = datos_paises %>%  filter(paisCol==pais) %>% select(`% de HIV en la poblacion`) %>% as.numeric()
-pHIVDiagnosticado =  datos_paises %>%  filter(paisCol==pais) %>% select(`% de hiv diagnosticados`) %>% as.numeric()
-pHIVTratado = datos_paises %>%  filter(paisCol==pais) %>% select(`% de hiv tratados`) %>% as.numeric()
-pHIVControlado = datos_paises %>%  filter(paisCol==pais) %>% select(`% de hiv controlados`) %>% as.numeric()
+casosIncidentes = input_prep %>%  filter(PAIS==paisCol & PARAMETRO=="Nuevos casos HIV en poblacion") %>% select(VALOR) %>% as.numeric()
+casosPrevalentes = input_prep %>% filter(PAIS==paisCol & PARAMETRO=="Casos Prevalentes HIV en poblacion") %>% select(VALOR) %>% as.numeric()
+prevalenciaHIV =input_prep %>% filter(PAIS==paisCol & PARAMETRO=="% de HIV en la poblacion") %>% select(VALOR) %>% as.numeric()
+pHIVDiagnosticado = input_prep %>% filter(PAIS==paisCol & PARAMETRO=="% de hiv diagnosticados") %>% select(VALOR) %>% as.numeric()
+pHIVTratado =input_prep %>% filter(PAIS==paisCol & PARAMETRO=="% de hiv tratados") %>% select(VALOR) %>% as.numeric()
+pHIVControlado = input_prep %>% filter(PAIS==paisCol & PARAMETRO=="% de hiv controlados") %>% select(VALOR) %>% as.numeric()
+esperanzaVida = input_prep %>% filter(PAIS==paisCol & PARAMETRO=="Esperanza de Vida") %>% select(VALOR) %>% as.numeric()
+
+
+## PARAMETRO QUE NO ESTA EN LOS INPUTS
 rrHIVDiagnosticadoNoTratados = 0.43 # ver luego
-
-esperanzaVida = datos_paises %>%  filter(paisCol==pais) %>% select(`Esperanza de Vida`) %>% as.numeric()
 
 
 #'Seteos basales
 testPorAno = 1 #definodo en hoja 6
 escribir = "True"
-#paisCol ="ARGENTINA" #Hardcodeado Argentina
 ciclosPorAno = 4 #El modelo hace ciclos trimestrales
 tasaDescuento = descuento / ciclosPorAno #Calculamos la tasa de descuento trimestral.
-utilidades$`Early HIV`
-uHIV = utilidades %>% select(`Early HIV`) %>% as.numeric()
-uHIVTTO = utilidades %>% select(`TTO`) %>% as.numeric()
+
+
+uHIV = input_prep %>% 
+  filter(PAIS=="GLOBAL" & tipo=="UTILIDAD" & PARAMETRO=="Early HIV") %>%
+  select(VALOR) %>% as.numeric()
+uHIVTTO = input_prep %>% filter(PAIS=="GLOBAL" & tipo=="UTILIDAD" & PARAMETRO=="TTO") %>%  select(VALOR) %>% as.numeric()
+  
+
 cuHIV = uHIV / ciclosPorAno 
 cuHIVTTO = uHIVTTO / ciclosPorAno 
 
@@ -52,7 +60,7 @@ cuPoblacion <- numeric(101)
 
 
 for (z in 0:100) {
-  uPoblacion[z + 1] <- utilidades2[z + 1, paisCol]
+  uPoblacion[z + 1] <- utilidades2[z + 1,1]
   cuPoblacion[z + 1] <- uPoblacion[[z + 1]] / ciclosPorAno
 }
 #[/Modificado LEAN]
@@ -71,50 +79,50 @@ for (z in 1:5) {
 
 # cargamos costos
 # '////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-cDiagnostico = costos %>% filter(costo=="DIAGNOSTICO") %>%
-  select(!!sym(paisCol)) %>%
-  as.numeric()
 
-cSeguimientoHIV_anual = costos %>% filter(costo=="SEGUIMIENTO") %>%
-  select(!!sym(paisCol)) %>%
-  as.numeric()
+cComplicacionesHIV =input_prep %>% 
+  filter(PAIS==paisCol & tipo=="COSTOS" & PARAMETRO=="COMPLICACIONES") %>%
+  select(VALOR) %>% as.numeric()
+
+cDiagnostico =input_prep %>% 
+  filter(PAIS==paisCol & tipo=="COSTOS" & PARAMETRO=="DIAGNOSTICO") %>%
+  select(VALOR) %>% as.numeric()
+
+cSeguimientoHIV_anual = input_prep %>% 
+  filter(PAIS==paisCol & tipo=="COSTOS" & PARAMETRO=="SEGUIMIENTO") %>%
+  select(VALOR) %>% as.numeric()
 
 cSeguimientoHIV <- cSeguimientoHIV_anual/ciclosPorAno
 
-cTratamientoHIV_anual =costos %>% filter(costo=="TRATAMIENTO") %>%
-  select(!!sym(paisCol)) %>%
-  as.numeric() 
+cTratamientoHIV_anual =input_prep %>% 
+  filter(PAIS==paisCol & tipo=="COSTOS" & PARAMETRO=="TRATAMIENTO") %>%
+  select(VALOR) %>% as.numeric()
 
 cTratamientoHIV <- cTratamientoHIV_anual/ciclosPorAno
 
-cPrEPTratamiento_anual = costos %>% filter(costo=="PREP_TTO") %>%
-  select(!!sym(paisCol)) %>%
-  as.numeric() 
+cPrEPTratamiento_anual = input_prep %>% 
+  filter(PAIS==paisCol & tipo=="COSTOS" & PARAMETRO=="PREP_TTO") %>%
+  select(VALOR) %>% as.numeric()
 
 cPrEPTratamiento <- cPrEPTratamiento_anual/ciclosPorAno
 
 
-cPrEPSeguimiento_anual = costos %>% filter(costo=="PREP_SEGUIMIENTO") %>%
-  select(!!sym(paisCol)) %>%
-  as.numeric() 
+cPrEPSeguimiento_anual = input_prep %>% 
+  filter(PAIS==paisCol & tipo=="COSTOS" & PARAMETRO=="PREP_SEGUIMIENTO") %>%
+  select(VALOR) %>% as.numeric()
 
 cPrEPSeguimiento <- cPrEPSeguimiento_anual/ciclosPorAno
 
-cPrEPTest_anual = costos %>% filter(costo=="PREP_TEST") %>%
-  select(!!sym(paisCol)) %>%
-  as.numeric() 
+cPrEPTest_anual = input_prep %>% 
+  filter(PAIS==paisCol & tipo=="COSTOS" & PARAMETRO=="PREP_TEST") %>%
+  select(VALOR) %>% as.numeric()
 
 cPrEPTest <-  cPrEPTest_anual/ciclosPorAno
 
-cConsulta = costos %>% filter(costo=="CONSULTA") %>%
-  select(!!sym(paisCol)) %>%
-  as.numeric()
-##VER ESTO NO HAY COSOTOS PARA COMPLICACIONES
-# cComplicacionesHIV = costos %>% filter(costo=="CONSULTA") %>%
-#   select(!!sym(paisCol)) %>%
-#   as.numeric()
+cConsulta = input_prep %>% 
+  filter(PAIS==paisCol & tipo=="COSTOS" & PARAMETRO=="CONSULTA") %>%
+  select(VALOR) %>% as.numeric()
 
-cComplicacionesHIV =0
 # 'Cargamos la array de utilidad restante.
 utilidadRestante = calcularUtilidadRestante(ciclosPorAno, esperanzaVida, cuPoblacion)
 
@@ -205,7 +213,7 @@ for (z in 1:ciclosPrEPOFF) {
 pMuerteGeneral <- NULL
 pMuerteGeneral <- numeric(101)  
 for (z in 1:86) {
-  pMuerteGeneral[14+z] <- 1 - exp(-probabilidad_muerte[z , paisCol] * (1 / ciclosPorAno))
+  pMuerteGeneral[14+z] <- 1 - exp(-probabilidad_muerte[z , 1] * (1 / ciclosPorAno))
 }
 
 pMuerteGeneral
