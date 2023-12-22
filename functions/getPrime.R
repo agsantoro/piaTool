@@ -1,22 +1,23 @@
 library(readxl)
 # parameters
-parameters = readxl::read_xlsx("xlsx/PRIME_v2.3.xlsx", sheet = "Parameters")
+parameters = readxl::read_xlsx("xlsx/PRIME_v2.3 (1).xlsx", sheet = "Parameters")
 
 
 # mortality and incidence data
-mortall = readxl::read_xlsx("xlsx/PRIME_v2.3.xlsx", sheet = "mortall")
+mortall = readxl::read_xlsx("xlsx/PRIME_v2.3 (1).xlsx", sheet = "mortall")
 
 
-mortcecx = readxl::read_xlsx("xlsx/PRIME_v2.3.xlsx", sheet = "mortcecx")
+mortcecx = readxl::read_xlsx("xlsx/PRIME_v2.3 (1).xlsx", sheet = "mortcecx")
 
 mortcecx[is.na(mortcecx)] = 0
 
-incidence = readxl::read_xlsx("xlsx/PRIME_v2.3.xlsx", sheet = "incidence")
+incidence = readxl::read_xlsx("xlsx/PRIME_v2.3 (1).xlsx", sheet = "incidence")
+
 
 source("functions/createLifetable.R", encoding = "UTF-8")
 
 # dalys params
-dalys = readxl::read_xlsx("xlsx/PRIME_v2.3_old.xlsx", sheet = "Model", range = "AV2:AW6")
+dalys = readxl::read_xlsx("xlsx/PRIME_v2.3 (1).xlsx", sheet = "Model", range = "AV2:AW6")
 colnames(dalys)[1]="event"
 
 # model function
@@ -38,11 +39,13 @@ getPrime = function (
     discountRate,
     proportionOfCervicalCancerCasesThatAreDueToHPV16_18,
     GDPPerCapita,
+    coverageTarget,
     mortall,
     mortcecx,
     incidence,
     dalys,
     parameters) {
+  
   # lifetable
   lifeTable = createLifetable("ARGENTINA")
   
@@ -338,7 +341,8 @@ getPrime = function (
     "DALYs por cáncer terminal",
     "Tasa de descuento",
     "Proporción de casos de cáncer cervical debidos al HPV 16/18",
-    "PIB per cápita"
+    "PIB per cápita",
+    "Cobertura target (todas las dosis)"
   )
   
   inputsValues = c(
@@ -356,7 +360,8 @@ getPrime = function (
     input$DALYsForTerminalCancer,
     input$discountRate,
     input$proportionOfCervicalCancerCasesThatAreDueToHPV16_18,
-    input$GDPPerCapita
+    input$GDPPerCapita,
+    input$coverageTarget
   )
   
   inputsTable = data.frame(

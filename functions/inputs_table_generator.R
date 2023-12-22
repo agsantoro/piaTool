@@ -104,7 +104,6 @@ inputs_table_generator_multiple = function (input, output, inputs_scenarios, sum
   
   for (int in sel_intervencion) {
     for (esc in sel_escenario[sel_escenario %in% summary_scenarios$table$scenarioName[summary_scenarios$table$intervencion==int]]) {
-      print(paste(int,esc))
       table_inputs = inputs_scenarios$table
       table_inputs = table_inputs[table_inputs$country %in% sel_country &
                                   table_inputs$intervencion == int &

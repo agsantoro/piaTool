@@ -546,7 +546,7 @@ for (i in 2:(numeroCiclos+1)) {
       modelo$ciclos[[i - 1]]$CasosAcumulados
   
     #(edadMaximaInicial + anosPasados)
-    print(paste("anos pasados",anosPasados))
+    #print(paste("anos pasados",anosPasados))
 #inicia loop j --------------    
     
     #((edadMaximaInicial+ anosPasados)- 10)
@@ -1096,7 +1096,7 @@ for (i in 2:(numeroCiclos+1)) {
     
   }##aca cierro loop j
   
-    print(paste("$MuerteHIV$Total",i,modelo$ciclos[[i]]$MuerteHIV$Total))
+    #print(paste("$MuerteHIV$Total",i,modelo$ciclos[[i]]$MuerteHIV$Total))
   # Actualizar el total de casos de VIH diagnosticados y casos de VIH
   modelo$casosHIVDx <-
     modelo$casosHIVDx + modelo$ciclos[[i]]$nuevosCasosDx
@@ -1218,7 +1218,7 @@ for (i in 2:(numeroCiclos+1)) {
         modelo$ciclos[[i]]$InfectadoDx$Total
     ) / ciclosPorAño
   
-  print(paste("anos_vividos",modelo$anosVividos))
+  #print(paste("anos_vividos",modelo$anosVividos))
   
   modelo$anosVividosD <-
     modelo$anosVividosD + (((

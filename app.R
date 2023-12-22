@@ -585,7 +585,7 @@ server <- function(input, output, session) {
   })
   
   observeEvent(input$toggle_avanzado_hpv, {
-    for (i in names(parametersReactive())[4:15]) {
+    for (i in names(parametersReactive())[4:16]) {
       isVisible <- shinyjs::toggleState(id = i)
       
       toggle(id = i, anim = TRUE, animType = "slide", condition = isVisible)
@@ -637,6 +637,7 @@ server <- function(input, output, session) {
   ##### HPV #####
   # lista de parámetros
   parametersReactive <- reactive({
+    browser()
     paramsList = list(
       birthCohortSizeFemale = as.numeric(parameters[parameters$Country==input$country,8]),
       cohortSizeAtVaccinationAgeFemale = as.numeric(parameters[parameters$Country==input$country,10]),
@@ -652,7 +653,8 @@ server <- function(input, output, session) {
       DALYsForTerminalCancer = 0.78,
       discountRate = as.numeric(parameters[parameters$Country==input$country,18]),
       proportionOfCervicalCancerCasesThatAreDueToHPV16_18 = as.numeric(parameters[parameters$Country==input$country,19]),
-      GDPPerCapita = as.numeric(parameters[parameters$Country==input$country,20])
+      GDPPerCapita = as.numeric(parameters[parameters$Country==input$country,20]),
+      coverageTarget = as.numeric(parameters[parameters$Country==input$country,23])
     )
     return(paramsList)
   })
@@ -677,6 +679,7 @@ server <- function(input, output, session) {
       input$discountRate,
       input$proportionOfCervicalCancerCasesThatAreDueToHPV16_18,
       input$GDPPerCapita,
+      input$coverageTarget,
       mortall,
       mortcecx,
       incidence,
