@@ -478,7 +478,7 @@ ui_resultados_hearts = function(input,output,resultados) {
         rownames(table) = NULL
         
         table$Valor[table$cat=="Resultados económicos"] = paste0("$",table$Valor[table$cat=="Resultados económicos"])
-        
+        clipr::write_clip(table)
         reactable(
           table,
           groupBy = "cat",

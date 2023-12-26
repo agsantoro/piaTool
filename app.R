@@ -637,7 +637,6 @@ server <- function(input, output, session) {
   ##### HPV #####
   # lista de parámetros
   parametersReactive <- reactive({
-    browser()
     paramsList = list(
       birthCohortSizeFemale = as.numeric(parameters[parameters$Country==input$country,8]),
       cohortSizeAtVaccinationAgeFemale = as.numeric(parameters[parameters$Country==input$country,10]),
