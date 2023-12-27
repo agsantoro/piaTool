@@ -692,18 +692,18 @@ server <- function(input, output, session) {
   ##### HEARTS #####
   
   run_hearts <- reactive({
-    if (is.null(input$hearts_input_target_4)==F) {
+    if (is.null(input$hearts_input_1)==F) {
       estimaToolCosts(
         str_to_title(input$country),
         population$population[population$country==str_to_title(input$country)],
-        input$hearts_input_base_1,
-        input$hearts_input_target_1,
-        input$hearts_input_base_2,
-        input$hearts_input_target_2,
-        input$hearts_input_base_3,
-        input$hearts_input_target_3,
-        input$hearts_input_base_4,
-        input$hearts_input_target_4
+        input$hearts_input_1/100,
+        input$hearts_input_1/100,
+        input$hearts_input_2/100,
+        input$hearts_input_2/100,
+        input$hearts_input_3/100,
+        input$hearts_input_8/100,
+        input$hearts_input_4/100,
+        input$hearts_input_4/100
       )
     }
   })

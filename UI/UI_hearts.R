@@ -2,35 +2,36 @@ ui_hearts = function (input,base_line) {
   
   country_sel = str_to_title(input$country)
   renderUI({
-  
     input_names = c(
-      "Prevalencia de hipertensión entre adultos de 30-79 años, estandarizada por edad",
-      "Prevalencia de diagnóstico previo de hipertensión entre adultos de 30-79 años con hipertensión, estandarizada por edad.",
-      "Tratamiento entre diagnosticados (%)",
-      "Control de la hipertensión entre los tratados (%)"
+      "Prevalencia de adultos con hipertensión, estandarizada por edad",
+      "Porcentaje de adultos con hipertensión diagnosticados",
+      "Porcentaje de personas diagnosticadas que se encuentran en tratamiento (basal)",
+      "Porcentaje de adultos con hipertensión controla entre los tratados",
+      "Costo farmacológico anual promedio por paciente", 
+      "Costo de evento de enfermedad isquémica",
+      "Costo de seguimiento anual promedio por paciente",
+      "Porcentaje de personas diagnosticadas que se encuentran en tratamiento (objetivo)"
     )
     
-    names(input_names) = colnames(base_line)[2:5]
+    names(input_names) = colnames(base_line)[-c(1,6)]
+    names(input_names)[8] = names(input_names)[3] 
     
     if (is.null(input$country) == F) {
       i_names = c()
-      for (i in 1:4) {
-        i_names = c(i_names,paste0("hearts_input_base_",i))
-      }
-      
-      for (i in 5:8) {
-        i_names = c(i_names,paste0("hearts_input_target_",(i-4)))
+      for (i in 1:8) {
+        i_names = c(i_names,paste0("hearts_input_",i))
       }
       
       i_labels = c()
       
-      for (i in 1:4) {
+      for (i in 1:8) {
         i_labels = c(i_labels,input_names[i])
       }
       
-      for (i in 5:8) {
-        i_labels = c(i_labels,input_names[i-4])
-      }
+      # i_labels[3] = paste(i_labels[3],"(basal)")
+      # i_labels[7] = paste(i_labels[7],"(objetivo)")
+      # 
+      
       
       hearts_map_inputs = data.frame(
         intervencion = "HEARTS",
@@ -39,8 +40,8 @@ ui_hearts = function (input,base_line) {
       )
       
       hearts_map_inputs$avanzado = NA
-      hearts_map_inputs$avanzado[c(1,2,4,5,6,8)] = T
-      hearts_map_inputs$avanzado[c(3,7)] = F
+      hearts_map_inputs$avanzado[c(1,2,4,5,6,7)] = T
+      hearts_map_inputs$avanzado[c(3,8)] = F
       
       rownames(hearts_map_inputs) = 1:nrow(hearts_map_inputs)
       
@@ -50,57 +51,55 @@ ui_hearts = function (input,base_line) {
       )
       
     }
-    
     tagList(
-    
-      
-          h4("Línea de base"),
-          lapply(input_names[3], function (i) {
-            
-            sliderInput(paste0("hearts_input_base_",which(input_names==i)),
-                        input_names[input_names==i],
-                        value = base_line[base_line$country==country_sel,names(input_names[input_names==i])],
+          lapply(c(3), function (i) {
+            sliderInput(paste0("hearts_input_",i),
+                        input_names[i],
+                        value = 100*base_line[base_line$country==country_sel,names(input_names[i])],
                         min=0,
-                        max=1,
-                        step=.001)
+                        max=100,
+                        step=.1)
           }),
-          h4("Objetivo"),
-          lapply(input_names[3], function (i) {
-            sliderInput(paste0("hearts_input_target_",which(input_names==i)),
-                        input_names[input_names==i],
-                        value = targets_default[targets_default$country==country_sel,names(input_names[input_names==i])],
+          lapply(c(8), function (i) {
+            sliderInput(paste0("hearts_input_",i),
+                        input_names[i],
+                        value = 100*targets_default$treatment[targets_default$country==country_sel],
                         min=0,
-                        max=1,
-                        step=.001)
+                        max=100,
+                        step=.1)
           }),
         
           tags$header(class="text-1xl flex justify-between items-center p-5 mt-4", style="background-color: #FF671B; color: white; text-align: center", 
                       tags$h1(style="display: inline-block; margin: 0 auto;", class="flex-grow mt-8 mb-8",tags$b("Avanzado")),
                       actionLink(inputId = "toggle_avanzado_hearts", label=icon("stream", style = "color: white;"))
           ),
-          hidden(tags$div(id = "titulo1", h4("Línea de base"))),
           hidden(
-            lapply(input_names[c(1,2,4)], function (i) {
-              
-              sliderInput(paste0("hearts_input_base_",which(input_names==i)),
-                          input_names[input_names==i],
-                          value = base_line[base_line$country==country_sel,names(input_names[input_names==i])],
+            lapply(c(1,2,4), function (i) {
+              sliderInput(paste0("hearts_input_",i),
+                          input_names[i],
+                          value = 100*base_line[base_line$country==country_sel,names(input_names[i])],
                           min=0,
-                          max=1,
-                          step=.001)
-            })  
-          ),
-          hidden(tags$div(id = "titulo2", h4("Objetivo"))),
-          hidden(
-            lapply(input_names[c(1,2,4)], function (i) {
-              sliderInput(paste0("hearts_input_target_",which(input_names==i)),
-                          input_names[input_names==i],
-                          value = targets_default[targets_default$country==country_sel,names(input_names[input_names==i])],
-                          min=0,
-                          max=1,
-                          step=.001)
+                          max=100,
+                          step=.1)
+            }),
+            lapply(c(5,6,7), function (i) {
+              numericInput(paste0("hearts_input_",i),
+                          input_names[i],
+                          value = base_line[base_line$country==country_sel,names(input_names[i])],
+                          step=.1)
             })
-          )
+          ),
+          # hidden(tags$div(id = "titulo2", h4("Objetivo"))),
+          # hidden(
+          #   lapply(input_names[c(1,2,4)], function (i) {
+          #     sliderInput(paste0("hearts_input_target_",which(input_names==i)),
+          #                 input_names[input_names==i],
+          #                 value = targets_default[targets_default$country==country_sel,names(input_names[input_names==i])],
+          #                 min=0,
+          #                 max=1,
+          #                 step=.001)
+          #   })
+          # )
         )
       
     
@@ -110,23 +109,10 @@ ui_hearts = function (input,base_line) {
 }
 
 ui_resultados_hearts = function(input,output,resultados) {
-  paste(input$hearts_input_target_1)
+  paste(input$hearts_input_1)
   country_sel = str_to_title(input$country)
   
-  if (is.null(input$hearts_input_base_1)==F) {
-    
-    # run_hearts = estimaToolCosts(
-    #   str_to_title(input$country),
-    #   population$population[population$country==str_to_title(input$country)],
-    #   input$hearts_input_base_1,
-    #   input$hearts_input_target_1,
-    #   input$hearts_input_base_2,
-    #   input$hearts_input_target_2,
-    #   input$hearts_input_base_3,
-    #   input$hearts_input_target_3,
-    #   input$hearts_input_base_4,
-    #   input$hearts_input_target_4
-    # )  
+  if (is.null(input$hearts_input_1)==F) {
   
     run_hearts = resultados()
     
