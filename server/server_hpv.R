@@ -315,7 +315,6 @@ server_hpv = function (input, output, session, parameterReactive, scenarios, res
             } else if (sel_intervencion == "HEARTS") {
               output$hearts_table_saved = renderReactable({
                 if (length(hearts_scenarios$savedScenarios)>0) {
-                  
                   table = data.frame(Indicador=hearts_scenarios$savedScenarios[[1]]$Indicador)
                   for (i in summary_scenarios$table$scenarioName[summary_scenarios$table$intervencion == sel_intervencion &
                                                                  summary_scenarios$table$country %in% sel_country &
@@ -324,7 +323,7 @@ server_hpv = function (input, output, session, parameterReactive, scenarios, res
                     table[[i]] = hearts_scenarios$savedScenarios[[i]]$Valor
                   }
                   cat_epi = 1:12
-                  cat_costos = 13:15
+                  cat_costos = 13:22
                   
                   table$cat=""
                   table$cat[cat_epi] = "Resultados epidemiológicos"

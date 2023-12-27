@@ -1,5 +1,6 @@
 ui_hearts = function (input,base_line) {
   
+  
   country_sel = str_to_title(input$country)
   renderUI({
     input_names = c(
@@ -51,10 +52,11 @@ ui_hearts = function (input,base_line) {
       )
       
     }
+    
     tagList(
           lapply(c(3), function (i) {
             sliderInput(paste0("hearts_input_",i),
-                        input_names[i],
+                        tags$div(input_names[i],icon("circle-info","fa-1x",title = model_card_hearts$Descripción[model_card_hearts$inputID==paste0("hearts_input_",i)])),
                         value = 100*base_line[base_line$country==country_sel,names(input_names[i])],
                         min=0,
                         max=100,
@@ -62,7 +64,7 @@ ui_hearts = function (input,base_line) {
           }),
           lapply(c(8), function (i) {
             sliderInput(paste0("hearts_input_",i),
-                        input_names[i],
+                        tags$div(input_names[i],icon("circle-info","fa-1x",title = model_card_hearts$Descripción[model_card_hearts$inputID==paste0("hearts_input_",i)])),
                         value = 100*targets_default$treatment[targets_default$country==country_sel],
                         min=0,
                         max=100,
@@ -76,7 +78,7 @@ ui_hearts = function (input,base_line) {
           hidden(
             lapply(c(1,2,4), function (i) {
               sliderInput(paste0("hearts_input_",i),
-                          input_names[i],
+                          tags$div(input_names[i],icon("circle-info","fa-1x",title = model_card_hearts$Descripción[model_card_hearts$inputID==paste0("hearts_input_",i)])),
                           value = 100*base_line[base_line$country==country_sel,names(input_names[i])],
                           min=0,
                           max=100,
@@ -84,7 +86,7 @@ ui_hearts = function (input,base_line) {
             }),
             lapply(c(5,6,7), function (i) {
               numericInput(paste0("hearts_input_",i),
-                          input_names[i],
+                           tags$div(input_names[i],icon("circle-info","fa-1x",title = model_card_hearts$Descripción[model_card_hearts$inputID==paste0("hearts_input_",i)])),
                           value = base_line[base_line$country==country_sel,names(input_names[i])],
                           step=.1)
             })
@@ -113,7 +115,6 @@ ui_resultados_hearts = function(input,output,resultados) {
   country_sel = str_to_title(input$country)
   
   if (is.null(input$hearts_input_1)==F) {
-  
     run_hearts = resultados()
     
     output$hearts_grafico_1 = renderPlotly({

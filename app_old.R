@@ -2281,7 +2281,6 @@ server <- function(input, output, session) {
         scn_name = i
         table[[i]] = hearts_scenarios$savedScenarios[[i]]$Valor
       }
-      
       cat_epi = 1:12
       cat_costos = 13:15
       

@@ -63,3 +63,4 @@ charts_theme <- hc_theme(
 i18n <- Translator$new(translation_json_path='translation.json')
 i18n$set_translation_language('sp')
 
+model_card_hearts = read.xlsx("estimaTool/model_card_sheet/model_card_sheet.xlsx") %>% dplyr::filter(is.na(inputID)==F)

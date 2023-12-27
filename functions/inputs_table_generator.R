@@ -39,25 +39,29 @@ inputs_table_generator = function (input, output, inputs_scenarios, summary_scen
   table_inputs = labels_inputs %>% left_join(table_inputs, by = c("i_names" = "inputName"))
   
   table_inputs$scenarioName = paste0(table_inputs$scenarioName, " (",table_inputs$country,")")
+  # if (sel_intervencion[1] == "HEARTS") {
+  #   table_data = data.frame(
+  #     Input = rep(unique(table_inputs$i_labels),2)
+  #   )
+  # } else {
+  #   table_data = data.frame(
+  #     Input = unique(table_inputs$i_labels)
+  #   )
+  # }
   
-  if (sel_intervencion[1] == "HEARTS") {
-    table_data = data.frame(
-      Input = rep(unique(table_inputs$i_labels),2)
-    )
-  } else {
-    table_data = data.frame(
-      Input = unique(table_inputs$i_labels)
-    )
-  }
   
+  table_data = data.frame(
+        Input = unique(table_inputs$i_labels)
+      )
+
   for (i in unique(table_inputs$scenarioName)) {
     table_data[[i]] = format(round(as.numeric(table_inputs$inputValue[table_inputs$scenarioName==i]),2), big.mark = ".", decimal.mark = ",")
   }
   
-  if (sel_intervencion[1] == "HEARTS") {
-    table_data$Input[1:4] = paste0(table_data$Input[1:4]," (base)")
-    table_data$Input[5:8] = paste0(table_data$Input[5:8]," (target)")
-  }
+  # if (sel_intervencion[1] == "HEARTS") {
+  #   table_data$Input[1:4] = paste0(table_data$Input[1:4]," (base)")
+  #   table_data$Input[5:8] = paste0(table_data$Input[5:8]," (target)")
+  # }
   
   table_data = cbind(table_data, labels_inputs$avanzado)
   
@@ -149,10 +153,10 @@ inputs_table_generator_multiple = function (input, output, inputs_scenarios, sum
         table_data[[i]] = format(round(as.numeric(table_inputs$inputValue[table_inputs$scenarioName==i]),2), big.mark = ".", decimal.mark = ",")
       }
       
-      if (int == "HEARTS") {
-        table_data$Input[1:4] = paste0(table_data$Input[1:4]," (base)")
-        table_data$Input[5:8] = paste0(table_data$Input[5:8]," (target)")
-      }
+      # if (int == "HEARTS") {
+      #   table_data$Input[1:4] = paste0(table_data$Input[1:4]," (base)")
+      #   table_data$Input[5:8] = paste0(table_data$Input[5:8]," (target)")
+      # }
       
       table_data = cbind(table_data, labels_inputs$avanzado)
       

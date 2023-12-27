@@ -703,7 +703,10 @@ server <- function(input, output, session) {
         input$hearts_input_3/100,
         input$hearts_input_8/100,
         input$hearts_input_4/100,
-        input$hearts_input_4/100
+        input$hearts_input_4/100,
+        input$hearts_input_5,
+        input$hearts_input_6,
+        input$hearts_input_7
       )
     }
   })

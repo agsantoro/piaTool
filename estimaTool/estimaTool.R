@@ -37,8 +37,12 @@ estimaToolCosts = function(
   `BASELINE_Tratamiento entre los diagnosticados (%)`,
   `TARGET_Tratamiento entre los diagnosticados (%)`,
   `BASELINE_Control de la hipertensión entre los tratados (%)`,
-  `TARGET_Control de la hipertensión entre los tratados (%)`
+  `TARGET_Control de la hipertensión entre los tratados (%)`,
+  `Costo farmacológico anual por paciente promedio (**)`,
+  `Evento de enfermedad cardiaca isquemica promedio  (***)`,
+  `Costo anual de consulta médica en paciente promedio (*)`
 ) {
+  
   ##### MORTALITY DATA #####
   # loading data
   load("estimaTool/mortality_data.RData")
@@ -244,10 +248,20 @@ estimaToolCosts = function(
   
   load("estimaTool/costs.RData")
   
+  costs = costs[costs$country==country,]
+  
+  
+  pasa_input=
+    c("Costo farmacológico anual por paciente promedio (**)",
+      "Evento de enfermedad cardiaca isquemica promedio  (***)",
+      "Costo anual de consulta médica en paciente promedio (*)"
+    )
+  
+  costs = costs[!costs$parameter %in% pasa_input,]
+  
   for (i in 1:nrow(costs)) {
     eval(parse(text = paste0("`",costs$parameter[i],"`=",costs$value[i])))
   }
-  
   
   
   costs_outcomes = list(
