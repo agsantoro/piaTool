@@ -572,13 +572,22 @@ modelo_tbc <- function(pExitoso,
   
   ### resultados -----
   # Nombres de los parámetros, como se ven en tu tabla.
-  parametros <- c("Tratamientos Exitosos", "Porcentaje de éxito", "Perdida de seguimiento", "Muertes",
-                  "Años de vida ajustados por calidad", "Años de vida perdidos", 
-                  "Años de vida ajustados por calidad perdidos", "Años de vida perdidos descontados",
-                  "Años de vida ajustados por calidad perdidos descontados", "Costos de intervención",
-                  "Costos evitados", "Costos totales", "ICER por año de vida ajustado por calidad perdido evitado",
-                  "ICER por año de vida perdido evitado", "ICER por año de vida ajustado por calidad perdido evitado descontado",
-                  "ICER por año de vida perdido evitado descontado", "ROI")
+  parametros <- c("Tratamientos exitosos (n)", "Porcentaje de éxito (%)",
+                  "Perdida de seguimiento", 
+                  "Muertes evitadas (n)",
+                  "Años de vida ajustados por calidad",
+                  "Años de vida ajustados por discapacidad evitados", 
+                  "Años de vida ajustados por calidad perdidos",
+                  "Años de vida perdidos descontados",
+                  "Años de vida ajustados por calidad perdidos descontados",
+                  "Costos de intervención (USD)",
+                  "Costos por eventos evitados (USD)", 
+                  "Costos totales",
+                  "ICER por año de vida ajustado por calidad perdido evitado",
+                  "ICER por año de vida perdido evitado",
+                  "ICER por año de vida ajustado por calidad perdido evitado descontado",
+                  "ICER por año de vida perdido evitado descontado", 
+                  "Retorno de Inversión (%)")
   
   # Crear el dataframe
   resultados <- data.frame(Parametro=parametros, SAT=SAT, DOT=DOT, VOT=VOT)
@@ -632,18 +641,18 @@ get_tbc_params = function () {
 
 get_tbc_params_labels = function () {
   c(
-    'Riesgo Relativo (RR) del tratamiento exitoso con DOT vs SAT',
-    'RR tratamiento exitoso vDOT vs DOT',
-    'Adherencia a vDOT (al menos 80% de las observaciones)',
-    'Probabilidad de tratamiento exitoso con SAT',
-    'Probabilidad de muerte dado tratamiento no exitoso con SAT',
-    'Probabilidad de falla dado tratamiento no exitoso con SAT',
-    'RR de muerte DOT vs SAT',
-    'RR de falla DOT vs SAT',
-    'Adherencia a DOT (al menos 80% de las observaciones)',
-    'RR de muerte vDOT vs DOT',
-    'RR de falla vDOT vs DOT',
-    'Cantidad de dosis supervisadas mediante vDOT por semana',
-    'Cantidad de dosis supervisadas mediante DOT por semana'
+    'Riesgo Relativo (RR) del tratamiento exitoso con con tratamiento de observación directa vs tratamiento autoadministrado',
+    'Riesgo relativo tratamiento exitoso tratamiento de observación directa por video vs tratamiento de observación directa',
+    'Porcentaje de adherencia a tratamiento de observación directa por video (%)',
+    'Porcentaje de tratamiento exitoso mediante tratamiento autosupervisado',
+    'Porcentaje de muerte dado tratamiento no exitoso mediante tratamiento autosupervisado',
+    'Porcentaje de falla terapéutica dado tratamiento no exitoso mediante tratamiento autosupervisado',
+    'Riesgo relativo de muerte tratamiento directamente observado vs tratamiento autosupervisado',
+    'Riesgo relativo de falla terapéutica del tratamiento directamente observado vs tratamiento autosupervisado',
+    'Porcentaje de adherencia al tratamiento directamente observado (%)',
+    'Riesgo relativo de muerte mediante tratamiento directamente observado por video vs tratamiento directamente observado',
+    'Riesgo relativo de falla terapéutica con tratamiento directamente observado por video vs tratamiento directamente observado',
+    'Cantidad de dosis supervisadas mediante tratamiento directamente observado por video por semana',
+    'Cantidad de dosis supervisadas mediante tratamiento directamente observado por semana'
   )
 }
