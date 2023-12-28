@@ -223,7 +223,7 @@ ui_avanzada <- navbarPage(
     HTML('<div class = "text-white")>Documentación</div>'),
     useShinyjs(),
     tags$script(HTML("var header = $('.navbar > .container-fluid');
-                      header.append('<div style=\"float:right\"><a href=\"#!//\"><img src=\"home-solid.svg\" style=\"float:right;width:27px;height:32px;padding-top:8px;\"> </a></div>');
+                      header.append('<div style=\"float:right\"><img src=\"PAHO_logos_bottom_spanish_white2.png\" style=\"float:left;width:7em;\"><a href=\"https://github.com/agsantoro/piaTool\" target=\"_blank\"><img src=\"github-mark-white.png\" style=\"float:right;width:27px;height:32px;padding-top:8px;padding-left:2px;\"> </a><a href=\"#!//\"><img src=\"home-solid.svg\" style=\"float:right;width:27px;height:32px;padding-top:8px;padding-right:2px;\"> </a></div>');
                       console.log(header)")
     ),
     br(),
