@@ -679,68 +679,102 @@ server_hpv = function (input, output, session, parameterReactive, scenarios, res
       } else {
         
         output$escenarios_guardados = renderUI({
-          
-          output$grafico_multiple = renderHighchart({
-            show("escenarios_guardados")
-            if (length(input$comparacion_intervencion)>1) {
-              intervenciones_seleccionadas = input$comparacion_intervencion
-              escenarios_seleccionados = input$comparacion_escenario
+          if (length(input$comparacion_intervencion)>1) {
+            intervenciones_seleccionadas = input$comparacion_intervencion
+            escenarios_seleccionados = input$comparacion_escenario
+            
+            ROI= list()
+            RCEI_AVAD = list()
+            
+            for (j in escenarios_seleccionados[escenarios_seleccionados %in% summary_scenarios$table$scenarioName[summary_scenarios$table$intervencion=="Vacuna contra el HPV"]]) {
+              ROI[[j]] = scenarios$savedScenarios[[j]]$outcomes$undisc[scenarios$savedScenarios[[j]]$outcomes$outcomes=="Retorno de inversión"]
+              RCEI_AVAD[[j]] = scenarios$savedScenarios[[j]]$outcomes$undisc[scenarios$savedScenarios[[j]]$outcomes$outcomes=="Razón de costo-efectividad incremental por Años de Vida Ajustados por Discapacidad evitados (USD)"]
+            }
+            
+            for (j in escenarios_seleccionados[escenarios_seleccionados %in% summary_scenarios$table$scenarioName[summary_scenarios$table$intervencion=="HEARTS"]]) {
+              ROI[[j]] = hearts_scenarios$savedScenarios[[j]]$Valor[hearts_scenarios$savedScenarios[[j]]$Indicador=="Retorno de inversión"]
+              RCEI_AVAD[[j]] = hearts_scenarios$savedScenarios[[j]]$Valor[hearts_scenarios$savedScenarios[[j]]$Indicador=="Razón de costo-efectividad incremental por Año de Vida Ajustado por Discapacidad evitado"]
+            }
+            
+            for (j in escenarios_seleccionados[escenarios_seleccionados %in% summary_scenarios$table$scenarioName[summary_scenarios$table$intervencion=="Hemorragia postparto"]]) {
+              ROI[[j]] = hpp_scenarios$savedScenarios[[j]]$Valor[hpp_scenarios$savedScenarios[[j]]$Indicador=="Retorno de Inversión (%)"]
+              RCEI_AVAD[[j]] = hpp_scenarios$savedScenarios[[j]]$Valor[hpp_scenarios$savedScenarios[[j]]$Indicador=="Diferencia de costos respecto al escenario basal (USD)"] / hpp_scenarios$savedScenarios[[j]]$Valor[hpp_scenarios$savedScenarios[[j]]$Indicador=="Años de vida ajustados por discapacidad evitados"]
+            }
+            
+            for (j in escenarios_seleccionados[escenarios_seleccionados %in% summary_scenarios$table$scenarioName[summary_scenarios$table$intervencion=="Hepatitis C"]]) {
+              ROI[[j]] = hepC_scenarios$savedScenarios[[j]]$Valor[hepC_scenarios$savedScenarios[[j]]$Indicador=="Retorno de Inversión (%)"]
+              RCEI_AVAD[[j]] = hepC_scenarios$savedScenarios[[j]]$Valor[hepC_scenarios$savedScenarios[[j]]$Indicador=="Retorno de Inversión (%)"]
+            }
+            
+            for (j in escenarios_seleccionados[escenarios_seleccionados %in% summary_scenarios$table$scenarioName[summary_scenarios$table$intervencion=="VDOT Tuberculosis"]]) {
               
-              core= list()
+              ROI[[j]] = tbc_scenarios$savedScenarios[[j]]$VOT[tbc_scenarios$savedScenarios[[j]]$Parametro=="Retorno de Inversión (%)"]
+              RCEI_AVAD[[j]] = tbc_scenarios$savedScenarios[[j]]$VOT[tbc_scenarios$savedScenarios[[j]]$Parametro=="Razón de costo-efectividad incremental por Año de Vida Ajustado por Discapacidad evitado (USD)"]
+            }
+            
+            for (j in escenarios_seleccionados[escenarios_seleccionados %in% summary_scenarios$table$scenarioName[summary_scenarios$table$intervencion=="Profilaxis Pre Exposición VIH"]]) {
+              ROI[[j]] = prep_scenarios$savedScenarios[[j]]$Valor[prep_scenarios$savedScenarios[[j]]$Parametro=="Retorno de Inversión"]
+              RCEI_AVAD[[j]] = prep_scenarios$savedScenarios[[j]]$Valor[prep_scenarios$savedScenarios[[j]]$Parametro=="Razón de costo-efectividad incremental (RCEI) por Años de Vida Ajustados por Discapacidad (AVAD) Evitados (descontado)"]
+            }
+            
+            escenarios = names(unlist(ROI))
+            roi_table = 
+              data.frame(scenarioName = escenarios,
+                         value = unlist(ROI)) %>% left_join(summary_scenarios$table)
+            
+            roi_table$scenarioName = paste0("Escenario: ","<b>",roi_table$scenarioName,"</b> <br>",roi_table$country,"<br>",roi_table$intervencion)
+            
+            roi_table <- roi_table %>% arrange(desc(value))
+            roi_table$value = round(roi_table$value,2)
+            
+            iceravad_table = 
+              data.frame(scenarioName = escenarios,
+                         value = unlist(RCEI_AVAD)) %>% left_join(summary_scenarios$table)
+            
+            iceravad_table$scenarioName = paste0("Escenario: ","<b>",iceravad_table$scenarioName,"</b> <br>",iceravad_table$country,"<br>",iceravad_table$intervencion)
+            
+            iceravad_table <- iceravad_table %>% arrange(desc(value))
+            iceravad_table$value = round(iceravad_table$value,2)
+            
+            output$grafico_multiple1 = renderHighchart({
+              show("escenarios_guardados")
               
+                grafico <- highchart() %>%
+                  hc_chart(type = "column") %>%
+                  hc_title(text = "Comparación del retorno de la inversión entre escenarios guardados") %>%
+                  hc_xAxis(categories = roi_table$scenarioName) %>%
+                  hc_plotOptions(column = list(
+                    colorByPoint = TRUE,
+                    dataLabels = list(enabled = TRUE)
+                  )) %>%
+                  hc_add_series(
+                    data = roi_table,
+                    type = "column",
+                    hcaes(y = value, color = intervencion),
+                    name = "ROI"
+                  ) 
+                
+                grafico %>% hc_legend(list(
+                  enabled = F
+                )) %>%
+                  hc_add_theme(hc_theme_elementary())
+                
               
-                for (j in escenarios_seleccionados[escenarios_seleccionados %in% summary_scenarios$table$scenarioName[summary_scenarios$table$intervencion=="Vacuna contra el HPV"]]) {
-                  browser()
-                  ore[[j]] = scenarios$savedScenarios[[j]]$outcomes$undisc[scenarios$savedScenarios[[j]]$outcomes$outcomes=="ROI"]
-                }
-                
-                for (j in escenarios_seleccionados[escenarios_seleccionados %in% summary_scenarios$table$scenarioName[summary_scenarios$table$intervencion=="HEARTS"]]) {
-                  browser()
-                  core[[j]] = hearts_scenarios$savedScenarios[[j]]$Valor[hearts_scenarios$savedScenarios[[j]]$Indicador=="ROI"]
-                }
-                
-                for (j in escenarios_seleccionados[escenarios_seleccionados %in% summary_scenarios$table$scenarioName[summary_scenarios$table$intervencion=="Hemorragia postparto"]]) {
-                  browser()
-                  core[[j]] = hpp_scenarios$savedScenarios[[j]]$Valor[hpp_scenarios$savedScenarios[[j]]$Indicador=="ROI"]
-                }
-                
-                for (j in escenarios_seleccionados[escenarios_seleccionados %in% summary_scenarios$table$scenarioName[summary_scenarios$table$intervencion=="Hepatitis C"]]) {
-                  browser()
-                  core[[j]] = hepC_scenarios$savedScenarios[[j]]$Valor[hepC_scenarios$savedScenarios[[j]]$Indicador=="ROI"]
-                }
-                
-                for (j in escenarios_seleccionados[escenarios_seleccionados %in% summary_scenarios$table$scenarioName[summary_scenarios$table$intervencion=="VDOT Tuberculosis"]]) {
-                  browser()
-                  core[[j]] = tbc_scenarios$savedScenarios[[j]]$VOT[tbc_scenarios$savedScenarios[[j]]$Parametro=="ROI"]
-                }
+            })
+            
+            output$grafico_multiple2 = renderHighchart({
+              show("escenarios_guardados")
               
-                for (j in escenarios_seleccionados[escenarios_seleccionados %in% summary_scenarios$table$scenarioName[summary_scenarios$table$intervencion=="Profilaxis Pre Exposición VIH"]]) {
-                  browser()
-                  core[[j]] = prep_scenarios$savedScenarios[[j]]$Valor[prep_scenarios$savedScenarios[[j]]$Parametro=="ROI"]
-                }
-                
-                escenarios = names(unlist(core))
-                roi_table = 
-                  data.frame(scenarioName = escenarios,
-                             value = unlist(core)) %>% left_join(summary_scenarios$table)
-                
-                roi_table$scenarioName = paste0("Escenario: ","<b>",roi_table$scenarioName,"</b> <br>",roi_table$country,"<br>",roi_table$intervencion)
-                
-                roi_table <- roi_table %>% arrange(desc(value))
-                roi_table$value = round(roi_table$value,2)
-                
-                
-                
               grafico <- highchart() %>%
                 hc_chart(type = "column") %>%
-                hc_title(text = "Comparación del retorno de la inversión entre escenarios guardados") %>%
-                hc_xAxis(categories = roi_table$scenarioName) %>%
+                hc_title(text = "Comparación de la RCEI por AVADS evitados") %>%
+                hc_xAxis(categories = iceravad_table$scenarioName) %>%
                 hc_plotOptions(column = list(
                   colorByPoint = TRUE,
                   dataLabels = list(enabled = TRUE)
                 )) %>%
                 hc_add_series(
-                  data = roi_table,
+                  data = iceravad_table,
                   type = "column",
                   hcaes(y = value, color = intervencion),
                   name = "ROI"
@@ -752,8 +786,9 @@ server_hpv = function (input, output, session, parameterReactive, scenarios, res
                 hc_add_theme(hc_theme_elementary())
               
               
-           }  
-          })
+            })
+          }
+          
           
           output$prueba = renderReactable({
             if (is.null(sel_escenario)==F & is.null(input$comparacion_intervencion)==F & is.null(input$comparacion_escenario)==F) {
@@ -807,8 +842,9 @@ server_hpv = function (input, output, session, parameterReactive, scenarios, res
           
           shiny::tagList(
             br(),
-            highchartOutput("grafico_multiple"),
+            highchartOutput("grafico_multiple1"),
             br(),
+            highchartOutput("grafico_multiple2"),
             br(),
             tags$header(id = "header_tabla_inputs_multiple", class="text-1xl flex justify-between items-center p-5 mt-4", style="background-color: #FF671B; color: white; text-align: center", 
                                       tags$h1(style="display: inline-block; margin: 0 auto;", class="flex-grow mt-8 mb-8",tags$b("Descripción de escenarios guardados")),

@@ -1,11 +1,13 @@
 library("htmltools")
 library("bsplus")
 
-ui_avanzada <- navbarPage(
+ui_avanzada <- 
+  navbarPage(
   id="NVP", 
   
   title = HTML('Programme Impact Assessment Tool (PIA Tool)'),
   tabPanel(
+    
     HTML('<div class = "text-white")>Definición de escenarios</div>'),
     
     # fluidRow(column(12,
@@ -121,10 +123,12 @@ ui_avanzada <- navbarPage(
       #          ))
       # ))
     ),
+    fluidRow(id="comenzar_mensaje", tags$p(class="animate-pulse", "Seleccione un país para comenzar...")),
     fluidRow(id = "columna_borde",
       column(2, style='border-right: 1px solid grey; padding-right: 50px;',
              #theme = shinythemes::shinytheme("united"),
              #tags$style(getStyle()),
+             
              hidden(
                tags$header(id = "header1", class="text-1xl flex justify-between items-center p-5 mt-4", style="background-color: #FF671B; color: white; text-align: center",
                            tags$h1(style="display: inline-block; margin: 0 auto;", class="flex-grow mt-8 mb-8",tags$b("Configuración")),
@@ -227,6 +231,7 @@ ui_avanzada <- navbarPage(
                       console.log(header)")
     ),
     br(),
+    
     tabsetPanel(id = "TSP_Manuales",
                 type = "pills",
                 tabPanel("Vacuna contra el HPV",
@@ -270,7 +275,36 @@ ui_avanzada <- navbarPage(
                                      frameBorder="0")
                 )
     )
-  )
+  ),
+  tags$footer(
+    div(style = "display: flex;",
+      div(style= "width: 50%;",
+        p(
+        style = "text-align: left;",
+        "PIA Tool v0.4 - Desarrollado por IECS")
+      ),
+      div(
+        style= "width: 50%;",
+        p(
+        style = "text-align: right;",
+        tags$a("Descargar manual de usuario", href="www.clarin.com", target ="_blank")
+      ))
+    ),
+    
+    
+              align = "left",
+              class = "bg-slate-100 opacity-95",
+              style = "
+                 position:fixed;
+                 left: 0;
+                 bottom:0;
+                 width:100%;
+                 height:30px; 
+                 color: black;
+                 padding: 4px;
+                 z-index: 100;
+                "),
+  
     
     
   

@@ -159,6 +159,10 @@ textarea {
   font-size: 1.5rem !important;
 }
 
+.container-fluid {
+  margin: 0 !important;
+}
+
 
 ")
 }

@@ -179,6 +179,7 @@ server <- function(input, output, session) {
   
   observeEvent(input$country, {
     if (length(input$country)>0) {
+      hide("comenzar_mensaje", anim = T, animType = "fade")
       show("columna_borde")
       show("header1", anim = T, animType = "fade")
       show("header2", anim = T, animType = "fade")

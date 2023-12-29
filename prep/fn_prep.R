@@ -1333,8 +1333,8 @@ prep_outcomes_labels = function() {
     "Razón de costo-efectividad incremental (RCEI) por Años de Vida Ajustados por Discapacidad (AVAD) Evitados (descontado)",
     "Razón de costo-efectividad incremental (RCEI) por Año de vida salvado (AVS)",
     "Razón de costo-efectividad incremental (RCEI) por Año de vida salvado (AVS) (descontado)",
-    "ROI",
-    "ROI (descontado)"
+    "Retorno de Inversión",
+    "Retorno de Inversión (descontado)"
   )
 }
 
