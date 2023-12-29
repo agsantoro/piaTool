@@ -653,7 +653,7 @@ server <- function(input, output, session) {
       discountRate = as.numeric(parameters[parameters$Country==input$country,18]),
       proportionOfCervicalCancerCasesThatAreDueToHPV16_18 = as.numeric(parameters[parameters$Country==input$country,19]),
       GDPPerCapita = as.numeric(parameters[parameters$Country==input$country,20]),
-      coverageTarget = as.numeric(parameters$`Coverage target (all doses)`[parameters$Country==input$country])
+      coverageTarget = as.numeric(parameters[parameters$Country==input$country,23])
     )
     return(paramsList)
   })
@@ -665,8 +665,8 @@ server <- function(input, output, session) {
       input$country,
       input$birthCohortSizeFemale,
       input$cohortSizeAtVaccinationAgeFemale,
-      input$coverageAllDosis/100,
-      input$vaccineEfficacyVsHPV16_18/100,
+      input$coverageAllDosis,
+      input$vaccineEfficacyVsHPV16_18,
       input$targetAgeGroup,
       input$vaccinePricePerFIG,
       input$vaccineDeliveryCostPerFIG,
@@ -676,9 +676,9 @@ server <- function(input, output, session) {
       input$DALYsForNonTerminalCancerSequelaePperYear,
       input$DALYsForTerminalCancer,
       input$discountRate,
-      input$proportionOfCervicalCancerCasesThatAreDueToHPV16_18/100,
+      input$proportionOfCervicalCancerCasesThatAreDueToHPV16_18,
       input$GDPPerCapita,
-      input$coverageTarget/100,
+      input$coverageTarget,
       mortall,
       mortcecx,
       incidence,
