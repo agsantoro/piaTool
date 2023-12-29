@@ -6,6 +6,9 @@
 
 La **PAHO Programme Impact Assessment Tool (PIA Tool)** ha sido desarrollada para respaldar la toma de decisiones informadas en el ámbito de la salud pública. Su objetivo es permitir a los usuarios evaluar de manera detallada diversos escenarios, ya sea relacionados con una misma intervención o con intervenciones diferentes en salud pública, y en un solo país o en varios. La herramienta también incluye conjuntos de parámetros estándar para cada país, derivados de un proceso de búsqueda sistemática de la literatura. Estos parámetros pueden ser accedidos dentro de la herramienta, junto con las referencias citadas en las tarjetas de modelo correspondientes.
 
+## URL
+https://iecs.shinyapps.io/piaTool/
+
 ## Audiencia Objetivo
 
 Esta aplicación está diseñada para ser utilizada por profesionales de la salud pública, incluidos epidemiólogos, planificadores de salud y administradores de salud. La versatilidad de la herramienta la hace adecuada para aquellos que buscan tomar decisiones informadas basadas en resultados de modelos en el ámbito de la salud pública.
