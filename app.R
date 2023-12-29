@@ -653,7 +653,7 @@ server <- function(input, output, session) {
       discountRate = as.numeric(parameters[parameters$Country==input$country,18]),
       proportionOfCervicalCancerCasesThatAreDueToHPV16_18 = as.numeric(parameters[parameters$Country==input$country,19]),
       GDPPerCapita = as.numeric(parameters[parameters$Country==input$country,20]),
-      coverageTarget = as.numeric(parameters[parameters$Country==input$country,23])
+      coverageTarget = as.numeric(parameters$`Coverage target (all doses)`[parameters$Country==input$country])
     )
     return(paramsList)
   })

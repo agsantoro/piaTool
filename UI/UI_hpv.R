@@ -89,8 +89,8 @@ ui_hpv_basica = function (parametersReactive,input,inputs_hpv, run_hearts) {
                              title = inputs_hover[i])
                       ),
                       min = 0,
-                      max= 100,
-                      value=parametersReactive[[i]]*100)}
+                      max= 1,
+                      value=parametersReactive[[i]])}
         
       }),
       br(),
@@ -123,11 +123,11 @@ ui_hpv_basica = function (parametersReactive,input,inputs_hpv, run_hearts) {
                                title = inputs_hover[i])
                         ),
                         min = 0,
-                        max= 100,
-                        value=parametersReactive[[i]]*100)
+                        max= 1,
+                        value=parametersReactive[[i]])
             
           )
-          }
+        }
       })
       
       
@@ -192,4 +192,3 @@ ui_tabla_hpv = function (resultados, input) {
 }
 
 
-  

@@ -266,7 +266,7 @@ server_hpv = function (input, output, session, parameterReactive, scenarios, res
                   table = scenarios$summaryTable[,snSelected]
                   cat_input = c(1,2,3,14)
                   cat_epi = c(6,7,8,9)
-                  cat_costos = c(4,5,10,11,12,13)
+                  cat_costos = c(4,5,10,11,12,13,15)
                   
                   table$cat=""
                   table$cat[cat_input] = "Inputs"
@@ -281,6 +281,7 @@ server_hpv = function (input, output, session, parameterReactive, scenarios, res
                   for (i in setdiff(1:ncol(table),c(1,ncol(table)))) {
                     columns[[colnames(table)[i]]] = colDef(name = colnames(table)[i], align = "right")
                   }
+                  
                   reactable(
                     table[table$cat!="Inputs",],
                     groupBy = "cat",
