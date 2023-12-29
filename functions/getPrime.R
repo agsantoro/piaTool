@@ -39,7 +39,7 @@ getPrime = function (
     discountRate,
     proportionOfCervicalCancerCasesThatAreDueToHPV16_18,
     GDPPerCapita,
-    coverageTarget,
+    #coverageTarget,
     mortall,
     mortcecx,
     incidence,
@@ -341,8 +341,8 @@ getPrime = function (
     "DALYs por cáncer terminal",
     "Tasa de descuento",
     "Proporción de casos de cáncer cervical debidos al HPV 16/18",
-    "PIB per cápita",
-    "Cobertura target (todas las dosis)"
+    "PIB per cápita"
+    #"Cobertura target (todas las dosis)"
   )
   
   inputsValues = c(

@@ -2,7 +2,7 @@ ui_hpv_basica = function (parametersReactive,input,inputs_hpv, run_hearts) {
   inputs_names = c(
     'Tamaño de la cohorte de nacimientos (mujeres)',
     'Tamaño de la cohorte en edad de vacunación (mujeres)',
-    'Porcentaje de cobertura basal (esquema completo)',
+    'Porcentaje de cobertura objetivo (esquema completo)',
     'Porcentaje de eficacia de la vacuna contra el VPH 16/18',
     'Grupo de edad objetivo',
     'Costo de vacunación (esquema completo)',
@@ -14,8 +14,8 @@ ui_hpv_basica = function (parametersReactive,input,inputs_hpv, run_hearts) {
     'Años de vida ajustados por discapacidad por cáncer de cuello uterino terminal',
     'Tasa de descuento',
     'Porcentaje de casos de cáncer de cuello de útero debidos al VPH 16/18',
-    'PIB per capita',
-    'Porcentaje de cobertura objetivo (esquema completo)'
+    'PIB per capita'
+    #'Porcentaje de cobertura objetivo (esquema completo)'
   )
   
   inputs_hover = c(
@@ -33,19 +33,19 @@ ui_hpv_basica = function (parametersReactive,input,inputs_hpv, run_hearts) {
     'Miden la carga total del cáncer de cuello uterino terminal combinando años de vida perdidos por muerte prematura y años vividos con discapacidad. Se recomienda consultar a un economista de la salud antes de cambiar este parámetro',
     'Tasa de descuento',
     'Porcentaje de casos de cáncer de cuello uterino que son atribuibles a las cepas 16 y 18 del VPH',
-    'PIB per capita',
-    'La proporción esperada de niñas en el grupo de edad relevante que recibirán el esquema completo de la vacuna luego de la intervención'
+    'PIB per capita'
+    #'La proporción esperada de niñas en el grupo de edad relevante que recibirán el esquema completo de la vacuna luego de la intervención'
   )
   
   if (is.null(input$country) == F) {
     i_names = c()
-    for (i in 1:16) {
+    for (i in 1:15) {
       i_names = c(i_names,names(parametersReactive[i]))
     }
     
     i_labels = c()
     
-    for (i in 1:16) {
+    for (i in 1:15) {
       i_labels = c(i_labels,inputs_names[i])
     }
     
@@ -56,7 +56,7 @@ ui_hpv_basica = function (parametersReactive,input,inputs_hpv, run_hearts) {
     )
     
     hpv_map_inputs$avanzado = NA
-    hpv_map_inputs$avanzado[4:16] = T
+    hpv_map_inputs$avanzado[4:15] = T
     hpv_map_inputs$avanzado[c(1:3)] = F
     
     save(
@@ -71,7 +71,7 @@ ui_hpv_basica = function (parametersReactive,input,inputs_hpv, run_hearts) {
       br(),
       #tags$style(getStyle()),
       lapply(1:3, function (i) {
-        if (!i %in% c(3,4,16)) {
+        if (!i %in% c(3,4)) {
           numericInput(input=names(parametersReactive)[i],
                        tags$div(
                          inputs_names[i],
@@ -99,7 +99,7 @@ ui_hpv_basica = function (parametersReactive,input,inputs_hpv, run_hearts) {
                   actionLink(inputId = "toggle_avanzado_hpv", label=icon("stream", style = "color: white;"))
       ),
       br(),
-      lapply(4:16, function (i) {
+      lapply(4:15, function (i) {
         if (!i %in% c(3,4,16)) {
           hidden(
             numericInput(input=names(parametersReactive)[i],

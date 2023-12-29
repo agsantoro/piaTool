@@ -652,8 +652,8 @@ server <- function(input, output, session) {
       DALYsForTerminalCancer = 0.78,
       discountRate = as.numeric(parameters[parameters$Country==input$country,18]),
       proportionOfCervicalCancerCasesThatAreDueToHPV16_18 = as.numeric(parameters[parameters$Country==input$country,19]),
-      GDPPerCapita = as.numeric(parameters[parameters$Country==input$country,20]),
-      coverageTarget = as.numeric(parameters[parameters$Country==input$country,23])
+      GDPPerCapita = as.numeric(parameters[parameters$Country==input$country,20])
+      #coverageTarget = as.numeric(parameters[parameters$Country==input$country,23])
     )
     return(paramsList)
   })
@@ -678,7 +678,7 @@ server <- function(input, output, session) {
       input$discountRate,
       input$proportionOfCervicalCancerCasesThatAreDueToHPV16_18,
       input$GDPPerCapita,
-      input$coverageTarget,
+      #input$coverageTarget,
       mortall,
       mortcecx,
       incidence,

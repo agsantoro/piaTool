@@ -690,26 +690,32 @@ server_hpv = function (input, output, session, parameterReactive, scenarios, res
               
               
                 for (j in escenarios_seleccionados[escenarios_seleccionados %in% summary_scenarios$table$scenarioName[summary_scenarios$table$intervencion=="Vacuna contra el HPV"]]) {
-                  core[[j]] = scenarios$savedScenarios[[j]]$outcomes$undisc[scenarios$savedScenarios[[j]]$outcomes$outcomes=="ROI"]
+                  browser()
+                  ore[[j]] = scenarios$savedScenarios[[j]]$outcomes$undisc[scenarios$savedScenarios[[j]]$outcomes$outcomes=="ROI"]
                 }
                 
                 for (j in escenarios_seleccionados[escenarios_seleccionados %in% summary_scenarios$table$scenarioName[summary_scenarios$table$intervencion=="HEARTS"]]) {
+                  browser()
                   core[[j]] = hearts_scenarios$savedScenarios[[j]]$Valor[hearts_scenarios$savedScenarios[[j]]$Indicador=="ROI"]
                 }
                 
                 for (j in escenarios_seleccionados[escenarios_seleccionados %in% summary_scenarios$table$scenarioName[summary_scenarios$table$intervencion=="Hemorragia postparto"]]) {
+                  browser()
                   core[[j]] = hpp_scenarios$savedScenarios[[j]]$Valor[hpp_scenarios$savedScenarios[[j]]$Indicador=="ROI"]
                 }
                 
                 for (j in escenarios_seleccionados[escenarios_seleccionados %in% summary_scenarios$table$scenarioName[summary_scenarios$table$intervencion=="Hepatitis C"]]) {
+                  browser()
                   core[[j]] = hepC_scenarios$savedScenarios[[j]]$Valor[hepC_scenarios$savedScenarios[[j]]$Indicador=="ROI"]
                 }
                 
                 for (j in escenarios_seleccionados[escenarios_seleccionados %in% summary_scenarios$table$scenarioName[summary_scenarios$table$intervencion=="VDOT Tuberculosis"]]) {
+                  browser()
                   core[[j]] = tbc_scenarios$savedScenarios[[j]]$VOT[tbc_scenarios$savedScenarios[[j]]$Parametro=="ROI"]
                 }
               
                 for (j in escenarios_seleccionados[escenarios_seleccionados %in% summary_scenarios$table$scenarioName[summary_scenarios$table$intervencion=="Profilaxis Pre Exposición VIH"]]) {
+                  browser()
                   core[[j]] = prep_scenarios$savedScenarios[[j]]$Valor[prep_scenarios$savedScenarios[[j]]$Parametro=="ROI"]
                 }
                 
