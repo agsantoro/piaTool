@@ -735,10 +735,10 @@ hepC_full = function(
   )
   resultados$Comparacion = list(
     'SVR logradas' = round(resultados$`Con tratamiento`$`SVR Logradas`,0),
-    'Cirrosis Evitadas' = round(resultados$`Sin tratamiento`$Cirrosis - resultados$`Con tratamiento`$Cirrosis,0),
+    'Cirrosis evitadas (n)' = round(resultados$`Sin tratamiento`$Cirrosis - resultados$`Con tratamiento`$Cirrosis,0),
     'Cirrosis Descompensadas Evitadas' = round(resultados$`Sin tratamiento`$`Cirrosis Descompensadas` - resultados$`Con tratamiento`$`Cirrosis Descompensadas`,0),	
-    'Hepatocarcinomas Evitados' = round(resultados$`Sin tratamiento`$Hepatocarcinomas - resultados$`Con tratamiento`$Hepatocarcinomas,0),
-    'Muertes por Hepatopatias Evitadas'	= round(resultados$`Sin tratamiento`$`Muertes asociadas a Higado` - resultados$`Con tratamiento`$`Muertes asociadas a Higado`,0)
+    'Carcinomas hepatocelulares evitados (n)' = round(resultados$`Sin tratamiento`$Hepatocarcinomas - resultados$`Con tratamiento`$Hepatocarcinomas,0),
+    'Muertes evitadas (n)'	= round(resultados$`Sin tratamiento`$`Muertes asociadas a Higado` - resultados$`Con tratamiento`$`Muertes asociadas a Higado`,0)
   )
   
   dalysDiscEvitados = (resultados$`Con tratamiento`$`Qalys vividos` - resultados$`Con tratamiento`$`Años de vida vividos`) - (resultados$`Sin tratamiento`$`Qalys vividos` - resultados$`Sin tratamiento`$`Años de vida vividos`)
@@ -764,28 +764,28 @@ hepC_full = function(
   ROI = (resultados$`Sin tratamiento`$Costos - resultados$`Con tratamiento`$Costos) / resultados$`Con tratamiento`$`Costos Tratamiento`  * 100
   ROIDesc = (resultados$`Sin tratamiento`$`Costos Descontados` - resultados$`Con tratamiento`$`Costos Descontados`) / resultados$`Con tratamiento`$`Costos Tratamiento` * 100
   
-  resultados$Comparacion[[ "Dalys por discapacidad Evitados"]] = dalysDiscEvitados
-  resultados$Comparacion[["Dalys por discapacidad Evitados (descontado)"]] = dalysDiscEvitadosDesc
-  resultados$Comparacion[["Años de vida salvados"]] = anosVidaSalvados
-  resultados$Comparacion[["Años de vida salvados (descontado)"]] = anosVidaSalvadosDesc
-  resultados$Comparacion[["Diferencia de Costos"]] = diferenciaCostos
-  resultados$Comparacion[["Diferencia de Costos (descontado)"]] = diferenciaCostosDesc
+  resultados$Comparacion[[ "Años de Vida Ajustados por Discapacidad evitados (AVAD)"]] = dalysDiscEvitados
+  resultados$Comparacion[["Años de Vida Ajustados por Discapacidad evitados (AVAD) (descontado)"]] = dalysDiscEvitadosDesc
+  resultados$Comparacion[["Años de vida salvados (AVS)"]] = anosVidaSalvados
+  resultados$Comparacion[["Años de vida salvados (AVS) (descontado)"]] = anosVidaSalvadosDesc
+  resultados$Comparacion[["Diferencia de costos (USD)"]] = diferenciaCostos
+  resultados$Comparacion[["Diferencia de costos (USD) (descontado)"]] = diferenciaCostosDesc
   resultados$Comparacion[["ICER por SVR"]] = icerSVR
   resultados$Comparacion[["ICER por SVR (descontado)"]] = icerSVRDesc
-  resultados$Comparacion[["ICER por Cirrosis Evitada"]] = icerCirrosisEvitada
-  resultados$Comparacion[["ICER por Cirrosis Evitada (descontado)"]] = icerCirrosisEvitadaDesc
+  resultados$Comparacion[["Razón de costo-efectividad incremental por cirrosis evitada (USD)"]] = icerCirrosisEvitada
+  resultados$Comparacion[["Razón de costo-efectividad incremental por cirrosis evitada (USD) (descontado)"]] = icerCirrosisEvitadaDesc
   resultados$Comparacion[["ICER por DC Evitada"]] = icerHCCEvitada
   resultados$Comparacion[["ICER por DC Evitada (descontado)"]] = icerHCCEvitadaDesc
   resultados$Comparacion[["ICER por HCC Evitada"]] = icerDCEvitada
   resultados$Comparacion[["ICER por HCC Evitada (descontado)"]] = icerDCEvitadaDesc
   resultados$Comparacion[["ICER por LRD Evitada"]] = icerLDREvitada
   resultados$Comparacion[["ICER por LRD Evitada (descontado)"]] = icerLDREvitadaDesc
-  resultados$Comparacion[["ICER por QALY"]] = icerQalyEvitada
-  resultados$Comparacion[["ICER por QALY (descontado)"]] = icerQalyEvitadaDesc
-  resultados$Comparacion[["ICER por LY"]] = icerLYEvitada
-  resultados$Comparacion[["ICER por LY (descontado)"]] = icerLYEvitadaDesc
-  resultados$Comparacion[["ROI"]] = ROI
-  resultados$Comparacion[["ROI (descontado)"]] = ROIDesc
+  resultados$Comparacion[["Razón de costo-efectividad incremental por Años de Vida Ajustados por Discapacidad evitada (USD)"]] = icerQalyEvitada
+  resultados$Comparacion[["Razón de costo-efectividad incremental por Años de Vida Ajustados por Discapacidad evitada (USD) (descontado)"]] = icerQalyEvitadaDesc
+  resultados$Comparacion[["Razón de costo-efectividad incremental por año de vida salvado por muerte por hepatopatía evitada (USD)"]] = icerLYEvitada
+  resultados$Comparacion[["Razón de costo-efectividad incremental por año de vida salvado por muerte por hepatopatía evitada (USD) (descontado)"]] = icerLYEvitadaDesc
+  resultados$Comparacion[["Retorno de Inversión (%)"]] = ROI
+  resultados$Comparacion[["Retorno de Inversión (%) (descontado)"]] = ROIDesc
   
   
   return(resultados)

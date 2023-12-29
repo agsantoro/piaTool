@@ -41,8 +41,8 @@ ui_hearts = function (input,base_line) {
       )
       
       hearts_map_inputs$avanzado = NA
-      hearts_map_inputs$avanzado[c(1,2,4,5,6,7)] = T
-      hearts_map_inputs$avanzado[c(3,8)] = F
+      hearts_map_inputs$avanzado[c(1,2,3,4,5,6,7)] = T
+      hearts_map_inputs$avanzado[c(8)] = F
       
       rownames(hearts_map_inputs) = 1:nrow(hearts_map_inputs)
       
@@ -54,14 +54,7 @@ ui_hearts = function (input,base_line) {
     }
     
     tagList(
-          lapply(c(3), function (i) {
-            sliderInput(paste0("hearts_input_",i),
-                        tags$div(input_names[i],icon("circle-info","fa-1x",title = model_card_hearts$Descripción[model_card_hearts$inputID==paste0("hearts_input_",i)])),
-                        value = 100*base_line[base_line$country==country_sel,names(input_names[i])],
-                        min=0,
-                        max=100,
-                        step=.1)
-          }),
+          
           lapply(c(8), function (i) {
             sliderInput(paste0("hearts_input_",i),
                         tags$div(input_names[i],icon("circle-info","fa-1x",title = model_card_hearts$Descripción[model_card_hearts$inputID==paste0("hearts_input_",i)])),
@@ -76,6 +69,14 @@ ui_hearts = function (input,base_line) {
                       actionLink(inputId = "toggle_avanzado_hearts", label=icon("stream", style = "color: white;"))
           ),
           hidden(
+            lapply(c(3), function (i) {
+              sliderInput(paste0("hearts_input_",i),
+                          tags$div(input_names[i],icon("circle-info","fa-1x",title = model_card_hearts$Descripción[model_card_hearts$inputID==paste0("hearts_input_",i)])),
+                          value = 100*base_line[base_line$country==country_sel,names(input_names[i])],
+                          min=0,
+                          max=100,
+                          step=.1)
+            }),
             lapply(c(1,2,4), function (i) {
               sliderInput(paste0("hearts_input_",i),
                           tags$div(input_names[i],icon("circle-info","fa-1x",title = model_card_hearts$Descripción[model_card_hearts$inputID==paste0("hearts_input_",i)])),

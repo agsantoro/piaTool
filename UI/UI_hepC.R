@@ -4,26 +4,47 @@ ui_hepC = function (input, datosPais) {
   
   renderUI({
     input_names = c(
-      "Costos de fibrosis descompensada" = "aCostoDC", 
-      "Costos de estadíos de fibrosis F0 a F2" = "aCostoF0F2", 
-      "Costos de estadío de fibrosis F3" = "aCostoF3", 
-      "Costos de estadío de fibrosis F4" = "aCostoF4", 
-      "Costos de carcinoma hepatocelular" = "aCostoHCC", 
-      "Tasa de descuento" = "AtasaDescuento", 
-      "Tamaño de la cohorte" = "cohorte", 
-      "Costo de la evaluación de la respuesta al tratamiento" = "Costo_Evaluacion", 
-      "Costo de tratamiento de 4 semanas de Epclusa" = "Costo_Tratamiento", 
-      "Probabilidad de encontrarse en estadio de fibrosis F0 al diagnóstico" = "F0", 
-      "Probabilidad de encontrarse en estadio de fibrosis F1 al diagnóstico" = "F1", 
-      "Probabilidad de encontrarse en estadio de fibrosis F2 al diagnóstico" = "F2", 
-      "Probabilidad de encontrarse en estadio de fibrosis F3 al diagnóstico" = "F3", 
-      "Probabilidad de encontrarse en estadio de fibrosis F4 al diagnóstico" = "F4", 
-      "Proporción de pacientes que abandonan el tratamiento." = "pAbandono", 
-      "Eficacia de Sofosbuvir / velpatasvir" = "pSVR", 
-      "Duración del tratamiento" = "tDuracion_Meses"
+      'Costo de cirrosis descompensada (USD)' = "aCostoDC", 
+      'Costos de estadío de fibrosis F0 a F2 (USD)' = "aCostoF0F2", 
+      'Costos de estadío de fibrosis F3 (USD)' = "aCostoF3", 
+      'Costos de estadío de fibrosis F4 (USD)' = "aCostoF4", 
+      'Costos de carcinoma hepatocelular (USD)' = "aCostoHCC", 
+      'Tasa de descuento (%)' = "AtasaDescuento", 
+      'Tamaño de la cohorte (n)' = "cohorte", 
+      'Costo de la evaluación de la respuesta al tratamiento' = "Costo_Evaluacion", 
+      'Costo de tratamiento mensual con Sofosbuvir/ Velpatasvir (Epclusa®) (USD)' = "Costo_Tratamiento",
+      'Porcentaje de personas en estadío de fibrosis F0 al diagnóstico (%)' = "F0", 
+      'Porcentaje de personas en estadío de fibrosis F1 al diagnóstico (%)' = "F1", 
+      'Porcentaje de personas en estadío de fibrosis F2 al diagnóstico (%)' = "F2", 
+      'Porcentaje de personas en estadío de fibrosis F3 al diagnóstico (%)' = "F3", 
+      'Porcentaje de personas en estadío de fibrosis F4 al diagnóstico (%)' = "F4", 
+      'Porcentaje de pacientes que abandonan el tratamiento (%)' = "pAbandono", 
+      'Eficacia de Sofosbuvir/ Velpatasvir (Epclusa®) (%)' = "pSVR", 
+      'Duración del tratamiento (meses)' = "tDuracion_Meses"
     )
     
-    unique(datosPais$indicador)
+    inputs_hover = c(
+      'Costo de cirrosis descompensada (USD)',
+      'Costos de estadío de fibrosis F0 a F2 (USD)',
+      'Costos de estadío de fibrosis F3 (USD)',
+      'Costos de estadío de fibrosis F4 (USD)',
+      'Costos de carcinoma hepatocelular (USD)',
+      'Se utiliza para traer al presente los costos y beneficios en salud futuros',
+      'Número de personas mayores de 18 años con infección por VHC que ingresan al modelo',
+      'Costo de la evaluación de la respuesta al tratamiento',
+      'Costo de tratamiento mensual de Sofosbuvir/ Velpatasvir (Epclusa®) para julio de 2023. Régimen de AAD (antivirales de acción directa) de 4 semanas. (USD oficial a tasa de cambio nominal de cada país)',
+      'Porcentaje de personas en estadío de fibrosis F0 al diagnóstico',
+      'Porcentaje de personas en estadío de fibrosis F1 al diagnóstico',
+      'Porcentaje de personas en estadío de fibrosis F2 al diagnóstico',
+      'Porcentaje de personas en estadío de fibrosis F3 al diagnóstico',
+      'Porcentaje de personas en estadío de fibrosis F4 al diagnóstico',
+      'Porcentaje de pacientes que abandonan el tratamiento',
+      'Porcentaje de la capacidad del tratamiento antiviral específico que combina los medicamentos Sofosbuvir y Velpatasvir para eliminar o reducir la carga viral del VHC',
+      'Duración del tratamiento con Sofosbuvir (400 mg) y Velpatasvir (100 mg) en meses'
+    )
+    
+    porcentajes = c(6,10:16)
+    
     
     default = list()
     default$cohorte = datosPais$valor[datosPais$pais==country_sel & datosPais$dimension=="epi" & datosPais$indicador=="Cohorte"]
@@ -75,15 +96,39 @@ ui_hepC = function (input, datosPais) {
       
     }
     
-    
     tagList(
           lapply(input_names[15:17], function(i) {
-            numericInput(
-              i,
-              names(input_names[input_names==i]),
-              default[[i]]
-              
-            )
+            
+            if (which(input_names==i) %in% porcentajes) {
+              sliderInput(
+                i,
+                tags$div(
+                  names(input_names[input_names==i]),
+                  icon("circle-info",
+                       "fa-1x",
+                       title = inputs_hover[which(input_names==i)])
+                ),
+                min = 0,
+                max = 100,
+                default[[i]]*100
+                
+                
+              )
+            } else {
+              numericInput(
+                i,
+                tags$div(
+                  names(input_names[input_names==i]),
+                  icon("circle-info",
+                       "fa-1x",
+                       title = inputs_hover[which(input_names==i)])
+                ),
+                default[[i]]
+                
+              )
+            }
+            
+            
           })
         ,
         tags$header(class="text-1xl flex justify-between items-center p-5 mt-4", style="background-color: #FF671B; color: white; text-align: center", 
@@ -92,12 +137,34 @@ ui_hepC = function (input, datosPais) {
         ),
           lapply(input_names[1:14], function(i) {
             hidden(
-              numericInput(
-                i,
-                names(input_names[input_names==i]),
-                default[[i]]
-                
-              )
+              if (which(input_names==i) %in% porcentajes) {
+                sliderInput(
+                  i,
+                  tags$div(
+                    names(input_names[input_names==i]),
+                    icon("circle-info",
+                         "fa-1x",
+                         title = inputs_hover[which(input_names==i)])
+                  ),
+                  min=0,
+                  max=100,
+                  default[[i]]
+                  
+                )
+              } else {
+                numericInput(
+                  i,
+                  tags$div(
+                    names(input_names[input_names==i]),
+                    icon("circle-info",
+                         "fa-1x",
+                         title = inputs_hover[which(input_names==i)])
+                  ),
+                  default[[i]]
+                  
+                )
+              }
+              
               
             )
             

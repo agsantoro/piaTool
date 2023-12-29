@@ -13,11 +13,13 @@ ui_hpp = function (input) {
     )
     
     label_inputs = c(
-      "Descuento",
-      "Costo de la intervención",
+      "Tasa de descuento (%)",
+      "Costo programático de anual (USD)",
       "Cobertura actual del uso de oxitocina (%)",
       "Cobertura esperada del uso de oxitocina (%)"
     )
+    
+    porcentajes = c(1,3,4)
     
     if (is.null(input$country) == F) {
       hpp_map_inputs = data.frame(
@@ -27,8 +29,8 @@ ui_hpp = function (input) {
       )
       
       hpp_map_inputs$avanzado = NA
-      hpp_map_inputs$avanzado[3:4] = T
-      hpp_map_inputs$avanzado[1:2] = F
+      hpp_map_inputs$avanzado[1:3] = T
+      hpp_map_inputs$avanzado[4] = F
       
       rownames(hpp_map_inputs) = 1:nrow(hpp_map_inputs)
       
@@ -48,16 +50,30 @@ ui_hpp = function (input) {
     
     tagList(
       
-          lapply(3:4, function(i) {
-            numericInput(nombres_input[i],label_inputs[i],defaults[i])
+          lapply(4, function(i) {
+            sliderInput(
+              nombres_input[i],
+              label_inputs[i],
+              min = 0,
+              max = 100,
+              defaults[i]*100)
           }),
           tags$header(class="text-1xl flex justify-between items-center p-5 mt-4", style="background-color: #FF671B; color: white; text-align: center", 
                       tags$h1(style="display: inline-block; margin: 0 auto;", class="flex-grow mt-8 mb-8",tags$b("Avanzado")),
                       actionLink(inputId = "toggle_avanzado_hpp", label=icon("stream", style = "color: white;"))
           ),
         
-          lapply(1:2, function(i) {
-            hidden(numericInput(nombres_input[i],label_inputs[i],defaults[i]))
+          lapply(1:3, function(i) {
+            if (i %in% porcentajes) {
+              hidden(sliderInput(nombres_input[i],
+                                 label_inputs[i],
+                                 min=0,
+                                 max=100,
+                                 defaults[i]*100))
+            } else {
+              hidden(numericInput(nombres_input[i],label_inputs[i],defaults[i]))
+            }
+            
           })    
         )
       

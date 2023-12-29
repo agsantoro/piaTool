@@ -151,6 +151,13 @@ a {color: black}
     border-color: #92897e;
 }
 
+textarea {
+  font-size: 1.5rem !important;
+}
+
+[type='number'] {
+  font-size: 1.5rem !important;
+}
 
 
 ")

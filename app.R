@@ -665,8 +665,8 @@ server <- function(input, output, session) {
       input$country,
       input$birthCohortSizeFemale,
       input$cohortSizeAtVaccinationAgeFemale,
-      input$coverageAllDosis,
-      input$vaccineEfficacyVsHPV16_18,
+      input$coverageAllDosis/100,
+      input$vaccineEfficacyVsHPV16_18/100,
       input$targetAgeGroup,
       input$vaccinePricePerFIG,
       input$vaccineDeliveryCostPerFIG,
@@ -676,9 +676,9 @@ server <- function(input, output, session) {
       input$DALYsForNonTerminalCancerSequelaePperYear,
       input$DALYsForTerminalCancer,
       input$discountRate,
-      input$proportionOfCervicalCancerCasesThatAreDueToHPV16_18,
+      input$proportionOfCervicalCancerCasesThatAreDueToHPV16_18/100,
       input$GDPPerCapita,
-      input$coverageTarget,
+      input$coverageTarget/100,
       mortall,
       mortcecx,
       incidence,
@@ -742,7 +742,7 @@ server <- function(input, output, session) {
   
   observeEvent(input$toggle_avanzado_hearts, {
     inputs_toggle = names(input)[substring(names(input),1,6)=="hearts"]
-    inputs_hide = inputs_toggle[-grep(3,inputs_toggle)]
+    inputs_hide = inputs_toggle[-grep(8,inputs_toggle)]
     
     for (i in c(inputs_hide, "titulo1","titulo2")) {
       isVisible <- shinyjs::toggleState(id = i)
@@ -787,23 +787,24 @@ server <- function(input, output, session) {
     
     if (length(input$hpp_costoIntervencion)>0) {
       resultados = resultados_comparados(str_to_title(input$country),
-                                         input$hpp_uso_oxitocina_base,
-                                         input$hpp_uso_oxitocina_taget,
-                                         input$hpp_descuento,
+                                         input$hpp_uso_oxitocina_base/100,
+                                         input$hpp_uso_oxitocina_taget/100,
+                                         input$hpp_descuento/100,
                                          input$hpp_costoIntervencion)
       data.frame(
         Indicador = c("Costo promedio de un evento de Hemorragia Post Parto",
                       "Perdida de Qaly por un evento de Hemorragia Post Parto",
-                      "Diferencia de costo",
-                      "Hemorragias Post Parto Evitadas",
-                      "Muertes por Hemorragias Post Parto Evitadas",
+                      "Diferencia de costos respecto al escenario basal (USD)",
+                      "Hemorragias posparto evitadas (n)",
+                      "Muertes evitadas (n)",
                       "Histerectomias por Hemorragias Post Parto Evitadas",
-                      "Años de vida por muerte prematura salvados",
-                      "Años de vida por discapacidad salvados",
-                      "Inversión",
-                      "ROI",
+                      "Años de vida salvados",
+                      "Años de vida ajustados por discapacidad evitados",
+                      "Costos de intervención (USD)",
+                      "Retorno de Inversión (%)",
                       "Costo cada mil",
                       "Qalys cada mil"),
+        
         Valor = c(resultados$base$"Costo_HPP",
                   resultados$base$"Dalys_Total",
                   resultados[["comparacion"]][["Diferencia de costo"]],
@@ -855,20 +856,20 @@ server <- function(input, output, session) {
         output,
         input_pais = str_to_title(input$country),
         input_cohorte = input$cohorte,
-        input_AtasaDescuento = input$AtasaDescuento,
-        input_F0 = input$F0,
-        input_F1 = input$F1,
-        input_F2 = input$F2,
-        input_F3 = input$F3,
-        input_F4 = input$F4,
+        input_AtasaDescuento = input$AtasaDescuento/100,
+        input_F0 = input$F0/100,
+        input_F1 = input$F1/100,
+        input_F2 = input$F2/100,
+        input_F3 = input$F3/100,
+        input_F4 = input$F4/100,
         input_aCostoF0F2 = input$aCostoF0F2,
         input_aCostoF3 = input$aCostoF3,
         input_aCostoF4 = input$aCostoF4,
         input_aCostoDC = input$aCostoDC,
         input_aCostoHCC = input$aCostoHCC,
-        input_pSVR = input$pSVR,
+        input_pSVR = input$pSVR/100,
         input_tDuracion_Meses = input$tDuracion_Meses,
-        input_pAbandono = input$pAbandono,
+        input_pAbandono = input$pAbandono/100,
         input_Costo_Tratamiento = input$Costo_Tratamiento,
         input_Costo_Evaluacion = input$Costo_Evaluacion
       )
