@@ -2,8 +2,8 @@ ui_hpv_basica = function (parametersReactive,input,inputs_hpv, run_hearts) {
   inputs_names = c(
     'Tamaño de la cohorte de nacimientos (mujeres)',
     'Tamaño de la cohorte en edad de vacunación (mujeres)',
-    'Porcentaje de cobertura objetivo (esquema completo)',
-    'Porcentaje de eficacia de la vacuna contra el VPH 16/18',
+    'Porporción de cobertura objetivo (esquema completo)',
+    'Proporción de eficacia de la vacuna contra el VPH 16/18',
     'Grupo de edad objetivo',
     'Costo de vacunación (esquema completo)',
     'Costos administrativos de la vacuna (esquema completo)',
@@ -13,7 +13,7 @@ ui_hpv_basica = function (parametersReactive,input,inputs_hpv, run_hearts) {
     'Años de vida ajustados por discapacidad por secuelas de cáncer de cuello uterino',
     'Años de vida ajustados por discapacidad por cáncer de cuello uterino terminal',
     'Tasa de descuento',
-    'Porcentaje de casos de cáncer de cuello de útero debidos al VPH 16/18',
+    'Proporción de casos de cáncer de cuello de útero debidos al VPH 16/18',
     'PIB per capita'
     #'Porcentaje de cobertura objetivo (esquema completo)'
   )
@@ -71,7 +71,7 @@ ui_hpv_basica = function (parametersReactive,input,inputs_hpv, run_hearts) {
       br(),
       #tags$style(getStyle()),
       lapply(1:3, function (i) {
-        if (!i %in% c(3,4)) {
+        if (!i %in% c(3,4,13,14)) {
           numericInput(input=names(parametersReactive)[i],
                        tags$div(
                          inputs_names[i],
@@ -100,7 +100,7 @@ ui_hpv_basica = function (parametersReactive,input,inputs_hpv, run_hearts) {
       ),
       br(),
       lapply(4:15, function (i) {
-        if (!i %in% c(3,4,16)) {
+        if (!i %in% c(3,4,13,14)) {
           hidden(
             numericInput(input=names(parametersReactive)[i],
                          tags$div(
