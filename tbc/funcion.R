@@ -568,11 +568,11 @@ modelo_tbc <- function(pExitoso,
            ((costo-as.numeric(SAT[12]))/(as.numeric(SAT[8])-AVP_ajustados_descontado)),
            (costos_evitados-costo_VOT_DOT)/costo_VOT_DOT
   )
-  VOT
   
   ### resultados -----
   # Nombres de los parámetros, como se ven en tu tabla.
-  parametros <- c("Tratamientos exitosos (n)", "Porcentaje de éxito (%)",
+  parametros <- c("Tratamientos exitosos (n)", 
+                  "Porcentaje de éxito (%)",
                   "Perdida de seguimiento", 
                   "Muertes evitadas (n)",
                   "Años de vida ajustados por calidad",
@@ -641,7 +641,7 @@ get_tbc_params = function () {
 
 get_tbc_params_labels = function () {
   c(
-    'Riesgo Relativo (RR) del tratamiento exitoso con con tratamiento de observación directa vs tratamiento autoadministrado',
+    'Riesgo Relativo del tratamiento exitoso con tratamiento de observación directa vs tratamiento autoadministrado',
     'Riesgo relativo tratamiento exitoso tratamiento de observación directa por video vs tratamiento de observación directa',
     'Porcentaje de adherencia a tratamiento de observación directa por video (%)',
     'Porcentaje de tratamiento exitoso mediante tratamiento autosupervisado',
@@ -654,5 +654,28 @@ get_tbc_params_labels = function () {
     'Riesgo relativo de falla terapéutica con tratamiento directamente observado por video vs tratamiento directamente observado',
     'Cantidad de dosis supervisadas mediante tratamiento directamente observado por video por semana',
     'Cantidad de dosis supervisadas mediante tratamiento directamente observado por semana'
+    
   )
 }
+
+get_tbc_hover = function () {
+  c(
+    'Riesgo relativo de éxito en el tratamiento de la tuberculosis comparando el tratamiento de observación directa con el tratamiento auto supervisado',
+    'Riesgo relativo de éxito en el tratamiento de la tuberculosis al comparar tratamiento de observación directa por video con el tratamiento de observación directa',
+    'Porcentaje que refleja la adherencia adecuada al tratamiento de observación directa por video para la TB, estableciendo que un paciente cumple con el tratamiento de manera correcta si asiste y completa al menos el 80% de las sesiones de medicación supervisadas',
+    'Porcentaje de pacientes que responden positivamente al tratamiento autosupervisado en comparación con el total de pacientes tratados para tuberculosis',
+    'Porcentaje de pacientes que fallecen tras no responder positivamente al tratamiento auto supervisado para tuberculosis',
+    'Porcentaje de pacientes que responden negativamente al tratamiento autosupervisado',
+    'Riesgo relativo de mortalidad en pacientes bajo tratamiento directamente observado frente a aquellos que gestionan su tratamiento auto supervisado',
+    'Riesgo relativo de falla terapéutica en pacientes bajo tratamiento directamente observado frente a aquellos que gestionan su tratamiento autosupervisado',
+    'Porcentaje que refleja la adherencia adecuada al tratamiento directamente observado para tuberculosis, estableciendo que un paciente cumple con el tratamiento de manera correcta si asiste y completa al menos el 80% de las sesiones de medicación supervisadas',
+    'Riesgo relativo de mortalidad en pacientes bajo tratamiento directamente observado por video frente a aquellos que reciben tratamiento tratamiento directamente observado',
+    'Riesgo relativo de falla terapéutica en pacientes bajo tratamiento directamente observado por video frente a aquellos que reciben tratamiento directamente observado',
+    'Número total de veces que un paciente con tuberculosis recibe supervisión para la toma de sus medicamentos a través de tratamiento directamente observado por video durante una semana',
+    'Número total de veces que un paciente con tuberculosis recibe supervisión para la toma de sus medicamentos a través de tratamiento directamente observado durante una semana'
+    
+    
+  )
+}
+
+

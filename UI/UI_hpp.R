@@ -14,9 +14,16 @@ ui_hpp = function (input) {
     
     label_inputs = c(
       "Tasa de descuento (%)",
-      "Costo programático de anual (USD)",
+      "Costo programático de la intervención anual (USD)",
       "Cobertura actual del uso de oxitocina (%)",
       "Cobertura esperada del uso de oxitocina (%)"
+    )
+    
+    inputs_hover = c(
+      'Se utiliza para traer al presente los costos y beneficios en salud futuros',
+      'Costo de implementar y sostener la intervención en un año (USD oficial a tasa de cambio nominal de cada país)',
+      'Porcentaje de uso de oxitocina durante el parto en el país.',
+      'Porcentaje de uso de oxitocina durante el parto en el país luego de la intervención'
     )
     
     porcentajes = c(1,3,4)
@@ -53,7 +60,12 @@ ui_hpp = function (input) {
           lapply(4, function(i) {
             sliderInput(
               nombres_input[i],
-              label_inputs[i],
+              tags$div(
+                label_inputs[i],
+                icon("circle-info",
+                     "fa-1x",
+                     title = inputs_hover[i])
+              ),
               min = 0,
               max = 100,
               defaults[i]*100)
@@ -66,12 +78,22 @@ ui_hpp = function (input) {
           lapply(1:3, function(i) {
             if (i %in% porcentajes) {
               hidden(sliderInput(nombres_input[i],
-                                 label_inputs[i],
+                                 tags$div(
+                                   label_inputs[i],
+                                   icon("circle-info",
+                                        "fa-1x",
+                                        title = inputs_hover[i])
+                                 ),
                                  min=0,
                                  max=100,
                                  defaults[i]*100))
             } else {
-              hidden(numericInput(nombres_input[i],label_inputs[i],defaults[i]))
+              hidden(numericInput(nombres_input[i],tags$div(
+                label_inputs[i],
+                icon("circle-info",
+                     "fa-1x",
+                     title = inputs_hover[i])
+              ),defaults[i]))
             }
             
           })    

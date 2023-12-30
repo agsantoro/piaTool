@@ -287,7 +287,7 @@ ui_avanzada <-
         style= "width: 50%;",
         p(
         style = "text-align: right;",
-        tags$a("Descargar manual de usuario", href="www.clarin.com", target ="_blank")
+        tags$a("Descargar manual de usuario", href="Manual/manual-PIA_TOOL-v2.pdf", target ="_blank"), 
       ))
     ),
     

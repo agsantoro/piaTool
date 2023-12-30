@@ -20,11 +20,33 @@ ui_tbc = function (input) {
       )
 
     }
-
+    
+    porcentajes = c(3,4,5,6,9)
+    
+    inputs_hover = get_tbc_hover()
+    
     tagList(
       
       lapply(1:3, function(i) {
-        numericInput(tbc_map_inputs$i_names[i],tbc_map_inputs$i_labels[i],get_tbc_params()[[i]])
+        if (i %in% porcentajes) {
+          sliderInput(tbc_map_inputs$i_names[i],
+                      tags$div(
+                        tbc_map_inputs$i_labels[i],
+                        icon("circle-info",
+                             "fa-1x",
+                             title = inputs_hover[i])
+                      ),
+                      
+                      min=0, max=100, get_tbc_params()[[i]]*100)
+        } else {
+          numericInput(tbc_map_inputs$i_names[i],tags$div(
+            tbc_map_inputs$i_labels[i],
+            icon("circle-info",
+                 "fa-1x",
+                 title = inputs_hover[i])
+          ),get_tbc_params()[[i]])
+        }
+        
       }),
       tags$header(class="text-1xl flex justify-between items-center p-5 mt-4", style="background-color: #FF671B; color: white; text-align: center",
                   tags$h1(style="display: inline-block; margin: 0 auto;", class="flex-grow mt-8 mb-8",tags$b("Avanzado")),
@@ -32,7 +54,22 @@ ui_tbc = function (input) {
       ),
 
       lapply(4:13, function(i) {
-        hidden(numericInput(tbc_map_inputs$i_names[i],tbc_map_inputs$i_labels[i],get_tbc_params()[[i]]))
+        if (i %in% porcentajes) {
+          hidden(sliderInput(tbc_map_inputs$i_names[i],tags$div(
+            tbc_map_inputs$i_labels[i],
+            icon("circle-info",
+                 "fa-1x",
+                 title = inputs_hover[i])
+          ),min=0, max=100, get_tbc_params()[[i]]*100))
+        } else {
+          hidden(numericInput(tbc_map_inputs$i_names[i],tags$div(
+            tbc_map_inputs$i_labels[i],
+            icon("circle-info",
+                 "fa-1x",
+                 title = inputs_hover[i])
+          ),get_tbc_params()[[i]]))
+        }
+        
       })
     )
     

@@ -719,15 +719,15 @@ server <- function(input, output, session) {
     params = get_tbc_params()
     
     if (length(input$VOTrrExito)!=0) {
-      table = modelo_tbc(input$pExitoso,
-                         input$pMuerte,
-                         input$pFalla,
+      table = modelo_tbc(input$pExitoso/100,
+                         input$pMuerte/100,
+                         input$pFalla/100,
                          input$DOTrrMuerte,
                          input$DOTrrFalla,
-                         input$DOTadherencia,
+                         input$DOTadherencia/100,
                          input$DOTrrExito,
                          input$VOTrrExito,
-                         input$VOTadherencia,
+                         input$VOTadherencia/100,
                          input$VOTrrFalla,
                          input$VOTrrMuerte,
                          input$country,
