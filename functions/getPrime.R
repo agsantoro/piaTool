@@ -1,23 +1,20 @@
 library(readxl)
 # parameters
-parameters = readxl::read_xlsx("xlsx/PRIME_v2.3 (1).xlsx", sheet = "Parameters")
-
+parameters = readxl::read_xlsx("xlsx/PRIME_hpv_v20231222.xlsx", sheet = "Parameters")
 
 # mortality and incidence data
-mortall = readxl::read_xlsx("xlsx/PRIME_v2.3 (1).xlsx", sheet = "mortall")
+mortall = readxl::read_xlsx("xlsx/PRIME_hpv_v20231222.xlsx", sheet = "mortall")
 
-
-mortcecx = readxl::read_xlsx("xlsx/PRIME_v2.3 (1).xlsx", sheet = "mortcecx")
+mortcecx = readxl::read_xlsx("xlsx/PRIME_hpv_v20231222.xlsx", sheet = "mortcecx")
 
 mortcecx[is.na(mortcecx)] = 0
 
-incidence = readxl::read_xlsx("xlsx/PRIME_v2.3 (1).xlsx", sheet = "incidence")
-
+incidence = readxl::read_xlsx("xlsx/PRIME_hpv_v20231222.xlsx", sheet = "incidence")
 
 source("functions/createLifetable.R", encoding = "UTF-8")
 
 # dalys params
-dalys = readxl::read_xlsx("xlsx/PRIME_v2.3 (1).xlsx", sheet = "Model", range = "AV2:AW6")
+dalys = readxl::read_xlsx("xlsx/PRIME_hpv_v20231222.xlsx", sheet = "Model", range = "AV2:AW6")
 colnames(dalys)[1]="event"
 
 # model function
@@ -45,6 +42,8 @@ getPrime = function (
     incidence,
     dalys,
     parameters) {
+  
+  browser()
   
   # lifetable
   lifeTable = createLifetable("ARGENTINA")
@@ -77,6 +76,7 @@ getPrime = function (
   ceCx16_18IncidencePreVacDisc[is.na(ceCx16_18IncidencePreVacDisc)] = 0
   
   ceCx16_18MortalityPreVac = as.numeric(mortcecx[mortcecx$`Country ¦ Age [11]`==country,-1]) * proportionOfCervicalCancerCasesThatAreDueToHPV16_18
+  ceCx16_18MortalityPreVac[is.na(ceCx16_18MortalityPreVac)] = 0
   
   ceCx16_18MortalityPreVacDisc = ceCx16_18MortalityPreVac * discountFactor
   
