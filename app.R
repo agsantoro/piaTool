@@ -638,10 +638,14 @@ server <- function(input, output, session) {
   ##### HPV #####
   # lista de parámetros
   parametersReactive <- reactive({
+    
     paramsList = list(
       birthCohortSizeFemale = as.numeric(parameters[parameters$Country==input$country,8]),
-      cohortSizeAtVaccinationAgeFemale = as.numeric(parameters[parameters$Country==input$country,10]),
-      coverageAllDosis = as.numeric(parameters[parameters$Country==input$country,11]),
+      cohortSizeAtVaccinationAgeFemale = as.numeric(cohortSizeAcVac$value[cohortSizeAcVac$country==input$country & 
+                                                                          cohortSizeAcVac$age==as.numeric(parameters[parameters$Country==input$country,13])
+                                                                         ]
+                                                    ),
+      coverageAllDosis = as.numeric(parameters[parameters$Country==input$country,23]),
       vaccineEfficacyVsHPV16_18 = as.numeric(parameters[parameters$Country==input$country,12]),
       targetAgeGroup = as.numeric(parameters[parameters$Country==input$country,13]),
       vaccinePricePerFIG = as.numeric(parameters[parameters$Country==input$country,14]),
