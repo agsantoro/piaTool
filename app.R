@@ -587,7 +587,7 @@ server <- function(input, output, session) {
   
   observeEvent(input$toggle_avanzado_hpv, {
     load("hpv_map_inputs.Rdata")
-    for (i in hpv_map_inputs$i_names[4:15]) {
+    for (i in hpv_map_inputs$i_names[hpv_map_inputs$avanzado==T]) {
       isVisible <- shinyjs::toggleState(id = i)
       
       toggle(id = i, anim = TRUE, animType = "slide", condition = isVisible)
@@ -642,7 +642,8 @@ server <- function(input, output, session) {
     getPrime(
       input,
       input$country,
-      input$birthCohortSizeFemale,
+      input$coverageBase,
+      #input$birthCohortSizeFemale,
       input$cohortSizeAtVaccinationAgeFemale,
       input$coverageAllDosis,
       input$vaccineEfficacyVsHPV16_18,

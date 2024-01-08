@@ -1,8 +1,7 @@
 ui_hpv_basica = function (input,inputs_hpv, run_hearts) {
-  
-    
   inputs_names = c(
-    'Tamaño de la cohorte de nacimientos (mujeres)',
+    'Porcentaje de cobertura basal (esquema completo)',
+    #'Tamaño de la cohorte de nacimientos (mujeres)',
     'Tamaño de la cohorte en edad de vacunación (mujeres)',
     'Porcentaje de cobertura objetivo (esquema completo)',
     'Porcentaje de eficacia de la vacuna contra el VPH 16/18',
@@ -17,11 +16,12 @@ ui_hpv_basica = function (input,inputs_hpv, run_hearts) {
     'Tasa de descuento',
     'Porcentaje de casos de cáncer de cuello de útero debidos al VPH 16/18',
     'PIB per capita'
-    #'Porcentaje de cobertura objetivo (esquema completo)'
+    
   )
   
   inputs_hover = c(
-    'Tamaño de la cohorte de nacimientos (mujeres)',
+    'Se refiere al porcentaje de mujeres que actualmente reciben vacuna contra el VPH.',
+    #'Tamaño de la cohorte de nacimientos (mujeres)',
     'Número de mujeres en el país correspondientes a la edad de vacunación de rutina, definida por el "grupo de edad objetivo"',
     'Se refiere al porcentaje de mujeres que actualmente reciben vacuna contra el VPH',
     'Indica la reducción del riesgo de infecciones persistentes y lesiones precancerosas por los tipos 16 y 18 del VPH*',
@@ -36,13 +36,14 @@ ui_hpv_basica = function (input,inputs_hpv, run_hearts) {
     'Tasa de descuento',
     'Porcentaje de casos de cáncer de cuello uterino que son atribuibles a las cepas 16 y 18 del VPH',
     'PIB per capita'
-    #'La proporción esperada de niñas en el grupo de edad relevante que recibirán el esquema completo de la vacuna luego de la intervención'
+    
   )
   
   if (is.null(input$country) == F) {
     parametersReactive <- function () {
       paramsList = list(
-        birthCohortSizeFemale = as.numeric(parameters[parameters$Country==input$country,8]),
+        coverageBase = as.numeric(parameters[parameters$Country==input$country,11]),
+        #birthCohortSizeFemale = as.numeric(parameters[parameters$Country==input$country,8]),
         cohortSizeAtVaccinationAgeFemale = as.numeric(cohortSizeAcVac$value[cohortSizeAcVac$country==input$country & 
                                                                               cohortSizeAcVac$age==as.numeric(parameters[parameters$Country==input$country,13])
         ]
@@ -60,7 +61,7 @@ ui_hpv_basica = function (input,inputs_hpv, run_hearts) {
         discountRate = as.numeric(parameters[parameters$Country==input$country,18]),
         proportionOfCervicalCancerCasesThatAreDueToHPV16_18 = as.numeric(parameters[parameters$Country==input$country,19]),
         GDPPerCapita = as.numeric(parameters[parameters$Country==input$country,20])
-        #coverageTarget = as.numeric(parameters[parameters$Country==input$country,23])
+        
       )
       return(paramsList)
     }
@@ -76,15 +77,21 @@ ui_hpv_basica = function (input,inputs_hpv, run_hearts) {
       i_labels = c(i_labels,inputs_names[i])
     }
     
+    browser()
+    
     hpv_map_inputs = data.frame(
       intervencion = "Vacuna contra el HPV",
       i_names,
       i_labels
     )
     
+    bsc = c(1,3,6)
+    avz = setdiff(seq(1,nrow(hpv_map_inputs)),bsc)
+    prc = c(1,3,4,13,14)
+    
     hpv_map_inputs$avanzado = NA
-    hpv_map_inputs$avanzado[4:15] = T
-    hpv_map_inputs$avanzado[c(1:3)] = F
+    hpv_map_inputs$avanzado[avz] = T
+    hpv_map_inputs$avanzado[bsc] = F
     
     save(
       hpv_map_inputs,
@@ -97,8 +104,8 @@ ui_hpv_basica = function (input,inputs_hpv, run_hearts) {
     tagList(
       br(),
       #tags$style(getStyle()),
-      lapply(1:3, function (i) {
-        if (!i %in% c(3,4,13,14)) {
+      lapply(bsc, function (i) {
+        if (!i %in% prc) {
           numericInput(input=names(parametersReactive())[i],
                        tags$div(
                          inputs_names[i],
@@ -126,8 +133,8 @@ ui_hpv_basica = function (input,inputs_hpv, run_hearts) {
                   actionLink(inputId = "toggle_avanzado_hpv", label=icon("stream", style = "color: white;"))
       ),
       br(),
-      lapply(4:15, function (i) {
-        if (!i %in% c(3,4,13,14)) {
+      lapply(avz, function (i) {
+        if (!i %in% prc) {
           hidden(
             numericInput(input=names(parametersReactive())[i],
                          tags$div(
@@ -150,8 +157,8 @@ ui_hpv_basica = function (input,inputs_hpv, run_hearts) {
                                title = inputs_hover[i])
                         ),
                         min = 0,
-                        max= 1,
-                        value=parametersReactive()[[i]])
+                        max= 100,
+                        value=parametersReactive()[[i]]*100)
             
           )
         }
@@ -175,26 +182,31 @@ ui_grafico_hpv = function (resultados, input) {
 }
 
 ui_tabla_hpv = function (resultados, input) {
-  if (length(input$birthCohortSizeFemale)>0) {
+  if (length(input$coverageBase)>0) {
+    browser()
     table = resultados$outcomes
     table$disc = format(round(table$disc,1), nsmall = 1,big.mark = ".", decimal.mark = ",", scientific = FALSE)
     table$undisc = format(round(table$undisc,1), nsmall = 1,big.mark = ".", decimal.mark = ",", scientific = FALSE)
     
     colnames(table) = c("Outcomes", "Undiscounted", "Discounted")
     
-    cat_input = c(1,2,3,14)
-    cat_epi = c(6,7,8,9)
-    cat_costos = c(4,5,10,11,12,13,15)
+    browser()
+    
+    cat_epi = c(5:8)
+    cat_costos = c(2,3,4,9,10,11,12,14)
     
     table$cat=""
-    table$cat[cat_input] = "Inputs"
     table$cat[cat_epi] = "Resultados epidemiológicos"
     table$cat[cat_costos] = "Resultados económicos"
-    table$Discounted[cat_input] = "-"
     
+    table = table[table$cat!="",]
+    table = rbind(
+      table[table$cat=="Resultados epidemiológicos",],
+      table[table$cat=="Resultados económicos",]
+    )
     
     reactable(
-      table[table$cat!="Inputs",],
+      table,
       groupBy = "cat",
       defaultExpanded = T,
       pagination = F,
