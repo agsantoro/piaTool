@@ -1,9 +1,11 @@
-ui_hpv_basica = function (parametersReactive,input,inputs_hpv, run_hearts) {
+ui_hpv_basica = function (input,inputs_hpv, run_hearts) {
+  
+    
   inputs_names = c(
     'Tamaño de la cohorte de nacimientos (mujeres)',
     'Tamaño de la cohorte en edad de vacunación (mujeres)',
-    'Porporción de cobertura objetivo (esquema completo)',
-    'Proporción de eficacia de la vacuna contra el VPH 16/18',
+    'Porcentaje de cobertura objetivo (esquema completo)',
+    'Porcentaje de eficacia de la vacuna contra el VPH 16/18',
     'Grupo de edad objetivo',
     'Costo de vacunación (esquema completo)',
     'Costos administrativos de la vacuna (esquema completo)',
@@ -13,7 +15,7 @@ ui_hpv_basica = function (parametersReactive,input,inputs_hpv, run_hearts) {
     'Años de vida ajustados por discapacidad por secuelas de cáncer de cuello uterino',
     'Años de vida ajustados por discapacidad por cáncer de cuello uterino terminal',
     'Tasa de descuento',
-    'Proporción de casos de cáncer de cuello de útero debidos al VPH 16/18',
+    'Porcentaje de casos de cáncer de cuello de útero debidos al VPH 16/18',
     'PIB per capita'
     #'Porcentaje de cobertura objetivo (esquema completo)'
   )
@@ -38,9 +40,34 @@ ui_hpv_basica = function (parametersReactive,input,inputs_hpv, run_hearts) {
   )
   
   if (is.null(input$country) == F) {
+    parametersReactive <- function () {
+      paramsList = list(
+        birthCohortSizeFemale = as.numeric(parameters[parameters$Country==input$country,8]),
+        cohortSizeAtVaccinationAgeFemale = as.numeric(cohortSizeAcVac$value[cohortSizeAcVac$country==input$country & 
+                                                                              cohortSizeAcVac$age==as.numeric(parameters[parameters$Country==input$country,13])
+        ]
+        ),
+        coverageAllDosis = as.numeric(parameters[parameters$Country==input$country,23]),
+        vaccineEfficacyVsHPV16_18 = as.numeric(parameters[parameters$Country==input$country,12]),
+        targetAgeGroup = as.numeric(parameters[parameters$Country==input$country,13]),
+        vaccinePricePerFIG = as.numeric(parameters[parameters$Country==input$country,14]),
+        vaccineDeliveryCostPerFIG = as.numeric(parameters[parameters$Country==input$country,15]),
+        totalVaccineCostPerFIG = as.numeric(parameters[parameters$Country==input$country,14])+as.numeric(parameters[parameters$Country==input$country,15]),
+        cancerTreatmentCostPerEpisodeOverLifetime = as.numeric(parameters[parameters$Country==input$country,16]),
+        DALYsForCancerDiagnosis = 0.08,
+        DALYsForNonTerminalCancerSequelaePperYear = as.numeric(parameters[parameters$Country==input$country,22]),
+        DALYsForTerminalCancer = 0.78,
+        discountRate = as.numeric(parameters[parameters$Country==input$country,18]),
+        proportionOfCervicalCancerCasesThatAreDueToHPV16_18 = as.numeric(parameters[parameters$Country==input$country,19]),
+        GDPPerCapita = as.numeric(parameters[parameters$Country==input$country,20])
+        #coverageTarget = as.numeric(parameters[parameters$Country==input$country,23])
+      )
+      return(paramsList)
+    }
+    
     i_names = c()
     for (i in 1:15) {
-      i_names = c(i_names,names(parametersReactive[i]))
+      i_names = c(i_names,names(parametersReactive()[i]))
     }
     
     i_labels = c()
@@ -72,16 +99,16 @@ ui_hpv_basica = function (parametersReactive,input,inputs_hpv, run_hearts) {
       #tags$style(getStyle()),
       lapply(1:3, function (i) {
         if (!i %in% c(3,4,13,14)) {
-          numericInput(input=names(parametersReactive)[i],
+          numericInput(input=names(parametersReactive())[i],
                        tags$div(
                          inputs_names[i],
                          icon("circle-info",
                               "fa-1x",
                               title = inputs_hover[i])
                        ),
-                       value = parametersReactive[[i]])
+                       value = parametersReactive()[[i]])
         } else {
-          sliderInput(input=names(parametersReactive)[i],
+          sliderInput(input=names(parametersReactive())[i],
                       label=tags$div(
                         inputs_names[i],
                         icon("circle-info",
@@ -89,8 +116,8 @@ ui_hpv_basica = function (parametersReactive,input,inputs_hpv, run_hearts) {
                              title = inputs_hover[i])
                       ),
                       min = 0,
-                      max= 1,
-                      value=parametersReactive[[i]])}
+                      max= 100,
+                      value=parametersReactive()[[i]]*100)}
         
       }),
       br(),
@@ -102,7 +129,7 @@ ui_hpv_basica = function (parametersReactive,input,inputs_hpv, run_hearts) {
       lapply(4:15, function (i) {
         if (!i %in% c(3,4,13,14)) {
           hidden(
-            numericInput(input=names(parametersReactive)[i],
+            numericInput(input=names(parametersReactive())[i],
                          tags$div(
                            inputs_names[i],
                            icon("circle-info", 
@@ -110,12 +137,12 @@ ui_hpv_basica = function (parametersReactive,input,inputs_hpv, run_hearts) {
                                 title = inputs_hover[i])
                          )
                          ,
-                         value = parametersReactive[[i]])
+                         value = parametersReactive()[[i]])
             
           )
         } else {
           hidden(
-            sliderInput(input=names(parametersReactive)[i],
+            sliderInput(input=names(parametersReactive())[i],
                         label=tags$div(
                           inputs_names[i],
                           icon("circle-info", 
@@ -124,7 +151,7 @@ ui_hpv_basica = function (parametersReactive,input,inputs_hpv, run_hearts) {
                         ),
                         min = 0,
                         max= 1,
-                        value=parametersReactive[[i]])
+                        value=parametersReactive()[[i]])
             
           )
         }

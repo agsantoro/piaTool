@@ -586,7 +586,8 @@ server <- function(input, output, session) {
   })
   
   observeEvent(input$toggle_avanzado_hpv, {
-    for (i in names(parametersReactive())[4:16]) {
+    load("hpv_map_inputs.Rdata")
+    for (i in hpv_map_inputs$i_names[4:15]) {
       isVisible <- shinyjs::toggleState(id = i)
       
       toggle(id = i, anim = TRUE, animType = "slide", condition = isVisible)
@@ -618,7 +619,7 @@ server <- function(input, output, session) {
   observeEvent(list(input$intervencion,
                     input$country), {
                       if (input$intervencion == "Vacuna contra el HPV") {
-                        output$uiOutput_basica <- ui_hpv_basica(parametersReactive(),input,inputs_hpv())
+                        output$uiOutput_basica <- ui_hpv_basica(input,inputs_hpv())
                       } else if (input$intervencion == "HEARTS") {
                         output$uiOutput_basica <- ui_hearts(input, base_line)
                       } else if (input$intervencion == "Hemorragia postparto") {
@@ -636,35 +637,8 @@ server <- function(input, output, session) {
   hide("ver_escenarios_guardados")
   
   ##### HPV #####
-  # lista de parámetros
-  parametersReactive <- reactive({
-    
-    paramsList = list(
-      birthCohortSizeFemale = as.numeric(parameters[parameters$Country==input$country,8]),
-      cohortSizeAtVaccinationAgeFemale = as.numeric(cohortSizeAcVac$value[cohortSizeAcVac$country==input$country & 
-                                                                          cohortSizeAcVac$age==as.numeric(parameters[parameters$Country==input$country,13])
-                                                                         ]
-                                                    ),
-      coverageAllDosis = as.numeric(parameters[parameters$Country==input$country,23]),
-      vaccineEfficacyVsHPV16_18 = as.numeric(parameters[parameters$Country==input$country,12]),
-      targetAgeGroup = as.numeric(parameters[parameters$Country==input$country,13]),
-      vaccinePricePerFIG = as.numeric(parameters[parameters$Country==input$country,14]),
-      vaccineDeliveryCostPerFIG = as.numeric(parameters[parameters$Country==input$country,15]),
-      totalVaccineCostPerFIG = as.numeric(parameters[parameters$Country==input$country,14])+as.numeric(parameters[parameters$Country==input$country,15]),
-      cancerTreatmentCostPerEpisodeOverLifetime = as.numeric(parameters[parameters$Country==input$country,16]),
-      DALYsForCancerDiagnosis = 0.08,
-      DALYsForNonTerminalCancerSequelaePperYear = as.numeric(parameters[parameters$Country==input$country,22]),
-      DALYsForTerminalCancer = 0.78,
-      discountRate = as.numeric(parameters[parameters$Country==input$country,18]),
-      proportionOfCervicalCancerCasesThatAreDueToHPV16_18 = as.numeric(parameters[parameters$Country==input$country,19]),
-      GDPPerCapita = as.numeric(parameters[parameters$Country==input$country,20])
-      #coverageTarget = as.numeric(parameters[parameters$Country==input$country,23])
-    )
-    return(paramsList)
-  })
   
   resultados  <-  reactive({
-    
     getPrime(
       input,
       input$country,
@@ -683,7 +657,6 @@ server <- function(input, output, session) {
       input$discountRate,
       input$proportionOfCervicalCancerCasesThatAreDueToHPV16_18,
       input$GDPPerCapita,
-      #input$coverageTarget,
       mortall,
       mortcecx,
       incidence,
