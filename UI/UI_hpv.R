@@ -13,9 +13,9 @@ ui_hpv_basica = function (input,inputs_hpv, run_hearts) {
     'Años de vida ajustados por discapacidad por diagnóstico de cáncer de cuello uterino',
     'Años de vida ajustados por discapacidad por secuelas de cáncer de cuello uterino',
     'Años de vida ajustados por discapacidad por cáncer de cuello uterino terminal',
-    'Tasa de descuento',
-    'Porcentaje de casos de cáncer de cuello de útero debidos al VPH 16/18',
-    'PIB per capita'
+    'Tasa de descuento'
+    #'Porcentaje de casos de cáncer de cuello de útero debidos al VPH 16/18',
+    #'PIB per capita'
     
   )
   
@@ -33,9 +33,9 @@ ui_hpv_basica = function (input,inputs_hpv, run_hearts) {
     'Miden la carga total del cáncer de cuello uterino combinando años de vida perdidos por muerte prematura y años vividos con discapacidad. Se recomienda consultar a un economista de la salud antes de cambiar este parámetro',
     'Miden la carga total de las secuelas de cáncer de cuello uterino combinando años de vida perdidos por muerte prematura y años vividos con discapacidad. Se recomienda consultar a un economista de la salud antes de cambiar este parámetro',
     'Miden la carga total del cáncer de cuello uterino terminal combinando años de vida perdidos por muerte prematura y años vividos con discapacidad. Se recomienda consultar a un economista de la salud antes de cambiar este parámetro',
-    'Tasa de descuento',
-    'Porcentaje de casos de cáncer de cuello uterino que son atribuibles a las cepas 16 y 18 del VPH',
-    'PIB per capita'
+    'Tasa de descuento'
+    #'Porcentaje de casos de cáncer de cuello uterino que son atribuibles a las cepas 16 y 18 del VPH',
+    #'PIB per capita'
     
   )
   
@@ -58,22 +58,22 @@ ui_hpv_basica = function (input,inputs_hpv, run_hearts) {
         DALYsForCancerDiagnosis = 0.288,
         DALYsForNonTerminalCancerSequelaePperYear = as.numeric(parameters[parameters$Country==input$country,22]),
         DALYsForTerminalCancer = 0.54,
-        discountRate = as.numeric(parameters[parameters$Country==input$country,18]),
-        proportionOfCervicalCancerCasesThatAreDueToHPV16_18 = as.numeric(parameters[parameters$Country==input$country,19]),
-        GDPPerCapita = as.numeric(parameters[parameters$Country==input$country,20])
+        discountRate = as.numeric(parameters[parameters$Country==input$country,18])
+        #proportionOfCervicalCancerCasesThatAreDueToHPV16_18 = as.numeric(parameters[parameters$Country==input$country,19]),
+        #GDPPerCapita = as.numeric(parameters[parameters$Country==input$country,20])
         
       )
       return(paramsList)
     }
     
     i_names = c()
-    for (i in 1:15) {
+    for (i in 1:13) {
       i_names = c(i_names,names(parametersReactive()[i]))
     }
     
     i_labels = c()
     
-    for (i in 1:15) {
+    for (i in 1:13) {
       i_labels = c(i_labels,inputs_names[i])
     }
     
@@ -86,7 +86,7 @@ ui_hpv_basica = function (input,inputs_hpv, run_hearts) {
     
     bsc = c(1,3,6)
     avz = setdiff(seq(1,nrow(hpv_map_inputs)),bsc)
-    prc = c(1,3,4,13,14)
+    prc = c(1,3,4,13)
     
     hpv_map_inputs$avanzado = NA
     hpv_map_inputs$avanzado[avz] = T
@@ -172,7 +172,7 @@ ui_hpv_basica = function (input,inputs_hpv, run_hearts) {
 
 ui_grafico_hpv = function (resultados, input) {
   renderHighchart({
-    if (length(input$proportionOfCervicalCancerCasesThatAreDueToHPV16_18)>0) {
+    if (length(input$coverageBase)>0) {
       resultados$plot
     } else {
       NULL

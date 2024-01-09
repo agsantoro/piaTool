@@ -42,7 +42,7 @@ flags <- c(
 
 # load functions
 source("functions/textoIntro.R", encoding = "UTF-8")
-source("functions/getPrime.R", encoding = "UTF-8")
+source("hpv/getPrime.R", encoding = "UTF-8")
 source("functions/roundUpNice.R", encoding = "UTF-8")
 source("functions/generateRMD.R", encoding = "UTF-8")
 source("estimaTool/estimaTool.R", encoding = "UTF-8")
