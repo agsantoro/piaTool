@@ -55,9 +55,9 @@ ui_hpv_basica = function (input,inputs_hpv, run_hearts) {
         vaccineDeliveryCostPerFIG = as.numeric(parameters[parameters$Country==input$country,15]),
         totalVaccineCostPerFIG = as.numeric(parameters[parameters$Country==input$country,14])+as.numeric(parameters[parameters$Country==input$country,15]),
         cancerTreatmentCostPerEpisodeOverLifetime = as.numeric(parameters[parameters$Country==input$country,16]),
-        DALYsForCancerDiagnosis = 0.08,
+        DALYsForCancerDiagnosis = 0.288,
         DALYsForNonTerminalCancerSequelaePperYear = as.numeric(parameters[parameters$Country==input$country,22]),
-        DALYsForTerminalCancer = 0.78,
+        DALYsForTerminalCancer = 0.54,
         discountRate = as.numeric(parameters[parameters$Country==input$country,18]),
         proportionOfCervicalCancerCasesThatAreDueToHPV16_18 = as.numeric(parameters[parameters$Country==input$country,19]),
         GDPPerCapita = as.numeric(parameters[parameters$Country==input$country,20])
@@ -77,7 +77,6 @@ ui_hpv_basica = function (input,inputs_hpv, run_hearts) {
       i_labels = c(i_labels,inputs_names[i])
     }
     
-    browser()
     
     hpv_map_inputs = data.frame(
       intervencion = "Vacuna contra el HPV",
@@ -183,14 +182,11 @@ ui_grafico_hpv = function (resultados, input) {
 
 ui_tabla_hpv = function (resultados, input) {
   if (length(input$coverageBase)>0) {
-    browser()
     table = resultados$outcomes
     table$disc = format(round(table$disc,1), nsmall = 1,big.mark = ".", decimal.mark = ",", scientific = FALSE)
     table$undisc = format(round(table$undisc,1), nsmall = 1,big.mark = ".", decimal.mark = ",", scientific = FALSE)
     
     colnames(table) = c("Outcomes", "Undiscounted", "Discounted")
-    
-    browser()
     
     cat_epi = c(5:8)
     cat_costos = c(2,3,4,9,10,11,12,14)
