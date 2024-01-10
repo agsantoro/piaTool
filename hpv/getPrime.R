@@ -111,7 +111,7 @@ getPrime = function (
   
   cancerDisabilitiesPreVacDisc = ceCx16_18MortalityPreVacDisc * lifeTable$ExDisc
   
-  dalysNonFatal = (DALYsForCancerDiagnosis+parameters$`DALYs for cancer sequelae year...22`[parameters$Country==country]*4)
+  dalysNonFatal = (DALYsForCancerDiagnosis+parameters$`DALYs for cancer sequelae year`[parameters$Country==country]*4)
   dalysFatal = (DALYsForTerminalCancer+DALYsForCancerDiagnosis)
   dalysNonFatalDisc = DALYsForCancerDiagnosis+DALYsForNonTerminalCancerSequelaePperYear*(1/(1+discountRate)+1/(1+discountRate)^2+1/(1+discountRate)^3+1/(1+discountRate)^4)
   dalysFatalDisc = DALYsForCancerDiagnosis+DALYsForTerminalCancer*1/(1+discountRate)
@@ -190,7 +190,7 @@ getPrime = function (
   cancerCareCostsDif = cancerCareCostsPreVac - cancerCareCostsPostVac
   
   cancerCareCostsDifDisc = cancerCareCostsPreVacDisc - cancerCareCostsPostVacDisc
-  
+  browser()
   ##### model DF #####
   model = data.frame(
     age,
