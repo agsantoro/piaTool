@@ -648,7 +648,6 @@ server_hpv = function (input, output, session, parameterReactive, scenarios, res
               if (length(input$comparacion_intervencion)==1) {
                 table_data = inputs_table_generator(input,output, inputs_scenarios, summary_scenarios)[[1]]
                 columnas = inputs_table_generator(input,output, inputs_scenarios, summary_scenarios)[[2]]
-                
                 reactable(
                   table_data,
                   groupBy = "Categoría",
@@ -686,7 +685,9 @@ server_hpv = function (input, output, session, parameterReactive, scenarios, res
               )
             ,
             br(),
-            hidden(reactableOutput("tabla_inputs"))
+            hidden(reactableOutput("tabla_inputs")),
+            br(),
+            br()
           )  
           
           

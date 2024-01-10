@@ -21,6 +21,10 @@ server <- function(input, output, session) {
   hide("columna_borde")
   hide("columna_resultados_borde")
   
+  observeEvent(list(input$vaccinePricePerFIG,input$vaccineDeliveryCostPerFIG),{
+    updateNumericInput(session,"totalVaccineCostPerFIG",value=input$vaccinePricePerFIG+input$vaccineDeliveryCostPerFIG)
+  })
+  
   output$descarga_comp <- downloadHandler(
     filename = function() {
       paste('piaTool-', Sys.Date(), '.xlsx', sep='')
@@ -594,6 +598,7 @@ server <- function(input, output, session) {
       enable(i)
     }
     
+      shinyjs::disable("totalVaccineCostPerFIG")
   })
   
   observeEvent(input$toggle_tabla_inputs, {
@@ -639,30 +644,32 @@ server <- function(input, output, session) {
   ##### HPV #####
   
   resultados  <-  reactive({
+    
     getPrime(
-      input,
-      input$country,
-      input$coverageBase,
+      input = input,
+      country= input$country,
+      coverageBase = input$coverageBase,
       #input$birthCohortSizeFemale,
-      input$cohortSizeAtVaccinationAgeFemale,
-      input$coverageAllDosis,
-      input$vaccineEfficacyVsHPV16_18,
-      input$targetAgeGroup,
-      input$vaccinePricePerFIG,
-      input$vaccineDeliveryCostPerFIG,
-      input$totalVaccineCostPerFIG,
-      input$cancerTreatmentCostPerEpisodeOverLifetime,
-      input$DALYsForCancerDiagnosis,
-      input$DALYsForNonTerminalCancerSequelaePperYear,
-      input$DALYsForTerminalCancer,
-      input$discountRate,
-      #input$proportionOfCervicalCancerCasesThatAreDueToHPV16_18,
+      cohortSizeAtVaccinationAgeFemale = input$cohortSizeAtVaccinationAgeFemale,
+      coverageAllDosis = input$coverageAllDosis,
+      vaccineEfficacyVsHPV16_18 = input$vaccineEfficacyVsHPV16_18,
+      targetAgeGroup = input$targetAgeGroup,
+      vaccinePricePerFIG = input$vaccinePricePerFIG,
+      vaccineDeliveryCostPerFIG = input$vaccineDeliveryCostPerFIG,
+      totalVaccineCostPerFIG = input$totalVaccineCostPerFIG,
+      cancerTreatmentCostPerEpisodeOverLifetime = input$cancerTreatmentCostPerEpisodeOverLifetime,
+      DALYsForCancerDiagnosis = input$DALYsForCancerDiagnosis,
+      DALYsForNonTerminalCancerSequelaePperYear = input$DALYsForNonTerminalCancerSequelaePperYear,
+      DALYsForTerminalCancer = input$DALYsForTerminalCancer,
+      discountRate = input$discountRate,
+      proportionOfCervicalCancerCasesThatAreDueToHPV16_18 = input$proportionOfCervicalCancerCasesThatAreDueToHPV16_18,
       #input$GDPPerCapita,
-      mortall,
-      mortcecx,
-      incidence,
-      dalys,
-      parameters
+      costoProg = input$costoProg,
+      mortall = mortall,
+      mortcecx = mortcecx,
+      incidence = incidence,
+      #dalys,
+      parameters = parameters
     )
   })
   
