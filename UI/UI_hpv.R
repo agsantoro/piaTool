@@ -1,41 +1,38 @@
 ui_hpv_basica = function (input,inputs_hpv, run_hearts) {
   inputs_names = c(
-    'Porcentaje de cobertura basal (esquema completo)', #1
-    #'Tamaño de la cohorte de nacimientos (mujeres)', 
-    'Tamaño de la cohorte en edad de vacunación (mujeres) (n)',
     'Porcentaje de cobertura objetivo (esquema completo) (%)',
-    'Eficacia de la vacuna contra el VPH 16/18 (%)',
-    'Grupo de edad objetivo',
     'Costo de vacunación (esquema completo)',
-    'Costos administrativos de la vacuna (esquema completo)',
-    'Costo total de vacunación (esquema completo)',
-    'Costo del tratamiento del cáncer',
+    'Grupo de edad objetivo',
+    'Tamaño de la cohorte en edad de vacunación (mujeres) (n)',
+    'Porcentaje de cobertura basal (esquema completo)',
+    'Eficacia de la vacuna contra el VPH 16/18 (%)',
+    'Porcentaje de casos de cáncer de cuello de útero debidos al VPH 16/18',
     'Años de vida ajustados por discapacidad por diagnóstico de cáncer de cuello uterino',
     'Años de vida ajustados por discapacidad por secuelas de cáncer de cuello uterino',
     'Años de vida ajustados por discapacidad por cáncer de cuello uterino terminal',
+    'Costos administrativos de la vacuna (esquema completo)',
+    'Costo total de vacunación (esquema completo)',
+    'Costo del tratamiento del cáncer',
     'Tasa de descuento (%)',
-    'Costo programático anual de la intervención (USD)',
-    'Porcentaje de casos de cáncer de cuello de útero debidos al VPH 16/18'
-    
+    'Costo programático anual de la intervención (USD)'
   )
   
   inputs_hover = c(
-    'Se refiere al porcentaje de mujeres que actualmente reciben vacuna contra el VPH.',
-    #'Tamaño de la cohorte de nacimientos (mujeres)',
+    'El porcentaje esperado de niñas en el grupo de edad relevante que recibirán el esquema completo de la vacuna luego de la intervención',
+    'Costo de vacunación completa por niña para abril de 2023 (USD oficial a tasa de cambio nominal de cada país)',
+    'Edad a la que normalmente se administran las vacunas contra el VPH. Tenga en cuenta que PRIME solo es adecuado para evaluar las vacunas contra el HPV administradas a niñas en las edades recomendadas por la OMS, de 9 a 13 años',
     'Número de mujeres en el país correspondientes a la edad de vacunación de rutina, definida por el "grupo de edad objetivo"',
     'Se refiere al porcentaje de mujeres que actualmente reciben vacuna contra el VPH',
-    'Indica la reducción del riesgo de infecciones persistentes y lesiones precancerosas por los tipos 16 y 18 del VPH*',
-    'Edad a la que normalmente se administran las vacunas contra el VPH. Tenga en cuenta que PRIME solo es adecuado para evaluar las vacunas contra el HPV administradas a niñas en las edades recomendadas por la OMS, de 9 a 13 años',
-    'Costo de vacunación completa por niña para abril de 2023 (USD oficial a tasa de cambio nominal de cada país)',
-    'Costo de administración, entrega y almacenamiento de la vacuna por niña completamente inmunizada para abril de 2023 (USD oficial a tasa de cambio nominal de cada país)',
-    'Costo total (precio de la vacuna más el costo administrativo) por niña completamente inmunizada para abril de 2023 (USD oficial a tasa de cambio nominal de cada país)',
-    'Costo promedio del tratamiento de un cáncer cervical a lo largo de la vida, expresado en dólares de abril de 2023 (USD oficial a tasa de cambio nominal de cada país)',
+    'Indica la reducción del riesgo de infecciones persistentes y lesiones precancerosas por los tipos 16 y 18 del VPH',
+    'Porcentaje de casos de cáncer de cuello uterino que son atribuibles a las cepas 16 y 18 del VPH',
     'Miden la carga total del cáncer de cuello uterino combinando años de vida perdidos por muerte prematura y años vividos con discapacidad. Se recomienda consultar a un economista de la salud antes de cambiar este parámetro',
     'Miden la carga total de las secuelas de cáncer de cuello uterino combinando años de vida perdidos por muerte prematura y años vividos con discapacidad. Se recomienda consultar a un economista de la salud antes de cambiar este parámetro',
     'Miden la carga total del cáncer de cuello uterino terminal combinando años de vida perdidos por muerte prematura y años vividos con discapacidad. Se recomienda consultar a un economista de la salud antes de cambiar este parámetro',
-    'Tasa de descuento',
-    'Costo de implementar y sostener la intervención en un año (USD oficial a tasa de cambio nominal de cada país)',
-    'Porcentaje de casos de cáncer de cuello uterino que son atribuibles a las cepas 16 y 18 del VPH'
+    'Costo de administración, entrega y almacenamiento de la vacuna por niña completamente inmunizada para abril de 2023 (USD oficial a tasa de cambio nominal de cada país)',
+    'Costo total (precio de la vacuna más el costo administrativo) por niña completamente inmunizada para abril de 2023 (USD oficial a tasa de cambio nominal de cada país)',
+    'Costo promedio del tratamiento de un cáncer cervical a lo largo de la vida, expresado en dólares de abril de 2023 (USD oficial a tasa de cambio nominal de cada país)',
+    'Se utiliza para traer al presente los costos y beneficios en salud futuros',
+    'Costo de implementar y sostener la intervención en un año (USD oficial a tasa de cambio nominal de cada país)'
     #'PIB per capita'
     
   )
@@ -43,27 +40,21 @@ ui_hpv_basica = function (input,inputs_hpv, run_hearts) {
   if (is.null(input$country) == F) {
     parametersReactive <- function () {
       paramsList = list(
-        coverageBase = as.numeric(parameters[parameters$Country==input$country,11]),
-        #birthCohortSizeFemale = as.numeric(parameters[parameters$Country==input$country,8]),
-        cohortSizeAtVaccinationAgeFemale = as.numeric(cohortSizeAcVac$value[cohortSizeAcVac$country==input$country & 
-                                                                              cohortSizeAcVac$age==as.numeric(parameters[parameters$Country==input$country,13])
-        ]
-        ),
         coverageAllDosis = as.numeric(parameters[parameters$Country==input$country,23]),
-        vaccineEfficacyVsHPV16_18 = as.numeric(parameters[parameters$Country==input$country,12]),
-        targetAgeGroup = as.numeric(parameters[parameters$Country==input$country,13]),
         vaccinePricePerFIG = as.numeric(parameters[parameters$Country==input$country,14]),
-        vaccineDeliveryCostPerFIG = as.numeric(parameters[parameters$Country==input$country,15]),
-        totalVaccineCostPerFIG = as.numeric(parameters[parameters$Country==input$country,14])+as.numeric(parameters[parameters$Country==input$country,15]),
-        cancerTreatmentCostPerEpisodeOverLifetime = as.numeric(parameters[parameters$Country==input$country,16]),
+        targetAgeGroup = as.numeric(parameters[parameters$Country==input$country,13]),
+        cohortSizeAtVaccinationAgeFemale = as.numeric(cohortSizeAcVac$value[cohortSizeAcVac$country==input$country & cohortSizeAcVac$age==as.numeric(parameters[parameters$Country==input$country,13])]),
+        coverageBase = as.numeric(parameters[parameters$Country==input$country,11]),
+        vaccineEfficacyVsHPV16_18 = as.numeric(parameters[parameters$Country==input$country,12]),
+        proportionOfCervicalCancerCasesThatAreDueToHPV16_18 = as.numeric(parameters[parameters$Country==input$country,19]),
         DALYsForCancerDiagnosis = 0.288,
         DALYsForNonTerminalCancerSequelaePperYear = as.numeric(parameters[parameters$Country==input$country,22]),
         DALYsForTerminalCancer = 0.54,
+        vaccineDeliveryCostPerFIG = as.numeric(parameters[parameters$Country==input$country,15]),
+        totalVaccineCostPerFIG = as.numeric(parameters[parameters$Country==input$country,14])+as.numeric(parameters[parameters$Country==input$country,15]),
+        cancerTreatmentCostPerEpisodeOverLifetime = as.numeric(parameters[parameters$Country==input$country,16]),
         discountRate = as.numeric(parameters[parameters$Country==input$country,18]),
-        costoProg = 0,
-        proportionOfCervicalCancerCasesThatAreDueToHPV16_18 = as.numeric(parameters[parameters$Country==input$country,19])
-        #GDPPerCapita = as.numeric(parameters[parameters$Country==input$country,20])
-        
+        costoProg = 0
       )
       return(paramsList)
     }
@@ -86,9 +77,9 @@ ui_hpv_basica = function (input,inputs_hpv, run_hearts) {
       i_labels
     )
     
-    bsc = c(1,3,6)
+    bsc = c(1:2)
     avz = setdiff(seq(1,nrow(hpv_map_inputs)),bsc)
-    prc = c(1,3,4,13,15)
+    prc = c(1,5,6,7,14)
     
     hpv_map_inputs$avanzado = NA
     hpv_map_inputs$avanzado[avz] = T
