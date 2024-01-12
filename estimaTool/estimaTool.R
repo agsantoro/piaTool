@@ -5,6 +5,14 @@ load("estimaTool/base_line.RData")
 load("estimaTool/targets_default.RData")
 load("estimaTool/population.RData")
 
+VA = function(tasa_descuento_anual,num_periodos) {
+  va <- ((1 - (1 + tasa_descuento_anual) ^ (-num_periodos+1)) / tasa_descuento_anual)
+  va <- (va + 1) * -1
+  return(va)
+  
+}
+
+
 epi_model <- function(run, x1, x2, country) {
   if (x1 >= 0 && x1 <= 100 && x2 >= 0 && x2 <= 100) {
     valores_x <- data.frame(prevalencia = c(x1, x2))  # Crea un nuevo dataframe con los valores de x
@@ -234,6 +242,13 @@ estimaToolCosts = function(
     summarise(yll=sum(yll),dalys=sum(dalys)) %>%
     mutate(dalys_overall=yll+dalys) %>% arrange(gender,age)
   
+  dalys_by_age_disc =dalys_by_age %>% left_join(
+    life_exp[life_exp$location==country,]
+  )
+  
+  dalys_by_age_disc$disc = dalys_by_age_disc$deaths *  VA(0.05,dalys_by_age_disc$lex) * -1
+  
+  
   epi_outcomes = data.frame(
     outcome = "Años de vida ajustados por discapacidad evitados",
     value = sum(dalys_overall$dalys_overall)
@@ -253,58 +268,37 @@ estimaToolCosts = function(
   costs = costs[costs$country==country,]
   
   
-  # pasa_input=
-  #   c("Costo farmacológico anual por paciente promedio (**)",
-  #     "Evento de enfermedad cardiaca isquemica promedio  (***)",
-  #     "Costo anual de consulta médica en paciente promedio (*)"
-  #   )
-  # 
-  # costs = costs[!costs$parameter %in% pasa_input,]
-  
   for (i in 1:nrow(costs)) {
     eval(parse(text = paste0("`",costs$parameter[i],"`=",costs$value[i])))
   }
   
-  browser()
-  costs_outcomes = list(
-    `Costo anual de la intervención por paciente promedio  hipertenso tratado` = `Costo anual de consulta médica en paciente promedio (*)` + `Costo farmacológico anual por paciente promedio (**)`,
-    `Costos totales anuales de la intervención` = run[[country]]$baseline$`Nueva población (N) tratada / Controlados actualmente previamente no controlados` * `Costo anual de consulta médica en paciente promedio (*)` + run[[country]]$baseline$`Nueva población (N) tratada / Controlados actualmente previamente no controlados` * `Costo farmacológico anual por paciente promedio (**)`,
-    `Costos médicos directos evitados por evento cardiovasculares (ECI y ACV)` = run[[country]]$baseline$`Eventos Coronarios evitados` * costs$value[costs$parameter=="Evento de enfermedad cardiaca isquemica promedio  (***)"] + costs$value[costs$parameter=="Evento de accidente cerebrovascular"] * run[[country]]$target$`Accidente Cerebrovascular evitados`,
-    `Diferencia de costos` = (run[[country]]$baseline$`Nueva población (N) tratada / Controlados actualmente previamente no controlados` * `Costo anual de consulta médica en paciente promedio (*)` + run[[country]]$baseline$`Nueva población (N) tratada / Controlados actualmente previamente no controlados` * `Costo farmacológico anual por paciente promedio (**)`)-(run[[country]]$baseline$`Eventos Coronarios evitados` * round(`Evento de enfermedad cardiaca isquemica promedio  (***)`,3) + round(`Evento de accidente cerebrovascular`,3) * run[[country]]$baseline$`Accidente Cerebrovascular evitados`),
-    `Razon incremental de costo por evento de ECI evitado` = ((run[[country]]$baseline$`Nueva población (N) tratada / Controlados actualmente previamente no controlados` * `Costo anual de consulta médica en paciente promedio (*)` + run[[country]]$baseline$`Nueva población (N) tratada / Controlados actualmente previamente no controlados` * `Costo farmacológico anual por paciente promedio (**)`)-(run[[country]]$baseline$`Eventos Coronarios evitados` * round(`Evento de enfermedad cardiaca isquemica promedio  (***)`,3) + round(`Evento de accidente cerebrovascular`,3) * run[[country]]$baseline$`Accidente Cerebrovascular evitados`)) / (run[[country]]$baseline$`Eventos Coronarios evitados`),
-    `Razon incremental de costo por muerte de ECI evitada`= ((run[[country]]$baseline$`Nueva población (N) tratada / Controlados actualmente previamente no controlados` * `Costo anual de consulta médica en paciente promedio (*)` + run[[country]]$baseline$`Nueva población (N) tratada / Controlados actualmente previamente no controlados` * `Costo farmacológico anual por paciente promedio (**)`)-(run[[country]]$baseline$`Eventos Coronarios evitados` * round(`Evento de enfermedad cardiaca isquemica promedio  (***)`,3) + round(`Evento de accidente cerebrovascular`,3) * run[[country]]$baseline$`Accidente Cerebrovascular evitados`)) / (run[[country]]$baseline$`Muertes evitadas por Eventos Coronarios`),
-    `Razon incremental de costo por evento de ACV evitado` = ((run[[country]]$baseline$`Nueva población (N) tratada / Controlados actualmente previamente no controlados` * `Costo anual de consulta médica en paciente promedio (*)` + run[[country]]$baseline$`Nueva población (N) tratada / Controlados actualmente previamente no controlados` * `Costo farmacológico anual por paciente promedio (**)`)-(run[[country]]$baseline$`Eventos Coronarios evitados` * round(`Evento de enfermedad cardiaca isquemica promedio  (***)`,3) + round(`Evento de accidente cerebrovascular`,3) * run[[country]]$baseline$`Accidente Cerebrovascular evitados`)) / (run[[country]]$baseline$`Accidente Cerebrovascular evitados`),
-    `Razon incremental de costo por muerte de ACV evitada` = ((run[[country]]$baseline$`Nueva población (N) tratada / Controlados actualmente previamente no controlados` * `Costo anual de consulta médica en paciente promedio (*)` + run[[country]]$baseline$`Nueva población (N) tratada / Controlados actualmente previamente no controlados` * `Costo farmacológico anual por paciente promedio (**)`)-(run[[country]]$baseline$`Eventos Coronarios evitados` * round(`Evento de enfermedad cardiaca isquemica promedio  (***)`,3) + round(`Evento de accidente cerebrovascular`,3) * run[[country]]$baseline$`Accidente Cerebrovascular evitados`)) / (run[[country]]$baseline$`Muertes evitadas por Accidente Cerebrovascular`),
-    `Razón de costo-efectividad incremental por Año de Vida Ajustado por Discapacidad evitado` = ((run[[country]]$baseline$`Nueva población (N) tratada / Controlados actualmente previamente no controlados` * `Costo anual de consulta médica en paciente promedio (*)` + run[[country]]$baseline$`Nueva población (N) tratada / Controlados actualmente previamente no controlados` * `Costo farmacológico anual por paciente promedio (**)`)-(run[[country]]$baseline$`Eventos Coronarios evitados` * round(`Evento de enfermedad cardiaca isquemica promedio  (***)`,3) + round(`Evento de accidente cerebrovascular`,3) * run[[country]]$baseline$`Accidente Cerebrovascular evitados`)) / (as.numeric(epi_outcomes$value[epi_outcomes$outcome == "Años de vida ajustados por discapacidad evitados"])),
-    `Retorno de inversión` = ((run[[country]]$baseline$`Eventos Coronarios evitados` * round(`Evento de enfermedad cardiaca isquemica promedio  (***)`,3) + round(`Evento de accidente cerebrovascular`,3) * run[[country]]$baseline$`Accidente Cerebrovascular evitados`) - (run[[country]]$baseline$`Nueva población (N) tratada / Controlados actualmente previamente no controlados` * `Costo anual de consulta médica en paciente promedio (*)` + run[[country]]$baseline$`Nueva población (N) tratada / Controlados actualmente previamente no controlados` * `Costo farmacológico anual por paciente promedio (**)`))/(run[[country]]$baseline$`Nueva población (N) tratada / Controlados actualmente previamente no controlados` * `Costo anual de consulta médica en paciente promedio (*)` + run[[country]]$baseline$`Nueva población (N) tratada / Controlados actualmente previamente no controlados` * `Costo farmacológico anual por paciente promedio (**)`)*100
-  )
-  # 
-  # costs_outcomes = list()
-  # costs_outcomes$`Costo anual de la intervención por paciente promedio  hipertenso tratado` = `Costo anual de consulta médica en paciente promedio (*)` + `Costo farmacológico anual por paciente promedio (**)`
-  # costs_outcomes$`Costos totales anuales de la intervención` = run[[country]]$baseline$`Nueva población (N) tratada / Controlados actualmente previamente no controlados` * `Costo anual de consulta médica en paciente promedio (*)` + run[[country]]$baseline$`Nueva población (N) tratada / Controlados actualmente previamente no controlados` * `Costo farmacológico anual por paciente promedio (**)`
-  # costs_outcomes$`Costos médicos directos evitados por evento cardiovasculares (ECI y ACV)` = run[[country]]$baseline$`Eventos Coronarios evitados` * costs$value[costs$parameter=="Evento de enfermedad cardiaca isquemica promedio  (***)"] + costs$value[costs$parameter=="Evento de accidente cerebrovascular"] * run[[country]]$target$`Accidente Cerebrovascular evitados`
-  # costs_outcomes$`Diferencia de costos` = costs_outcomes$`Costos totales anuales de la intervención`- costs_outcomes$`Costos médicos directos evitados por evento cardiovasculares (ECI y ACV)`
-  # costs_outcomes$`Razon incremental de costo por evento de ECI evitado` = costs_outcomes$`Diferencia de costos` / run[[country]]$baseline$`Eventos Coronarios evitados`
-  # costs_outcomes$`Razon incremental de costo por evento de ACV evitado` = costs_outcomes$`Diferencia de costos` / run[[country]]$baseline$`Accidente Cerebrovascular evitados`
-  # costs_outcomes$`Razon incremental de costo por muerte evitada` = costs_outcomes$`Diferencia de costos` / (run[[country]]$baseline$`Muertes evitadas por Eventos Coronarios` + run[[country]]$baseline$`Muertes evitadas por Accidente Cerebrovascular`)
-  # costs_outcomes$`Razón de costo-efectividad incremental por Año de Vida Ajustado por Discapacidad evitado` = costs_outcomes$`Diferencia de costos` /  sum(dalys_overall$dalys_overall)
-  # 
-  
-  # anos_vida_restantes <- 45.3
-  # pago <- 1
-  # num_periodos <- anos_vida_restantes - 1
-  # tasa_descuento_anual = 0.05
-  # 
-  # 
-  # VA = function(tasa_descuento_anual,num_periodos) {
-  #   va <- ((1 - (1 + tasa_descuento_anual) ^ (-num_periodos)) / tasa_descuento_anual)
-  #   va <- (va + 1) * 100
-  #   return(va)
-  #   
-  # }
-  # 
-  # VA(tasa_descuento_anual,num_periodos)
-  
+  # costs_outcomes = list(
+  #   `Costo anual de la intervención por paciente promedio  hipertenso tratado` = `Costo anual de consulta médica en paciente promedio (*)` + `Costo farmacológico anual por paciente promedio (**)`,
+  #   `Costos totales anuales de la intervención` = run[[country]]$baseline$`Nueva población (N) tratada / Controlados actualmente previamente no controlados` * `Costo anual de consulta médica en paciente promedio (*)` + run[[country]]$baseline$`Nueva población (N) tratada / Controlados actualmente previamente no controlados` * `Costo farmacológico anual por paciente promedio (**)`,
+  #   `Costos médicos directos evitados por evento cardiovasculares (ECI y ACV)` = run[[country]]$baseline$`Eventos Coronarios evitados` * costs$value[costs$parameter=="Evento de enfermedad cardiaca isquemica promedio  (***)"] + costs$value[costs$parameter=="Evento de accidente cerebrovascular"] * run[[country]]$target$`Accidente Cerebrovascular evitados`,
+  #   `Diferencia de costos` = (run[[country]]$baseline$`Nueva población (N) tratada / Controlados actualmente previamente no controlados` * `Costo anual de consulta médica en paciente promedio (*)` + run[[country]]$baseline$`Nueva población (N) tratada / Controlados actualmente previamente no controlados` * `Costo farmacológico anual por paciente promedio (**)`)-(run[[country]]$baseline$`Eventos Coronarios evitados` * round(`Evento de enfermedad cardiaca isquemica promedio  (***)`,3) + round(`Evento de accidente cerebrovascular`,3) * run[[country]]$baseline$`Accidente Cerebrovascular evitados`),
+  #   `Razon incremental de costo por evento de ECI evitado` = ((run[[country]]$baseline$`Nueva población (N) tratada / Controlados actualmente previamente no controlados` * `Costo anual de consulta médica en paciente promedio (*)` + run[[country]]$baseline$`Nueva población (N) tratada / Controlados actualmente previamente no controlados` * `Costo farmacológico anual por paciente promedio (**)`)-(run[[country]]$baseline$`Eventos Coronarios evitados` * round(`Evento de enfermedad cardiaca isquemica promedio  (***)`,3) + round(`Evento de accidente cerebrovascular`,3) * run[[country]]$baseline$`Accidente Cerebrovascular evitados`)) / (run[[country]]$baseline$`Eventos Coronarios evitados`),
+  #   `Razon incremental de costo por muerte de ECI evitada`= ((run[[country]]$baseline$`Nueva población (N) tratada / Controlados actualmente previamente no controlados` * `Costo anual de consulta médica en paciente promedio (*)` + run[[country]]$baseline$`Nueva población (N) tratada / Controlados actualmente previamente no controlados` * `Costo farmacológico anual por paciente promedio (**)`)-(run[[country]]$baseline$`Eventos Coronarios evitados` * round(`Evento de enfermedad cardiaca isquemica promedio  (***)`,3) + round(`Evento de accidente cerebrovascular`,3) * run[[country]]$baseline$`Accidente Cerebrovascular evitados`)) / (run[[country]]$baseline$`Muertes evitadas por Eventos Coronarios`),
+  #   `Razon incremental de costo por evento de ACV evitado` = ((run[[country]]$baseline$`Nueva población (N) tratada / Controlados actualmente previamente no controlados` * `Costo anual de consulta médica en paciente promedio (*)` + run[[country]]$baseline$`Nueva población (N) tratada / Controlados actualmente previamente no controlados` * `Costo farmacológico anual por paciente promedio (**)`)-(run[[country]]$baseline$`Eventos Coronarios evitados` * round(`Evento de enfermedad cardiaca isquemica promedio  (***)`,3) + round(`Evento de accidente cerebrovascular`,3) * run[[country]]$baseline$`Accidente Cerebrovascular evitados`)) / (run[[country]]$baseline$`Accidente Cerebrovascular evitados`),
+  #   `Razon incremental de costo por muerte de ACV evitada` = ((run[[country]]$baseline$`Nueva población (N) tratada / Controlados actualmente previamente no controlados` * `Costo anual de consulta médica en paciente promedio (*)` + run[[country]]$baseline$`Nueva población (N) tratada / Controlados actualmente previamente no controlados` * `Costo farmacológico anual por paciente promedio (**)`)-(run[[country]]$baseline$`Eventos Coronarios evitados` * round(`Evento de enfermedad cardiaca isquemica promedio  (***)`,3) + round(`Evento de accidente cerebrovascular`,3) * run[[country]]$baseline$`Accidente Cerebrovascular evitados`)) / (run[[country]]$baseline$`Muertes evitadas por Accidente Cerebrovascular`),
+  #   `Razón de costo-efectividad incremental por Año de Vida Ajustado por Discapacidad evitado` = ((run[[country]]$baseline$`Nueva población (N) tratada / Controlados actualmente previamente no controlados` * `Costo anual de consulta médica en paciente promedio (*)` + run[[country]]$baseline$`Nueva población (N) tratada / Controlados actualmente previamente no controlados` * `Costo farmacológico anual por paciente promedio (**)`)-(run[[country]]$baseline$`Eventos Coronarios evitados` * round(`Evento de enfermedad cardiaca isquemica promedio  (***)`,3) + round(`Evento de accidente cerebrovascular`,3) * run[[country]]$baseline$`Accidente Cerebrovascular evitados`)) / (as.numeric(epi_outcomes$value[epi_outcomes$outcome == "Años de vida ajustados por discapacidad evitados"])),
+  #   `Retorno de inversión` = ((run[[country]]$baseline$`Eventos Coronarios evitados` * round(`Evento de enfermedad cardiaca isquemica promedio  (***)`,3) + round(`Evento de accidente cerebrovascular`,3) * run[[country]]$baseline$`Accidente Cerebrovascular evitados`) - (run[[country]]$baseline$`Nueva población (N) tratada / Controlados actualmente previamente no controlados` * `Costo anual de consulta médica en paciente promedio (*)` + run[[country]]$baseline$`Nueva población (N) tratada / Controlados actualmente previamente no controlados` * `Costo farmacológico anual por paciente promedio (**)`))/(run[[country]]$baseline$`Nueva población (N) tratada / Controlados actualmente previamente no controlados` * `Costo anual de consulta médica en paciente promedio (*)` + run[[country]]$baseline$`Nueva población (N) tratada / Controlados actualmente previamente no controlados` * `Costo farmacológico anual por paciente promedio (**)`)*100
+  # )
+
+  costs_outcomes = list()
+  costs_outcomes$`Costo anual de la intervención por paciente promedio  hipertenso tratado` = `Costo anual de consulta médica en paciente promedio (*)` + `Costo farmacológico anual por paciente promedio (**)`
+  costs_outcomes$`Costos totales anuales de la intervención` = run[[country]]$baseline$`Nueva población (N) tratada / Controlados actualmente previamente no controlados` * `Costo anual de consulta médica en paciente promedio (*)` + run[[country]]$baseline$`Nueva población (N) tratada / Controlados actualmente previamente no controlados` * `Costo farmacológico anual por paciente promedio (**)`
+  costs_outcomes$`Costos médicos directos evitados por evento cardiovasculares (ECI y ACV)` = run[[country]]$baseline$`Eventos Coronarios evitados` * costs$value[costs$parameter=="Evento de enfermedad cardiaca isquemica promedio  (***)"] + costs$value[costs$parameter=="Evento de accidente cerebrovascular"] * run[[country]]$target$`Accidente Cerebrovascular evitados`
+  costs_outcomes$`Diferencia de costos` = costs_outcomes$`Costos totales anuales de la intervención`- costs_outcomes$`Costos médicos directos evitados por evento cardiovasculares (ECI y ACV)`
+  costs_outcomes$`Razon incremental de costo por evento de ECI evitado` = costs_outcomes$`Diferencia de costos` / run[[country]]$baseline$`Eventos Coronarios evitados`
+  costs_outcomes$`Razon incremental de costo por evento de ACV evitado` = costs_outcomes$`Diferencia de costos` / run[[country]]$baseline$`Accidente Cerebrovascular evitados`
+  costs_outcomes$`Razon incremental de costo por muerte evitada` = costs_outcomes$`Diferencia de costos` / (run[[country]]$baseline$`Muertes evitadas por Eventos Coronarios` + run[[country]]$baseline$`Muertes evitadas por Accidente Cerebrovascular`)
+  costs_outcomes$`Razón de costo-efectividad incremental por Año de Vida Ajustado por Discapacidad evitado` = costs_outcomes$`Diferencia de costos` /  sum(dalys_overall$dalys_overall)
+  costs_outcomes$`Razon de costo-efectividad incremental por Año de Vida Ajustado por Discapacidad descontado evitado` = costs_outcomes$`Diferencia de costos` / (sum(dalys_by_age_disc$disc) + sum(dalys_by_age_disc$dalys))
+  costs_outcomes$`Razón de costo-efectividad incremental por año de vida salvado` = costs_outcomes$`Diferencia de costos` / sum(dalys_by_age$yll)
+  costs_outcomes$`Razon de costo-efectividad incremental por año de vida salvado descontado` = costs_outcomes$`Diferencia de costos` / sum(dalys_by_age_disc$disc) 
+  costs_outcomes$`ROI` = 100*(costs_outcomes$`Costos médicos directos evitados por evento cardiovasculares (ECI y ACV)`- costs_outcomes$`Costos totales anuales de la intervención`) / costs_outcomes$`Costos totales anuales de la intervención`
+
   
   
   estimaToolModel = list(
