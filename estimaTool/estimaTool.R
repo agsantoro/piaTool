@@ -289,6 +289,24 @@ estimaToolCosts = function(
   # costs_outcomes$`Razon incremental de costo por muerte evitada` = costs_outcomes$`Diferencia de costos` / (run[[country]]$baseline$`Muertes evitadas por Eventos Coronarios` + run[[country]]$baseline$`Muertes evitadas por Accidente Cerebrovascular`)
   # costs_outcomes$`Razón de costo-efectividad incremental por Año de Vida Ajustado por Discapacidad evitado` = costs_outcomes$`Diferencia de costos` /  sum(dalys_overall$dalys_overall)
   # 
+  
+  # anos_vida_restantes <- 45.3
+  # pago <- 1
+  # num_periodos <- anos_vida_restantes - 1
+  # tasa_descuento_anual = 0.05
+  # 
+  # 
+  # VA = function(tasa_descuento_anual,num_periodos) {
+  #   va <- ((1 - (1 + tasa_descuento_anual) ^ (-num_periodos)) / tasa_descuento_anual)
+  #   va <- (va + 1) * 100
+  #   return(va)
+  #   
+  # }
+  # 
+  # VA(tasa_descuento_anual,num_periodos)
+  
+  
+  
   estimaToolModel = list(
     country = country,
     mortality_data = mortality_data,
