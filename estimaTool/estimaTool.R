@@ -4,6 +4,7 @@ library(tidyr)
 load("estimaTool/base_line.RData")
 load("estimaTool/targets_default.RData")
 load("estimaTool/population.RData")
+load("estimaTool/costs.RData")
 
 VA = function(tasa_descuento_anual,num_periodos) {
   va <- ((1 - (1 + tasa_descuento_anual) ^ (-num_periodos+1)) / tasa_descuento_anual)
@@ -110,7 +111,6 @@ estimaToolCosts = function(
     fatality_weighted = c(male_ihd,female_ihd,male_stroke,female_stroke),
     deaths = c(male_ihd_deaths,female_ihd_deaths,male_stroke_deaths,female_stroke_deaths)
   ) %>% as.data.frame()
-  
   
   #### ESTIMA TOOL RUN #####
   run = list()
@@ -264,7 +264,7 @@ estimaToolCosts = function(
   
   ##### COSTS #####
   
-  load("estimaTool/costs.RData")
+  
   costs = costs[costs$country==country,]
   
   

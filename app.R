@@ -572,9 +572,6 @@ server <- function(input, output, session) {
           hide("saveScenario2", anim = T, animType = "slide")
           show("saveScenario", anim = T, animType = "slide")
         }
-        
-        
-        
       }
       
       
