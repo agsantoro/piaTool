@@ -1,30 +1,35 @@
 library(readxl)
+
 # parameters
-parameters = readxl::read_xlsx("xlsx/PRIME_v2.3 (1).xlsx", sheet = "Parameters")
+parameters = readxl::read_xlsx("hpv/xlsx/definitiva.xlsx", sheet = "Parameters")
+#load("hpv/data/parameters.RData")
 
 
 # mortality and incidence data
-mortall = readxl::read_xlsx("xlsx/PRIME_v2.3 (1).xlsx", sheet = "mortall")
+mortall = readxl::read_xlsx("hpv/xlsx/definitiva.xlsx", sheet = "mortall")
+#load("hpv/data/mortall.RData")
 
+mortcecx = readxl::read_xlsx("hpv/xlsx/definitiva.xlsx", sheet = "mortcecx")
+#load("hpv/data/mortcex.RData")
+#mortcecx[is.na(mortcecx)] = 0
 
-mortcecx = readxl::read_xlsx("xlsx/PRIME_v2.3 (1).xlsx", sheet = "mortcecx")
+incidence = readxl::read_xlsx("hpv/xlsx/definitiva.xlsx", sheet = "incidence")
+#load("hpv/incidence.RData")
 
-mortcecx[is.na(mortcecx)] = 0
+cohortSizeAcVac = readxl::read_xlsx("hpv/xlsx/definitiva.xlsx", sheet = "EDAD_VACUNA")
+names(cohortSizeAcVac)[1]="age"
+#load("hpv/cohortSizeAcVac.RData")
+cohortSizeAcVac = cohortSizeAcVac %>% pivot_longer(cols = 2:ncol(cohortSizeAcVac), names_to = "country")
 
-incidence = readxl::read_xlsx("xlsx/PRIME_v2.3 (1).xlsx", sheet = "incidence")
-
-
-source("functions/createLifetable.R", encoding = "UTF-8")
-
-# dalys params
-dalys = readxl::read_xlsx("xlsx/PRIME_v2.3 (1).xlsx", sheet = "Model", range = "AV2:AW6")
-colnames(dalys)[1]="event"
+source("hpv/createLifetable.R", encoding = "UTF-8")
 
 # model function
+
 getPrime = function (
     input,
     country,
-    birthCohortSizeFemale,
+    coverageBase,
+    #birthCohortSizeFemale,
     cohortSizeAtVaccinationAgeFemale,
     coverageAllDosis,
     vaccineEfficacyVsHPV16_18,
@@ -37,28 +42,40 @@ getPrime = function (
     DALYsForNonTerminalCancerSequelaePperYear,
     DALYsForTerminalCancer,
     discountRate,
+    costoProg,
     proportionOfCervicalCancerCasesThatAreDueToHPV16_18,
-    GDPPerCapita,
-    #coverageTarget,
+    #GDPPerCapita,
     mortall,
     mortcecx,
     incidence,
-    dalys,
+    #dalys,
     parameters) {
   
+  coverageAllDosis = coverageAllDosis/100
+  vaccineEfficacyVsHPV16_18 = vaccineEfficacyVsHPV16_18/100
+  discountRate = discountRate/100
+  coverageBase = coverageBase/100
+  proportionOfCervicalCancerCasesThatAreDueToHPV16_18 = proportionOfCervicalCancerCasesThatAreDueToHPV16_18/100
+  
+  GDPPerCapita = as.numeric(parameters[parameters$Country==input$country,20])
+  
+  
   # lifetable
-  lifeTable = createLifetable("ARGENTINA")
+  lifeTable = createLifetable(country)
   
   # model
   age = 0:100
   
   standardisedCohortSize_brith = lifeTable$lx
-  
   standardisedCohortSize_vacAge = rep(NA,101) 
   standardisedCohortSize_vacAge[age<targetAgeGroup] = 0
-  for (i in (length(standardisedCohortSize_vacAge[age<targetAgeGroup])):(length(standardisedCohortSize_vacAge))) {
-    standardisedCohortSize_vacAge[i] = standardisedCohortSize_brith[i]/standardisedCohortSize_brith[age==targetAgeGroup]
-  }
+  standardisedCohortSize_vacAge[age>=targetAgeGroup] = standardisedCohortSize_brith[age>=targetAgeGroup]/standardisedCohortSize_brith[age==12]
+  
+  
+  # for (i in (length(standardisedCohortSize_vacAge[age<targetAgeGroup])):(length(standardisedCohortSize_vacAge))) {
+  #   browser()
+  #   standardisedCohortSize_vacAge[i] = standardisedCohortSize_brith[i]/standardisedCohortSize_brith[age==targetAgeGroup]
+  # }
   
   discountFactor = rep(NA,101) 
   discountFactor[age<=targetAgeGroup] = 1
@@ -77,6 +94,7 @@ getPrime = function (
   ceCx16_18IncidencePreVacDisc[is.na(ceCx16_18IncidencePreVacDisc)] = 0
   
   ceCx16_18MortalityPreVac = as.numeric(mortcecx[mortcecx$`Country ¦ Age [11]`==country,-1]) * proportionOfCervicalCancerCasesThatAreDueToHPV16_18
+  ceCx16_18MortalityPreVac[is.na(ceCx16_18MortalityPreVac)] = 0
   
   ceCx16_18MortalityPreVacDisc = ceCx16_18MortalityPreVac * discountFactor
   
@@ -92,20 +110,27 @@ getPrime = function (
   
   cancerDisabilitiesPreVacDisc = ceCx16_18MortalityPreVacDisc * lifeTable$ExDisc
   
-  cancerDisabilitiesLostPreVac = (ceCx16_18IncidencePreVac - ceCx16_18MortalityPreVac) * dalys$DALYs[1] + ceCx16_18MortalityPreVac * dalys$DALYs[2]
+  dalysNonFatal = (DALYsForCancerDiagnosis+parameters$`DALYs for cancer sequelae year`[parameters$Country==country]*4)
+  dalysFatal = (DALYsForTerminalCancer+DALYsForCancerDiagnosis)
+  dalysNonFatalDisc = DALYsForCancerDiagnosis+DALYsForNonTerminalCancerSequelaePperYear*(1/(1+discountRate)+1/(1+discountRate)^2+1/(1+discountRate)^3+1/(1+discountRate)^4)
+  dalysFatalDisc = DALYsForCancerDiagnosis+DALYsForTerminalCancer*1/(1+discountRate)
   
-  cancerDisabilitiesLostPreVacDisc = ((ceCx16_18IncidencePreVac - ceCx16_18MortalityPreVac) * dalys$DALYs[3] + ceCx16_18MortalityPreVac * dalys$DALYs[4]) / (1 + discountRate) ^ (age - 12)
+  cancerDisabilitiesLostPreVac = (ceCx16_18IncidencePreVac - ceCx16_18MortalityPreVac) * dalysNonFatal + ceCx16_18MortalityPreVac * dalysFatal
   
+  ############ ver dalys
+  
+  cancerDisabilitiesLostPreVacDisc = ((ceCx16_18IncidencePreVac - ceCx16_18MortalityPreVac) * dalysNonFatalDisc + ceCx16_18MortalityPreVac * dalysFatalDisc) / (1 + discountRate) ^ (age - input$targetAgeGroup)
+  ############
   cancerCareCostsPreVac = ceCx16_18IncidencePreVac * cancerTreatmentCostPerEpisodeOverLifetime
   
-  cancerCareCostsPreVacDisc = cancerCareCostsPreVac / (1+discountRate) ^ (age - 12)
+  cancerCareCostsPreVacDisc = cancerCareCostsPreVac / (1+discountRate) ^ (age - input$targetAgeGroup)
   
   
   ##### POST VACCINATION #####
   
   ceCx16_18IncidencePostVac = c()
   ceCx16_18IncidencePostVac[age<targetAgeGroup] = ceCx16_18IncidencePreVac[age<targetAgeGroup]
-  ceCx16_18IncidencePostVac[age>=targetAgeGroup] = ceCx16_18IncidencePreVac[age>=targetAgeGroup] * (1 - coverageAllDosis * vaccineEfficacyVsHPV16_18)
+  ceCx16_18IncidencePostVac[age>=targetAgeGroup] = ceCx16_18IncidencePreVac[age>=targetAgeGroup] * (1 - coverageBase * vaccineEfficacyVsHPV16_18)
   
   ceCx16_18IncidencePostVacDisc = c()
   ceCx16_18IncidencePostVacDisc[age<targetAgeGroup] = ceCx16_18IncidencePreVacDisc[age<targetAgeGroup]
@@ -113,7 +138,7 @@ getPrime = function (
   
   ceCx16_18MortalityPostVac = c()
   ceCx16_18MortalityPostVac[age<targetAgeGroup] = ceCx16_18MortalityPreVac[age<targetAgeGroup]
-  ceCx16_18MortalityPostVac[age>=targetAgeGroup] = ceCx16_18MortalityPreVac[age>=targetAgeGroup] * (1 - coverageAllDosis * vaccineEfficacyVsHPV16_18)
+  ceCx16_18MortalityPostVac[age>=targetAgeGroup] = ceCx16_18MortalityPreVac[age>=targetAgeGroup] * (1 - coverageBase * vaccineEfficacyVsHPV16_18)
   
   ceCx16_18MortalityPostVacDisc = c()
   ceCx16_18MortalityPostVacDisc[age<targetAgeGroup] = ceCx16_18MortalityPreVacDisc[age<targetAgeGroup]
@@ -121,27 +146,26 @@ getPrime = function (
   
   lifeYearsLostPostVac = c()
   lifeYearsLostPostVac[age<targetAgeGroup] = lifeYearsLostPreVac[age<targetAgeGroup]
-  lifeYearsLostPostVac[age>=targetAgeGroup] = lifeYearsLostPreVac[age>=targetAgeGroup] * (1 - coverageAllDosis * vaccineEfficacyVsHPV16_18)
+  lifeYearsLostPostVac[age>=targetAgeGroup] = lifeYearsLostPreVac[age>=targetAgeGroup] * (1 - coverageBase * vaccineEfficacyVsHPV16_18)
   
   lifeYearsLostPostVacDisc = c()
   lifeYearsLostPostVacDisc[age<targetAgeGroup] = lifeYearsLostPreVacDisc[age<targetAgeGroup]
-  lifeYearsLostPostVacDisc[age>=targetAgeGroup] = lifeYearsLostPreVacDisc[age>=targetAgeGroup] * (1 - coverageAllDosis * vaccineEfficacyVsHPV16_18)
+  lifeYearsLostPostVacDisc[age>=targetAgeGroup] = lifeYearsLostPreVacDisc[age>=targetAgeGroup] * (1 - coverageBase * vaccineEfficacyVsHPV16_18)
   
   cancerDisabilitiesLostPostVac = c()
   cancerDisabilitiesLostPostVac[age<targetAgeGroup] = cancerDisabilitiesLostPreVac[age<targetAgeGroup]
-  cancerDisabilitiesLostPostVac[age>=targetAgeGroup] = cancerDisabilitiesLostPreVac[age>=targetAgeGroup] * (1 - coverageAllDosis * vaccineEfficacyVsHPV16_18)
+  cancerDisabilitiesLostPostVac[age>=targetAgeGroup] = cancerDisabilitiesLostPreVac[age>=targetAgeGroup] * (1 - coverageBase * vaccineEfficacyVsHPV16_18)
   
   cancerDisabilitiesLostPostVacDisc = c()
   cancerDisabilitiesLostPostVacDisc[age<targetAgeGroup] = cancerDisabilitiesLostPreVacDisc[age<targetAgeGroup]
-  cancerDisabilitiesLostPostVacDisc[age>=targetAgeGroup] = cancerDisabilitiesLostPreVacDisc[age>=targetAgeGroup] * (1 - coverageAllDosis * vaccineEfficacyVsHPV16_18)
+  cancerDisabilitiesLostPostVacDisc[age>=targetAgeGroup] = cancerDisabilitiesLostPreVacDisc[age>=targetAgeGroup] * (1 - coverageBase * vaccineEfficacyVsHPV16_18)
   
   cancerCareCostsPostVac = c()
   cancerCareCostsPostVac[age<targetAgeGroup] = cancerCareCostsPreVac[age<targetAgeGroup]
-  cancerCareCostsPostVac[age>=targetAgeGroup] = cancerCareCostsPreVac[age>=targetAgeGroup] * (1 - coverageAllDosis * vaccineEfficacyVsHPV16_18)
-  
+  cancerCareCostsPostVac[age>=targetAgeGroup] = cancerCareCostsPreVac[age>=targetAgeGroup] * (1 - coverageBase * vaccineEfficacyVsHPV16_18)
   cancerCareCostsPostVacDisc = c()
   cancerCareCostsPostVacDisc[age<targetAgeGroup] = cancerCareCostsPreVacDisc[age<targetAgeGroup]
-  cancerCareCostsPostVacDisc[age>=targetAgeGroup] = cancerCareCostsPreVacDisc[age>=targetAgeGroup] * (1 - coverageAllDosis * vaccineEfficacyVsHPV16_18)
+  cancerCareCostsPostVacDisc[age>=targetAgeGroup] = cancerCareCostsPreVacDisc[age>=targetAgeGroup] * (1 - coverageBase * vaccineEfficacyVsHPV16_18)
   
   
   ##### difference after vaccination #####
@@ -165,8 +189,7 @@ getPrime = function (
   cancerCareCostsDif = cancerCareCostsPreVac - cancerCareCostsPostVac
   
   cancerCareCostsDifDisc = cancerCareCostsPreVacDisc - cancerCareCostsPostVacDisc
-  
-  
+
   ##### model DF #####
   model = data.frame(
     age,
@@ -279,43 +302,40 @@ getPrime = function (
   #   "GDP per capita"=input$GDPPerCapita,
   #   "ROI" = ((sum(model$cancerCareCostsDifDisc*model$standardisedCohortSize_vacAge)*input$cohortSizeAtVaccinationAgeFemale)-(input$totalVaccineCostPerFIG*input$cohortSizeAtVaccinationAgeFemale*input$coverageAllDosis))/(input$totalVaccineCostPerFIG*input$cohortSizeAtVaccinationAgeFemale*input$coverageAllDosis)*100
   # )
-
   undisc = c(
     "Tamaño de la cohorte de nacimiento (mujeres)"=input$birthCohortSizeFemale,
     "Tamaño de la cohorte en edad de vacunación (mujeres)"=input$cohortSizeAtVaccinationAgeFemale,
-    "Costo total de la vacunación ($USD)"=input$totalVaccineCostPerFIG*input$cohortSizeAtVaccinationAgeFemale*input$coverageAllDosis,
-    "Costos de tratamiento ahorrados ($USD)"=sum(model$cancerCareCostsDif*model$standardisedCohortSize_vacAge)*input$cohortSizeAtVaccinationAgeFemale,
-    "Costo neto ($USD)"=-(sum(model$cancerCareCostsDif*model$standardisedCohortSize_vacAge)*input$cohortSizeAtVaccinationAgeFemale)+(input$totalVaccineCostPerFIG*input$cohortSizeAtVaccinationAgeFemale*input$coverageAllDosis),
-    "Cánceres de cuello uterino evitados (n)"=sum(model$ceCx16_18IncidenceDif*model$standardisedCohortSize_vacAge)*input$cohortSizeAtVaccinationAgeFemale,
-    "Muertes evitadas (n)"=sum(model$ceCx16_18MortalityDif*model$standardisedCohortSize_vacAge)*input$cohortSizeAtVaccinationAgeFemale,
-    "Años de vida salvados"=sum(model$lifeYearsLostDif*model$standardisedCohortSize_vacAge)*input$cohortSizeAtVaccinationAgeFemale,
-    "Años de Vida Ajustados por Discapacidad evitados"=sum(model$cancerDisabilitiesLostDif*model$standardisedCohortSize_vacAge)*input$cohortSizeAtVaccinationAgeFemale,
-    "Razón de costo-efectividad incremental por cáncer de cuello uterino prevenido (USD)"=(-(sum(model$cancerCareCostsDif*model$standardisedCohortSize_vacAge)*input$cohortSizeAtVaccinationAgeFemale)+(input$totalVaccineCostPerFIG*input$cohortSizeAtVaccinationAgeFemale*input$coverageAllDosis))/(sum(model$ceCx16_18IncidenceDif*model$standardisedCohortSize_vacAge)*input$cohortSizeAtVaccinationAgeFemale),
-    "Razón de costo-efectividad incremental por vida salvada (USD)"=(-(sum(model$cancerCareCostsDif*model$standardisedCohortSize_vacAge)*input$cohortSizeAtVaccinationAgeFemale)+(input$totalVaccineCostPerFIG*input$cohortSizeAtVaccinationAgeFemale*input$coverageAllDosis))/(sum(model$ceCx16_18MortalityDif*model$standardisedCohortSize_vacAge)*input$cohortSizeAtVaccinationAgeFemale),
-    "Razón de costo-efectividad incremental por Año de Vida Salvado (USD)"=(-(sum(model$cancerCareCostsDif*model$standardisedCohortSize_vacAge)*input$cohortSizeAtVaccinationAgeFemale)+(input$totalVaccineCostPerFIG*input$cohortSizeAtVaccinationAgeFemale*input$coverageAllDosis))/(sum(model$lifeYearsLostDif*model$standardisedCohortSize_vacAge)*input$cohortSizeAtVaccinationAgeFemale),
-    "Razón de costo-efectividad incremental por Años de Vida Ajustados por Discapacidad evitados (USD)"=(-(sum(model$cancerCareCostsDif*model$standardisedCohortSize_vacAge)*input$cohortSizeAtVaccinationAgeFemale)+(input$totalVaccineCostPerFIG*input$cohortSizeAtVaccinationAgeFemale*input$coverageAllDosis))/
-      ((sum(model$lifeYearsLostDif*model$standardisedCohortSize_vacAge)*input$cohortSizeAtVaccinationAgeFemale)+(sum(model$cancerDisabilitiesLostDif*model$standardisedCohortSize_vacAge)*input$cohortSizeAtVaccinationAgeFemale)),
-    "PIB per Caápita"=input$GDPPerCapita,
-    "Retorno de inversión" = ((sum(model$cancerCareCostsDif*model$standardisedCohortSize_vacAge)*input$cohortSizeAtVaccinationAgeFemale)-(input$totalVaccineCostPerFIG*input$cohortSizeAtVaccinationAgeFemale*input$coverageAllDosis))/(input$totalVaccineCostPerFIG*input$cohortSizeAtVaccinationAgeFemale*input$coverageAllDosis)*100
+    "Costo total de la vacunación ($USD)"= costoProg + (input$totalVaccineCostPerFIG * input$cohortSizeAtVaccinationAgeFemale *(-coverageBase + coverageAllDosis)),
+    "Costos de tratamiento ahorrados ($USD)" = cohortSizeAtVaccinationAgeFemale * sum(((model$cancerCareCostsPostVac) - ((model$cancerCareCostsPreVac) * (1 - coverageAllDosis * vaccineEfficacyVsHPV16_18)))*standardisedCohortSize_vacAge),
+    "Costo neto ($USD)"= (input$totalVaccineCostPerFIG * input$cohortSizeAtVaccinationAgeFemale *(-coverageBase + coverageAllDosis))-(cohortSizeAtVaccinationAgeFemale * sum(((model$cancerCareCostsPostVac) - ((model$cancerCareCostsPreVac) * (1 - coverageAllDosis * vaccineEfficacyVsHPV16_18)))*standardisedCohortSize_vacAge)),
+    "Cánceres de cuello uterino evitados (n)"=input$cohortSizeAtVaccinationAgeFemale * (sum(((model$ceCx16_18IncidencePreVac*(1-coverageBase * vaccineEfficacyVsHPV16_18))-(model$ceCx16_18IncidencePreVac*(1-coverageAllDosis * vaccineEfficacyVsHPV16_18)))*(model$standardisedCohortSize_vacAge))),
+    "Muertes evitadas (n)"=(sum(((model$ceCx16_18MortalityPostVac)-((model$ceCx16_18MortalityPreVac) * (1*(1-coverageAllDosis*vaccineEfficacyVsHPV16_18))))*(model$standardisedCohortSize_vacAge))) * cohortSizeAtVaccinationAgeFemale,
+    "Años de vida salvados"= (sum(((model$lifeYearsLostPostVac) - ((model$lifeYearsLostPreVac) * (1-coverageAllDosis*vaccineEfficacyVsHPV16_18)))*(model$standardisedCohortSize_vacAge))) * input$cohortSizeAtVaccinationAgeFemale,
+    "Años de Vida Ajustados por Discapacidad evitados"=sum(((model$cancerDisabilitiesLostPostVac) - ((model$cancerDisabilitiesLostPreVac) * (1-coverageAllDosis*vaccineEfficacyVsHPV16_18)))*(model$standardisedCohortSize_vacAge)) * input$cohortSizeAtVaccinationAgeFemale,
+    "Razón de costo-efectividad incremental por cáncer de cuello uterino prevenido (USD)"=((input$totalVaccineCostPerFIG * input$cohortSizeAtVaccinationAgeFemale *(-coverageBase + coverageAllDosis))-(cohortSizeAtVaccinationAgeFemale * sum(((model$cancerCareCostsPostVac) - ((model$cancerCareCostsPreVac) * (1 - coverageAllDosis * vaccineEfficacyVsHPV16_18)))*standardisedCohortSize_vacAge)))/(input$cohortSizeAtVaccinationAgeFemale * (sum(((model$ceCx16_18IncidencePreVac*(1-coverageBase * vaccineEfficacyVsHPV16_18))-(model$ceCx16_18IncidencePreVac*(1-coverageAllDosis * vaccineEfficacyVsHPV16_18)))*(model$standardisedCohortSize_vacAge)))),
+    "Razón de costo-efectividad incremental por vida salvada (USD)"=((input$totalVaccineCostPerFIG * input$cohortSizeAtVaccinationAgeFemale *(-coverageBase + coverageAllDosis))-(cohortSizeAtVaccinationAgeFemale * sum(((model$cancerCareCostsPostVac) - ((model$cancerCareCostsPreVac) * (1 - coverageAllDosis * vaccineEfficacyVsHPV16_18)))*standardisedCohortSize_vacAge)))/((sum(((model$ceCx16_18MortalityPostVac)-((model$ceCx16_18MortalityPreVac) * (1*(1-coverageAllDosis*vaccineEfficacyVsHPV16_18))))*(model$standardisedCohortSize_vacAge))) * cohortSizeAtVaccinationAgeFemale),
+    "Razón de costo-efectividad incremental por Año de Vida Salvado (USD)"=((input$totalVaccineCostPerFIG * input$cohortSizeAtVaccinationAgeFemale *(-coverageBase + coverageAllDosis))-(cohortSizeAtVaccinationAgeFemale * sum(((model$cancerCareCostsPostVac) - ((model$cancerCareCostsPreVac) * (1 - coverageAllDosis * vaccineEfficacyVsHPV16_18)))*standardisedCohortSize_vacAge)))/((sum(((model$lifeYearsLostPostVac) - ((model$lifeYearsLostPreVac) * (1-coverageAllDosis*vaccineEfficacyVsHPV16_18)))*(model$standardisedCohortSize_vacAge))) * input$cohortSizeAtVaccinationAgeFemale),
+    "Razón de costo-efectividad incremental por Años de Vida Ajustados por Discapacidad evitados (USD)"=((input$totalVaccineCostPerFIG * input$cohortSizeAtVaccinationAgeFemale *(-coverageBase + coverageAllDosis))-(cohortSizeAtVaccinationAgeFemale * sum(((model$cancerCareCostsPostVac) - ((model$cancerCareCostsPreVac) * (1 - coverageAllDosis * vaccineEfficacyVsHPV16_18)))*standardisedCohortSize_vacAge)))/(((sum(((model$lifeYearsLostPostVac) - ((model$lifeYearsLostPreVac) * (1-coverageAllDosis*vaccineEfficacyVsHPV16_18)))*(model$standardisedCohortSize_vacAge))) * input$cohortSizeAtVaccinationAgeFemale)+(sum(((model$cancerDisabilitiesLostPostVac) - ((model$cancerDisabilitiesLostPreVac) * (1-coverageAllDosis*vaccineEfficacyVsHPV16_18)))*(model$standardisedCohortSize_vacAge)) * input$cohortSizeAtVaccinationAgeFemale)),
+    "PIB per Caápita"=GDPPerCapita,
+    "Retorno de inversión" = ((cohortSizeAtVaccinationAgeFemale * sum(((model$cancerCareCostsPostVac) - ((model$cancerCareCostsPreVac) * (1 - coverageAllDosis * vaccineEfficacyVsHPV16_18)))*standardisedCohortSize_vacAge))-(input$totalVaccineCostPerFIG * input$cohortSizeAtVaccinationAgeFemale *(-coverageBase + coverageAllDosis)))/(input$totalVaccineCostPerFIG * input$cohortSizeAtVaccinationAgeFemale *(-coverageBase + coverageAllDosis))*100
   )
 
   disc = c(
     "Tamaño de la cohorte de nacimiento (mujeres)"=input$birthCohortSizeFemale,
     "Tamaño de la cohorte en edad de vacunación (mujeres)"=input$cohortSizeAtVaccinationAgeFemale,
-    "Costo total de la vacunación ($USD)"=input$totalVaccineCostPerFIG*input$cohortSizeAtVaccinationAgeFemale*input$coverageAllDosis,
-    "Costos de tratamiento ahorrados ($USD)"=sum(model$cancerCareCostsDif*model$standardisedCohortSize_vacAge)*input$cohortSizeAtVaccinationAgeFemale,
-    "Costo neto ($USD)"=-(sum(model$cancerCareCostsDif*model$standardisedCohortSize_vacAge)*input$cohortSizeAtVaccinationAgeFemale)+(input$totalVaccineCostPerFIG*input$cohortSizeAtVaccinationAgeFemale*input$coverageAllDosis),
-    "Cánceres de cuello uterino evitados (n)"=sum(model$ceCx16_18IncidenceDif*model$standardisedCohortSize_vacAge)*input$cohortSizeAtVaccinationAgeFemale,
-    "Muertes evitadas (n)"=sum(model$ceCx16_18MortalityDif*model$standardisedCohortSize_vacAge)*input$cohortSizeAtVaccinationAgeFemale,
-    "Años de vida salvados"=sum(model$lifeYearsLostDif*model$standardisedCohortSize_vacAge)*input$cohortSizeAtVaccinationAgeFemale,
-    "Años de Vida Ajustados por Discapacidad evitados"=sum(model$cancerDisabilitiesLostDif*model$standardisedCohortSize_vacAge)*input$cohortSizeAtVaccinationAgeFemale,
-    "Razón de costo-efectividad incremental por cáncer de cuello uterino prevenido (USD)"=(-(sum(model$cancerCareCostsDif*model$standardisedCohortSize_vacAge)*input$cohortSizeAtVaccinationAgeFemale)+(input$totalVaccineCostPerFIG*input$cohortSizeAtVaccinationAgeFemale*input$coverageAllDosis))/(sum(model$ceCx16_18IncidenceDif*model$standardisedCohortSize_vacAge)*input$cohortSizeAtVaccinationAgeFemale),
-    "Razón de costo-efectividad incremental por vida salvada (USD)"=(-(sum(model$cancerCareCostsDif*model$standardisedCohortSize_vacAge)*input$cohortSizeAtVaccinationAgeFemale)+(input$totalVaccineCostPerFIG*input$cohortSizeAtVaccinationAgeFemale*input$coverageAllDosis))/(sum(model$ceCx16_18MortalityDif*model$standardisedCohortSize_vacAge)*input$cohortSizeAtVaccinationAgeFemale),
-    "Razón de costo-efectividad incremental por Año de Vida Salvado (USD)"=(-(sum(model$cancerCareCostsDif*model$standardisedCohortSize_vacAge)*input$cohortSizeAtVaccinationAgeFemale)+(input$totalVaccineCostPerFIG*input$cohortSizeAtVaccinationAgeFemale*input$coverageAllDosis))/(sum(model$lifeYearsLostDif*model$standardisedCohortSize_vacAge)*input$cohortSizeAtVaccinationAgeFemale),
-    "Razón de costo-efectividad incremental por Años de Vida Ajustados por Discapacidad evitados (USD)"=(-(sum(model$cancerCareCostsDif*model$standardisedCohortSize_vacAge)*input$cohortSizeAtVaccinationAgeFemale)+(input$totalVaccineCostPerFIG*input$cohortSizeAtVaccinationAgeFemale*input$coverageAllDosis))/
-      ((sum(model$lifeYearsLostDif*model$standardisedCohortSize_vacAge)*input$cohortSizeAtVaccinationAgeFemale)+(sum(model$cancerDisabilitiesLostDif*model$standardisedCohortSize_vacAge)*input$cohortSizeAtVaccinationAgeFemale)),
-    "PIB per Caápita"=input$GDPPerCapita,
-    "Retorno de inversión" = ((sum(model$cancerCareCostsDif*model$standardisedCohortSize_vacAge)*input$cohortSizeAtVaccinationAgeFemale)-(input$totalVaccineCostPerFIG*input$cohortSizeAtVaccinationAgeFemale*input$coverageAllDosis))/(input$totalVaccineCostPerFIG*input$cohortSizeAtVaccinationAgeFemale*input$coverageAllDosis)*100
+    "Costo total de la vacunación ($USD)"=costoProg + (input$totalVaccineCostPerFIG * input$cohortSizeAtVaccinationAgeFemale *(-coverageBase + coverageAllDosis)),
+    "Costos de tratamiento ahorrados ($USD)"= cohortSizeAtVaccinationAgeFemale * sum(((model$cancerCareCostsPostVacDisc) - ((model$cancerCareCostsPreVacDisc) * (1 - coverageAllDosis * vaccineEfficacyVsHPV16_18)))*standardisedCohortSize_vacAge),
+    "Costo neto ($USD)"=(input$totalVaccineCostPerFIG * input$cohortSizeAtVaccinationAgeFemale *(-coverageBase + coverageAllDosis))-(cohortSizeAtVaccinationAgeFemale * sum(((model$cancerCareCostsPostVacDisc) - ((model$cancerCareCostsPreVacDisc) * (1 - coverageAllDosis * vaccineEfficacyVsHPV16_18)))*standardisedCohortSize_vacAge)),
+    "Cánceres de cuello uterino evitados (n)"=input$cohortSizeAtVaccinationAgeFemale * (sum(((model$ceCx16_18IncidencePreVac*(1-coverageBase * vaccineEfficacyVsHPV16_18))-(model$ceCx16_18IncidencePreVac*(1-coverageAllDosis * vaccineEfficacyVsHPV16_18)))*(model$standardisedCohortSize_vacAge))),
+    "Muertes evitadas (n)"=(sum(((model$ceCx16_18MortalityPostVac)-((model$ceCx16_18MortalityPreVac) * (1*(1-coverageAllDosis*vaccineEfficacyVsHPV16_18))))*(model$standardisedCohortSize_vacAge))) * cohortSizeAtVaccinationAgeFemale,
+    "Años de vida salvados"=(sum(((model$lifeYearsLostPostVacDisc) - ((model$lifeYearsLostPreVacDisc) * (1-coverageAllDosis*vaccineEfficacyVsHPV16_18)))*(model$standardisedCohortSize_vacAge))) * input$cohortSizeAtVaccinationAgeFemale,
+    "Años de Vida Ajustados por Discapacidad evitados"=sum(((model$cancerDisabilitiesLostPostVacDisc) - ((model$cancerDisabilitiesLostPreVacDisc) * (1-coverageAllDosis*vaccineEfficacyVsHPV16_18)))*(model$standardisedCohortSize_vacAge)) * input$cohortSizeAtVaccinationAgeFemale,
+    "Razón de costo-efectividad incremental por cáncer de cuello uterino prevenido (USD)"=((input$totalVaccineCostPerFIG * input$cohortSizeAtVaccinationAgeFemale *(-coverageBase + coverageAllDosis))-(cohortSizeAtVaccinationAgeFemale * sum(((model$cancerCareCostsPostVacDisc) - ((model$cancerCareCostsPreVacDisc) * (1 - coverageAllDosis * vaccineEfficacyVsHPV16_18)))*standardisedCohortSize_vacAge)))/(input$cohortSizeAtVaccinationAgeFemale * (sum(((model$ceCx16_18IncidencePreVac*(1-coverageBase * vaccineEfficacyVsHPV16_18))-(model$ceCx16_18IncidencePreVac*(1-coverageAllDosis * vaccineEfficacyVsHPV16_18)))*(model$standardisedCohortSize_vacAge)))),
+    "Razón de costo-efectividad incremental por vida salvada (USD)"=((input$totalVaccineCostPerFIG * input$cohortSizeAtVaccinationAgeFemale *(-coverageBase + coverageAllDosis))-(cohortSizeAtVaccinationAgeFemale * sum(((model$cancerCareCostsPostVacDisc) - ((model$cancerCareCostsPreVacDisc) * (1 - coverageAllDosis * vaccineEfficacyVsHPV16_18)))*standardisedCohortSize_vacAge)))/((sum(((model$ceCx16_18MortalityPostVac)-((model$ceCx16_18MortalityPreVac) * (1*(1-coverageAllDosis*vaccineEfficacyVsHPV16_18))))*(model$standardisedCohortSize_vacAge))) * cohortSizeAtVaccinationAgeFemale),
+    "Razón de costo-efectividad incremental por Año de Vida Salvado (USD)"=((input$totalVaccineCostPerFIG * input$cohortSizeAtVaccinationAgeFemale *(-coverageBase + coverageAllDosis))-(cohortSizeAtVaccinationAgeFemale * sum(((model$cancerCareCostsPostVacDisc) - ((model$cancerCareCostsPreVacDisc) * (1 - coverageAllDosis * vaccineEfficacyVsHPV16_18)))*standardisedCohortSize_vacAge)))/((sum(((model$lifeYearsLostPostVacDisc) - ((model$lifeYearsLostPreVacDisc) * (1-coverageAllDosis*vaccineEfficacyVsHPV16_18)))*(model$standardisedCohortSize_vacAge))) * input$cohortSizeAtVaccinationAgeFemale),
+    "Razón de costo-efectividad incremental por Años de Vida Ajustados por Discapacidad evitados (USD)"=((input$totalVaccineCostPerFIG * input$cohortSizeAtVaccinationAgeFemale *(-coverageBase + coverageAllDosis))-(cohortSizeAtVaccinationAgeFemale * sum(((model$cancerCareCostsPostVacDisc) - ((model$cancerCareCostsPreVacDisc) * (1 - coverageAllDosis * vaccineEfficacyVsHPV16_18)))*standardisedCohortSize_vacAge)))/(((sum(((model$lifeYearsLostPostVacDisc) - ((model$lifeYearsLostPreVacDisc) * (1-coverageAllDosis*vaccineEfficacyVsHPV16_18)))*(model$standardisedCohortSize_vacAge))) * input$cohortSizeAtVaccinationAgeFemale)+(sum(((model$cancerDisabilitiesLostPostVacDisc) - ((model$cancerDisabilitiesLostPreVacDisc) * (1-coverageAllDosis*vaccineEfficacyVsHPV16_18)))*(model$standardisedCohortSize_vacAge)) * input$cohortSizeAtVaccinationAgeFemale)),
+    "PIB per Caápita"=GDPPerCapita,
+    "Retorno de inversión" = ((cohortSizeAtVaccinationAgeFemale * sum(((model$cancerCareCostsPostVacDisc) - ((model$cancerCareCostsPreVacDisc) * (1 - coverageAllDosis * vaccineEfficacyVsHPV16_18)))*standardisedCohortSize_vacAge))-(input$totalVaccineCostPerFIG * input$cohortSizeAtVaccinationAgeFemale *(-coverageBase + coverageAllDosis)))/(input$totalVaccineCostPerFIG * input$cohortSizeAtVaccinationAgeFemale *(-coverageBase + coverageAllDosis))*100
   )
 
   outcomes = data.frame(
@@ -327,7 +347,7 @@ getPrime = function (
   rownames(outcomes) = c(1:nrow(outcomes))
   
   inputsNames = c(
-    "Tamaño de cohorte al nacimiento (mujeres)",
+    #"Tamaño de cohorte al nacimiento (mujeres)",
     "Tamaño de cohorte a la edad de vacunación (mujeres)",
     "Cobertura (todas las dosis)",
     "Eficacia de la vacuna frente al HPV 16/18",
@@ -340,13 +360,13 @@ getPrime = function (
     "DALYs por secuelas no terminales del cáncer (por año)",
     "DALYs por cáncer terminal",
     "Tasa de descuento",
-    "Proporción de casos de cáncer cervical debidos al HPV 16/18",
-    "PIB per cápita"
-    #"Cobertura target (todas las dosis)"
+    #"Proporción de casos de cáncer cervical debidos al HPV 16/18",
+    #"PIB per cápita",
+    "Cobertura target (todas las dosis)"
   )
   
   inputsValues = c(
-    input$birthCohortSizeFemale,
+    #input$birthCohortSizeFemale,
     input$cohortSizeAtVaccinationAgeFemale,
     input$coverageAllDosis,
     input$vaccineEfficacyVsHPV16_18,
@@ -359,9 +379,9 @@ getPrime = function (
     input$DALYsForNonTerminalCancerSequelaePperYear,
     input$DALYsForTerminalCancer,
     input$discountRate,
-    input$proportionOfCervicalCancerCasesThatAreDueToHPV16_18,
-    input$GDPPerCapita,
-    input$coverageTarget
+    #input$proportionOfCervicalCancerCasesThatAreDueToHPV16_18,
+    #input$GDPPerCapita,
+    input$coverageBase
   )
   
   inputsTable = data.frame(

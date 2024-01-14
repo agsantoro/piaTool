@@ -8,31 +8,74 @@ ui_hearts = function (input,base_line) {
       "Porcentaje de adultos con hipertensión diagnosticados",
       "Porcentaje de personas diagnosticadas que se encuentran en tratamiento (basal)",
       "Porcentaje de adultos con hipertensión controla entre los tratados",
-      "Costo farmacológico anual promedio por paciente", 
+      "Costo farmacológico anual promedio por paciente",
       "Costo de evento de enfermedad isquémica",
       "Costo de seguimiento anual promedio por paciente",
       "Porcentaje de personas diagnosticadas que se encuentran en tratamiento (objetivo)"
     )
     
-    names(input_names) = colnames(base_line)[-c(1,6)]
-    names(input_names)[8] = names(input_names)[3] 
+    
+    
+    input_labels = c(
+        'Porcentaje de personas diagnosticadas que se encuentran en tratamiento (objetivo)',
+        'Población total del país (n)',
+        'Prevalencia de adultos con hipertensión, estandarizada por edad (%)',
+        'Porcentaje de adultos con hipertensión diagnosticados',
+        'Porcentaje de personas diagnosticadas que se encuentran en tratamiento (basal)',
+        'Porcentaje de adultos con hipertensión controla entre los tratados',
+    #   'Letalidad ponderada por edad y sexo para accidente cerebrovascular (grupo entre 30-79 años) (%)',
+    #   'Letalidad ponderada por edad y sexo para enfermedad cardíaca isquémica (grupo entre 30-79 años) (%)',
+        'Costo farmacológico anual promedio por paciente (USD)',
+        'Costo de seguimiento anual promedio por paciente (USD)',
+      'Costo de evento de enfermedad isquémica (USD)',
+      'Costo de evento de accidente cerebro vascular (USD)',
+      'Tasa de descuento (%)',
+      'Costo programático anual (USD)'
+    )
+    
+    inputs_hover = c(
+      'Porcentaje de personas diagnosticadas que se encuentran en tratamiento (objetivo)',
+      'Población total del país (n)',
+      'Prevalencia de adultos con hipertensión, estandarizada por edad (%)',
+      'Porcentaje de adultos con hipertensión diagnosticados',
+      'Porcentaje de personas diagnosticadas que se encuentran en tratamiento (basal)',
+      'Porcentaje de adultos con hipertensión controla entre los tratados',
+      #'Letalidad ponderada por edad y sexo para accidente cerebrovascular (grupo entre 30-79 años) (%)',
+      #'Letalidad ponderada por edad y sexo para enfermedad cardíaca isquémica (grupo entre 30-79 años) (%)',
+      'Costo farmacológico anual promedio por paciente (USD)',
+      'Costo de seguimiento anual promedio por paciente (USD)',
+      'Costo de evento de enfermedad isquémica (USD)',
+      'Costo de evento de accidente cerebro vascular (USD)',
+      'Tasa de descuento (%)',
+      'Costo programático anual (USD)'
+    )
+
+    input_values = c(
+      targets_default$treatment[base_line$country==input$country],
+      population$population[population$country==input$country],
+      base_line$prevalence_of_hypertension,
+      base_line$prevalence_previous_diagnosis,
+      base_line$treatment,
+      base_line$control,
+      base_line$costo_farm,
+      base_line$costo_seguimiento,
+      base_line$costo_evento_eci,
+      costs$value[costs$parameter=="Evento de enfermedad cardiaca isquemica promedio  (***)" & costs$country==str_to_title(input$country)],
+      0.05,
+      0
+    )
     
     if (is.null(input$country) == F) {
       i_names = c()
-      for (i in 1:8) {
+      for (i in 1:length(input_labels)) {
         i_names = c(i_names,paste0("hearts_input_",i))
       }
       
       i_labels = c()
       
-      for (i in 1:8) {
-        i_labels = c(i_labels,input_names[i])
+      for (i in 1:length(input_labels)) {
+        i_labels = c(i_labels,input_labels[i])
       }
-      
-      # i_labels[3] = paste(i_labels[3],"(basal)")
-      # i_labels[7] = paste(i_labels[7],"(objetivo)")
-      # 
-      
       
       hearts_map_inputs = data.frame(
         intervencion = "HEARTS",
@@ -41,10 +84,14 @@ ui_hearts = function (input,base_line) {
       )
       
       hearts_map_inputs$avanzado = NA
-      hearts_map_inputs$avanzado[c(1,2,3,4,5,6,7)] = T
-      hearts_map_inputs$avanzado[c(8)] = F
-      
+      hearts_map_inputs$avanzado[c(1)] = F
+      hearts_map_inputs$avanzado[is.na(hearts_map_inputs$avanzado)] = T
       rownames(hearts_map_inputs) = 1:nrow(hearts_map_inputs)
+      
+      bsc = which(hearts_map_inputs$avanzado==F)
+      avz = which(hearts_map_inputs$avanzado==T)
+      prc = c(3,4,5,6,7,8,13)
+      
       
       save(
         hearts_map_inputs,
@@ -53,54 +100,61 @@ ui_hearts = function (input,base_line) {
       
     }
     
+    browser()
+    
     tagList(
           
-          lapply(c(8), function (i) {
+          lapply(bsc, function (i) {
             sliderInput(paste0("hearts_input_",i),
-                        tags$div(input_names[i],icon("circle-info","fa-1x",title = model_card_hearts$Descripción[model_card_hearts$inputID==paste0("hearts_input_",i)])),
+                        tags$div(input_labels[i],icon("circle-info","fa-1x",title = inputs_hover[i])),
                         value = 100*targets_default$treatment[targets_default$country==country_sel],
                         min=0,
                         max=100,
                         step=.1)
-          }),
+          })
+          ,
         
           tags$header(class="text-1xl flex justify-between items-center p-5 mt-4", style="background-color: #FF671B; color: white; text-align: center", 
                       tags$h1(style="display: inline-block; margin: 0 auto;", class="flex-grow mt-8 mb-8",tags$b("Avanzado")),
                       actionLink(inputId = "toggle_avanzado_hearts", label=icon("stream", style = "color: white;"))
           ),
-          hidden(
-            lapply(c(3), function (i) {
-              sliderInput(paste0("hearts_input_",i),
-                          tags$div(input_names[i],icon("circle-info","fa-1x",title = model_card_hearts$Descripción[model_card_hearts$inputID==paste0("hearts_input_",i)])),
-                          value = 100*base_line[base_line$country==country_sel,names(input_names[i])],
-                          min=0,
-                          max=100,
-                          step=.1)
-            }),
-            lapply(c(1,2,4), function (i) {
-              sliderInput(paste0("hearts_input_",i),
-                          tags$div(input_names[i],icon("circle-info","fa-1x",title = model_card_hearts$Descripción[model_card_hearts$inputID==paste0("hearts_input_",i)])),
-                          value = 100*base_line[base_line$country==country_sel,names(input_names[i])],
-                          min=0,
-                          max=100,
-                          step=.1)
-            }),
-            lapply(c(5,6,7), function (i) {
-              numericInput(paste0("hearts_input_",i),
-                           tags$div(input_names[i],icon("circle-info","fa-1x",title = model_card_hearts$Descripción[model_card_hearts$inputID==paste0("hearts_input_",i)])),
-                          value = base_line[base_line$country==country_sel,names(input_names[i])],
-                          step=.1)
-            })
-          ),
-          # hidden(tags$div(id = "titulo2", h4("Objetivo"))),
+          
+          #hidden(
+            lapply(setdiff(avz,prc), function (i) {
+              browser()
+                  numericInput(paste0("hearts_input_",i),
+                              tags$div(input_labels[i],icon("circle-info","fa-1x",title = inputs_hover[i], verify_fa = FALSE)),
+                              value = input_values[i],
+                              step=.1)
+                })
+            
+          #)
+          
+          
+          
+          # ,
           # hidden(
-          #   lapply(input_names[c(1,2,4)], function (i) {
-          #     sliderInput(paste0("hearts_input_target_",which(input_names==i)),
-          #                 input_names[input_names==i],
-          #                 value = targets_default[targets_default$country==country_sel,names(input_names[input_names==i])],
+          #   lapply(c(3), function (i) {
+          #     sliderInput(paste0("hearts_input_",i),
+          #                 tags$div(input_names[i],icon("circle-info","fa-1x",title = model_card_hearts$Descripción[model_card_hearts$inputID==paste0("hearts_input_",i)])),
+          #                 value = 100*base_line[base_line$country==country_sel,names(input_names[i])],
           #                 min=0,
-          #                 max=1,
-          #                 step=.001)
+          #                 max=100,
+          #                 step=.1)
+          #   }),
+          #   lapply(c(1,2,4), function (i) {
+          #     sliderInput(paste0("hearts_input_",i),
+          #                 tags$div(input_names[i],icon("circle-info","fa-1x",title = model_card_hearts$Descripción[model_card_hearts$inputID==paste0("hearts_input_",i)])),
+          #                 value = 100*base_line[base_line$country==country_sel,names(input_names[i])],
+          #                 min=0,
+          #                 max=100,
+          #                 step=.1)
+          #   }),
+          #   lapply(c(5,6,7), function (i) {
+          #     numericInput(paste0("hearts_input_",i),
+          #                  tags$div(input_names[i],icon("circle-info","fa-1x",title = model_card_hearts$Descripción[model_card_hearts$inputID==paste0("hearts_input_",i)])),
+          #                 value = base_line[base_line$country==country_sel,names(input_names[i])],
+          #                 step=.1)
           #   })
           # )
         )

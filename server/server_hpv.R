@@ -264,14 +264,30 @@ server_hpv = function (input, output, session, parameterReactive, scenarios, res
                     snSelected = c(colnames(scenarios$summaryTable)[1], sel_escenario)
                   }
                   table = scenarios$summaryTable[,snSelected]
-                  cat_input = c(1,2,3,14)
-                  cat_epi = c(6,7,8,9)
-                  cat_costos = c(4,5,10,11,12,13,15)
+                  
+                  # cat_input = c(1,2,3,14)
+                  # cat_epi = c(6,7,8,9)
+                  # cat_costos = c(4,5,10,11,12,13,15)
+                  # 
+                  cat_epi = c(5:8)
+                  cat_costos = c(2,3,4,9,10,11,12,14)
+                  
+                  # table$cat=""
+                  # table$cat[cat_input] = "Inputs"
+                  # table$cat[cat_epi] = "Resultados epidemiológicos"
+                  # table$cat[cat_costos] = "Resultados económicos"
+                  # 
                   
                   table$cat=""
-                  table$cat[cat_input] = "Inputs"
                   table$cat[cat_epi] = "Resultados epidemiológicos"
                   table$cat[cat_costos] = "Resultados económicos"
+                  
+                  table = table[table$cat!="",]
+                  table = rbind(
+                    table[table$cat=="Resultados epidemiológicos",],
+                    table[table$cat=="Resultados económicos",]
+                  )
+                  
                   
                   columns = list(
                     cat = colDef(name = "Categoría", align = "left"),
@@ -283,7 +299,7 @@ server_hpv = function (input, output, session, parameterReactive, scenarios, res
                   }
                   
                   reactable(
-                    table[table$cat!="Inputs",],
+                    table,
                     groupBy = "cat",
                     defaultExpanded = T,
                     pagination = F,
@@ -632,7 +648,6 @@ server_hpv = function (input, output, session, parameterReactive, scenarios, res
               if (length(input$comparacion_intervencion)==1) {
                 table_data = inputs_table_generator(input,output, inputs_scenarios, summary_scenarios)[[1]]
                 columnas = inputs_table_generator(input,output, inputs_scenarios, summary_scenarios)[[2]]
-                
                 reactable(
                   table_data,
                   groupBy = "Categoría",
@@ -670,7 +685,9 @@ server_hpv = function (input, output, session, parameterReactive, scenarios, res
               )
             ,
             br(),
-            hidden(reactableOutput("tabla_inputs"))
+            hidden(reactableOutput("tabla_inputs")),
+            br(),
+            br()
           )  
           
           
