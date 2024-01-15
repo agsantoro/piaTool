@@ -148,7 +148,10 @@ ui_avanzada <-
              br(),
              hidden(textInput("scenarioName",'Nombre del escenario')),
              column(12,
-                    hidden(actionButton("saveScenario2",icon("save"))), align="right")
+                    hidden(actionButton("saveScenario2",icon("save"))), align="right"),
+             br(),
+             br(),
+             br()
              
              
              

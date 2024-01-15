@@ -3,63 +3,51 @@ ui_hearts = function (input,base_line) {
   
   country_sel = str_to_title(input$country)
   renderUI({
-    input_names = c(
-      "Prevalencia de adultos con hipertensión, estandarizada por edad",
-      "Porcentaje de adultos con hipertensión diagnosticados",
-      "Porcentaje de personas diagnosticadas que se encuentran en tratamiento (basal)",
-      "Porcentaje de adultos con hipertensión controla entre los tratados",
-      "Costo farmacológico anual promedio por paciente",
-      "Costo de evento de enfermedad isquémica",
-      "Costo de seguimiento anual promedio por paciente",
-      "Porcentaje de personas diagnosticadas que se encuentran en tratamiento (objetivo)"
-    )
-    
-    
     
     input_labels = c(
-        'Porcentaje de personas diagnosticadas que se encuentran en tratamiento (objetivo)',
-        'Población total del país (n)',
-        'Prevalencia de adultos con hipertensión, estandarizada por edad (%)',
-        'Porcentaje de adultos con hipertensión diagnosticados',
-        'Porcentaje de personas diagnosticadas que se encuentran en tratamiento (basal)',
-        'Porcentaje de adultos con hipertensión controla entre los tratados',
-    #   'Letalidad ponderada por edad y sexo para accidente cerebrovascular (grupo entre 30-79 años) (%)',
-    #   'Letalidad ponderada por edad y sexo para enfermedad cardíaca isquémica (grupo entre 30-79 años) (%)',
-        'Costo farmacológico anual promedio por paciente (USD)',
-        'Costo de seguimiento anual promedio por paciente (USD)',
-      'Costo de evento de enfermedad isquémica (USD)',
-      'Costo de evento de accidente cerebro vascular (USD)',
-      'Tasa de descuento (%)',
-      'Costo programático anual (USD)'
-    )
-    
-    inputs_hover = c(
       'Porcentaje de personas diagnosticadas que se encuentran en tratamiento (objetivo)',
       'Población total del país (n)',
       'Prevalencia de adultos con hipertensión, estandarizada por edad (%)',
       'Porcentaje de adultos con hipertensión diagnosticados',
       'Porcentaje de personas diagnosticadas que se encuentran en tratamiento (basal)',
       'Porcentaje de adultos con hipertensión controla entre los tratados',
-      #'Letalidad ponderada por edad y sexo para accidente cerebrovascular (grupo entre 30-79 años) (%)',
-      #'Letalidad ponderada por edad y sexo para enfermedad cardíaca isquémica (grupo entre 30-79 años) (%)',
+    # 'Letalidad ponderada por edad y sexo para accidente cerebrovascular (grupo entre 30-79 años) (%)',
+    # 'Letalidad ponderada por edad y sexo para enfermedad cardíaca isquémica (grupo entre 30-79 años) (%)',
       'Costo farmacológico anual promedio por paciente (USD)',
       'Costo de seguimiento anual promedio por paciente (USD)',
-      'Costo de evento de enfermedad isquémica (USD)',
+      'Costo de evento de enfermedad coronaria isquémica (USD)',
       'Costo de evento de accidente cerebro vascular (USD)',
       'Tasa de descuento (%)',
       'Costo programático anual (USD)'
     )
+    
+    inputs_hover = c(
+      'Porcentaje de personas que están recibiendo tratamiento en relación con el total de individuos que han sido diagnosticados con hipertensión en un punto inicial o línea de base',
+      'Refleja el objetivo fijado para el porcentaje de personas diagnosticadas con hipertensión que deben tener tratamiento',
+      'Prevalencia de individuos con hipertensión, diagnosticada o no, en el grupo etario de 30 a 79 años en cada país, proporcionando un punto de referencia inicial',
+      'Porcentaje de individuos entre 30 y 79 años previamente diagnosticados con hipertensión, proporcionando un punto de referencia inicial',
+      'Porcentaje de personas de 30 a 79 años, ya diagnosticadas con hipertensión y en tratamiento, que han conseguido controlar su presión arterial, proporcionando un punto de referencia inicial',
+      'Población total (proyectada para el año 2023) de cada país',
+      # 'Índice de letalidad (tasa de letalidad ponderada por sexo y edad) para accidente cerebrovascular en el grupo de edad de 30 a 79 años',
+      # 'Índice de letalidad (tasa de letalidad ponderada por sexo y edad) para enfermedad coronaria isquémica en el grupo de edad de 30 a 79 años',
+      'Incluye la proporción de pacientes que están en cada paso por país para abril de 2023 (USD oficial a tasa de cambio nominal de cada país)',
+      'Costos de tratar un evento de enfermedad coronaria isquémica por país para abril de 2023 (USD oficial a tasa de cambio nominal de cada país)',
+      'Costos de tratar un evento de accidente cerebrovascular (USD oficial a tasa de cambio nominal de cada país)',
+      'Costos de seguimiento (farmacológico, consultas médicas, etc) anual por paciente (USD oficial a tasa de cambio nominal de cada país)',
+      'Se utiliza para traer al presente los costos y beneficios en salud futuros',
+      'Costo de implementar y sostener la intervención en un año (USD oficial a tasa de cambio nominal de cada país)'
+    )
 
     input_values = c(
-      targets_default$treatment[base_line$country==input$country],
-      population$population[population$country==input$country],
-      base_line$prevalence_of_hypertension,
-      base_line$prevalence_previous_diagnosis,
-      base_line$treatment,
-      base_line$control,
-      base_line$costo_farm,
-      base_line$costo_seguimiento,
-      base_line$costo_evento_eci,
+      targets_default$treatment[targets_default$country==str_to_title(input$country)],
+      population$population[population$country==str_to_title(input$country)],
+      base_line$prevalence_of_hypertension[base_line$country==str_to_title(input$country)],
+      base_line$prevalence_previous_diagnosis[base_line$country==str_to_title(input$country)],
+      base_line$treatment[base_line$country==str_to_title(input$country)],
+      base_line$control[base_line$country==str_to_title(input$country)],
+      base_line$costo_farm[base_line$country==str_to_title(input$country)],
+      base_line$costo_seguimiento[base_line$country==str_to_title(input$country)],
+      base_line$costo_evento_eci[base_line$country==str_to_title(input$country)],
       costs$value[costs$parameter=="Evento de enfermedad cardiaca isquemica promedio  (***)" & costs$country==str_to_title(input$country)],
       0.05,
       0
@@ -90,7 +78,7 @@ ui_hearts = function (input,base_line) {
       
       bsc = which(hearts_map_inputs$avanzado==F)
       avz = which(hearts_map_inputs$avanzado==T)
-      prc = c(3,4,5,6,7,8,13)
+      prc = c(3,4,5,6,11)
       
       
       save(
@@ -99,8 +87,6 @@ ui_hearts = function (input,base_line) {
       )
       
     }
-    
-    browser()
     
     tagList(
           
@@ -118,17 +104,28 @@ ui_hearts = function (input,base_line) {
                       tags$h1(style="display: inline-block; margin: 0 auto;", class="flex-grow mt-8 mb-8",tags$b("Avanzado")),
                       actionLink(inputId = "toggle_avanzado_hearts", label=icon("stream", style = "color: white;"))
           ),
+          br(),
+          hidden(
           
-          #hidden(
-            lapply(setdiff(avz,prc), function (i) {
-              browser()
-                  numericInput(paste0("hearts_input_",i),
-                              tags$div(input_labels[i],icon("circle-info","fa-1x",title = inputs_hover[i], verify_fa = FALSE)),
-                              value = input_values[i],
-                              step=.1)
+            lapply(avz, function (i) {
+              if (!i %in% prc) {
+                numericInput(paste0("hearts_input_",i),
+                             tags$div(input_labels[i],icon("circle-info","fa-1x",title = inputs_hover[i], verify_fa = FALSE)),
+                             value = input_values[i],
+                             step=.1)
+              } else {
+                sliderInput(paste0("hearts_input_",i),
+                             tags$div(input_labels[i],icon("circle-info","fa-1x",title = inputs_hover[i], verify_fa = FALSE)),
+                             value = input_values[i]*100,
+                             min=0,
+                             max=100,
+                             step=.1)
+              }
+                  
                 })
+          
             
-          #)
+          ),
           
           
           
@@ -477,50 +474,17 @@ ui_resultados_hearts = function(input,output,resultados) {
     
     output$hearts_resultados = renderReactable({
       if(length(run_hearts)>0) {
-        metrica_baseline = names(run_hearts$run[[country_sel]]$baseline)
-        valores_baseline = unname(unlist(run_hearts$run[[country_sel]]$baseline))
-        metrica_target = names(run_hearts$run[[country_sel]]$target)
-        valores_target = unname(unlist(run_hearts$run[[country_sel]]$target))
-        
-        table = left_join(
-          data.frame(
-            metrica = metrica_baseline,
-            valores_baseline
-          ),
-          data.frame(
-            metrica = metrica_target,
-            valores_target
-          ))
-        table = table[7:17,c("metrica","valores_target")]
+        table = run_hearts$resumen_resultados
         colnames(table) = c("Indicador","Valor")  
         
-        epi = run_hearts$epi_outcomes
-        colnames(epi) = colnames(table)
-        
-        
-        costos = data.frame(
-          Indicador=names(run_hearts$costs_outcomes),
-          Valor=unname(unlist(run_hearts$costs_outcomes))
-          
-        ) 
-        table = rbind(
-          table,
-          epi,
-          costos
-        ) %>% as.data.frame()
-        
-        table$Valor = round(table$Valor,1)
-        table$Valor = format(table$Valor, big.mark = ".", decimal.mark = ",")
-        
-        cat_epi = 1:12
-        cat_costos = 13:22
+        cat_epi = 1:13
+        cat_costos = 14:20
         table$cat=""
         table$cat[cat_epi] = "Resultados epidemiológicos"
         table$cat[cat_costos] = "Resultados económicos"
         rownames(table) = NULL
+        table$Valor = format(round(table$Valor,1), big.mark=".", small.mark=",")
         
-        table$Valor[table$cat=="Resultados económicos"] = paste0("$",table$Valor[table$cat=="Resultados económicos"])
-        clipr::write_clip(table)
         reactable(
           table,
           groupBy = "cat",

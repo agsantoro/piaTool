@@ -339,8 +339,9 @@ server_hpv = function (input, output, session, parameterReactive, scenarios, res
                     scn_name = i
                     table[[i]] = hearts_scenarios$savedScenarios[[i]]$Valor
                   }
-                  cat_epi = 1:12
-                  cat_costos = 13:22
+                  
+                  cat_epi = 1:13
+                  cat_costos = 14:20
                   
                   table$cat=""
                   table$cat[cat_epi] = "Resultados epidemiológicos"
@@ -352,7 +353,7 @@ server_hpv = function (input, output, session, parameterReactive, scenarios, res
                   )
                   
                   for (i in setdiff(1:ncol(table),c(1,ncol(table)))) {
-                    table[i] = format(table[i], bigmark=",", decimalmark=".") 
+                    table[i] = format(table[i], big.mark=",", small.mark=".") 
                     columns[[colnames(table)[i]]] = colDef(name = colnames(table)[i], align = "right")
                   }
                   

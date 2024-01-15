@@ -360,40 +360,17 @@ server <- function(input, output, session) {
           scnName = input$scenarioName
           country_sel = str_to_title(input$country)
           
-          metrica_baseline = names(run_hearts()$run[[country_sel]]$baseline)
-          valores_baseline = unname(unlist(run_hearts()$run[[country_sel]]$baseline))
-          metrica_target = names(run_hearts()$run[[country_sel]]$target)
-          valores_target = unname(unlist(run_hearts()$run[[country_sel]]$target))
           
-          table = left_join(
-            data.frame(
-              metrica = metrica_baseline,
-              valores_baseline
-            ),
-            data.frame(
-              metrica = metrica_target,
-              valores_target
-            ))
-          
-          table = table[7:17,c("metrica","valores_target")]
+          table = run_hearts()$resumen_resultados
           colnames(table) = c("Indicador","Valor")  
           
-          epi = run_hearts()$epi_outcomes
-          colnames(epi) = colnames(table)
-          
-          costos = data.frame(
-            Indicador=names(run_hearts()$costs_outcomes),
-            Valor=unname(unlist(run_hearts()$costs_outcomes))
-            
-          ) 
-          
-          table = rbind(
-            table,
-            epi,
-            costos
-          )
-          
-          table$Valor = round(table$Valor,1)
+          cat_epi = 1:13
+          cat_costos = 14:20
+          table$cat=""
+          table$cat[cat_epi] = "Resultados epidemiológicos"
+          table$cat[cat_costos] = "Resultados económicos"
+          rownames(table) = NULL
+          table$Valor = format(round(table$Valor,1), bigmark=".", decimalmark=",")
           
           hearts_scenarios$savedScenarios[[scnName]] <- table
           
@@ -677,19 +654,19 @@ server <- function(input, output, session) {
   run_hearts <- reactive({
     if (is.null(input$hearts_input_1)==F) {
       estimaToolCosts(
-        str_to_title(input$country),
-        population$population[population$country==str_to_title(input$country)],
-        input$hearts_input_1/100,
-        input$hearts_input_1/100,
-        input$hearts_input_2/100,
-        input$hearts_input_2/100,
-        input$hearts_input_3/100,
-        input$hearts_input_8/100,
-        input$hearts_input_4/100,
-        input$hearts_input_4/100,
-        input$hearts_input_5,
-        input$hearts_input_6,
-        input$hearts_input_7
+        country = input$country,
+        Population = input$hearts_input_2,
+        `BASELINE_Prevalencia de hipertensión entre adultos de 30-79 años, estandarizada por edad` = input$hearts_input_3/100,
+        `TARGET_Prevalencia de hipertensión entre adultos de 30-79 años, estandarizada por edad` = input$hearts_input_3/100,
+        `BASELINE_Prevalencia de diagnóstico previo de hipertensión entre adultos de 30-79 años con hipertensión, estandarizada por edad` = input$hearts_input_4/100,
+        `TARGET_Prevalencia de diagnóstico previo de hipertensión entre adultos de 30-79 años con hipertensión, estandarizada por edad` = input$hearts_input_4/100,
+        `BASELINE_Tratamiento entre los diagnosticados (%)` = input$hearts_input_5/100,
+        `TARGET_Tratamiento entre los diagnosticados (%)` = input$hearts_input_1/100,
+        `BASELINE_Control de la hipertensión entre los tratados (%)` = input$hearts_input_6/100,
+        `TARGET_Control de la hipertensión entre los tratados (%)` = input$hearts_input_6/100,
+        `Costo farmacológico anual por paciente promedio (**)` = input$hearts_input_7,
+        `Evento de enfermedad cardiaca isquemica promedio  (***)` = input$hearts_input_9,
+        `Costo anual de consulta médica en paciente promedio (*)` = input$hearts_input_8
       )
     }
   })
@@ -724,10 +701,11 @@ server <- function(input, output, session) {
   
   
   observeEvent(input$toggle_avanzado_hearts, {
-    inputs_toggle = names(input)[substring(names(input),1,6)=="hearts"]
-    inputs_hide = inputs_toggle[-grep(8,inputs_toggle)]
     
-    for (i in c(inputs_hide, "titulo1","titulo2")) {
+    load("hearts_map_inputs.Rdata")
+    inputs_hide = hearts_map_inputs$i_names[hearts_map_inputs$avanzado==T]
+    
+    for (i in c(inputs_hide)) {
       isVisible <- shinyjs::toggleState(id = i)
       toggle(id = i, anim = TRUE, animType = "slide", condition = isVisible)
       enable(i)

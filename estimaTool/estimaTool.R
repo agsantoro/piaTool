@@ -1,10 +1,35 @@
 library(dplyr)
 library(tidyr)
 
-load("estimaTool/base_line.RData")
-load("estimaTool/targets_default.RData")
-load("estimaTool/population.RData")
-load("estimaTool/costs.RData")
+# load("estimaTool/base_line.RData")
+# write.xlsx(base_line,file="estimaTool/base_line.xlsx")
+base_line = read.xlsx("estimaTool/base_line.xlsx")
+
+# load("estimaTool/targets_default.RData")
+# write.xlsx(targets_default,file = "estimaTool/targets_default.xlsx")
+targets_default = read.xlsx("estimaTool/targets_default.xlsx")
+
+# load("estimaTool/population.RData")
+# write.xlsx(population,file = "estimaTool/population.xlsx")
+population = read.xlsx("estimaTool/population.xlsx")
+
+# load("estimaTool/costs.RData")
+# write.xlsx(costs,file = "estimaTool/costs.xlsx")
+costs = read.xlsx("estimaTool/costs.xlsx")
+
+# load("estimaTool/fatality_data.RData")
+# write.xlsx(fatality_data,file = "estimaTool/fatality_data.xlsx")
+fatality_data = read.xlsx("estimaTool/fatality_data.xlsx")
+
+
+
+# load("estimaTool/life_exp.RData")
+# write.xlsx(life_exp,file = "estimaTool/life_exp.xlsx")
+life_exp = read.xlsx("estimaTool/life_exp.xlsx")
+
+# load("estimaTool/mortality_data.RData")
+# write.xlsx(mortality_data,file = "estimaTool/mortality_data.xlsx")
+mortality_data = read.xlsx("estimaTool/mortality_data.xlsx")
 
 VA = function(tasa_descuento_anual,num_periodos) {
   va <- ((1 - (1 + tasa_descuento_anual) ^ (-num_periodos+1)) / tasa_descuento_anual)
@@ -51,10 +76,7 @@ estimaToolCosts = function(
   `Evento de enfermedad cardiaca isquemica promedio  (***)`,
   `Costo anual de consulta médica en paciente promedio (*)`
 ) {
-  
-  ##### MORTALITY DATA #####
-  # loading data
-  load("estimaTool/mortality_data.RData")
+  country = str_to_title(country)
   
   # adding both sexes as rows
   mortality_data = 
@@ -73,9 +95,6 @@ estimaToolCosts = function(
   
   
   ##### FATALITY DATA #####
-  
-  # loading fatality data
-  load("estimaTool/fatality_data.RData")
   
   # wrangling data to calculated weighted fatality ratios 
   fatality_data = fatality_data %>% pivot_longer(names_to = "gender", cols = 3:4)
@@ -163,8 +182,6 @@ estimaToolCosts = function(
   run[[country]]$baseline$`Nueva población (N) tratada / Controlados actualmente previamente no controlados` = run[[country]]$target$`Población de adultos entre 30 y 79 años con hipertensión que inició tratamiento` - run[[country]]$baseline$`Población de adultos entre 30 y 79 años con hipertensión que inició tratamiento`
   run[[country]]$target$`Nueva población (N) tratada / Controlados actualmente previamente no controlados` =   run[[country]]$target$`Población (N) de hipertensos controlados entre adultos de 30-79 años con hipertensión` - run[[country]]$baseline$`Población (N) de hipertensos controlados entre adultos de 30-79 años con hipertensión`
   
-  x=data.frame(names(unlist(run$Argentina)),unname(unlist(run$Argentina)))
-  
   ###### DISABILITY WEIGHT #####
   
   disability_weight = list(
@@ -173,8 +190,6 @@ estimaToolCosts = function(
   
   
   ##### EXPECTATION OF LIFE #####
-  
-  load("estimaTool/life_exp.RData")
   
   
   ##### averted events #####
@@ -222,7 +237,6 @@ estimaToolCosts = function(
   
   
   averted_by_age = averted_by_age %>% pivot_longer(names_to = "gender", cols = c("Male","Female")) %>% arrange(event,cause,gender)
-  
   
   dalys_by_age = averted_by_age[averted_by_age$event=="Deaths",] %>% left_join(life_exp[life_exp$location==country,]) %>%
     mutate(yll=value*lex,
@@ -297,9 +311,55 @@ estimaToolCosts = function(
   costs_outcomes$`Razon de costo-efectividad incremental por Año de Vida Ajustado por Discapacidad descontado evitado` = costs_outcomes$`Diferencia de costos` / (sum(dalys_by_age_disc$disc) + sum(dalys_by_age_disc$dalys))
   costs_outcomes$`Razón de costo-efectividad incremental por año de vida salvado` = costs_outcomes$`Diferencia de costos` / sum(dalys_by_age$yll)
   costs_outcomes$`Razon de costo-efectividad incremental por año de vida salvado descontado` = costs_outcomes$`Diferencia de costos` / sum(dalys_by_age_disc$disc) 
-  costs_outcomes$`ROI` = 100*(costs_outcomes$`Costos médicos directos evitados por evento cardiovasculares (ECI y ACV)`- costs_outcomes$`Costos totales anuales de la intervención`) / costs_outcomes$`Costos totales anuales de la intervención`
+  costs_outcomes$`Retorno de inversión (%)` = 100*(costs_outcomes$`Costos médicos directos evitados por evento cardiovasculares (ECI y ACV)`- costs_outcomes$`Costos totales anuales de la intervención`) / costs_outcomes$`Costos totales anuales de la intervención`
 
-  
+  resumen_resultados = 
+    data.frame(
+      indicador = c(
+        'Eventos Coronarios evitados (n)',
+        'Tasa de Eventos Coronarios evitados cada 100.000 habitantes',
+        'Accidente Cerebrovascular evitados (n)',
+        'Tasa de accidente cerebrovascular evitados cada 100.000 habitantes',
+        'Muertes evitadas por Eventos Coronarios (n)',
+        'Muertes por Eventos Coronarios por cada 100.000 habitantes que podrían evitarse',
+        'Muertes evitadas por Accidente Cerebrovascular (n)',
+        'Muertes por Accidente Cerebrovascular por cada 100.000 habitantes que podrían evitarse',
+        'Muertes evitadas (n)',
+        'Muertes totales por cada 100.000 habitantes que podrían evitarse',
+        'Población de adultos entre 30 y 79 años con hipertensión que inició tratamiento (n)',
+        'Años de vida ajustados por discapacidad evitados',
+        'Años de vida salvados',
+        'Costos totales de la intervención (USD)',
+        'Costos evitados atribuibles a la intervención (USD)',
+        'Diferencia de costos respecto al escenario basal (USD)',
+        'Razón de costo-efectividad incremental por Año de Vida Salvado (USD)',
+        'Razón de costo-efectividad incremental por Año de Vida Ajustado por Discapacidad evitado (USD)',
+        'Razón de costo-efectividad incremental por vida salvada (USD)',
+        'Retorno de inversión (%)'  
+      ),
+      valor = c(
+        run[[country]]$baseline$`Eventos Coronarios evitados`,
+        run[[country]]$baseline$`Eventos Coronarios evitados` / Population * 100000,
+        run[[country]]$baseline$`Accidente Cerebrovascular evitados`,
+        run[[country]]$baseline$`Accidente Cerebrovascular evitados` / Population * 100000,
+        run[[country]]$baseline$`Muertes evitadas por Eventos Coronarios`,
+        run[[country]]$baseline$`Muertes evitadas por Eventos Coronarios` / Population * 100000,
+        run[[country]]$baseline$`Muertes evitadas por Accidente Cerebrovascular`,
+        run[[country]]$baseline$`Muertes evitadas por Accidente Cerebrovascular` / Population * 100000,
+        run[[country]]$baseline$`Muertes evitadas por Accidente Cerebrovascular` + run[[country]]$baseline$`Muertes evitadas por Eventos Coronarios`,
+        (run[[country]]$baseline$`Muertes evitadas por Accidente Cerebrovascular` + run[[country]]$baseline$`Muertes evitadas por Eventos Coronarios`) / Population * 100000,
+        run[[country]]$baseline$`Nueva población (N) tratada / Controlados actualmente previamente no controlados`,
+        (sum(dalys_by_age_disc$disc) + sum(dalys_by_age_disc$dalys)),
+        sum(dalys_by_age$yll),
+        costs_outcomes$`Costos totales anuales de la intervención`,
+        costs_outcomes$`Costos médicos directos evitados por evento cardiovasculares (ECI y ACV)`,
+        costs_outcomes$`Diferencia de costos`,
+        costs_outcomes$`Razón de costo-efectividad incremental por año de vida salvado`,
+        costs_outcomes$`Razón de costo-efectividad incremental por Año de Vida Ajustado por Discapacidad evitado`,
+        costs_outcomes$`Razon incremental de costo por muerte evitada`,
+        costs_outcomes$`Retorno de inversión (%)`
+      )
+    )
   
   estimaToolModel = list(
     country = country,
@@ -315,7 +375,8 @@ estimaToolCosts = function(
     epi_outcomes = epi_outcomes,
     costs_outcomes = costs_outcomes,
     epi_model_y = epi_model_y,
-    epi_model_outcomes = outcomesEpi
+    epi_model_outcomes = outcomesEpi,
+    resumen_resultados = resumen_resultados
   )
   return(estimaToolModel)
 }
