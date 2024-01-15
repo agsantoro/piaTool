@@ -177,20 +177,20 @@ server <- function(input, output, session) {
 
   
   observeEvent(input$intervencion, {
-    hide("saveScenario2")
-    hide("scenarioName")
+    shinyjs::hide("saveScenario2")
+    shinyjs::hide("scenarioName")
   })
   
   observeEvent(input$country, {
     if (length(input$country)>0) {
-      hide("comenzar_mensaje", anim = T, animType = "fade")
-      show("columna_borde")
-      show("header1", anim = T, animType = "fade")
-      show("header2", anim = T, animType = "fade")
-      show("saveScenarioDiv", anim = T, animType = "fade")
-      delay(500,show("uiOutput_basica", anim = T, animType = "fade"))
-      delay(500,show("resultados_hpv", anim = T, animType = "fade"))
-      delay(500,show("saveScenario", anim = T, animType = "fade"))
+      shinyjs::hide("comenzar_mensaje", anim = T, animType = "fade")
+      shinyjs::show("columna_borde")
+      shinyjs::show("header1", anim = T, animType = "fade")
+      shinyjs::show("header2", anim = T, animType = "fade")
+      shinyjs::show("saveScenarioDiv", anim = T, animType = "fade")
+      shinyjs::delay(500,shinyjs::show("uiOutput_basica", anim = T, animType = "fade"))
+      shinyjs::delay(500,shinyjs::show("resultados_hpv", anim = T, animType = "fade"))
+      shinyjs::delay(500,shinyjs::show("saveScenario", anim = T, animType = "fade"))
       #delay(500,show("header_comparacion", anim = T, animType = "fade"))
     }
   })

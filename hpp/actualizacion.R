@@ -6,18 +6,21 @@ descontarValor <- function(tasa_descuento_anual,num_periodos) {
 }
 
 
+
+
+
+
 hpp = function (pais, 
-                usoOxitocina = 0.853, 
-                eficacia_Intervencion = 0.30230,
-                pHPP = 0.108, #Probabilidad de tener una hemorragia post parto.
-                pHPP_Severa = 0.1759, #Probabilidad de que esa hemorragia post parto sea severa.
-                pHisterectomia = 0.03, #Probabilidad de tener una histerectomia ante una HPP severa.
-                eficaciaOxitocina = 0.51, #reducción de la probabilidad de HPP ante oxitocina.
-                uHisterectomia = 0.985, #Utilidad de una histerectomia.
-                descuento = 0.05, #Tasa de descuento (INPUT)
+                usoOxitocina, 
+                eficacia_Intervencion,
+                pHPP, #Probabilidad de tener una hemorragia post parto.
+                pHPP_Severa, #Probabilidad de que esa hemorragia post parto sea severa.
+                pHisterectomia, #Probabilidad de tener una histerectomia ante una HPP severa.
+                eficaciaOxitocina, #reducción de la probabilidad de HPP ante oxitocina.
+                uHisterectomia, #Utilidad de una histerectomia.
+                descuento, #Tasa de descuento (INPUT)
                 costoIntervencion = 0 #Costo de la intervención  (INPUT)
 ) {
-  browser()
   # Carga información de países
   # load("hpp/data/datosPais.RData")
   # write.xlsx(datosPais,file="hpp/data/datosPais.xlsx")
@@ -50,7 +53,7 @@ hpp = function (pais,
   #Calculamos la cantidad de años descontados desde la edad al parto y la expectativa de vida.
   expectativaAlParto = datosPais$value[datosPais$indicador == "EXPECTATIVA.DE.VIDA.A.LA.EDAD.DE.PARTO"]  
   edadAlParto = datosPais$value[datosPais$indicador == "EDAD.AL.PARTO"]
-  añosDescontados = VA(descuento, (expectativaAlParto - edadAlParto))*-1
+  añosDescontados = descontarValor(descuento, (expectativaAlParto - edadAlParto))*-1
   
   #Calculamos el valor descontado de qalys perdidos por una histerectomia
   Dalys_Histerectomia = (1 - uHisterectomia) * añosDescontados
@@ -71,7 +74,7 @@ hpp = function (pais,
       siHPP = poblacion * pHPP
     )
   }
-
+  
   
   
   # función almacena datos de corrida
@@ -90,11 +93,10 @@ hpp = function (pais,
     )
   }
   
-  
   if (usoOxitocina == datosPais$value[datosPais$indicador=="USO.DE.OXITOCINA"]) {
     runRama = rama(usoOxitocina,numeroPartos,pHPP,eficaciaOxitocina)
   } else {
-    runRama = rama(usoOxitocina * datosPais$value[datosPais$indicador=="pINSTITUCIONALES"],datosPais$value[datosPais$indicador=="PARTOS.ANUALES"], pHPP, eficaciaOxitocina)
+    runRama = rama(usoOxitocina * datosPais$value[datosPais$indicador=="pINSTITUCIONALES"],numeroPartos, pHPP, eficaciaOxitocina)
   }
   
   # setea parámetros escenario
@@ -125,7 +127,7 @@ hpp = function (pais,
   }
   
   runSetearQalyLost = setearQalyLost(Dalys_Total)    
-
+  
   # Calcula indicadores para resultados
   getCosto = function() {
     (runRama$recibeOxitocina$siHPP * runSetearCostos$costoHPP + runRama$noRecibeOxitocina$siHPP * runSetearCostos$costoHPP) + (runSetearCostos$costoOxitocina * runRama$poblacion * runRama$usoOxitocina) + runSetearCostoIntervencion[[1]]
@@ -177,30 +179,30 @@ resultados_comparados = function(pais,
   
   base = hpp(
     pais,
-    uso_oxitocina_base,
-    eficacia_Intervencion = 0.30234,
-    pHPP = 0.12, #Probabilidad de tener una hemorragia post parto.
-    pHPP_Severa = 0.18, #Probabilidad de que esa hemorragia post parto sea severa.
+    usoOxitocina = uso_oxitocina_base, 
+    eficacia_Intervencion = 0.30230,
+    pHPP = 0.108, #Probabilidad de tener una hemorragia post parto.
+    pHPP_Severa = 0.1759, #Probabilidad de que esa hemorragia post parto sea severa.
     pHisterectomia = 0.03, #Probabilidad de tener una histerectomia ante una HPP severa.
-    eficaciaOxitocina = 0.5, #reducción de la probabilidad de HPP ante oxitocina.
+    eficaciaOxitocina = 0.51, #reducción de la probabilidad de HPP ante oxitocina.
     uHisterectomia = 0.985, #Utilidad de una histerectomia.
     descuento = descuento, #Tasa de descuento (INPUT)
-    costoIntervencion = 0 #Costo de la intervención  (INPUT)
+    costoIntervencion = costoIntervencion #Costo de la intervención  (INPUT)
   )
-    
+  
   target = hpp(
     pais,
-    uso_oxitocina_target,
-    eficacia_Intervencion = 0.30234,
-    pHPP = 0.12, #Probabilidad de tener una hemorragia post parto.
-    pHPP_Severa = 0.18, #Probabilidad de que esa hemorragia post parto sea severa.
+    usoOxitocina = uso_oxitocina_target, 
+    eficacia_Intervencion = 0.30230,
+    pHPP = 0.108, #Probabilidad de tener una hemorragia post parto.
+    pHPP_Severa = 0.1759, #Probabilidad de que esa hemorragia post parto sea severa.
     pHisterectomia = 0.03, #Probabilidad de tener una histerectomia ante una HPP severa.
-    eficaciaOxitocina = 0.5, #reducción de la probabilidad de HPP ante oxitocina.
+    eficaciaOxitocina = 0.51, #reducción de la probabilidad de HPP ante oxitocina.
     uHisterectomia = 0.985, #Utilidad de una histerectomia.
     descuento = descuento, #Tasa de descuento (INPUT)
-    costoIntervencion = costoIntervencion #Costo de la intervención  (INPUT),
+    costoIntervencion = costoIntervencion #Costo de la intervención  (INPUT)
   )
-
+  
   comparacion = list(
     "Diferencia de costo" = target$getCosto - base$getCosto,
     "Diferencia de Qualys" = target$QalyLost - base$QalyLost,
@@ -258,18 +260,18 @@ resultados_comparados = function(pais,
   list(base=base,
        target=target,
        comparacion=comparacion)
-    
+  
 }
 
-# 
-# a=resultados_comparados(
-#   pais = "Argentina",
-#   uso_oxitocina_base = 0.71818,
-#   uso_oxitocina_target = 0.80339,
-#   descuento = 0,
-#   costoIntervencion = 7.8
-# )$base$getCosto
-# 
+
+a=resultados_comparados(
+  pais = "Argentina",
+  uso_oxitocina_base = 0.711,
+  uso_oxitocina_target = 0.80087,
+  descuento = 0.05,
+  costoIntervencion = 0
+)$comparacion
+
 # b=resultados_comparados(
 #   pais = "Argentina",
 #   uso_oxitocina_base = 0.71818,
