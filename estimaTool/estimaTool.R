@@ -62,19 +62,19 @@ epi_model <- function(run, x1, x2, country) {
 }
 
 estimaToolCosts = function(
-  country = input$country,
-  Population,
-  `BASELINE_Prevalencia de hipertensión entre adultos de 30-79 años, estandarizada por edad`,
-  `TARGET_Prevalencia de hipertensión entre adultos de 30-79 años, estandarizada por edad`,
-  `BASELINE_Prevalencia de diagnóstico previo de hipertensión entre adultos de 30-79 años con hipertensión, estandarizada por edad`,
-  `TARGET_Prevalencia de diagnóstico previo de hipertensión entre adultos de 30-79 años con hipertensión, estandarizada por edad`,
-  `BASELINE_Tratamiento entre los diagnosticados (%)`,
-  `TARGET_Tratamiento entre los diagnosticados (%)`,
-  `BASELINE_Control de la hipertensión entre los tratados (%)`,
-  `TARGET_Control de la hipertensión entre los tratados (%)`,
-  `Costo farmacológico anual por paciente promedio (**)`,
-  `Evento de enfermedad cardiaca isquemica promedio  (***)`,
-  `Costo anual de consulta médica en paciente promedio (*)`
+    country = input$country,
+    Population,
+    `BASELINE_Prevalencia de hipertensión entre adultos de 30-79 años, estandarizada por edad`,
+    `TARGET_Prevalencia de hipertensión entre adultos de 30-79 años, estandarizada por edad`,
+    `BASELINE_Prevalencia de diagnóstico previo de hipertensión entre adultos de 30-79 años con hipertensión, estandarizada por edad`,
+    `TARGET_Prevalencia de diagnóstico previo de hipertensión entre adultos de 30-79 años con hipertensión, estandarizada por edad`,
+    `BASELINE_Tratamiento entre los diagnosticados (%)`,
+    `TARGET_Tratamiento entre los diagnosticados (%)`,
+    `BASELINE_Control de la hipertensión entre los tratados (%)`,
+    `TARGET_Control de la hipertensión entre los tratados (%)`,
+    `Costo farmacológico anual por paciente promedio (**)`,
+    `Evento de enfermedad cardiaca isquemica promedio  (***)`,
+    `Costo anual de consulta médica en paciente promedio (*)`
 ) {
   country = str_to_title(country)
   
@@ -298,7 +298,7 @@ estimaToolCosts = function(
   #   `Razón de costo-efectividad incremental por Año de Vida Ajustado por Discapacidad evitado` = ((run[[country]]$baseline$`Nueva población (N) tratada / Controlados actualmente previamente no controlados` * `Costo anual de consulta médica en paciente promedio (*)` + run[[country]]$baseline$`Nueva población (N) tratada / Controlados actualmente previamente no controlados` * `Costo farmacológico anual por paciente promedio (**)`)-(run[[country]]$baseline$`Eventos Coronarios evitados` * round(`Evento de enfermedad cardiaca isquemica promedio  (***)`,3) + round(`Evento de accidente cerebrovascular`,3) * run[[country]]$baseline$`Accidente Cerebrovascular evitados`)) / (as.numeric(epi_outcomes$value[epi_outcomes$outcome == "Años de vida ajustados por discapacidad evitados"])),
   #   `Retorno de inversión` = ((run[[country]]$baseline$`Eventos Coronarios evitados` * round(`Evento de enfermedad cardiaca isquemica promedio  (***)`,3) + round(`Evento de accidente cerebrovascular`,3) * run[[country]]$baseline$`Accidente Cerebrovascular evitados`) - (run[[country]]$baseline$`Nueva población (N) tratada / Controlados actualmente previamente no controlados` * `Costo anual de consulta médica en paciente promedio (*)` + run[[country]]$baseline$`Nueva población (N) tratada / Controlados actualmente previamente no controlados` * `Costo farmacológico anual por paciente promedio (**)`))/(run[[country]]$baseline$`Nueva población (N) tratada / Controlados actualmente previamente no controlados` * `Costo anual de consulta médica en paciente promedio (*)` + run[[country]]$baseline$`Nueva población (N) tratada / Controlados actualmente previamente no controlados` * `Costo farmacológico anual por paciente promedio (**)`)*100
   # )
-
+  
   costs_outcomes = list()
   costs_outcomes$`Costo anual de la intervención por paciente promedio  hipertenso tratado` = `Costo anual de consulta médica en paciente promedio (*)` + `Costo farmacológico anual por paciente promedio (**)`
   costs_outcomes$`Costos totales anuales de la intervención` = run[[country]]$baseline$`Nueva población (N) tratada / Controlados actualmente previamente no controlados` * `Costo anual de consulta médica en paciente promedio (*)` + run[[country]]$baseline$`Nueva población (N) tratada / Controlados actualmente previamente no controlados` * `Costo farmacológico anual por paciente promedio (**)`
@@ -312,7 +312,7 @@ estimaToolCosts = function(
   costs_outcomes$`Razón de costo-efectividad incremental por año de vida salvado` = costs_outcomes$`Diferencia de costos` / sum(dalys_by_age$yll)
   costs_outcomes$`Razon de costo-efectividad incremental por año de vida salvado descontado` = costs_outcomes$`Diferencia de costos` / sum(dalys_by_age_disc$disc) 
   costs_outcomes$`Retorno de inversión (%)` = 100*(costs_outcomes$`Costos médicos directos evitados por evento cardiovasculares (ECI y ACV)`- costs_outcomes$`Costos totales anuales de la intervención`) / costs_outcomes$`Costos totales anuales de la intervención`
-
+  
   resumen_resultados = 
     data.frame(
       indicador = c(

@@ -5,13 +5,10 @@ descontarValor <- function(tasa_descuento_anual,num_periodos) {
   
 }
 
-
-
-
-
-
 hpp = function (pais, 
                 usoOxitocina, 
+                partos_anuales,
+                edad_al_parto,
                 eficacia_Intervencion,
                 pHPP, #Probabilidad de tener una hemorragia post parto.
                 pHPP_Severa, #Probabilidad de que esa hemorragia post parto sea severa.
@@ -21,6 +18,9 @@ hpp = function (pais,
                 descuento, #Tasa de descuento (INPUT)
                 costoIntervencion = 0 #Costo de la intervención  (INPUT)
 ) {
+  
+  browser()
+  
   # Carga información de países
   # load("hpp/data/datosPais.RData")
   # write.xlsx(datosPais,file="hpp/data/datosPais.xlsx")
@@ -40,7 +40,7 @@ hpp = function (pais,
   
   pHPPCountry = (datosPais$value[datosPais$indicador=="USO.DE.OXITOCINA"] * eficaciaOxitocina * pHPP) + ((1 - datosPais$value[datosPais$indicador=="USO.DE.OXITOCINA"]) * pHPP)
   #Estimamos el numero de HPP para el pais
-  numeroPartos = datosPais$value[datosPais$indicador == "PARTOS.ANUALES"] 
+  numeroPartos = partos_anuales 
   nHPPCountry = pHPPCountry * numeroPartos 
   
   #Calculamos el Case Fatality Ratio.
@@ -52,7 +52,7 @@ hpp = function (pais,
   
   #Calculamos la cantidad de años descontados desde la edad al parto y la expectativa de vida.
   expectativaAlParto = datosPais$value[datosPais$indicador == "EXPECTATIVA.DE.VIDA.A.LA.EDAD.DE.PARTO"]  
-  edadAlParto = datosPais$value[datosPais$indicador == "EDAD.AL.PARTO"]
+  edadAlParto = edad_al_parto
   añosDescontados = descontarValor(descuento, (expectativaAlParto - edadAlParto))*-1
   
   
@@ -252,40 +252,10 @@ resultados_comparados = function(pais,
 }
 
 
-resultados_comparados(
-  pais = "Argentina",
-  uso_oxitocina_base = 0.711,
-  uso_oxitocina_target = 0.80087,
-  descuento = 0.05,
-  costoIntervencion = 0
-)
-
-# b=resultados_comparados(
+# resultados_comparados(
 #   pais = "Argentina",
-#   uso_oxitocina_base = 0.71818,
-#   uso_oxitocina_target = 0.80339,
-#   descuento = 0,
-#   costoIntervencion = 7.8
-# )$target$getCosto
-# 
-# 
-# 
-# 
-# 
-# a2=resultados_comparados(
-#   pais = "Argentina",
-#   uso_oxitocina_base = 0.71818,
-#   uso_oxitocina_target = 0.80339,
-#   descuento = 0,
-#   costoIntervencion = 7.8
-# )$base$getCosto
-# 
-# b2=resultados_comparados(
-#   pais = "Argentina",
-#   uso_oxitocina_base = 0.71818,
-#   uso_oxitocina_target = 0.80339,
-#   descuento = 0,
-#   costoIntervencion = 7.8
-# )$target$getCosto
-# 
-# 
+#   uso_oxitocina_base = 0.711,
+#   uso_oxitocina_target = 0.80087,
+#   descuento = 0.05,
+#   costoIntervencion = 0
+# )

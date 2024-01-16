@@ -199,20 +199,20 @@ server <- function(input, output, session) {
     if (nrow(summary_scenarios$table)!=0) {hide("no_esc")}
     if (input$NVP == "<div class = \"text-white\")>Escenarios guardados</div>") {
       if (nrow(summary_scenarios$table)>0) {
-        show("row_comparacion", anim = T, animType = "fade")
-        show("panel_comparacion", anim = T, animType = "fade")
-        hide("columna_resultados_borde", anim = T, animType = "fade")
-        hide("inputs_summary_table", anim = T, animType = "fade")
+        shinyjs::show("row_comparacion", anim = T, animType = "fade")
+        shinyjs::show("panel_comparacion", anim = T, animType = "fade")
+        shinyjs::hide("columna_resultados_borde", anim = T, animType = "fade")
+        shinyjs::hide("inputs_summary_table", anim = T, animType = "fade")
         shinyjs::click("restart")
         
         #show("columna_resultados_borde")
       }
-      delay(500,show("filtro_intervencion", anim = T, animType = "fade"))
-      delay(500,show("select_escenarios_guardados", anim = T, animType = "fade"))
+      delay(500,shinyjs::show("filtro_intervencion", anim = T, animType = "fade"))
+      delay(500,shinyjs::show("select_escenarios_guardados", anim = T, animType = "fade"))
       #delay(500,show("escenarios_guardados", anim = T, animType = "fade"))
       
       
-      delay(500,show("header_comparacion", anim = T, animType = "fade"))
+      delay(500,shinyjs::show("header_comparacion", anim = T, animType = "fade"))
     } 
   })
   
@@ -221,9 +221,9 @@ server <- function(input, output, session) {
   
   # muestra div para guardar escenario
   observeEvent(input$saveScenario, {
-    show("guardar_hpv", anim = T, animType = "slide")
-    show("scenarioName", anim = T, animType = "slide")
-    show("saveScenario2", anim = T, animType = "slide")
+    shinyjs::show("guardar_hpv", anim = T, animType = "slide")
+    shinyjs::show("scenarioName", anim = T, animType = "slide")
+    shinyjs::show("saveScenario2", anim = T, animType = "slide")
     #hide("saveScenario", anim = T, animType = "slide")
   })
   
@@ -306,7 +306,7 @@ server <- function(input, output, session) {
           scnName = input$scenarioName
           scenarios$savedScenarios[[scnName]] <- resultados()
           summaryScenarios = data.frame(outcomes=scenarios$savedScenarios[[1]]$outcomes[[1]])
-          show("ver_escenarios_guardados")
+          shinyjs::show("ver_escenarios_guardados")
           
           for (i in names(scenarios$savedScenarios)){
             summaryScenarios = cbind(summaryScenarios,data.frame(scenarios$savedScenarios[[i]]$outcomes[,"undisc"]))
@@ -334,10 +334,10 @@ server <- function(input, output, session) {
           )
           
           # oculta div guardar escenario una vez guardado
-          hide("guardar_hpv", anim = T, animType = "slide")
-          hide("scenarioName", anim = T, animType = "slide")
-          hide("saveScenario2", anim = T, animType = "slide")
-          show("saveScenario", anim = T, animType = "fade")
+          shinyjs::hide("guardar_hpv", anim = T, animType = "slide")
+          shinyjs::hide("scenarioName", anim = T, animType = "slide")
+          shinyjs::hide("saveScenario2", anim = T, animType = "slide")
+          shinyjs::show("saveScenario", anim = T, animType = "fade")
           updateTextAreaInput(session,"scenarioName",value="")  
           
         } else {
@@ -347,10 +347,10 @@ server <- function(input, output, session) {
             text = "Debe definir un nombre para guardar el escenario.",
             type = "error"
           )
-          hide("guardar_hpv", anim = T, animType = "slide")
-          hide("scenarioName", anim = T, animType = "slide")
-          hide("saveScenario2", anim = T, animType = "slide")
-          show("saveScenario", anim = T, animType = "slide")
+          shinyjs::hide("guardar_hpv", anim = T, animType = "slide")
+          shinyjs::hide("scenarioName", anim = T, animType = "slide")
+          shinyjs::hide("saveScenario2", anim = T, animType = "slide")
+          shinyjs::show("saveScenario", anim = T, animType = "slide")
         }
         
       } else if (input$intervencion == "HEARTS") {
@@ -382,12 +382,12 @@ server <- function(input, output, session) {
           )
           
           # oculta div guardar escenario una vez guardado
-          hide("guardar_hpv", anim = T, animType = "slide")
-          hide("scenarioName", anim = T, animType = "slide")
-          hide("saveScenario2", anim = T, animType = "slide")
-          show("saveScenario", anim = T, animType = "fade")
+          shinyjs::hide("guardar_hpv", anim = T, animType = "slide")
+          shinyjs::hide("scenarioName", anim = T, animType = "slide")
+          shinyjs::hide("saveScenario2", anim = T, animType = "slide")
+          shinyjs::show("saveScenario", anim = T, animType = "fade")
           updateTextAreaInput(session,"scenarioName",value="")
-          show("ver_escenarios_guardados", anim = T, animType = "fade")
+          shinyjs::show("ver_escenarios_guardados", anim = T, animType = "fade")
           
         } else {
           sendSweetAlert(
@@ -397,10 +397,10 @@ server <- function(input, output, session) {
             type = "error"
           )
           
-          hide("guardar_hpv", anim = T, animType = "slide")
-          hide("scenarioName", anim = T, animType = "slide")
-          hide("saveScenario2", anim = T, animType = "slide")
-          show("saveScenario", anim = T, animType = "slide")
+          shinyjs::hide("guardar_hpv", anim = T, animType = "slide")
+          shinyjs::hide("scenarioName", anim = T, animType = "slide")
+          shinyjs::hide("saveScenario2", anim = T, animType = "slide")
+          shinyjs::show("saveScenario", anim = T, animType = "slide")
           
         }
         
@@ -420,12 +420,12 @@ server <- function(input, output, session) {
             type = "success"
           )
           # oculta div guardar escenario una vez guardado
-          hide("guardar_hpv", anim = T, animType = "slide")
-          hide("scenarioName", anim = T, animType = "slide")
-          hide("saveScenario2", anim = T, animType = "slide")
-          show("saveScenario", anim = T, animType = "fade")
+          shinyjs::hide("guardar_hpv", anim = T, animType = "slide")
+          shinyjs::hide("scenarioName", anim = T, animType = "slide")
+          shinyjs::hide("saveScenario2", anim = T, animType = "slide")
+          shinyjs::show("saveScenario", anim = T, animType = "fade")
           updateTextAreaInput(session,"scenarioName",value="")
-          show("ver_escenarios_guardados", anim = T, animType = "fade")
+          shinyjs::show("ver_escenarios_guardados", anim = T, animType = "fade")
         } else {
           sendSweetAlert(
             session = session,
@@ -433,10 +433,10 @@ server <- function(input, output, session) {
             text = "Debe definir un nombre para guardar el escenario.",
             type = "error"
           )
-          hide("guardar_hpv", anim = T, animType = "slide")
-          hide("scenarioName", anim = T, animType = "slide")
-          hide("saveScenario2", anim = T, animType = "slide")
-          show("saveScenario", anim = T, animType = "slide")
+          shinyjs::hide("guardar_hpv", anim = T, animType = "slide")
+          shinyjs::hide("scenarioName", anim = T, animType = "slide")
+          shinyjs::hide("saveScenario2", anim = T, animType = "slide")
+          shinyjs::show("saveScenario", anim = T, animType = "slide")
         }
       } else if (input$intervencion == "Hepatitis C") {
         if (input$scenarioName !="") {
@@ -455,12 +455,12 @@ server <- function(input, output, session) {
             type = "success"
           )
           
-          hide("guardar_hpv", anim = T, animType = "slide")
-          hide("scenarioName", anim = T, animType = "slide")
-          hide("saveScenario2", anim = T, animType = "slide")
-          show("saveScenario", anim = T, animType = "fade")
+          shinyjs::hide("guardar_hpv", anim = T, animType = "slide")
+          shinyjs::hide("scenarioName", anim = T, animType = "slide")
+          shinyjs::hide("saveScenario2", anim = T, animType = "slide")
+          shinyjs::show("saveScenario", anim = T, animType = "fade")
           updateTextAreaInput(session,"scenarioName",value="")
-          show("ver_escenarios_guardados", anim = T, animType = "fade")
+          shinyjs::show("ver_escenarios_guardados", anim = T, animType = "fade")
         } else {
           sendSweetAlert(
             session = session,
@@ -468,10 +468,10 @@ server <- function(input, output, session) {
             text = "Debe definir un nombre para guardar el escenario.",
             type = "error"
           )
-          hide("guardar_hpv", anim = T, animType = "slide")
-          hide("scenarioName", anim = T, animType = "slide")
-          hide("saveScenario2", anim = T, animType = "slide")
-          show("saveScenario", anim = T, animType = "slide")
+          shinyjs::hide("guardar_hpv", anim = T, animType = "slide")
+          shinyjs::hide("scenarioName", anim = T, animType = "slide")
+          shinyjs::hide("saveScenario2", anim = T, animType = "slide")
+          shinyjs::show("saveScenario", anim = T, animType = "slide")
         }
         
         
@@ -493,12 +493,12 @@ server <- function(input, output, session) {
             type = "success"
           )
           
-          hide("guardar_hpv", anim = T, animType = "slide")
-          hide("scenarioName", anim = T, animType = "slide")
-          hide("saveScenario2", anim = T, animType = "slide")
-          show("saveScenario", anim = T, animType = "fade")
+          shinyjs::hide("guardar_hpv", anim = T, animType = "slide")
+          shinyjs::hide("scenarioName", anim = T, animType = "slide")
+          shinyjs::hide("saveScenario2", anim = T, animType = "slide")
+          shinyjs::show("saveScenario", anim = T, animType = "fade")
           updateTextAreaInput(session,"scenarioName",value="")
-          show("ver_escenarios_guardados", anim = T, animType = "fade")
+          shinyjs::show("ver_escenarios_guardados", anim = T, animType = "fade")
         } else {
           sendSweetAlert(
             session = session,
@@ -506,10 +506,10 @@ server <- function(input, output, session) {
             text = "Debe definir un nombre para guardar el escenario.",
             type = "error"
           )
-          hide("guardar_hpv", anim = T, animType = "slide")
-          hide("scenarioName", anim = T, animType = "slide")
-          hide("saveScenario2", anim = T, animType = "slide")
-          show("saveScenario", anim = T, animType = "slide")
+          shinyjs::hide("guardar_hpv", anim = T, animType = "slide")
+          shinyjs::hide("scenarioName", anim = T, animType = "slide")
+          shinyjs::hide("saveScenario2", anim = T, animType = "slide")
+          shinyjs::show("saveScenario", anim = T, animType = "slide")
         }
         
         
@@ -531,12 +531,12 @@ server <- function(input, output, session) {
             type = "success"
           )
           
-          hide("guardar_hpv", anim = T, animType = "slide")
-          hide("scenarioName", anim = T, animType = "slide")
-          hide("saveScenario2", anim = T, animType = "slide")
-          show("saveScenario", anim = T, animType = "fade")
+          shinyjs::hide("guardar_hpv", anim = T, animType = "slide")
+          shinyjs::hide("scenarioName", anim = T, animType = "slide")
+          shinyjs::hide("saveScenario2", anim = T, animType = "slide")
+          shinyjs::show("saveScenario", anim = T, animType = "fade")
           updateTextAreaInput(session,"scenarioName",value="")
-          show("ver_escenarios_guardados", anim = T, animType = "fade")
+          shinyjs::show("ver_escenarios_guardados", anim = T, animType = "fade")
         } else {
           sendSweetAlert(
             session = session,
@@ -544,10 +544,10 @@ server <- function(input, output, session) {
             text = "Debe definir un nombre para guardar el escenario.",
             type = "error"
           )
-          hide("guardar_hpv", anim = T, animType = "slide")
-          hide("scenarioName", anim = T, animType = "slide")
-          hide("saveScenario2", anim = T, animType = "slide")
-          show("saveScenario", anim = T, animType = "slide")
+          shinyjs::hide("guardar_hpv", anim = T, animType = "slide")
+          shinyjs::hide("scenarioName", anim = T, animType = "slide")
+          shinyjs::hide("saveScenario2", anim = T, animType = "slide")
+          shinyjs::show("saveScenario", anim = T, animType = "slide")
         }
       }
       
@@ -714,8 +714,8 @@ server <- function(input, output, session) {
   
   observeEvent(input$saveScenario, {
     
-    show("scenarioName")
-    show("saveScenario")
+    shinyjs::show("scenarioName")
+    shinyjs::show("saveScenario")
     
   })
   
@@ -746,40 +746,26 @@ server <- function(input, output, session) {
   
   hpp_run = reactive({
     
-    if (length(input$hpp_costoIntervencion)>0) {
-      resultados = resultados_comparados(str_to_title(input$country),
-                                         input$hpp_uso_oxitocina_base/100,
-                                         input$hpp_uso_oxitocina_taget/100,
-                                         input$hpp_descuento/100,
-                                         input$hpp_costoIntervencion)
-      data.frame(
-        Indicador = c("Costo promedio de un evento de Hemorragia Post Parto",
-                      "Perdida de Qaly por un evento de Hemorragia Post Parto",
-                      "Diferencia de costos respecto al escenario basal (USD)",
-                      "Hemorragias posparto evitadas (n)",
-                      "Muertes evitadas (n)",
-                      "Histerectomias por Hemorragias Post Parto Evitadas",
-                      "Años de vida salvados",
-                      "Años de vida ajustados por discapacidad evitados",
-                      "Costos de intervención (USD)",
-                      "Retorno de Inversión (%)",
-                      "Costo cada mil",
-                      "Qalys cada mil"),
-        
-        Valor = c(resultados$base$"Costo_HPP",
-                  resultados$base$"Dalys_Total",
-                  resultados[["comparacion"]][["Diferencia de costo"]],
-                  resultados[["comparacion"]][["Hemorragias Post Parto Evitadas"]],
-                  resultados[["comparacion"]][["Muertes por Hemorragias Post Parto Evitadas"]],
-                  resultados[["comparacion"]][["Histerectomias por Hemorragias Post Parto Evitadas"]],
-                  resultados[["comparacion"]][["Años de vida por muerte prematura salvados"]],
-                  resultados[["comparacion"]][["Años de vida por discapacidad salvados"]],
-                  resultados[["comparacion"]][["Inversion"]],
-                  resultados[["comparacion"]][["ROI"]],
-                  resultados[["comparacion"]][["Costo cada mil"]],
-                  resultados[["comparacion"]][["Qalys cada mil"]]
-                  
-                  )
+    if (length(input$hpp_uso_oxitocina_base)>0) {
+      
+      resultados = resultados_comparados(
+        pais = str_to_title(input$country),
+        usoOxitocina_base = input$hpp_uso_oxitocina_base/100,
+        usoOxitocina_target = input$hpp_uso_oxitocina_taget/100,
+        partos_anuales = input$hpp_partos_anuales,
+        edad_al_parto = input$hpp_edad_parto,
+        partos_institucionales = input$hpp_partos_institucionales/100,
+        eficacia_Intervencion = 0.30230,
+        mortalidad_materna = input$hpp_mortalidad_materna,
+        mortalidad_hpp = input$hpp_mortalidad_hpp/100,
+        pHPP = input$hpp_pHPP/100,
+        pHPP_Severa = input$hpp_pHPP_Severa/100,
+        pHisterectomia = input$hpp_pHisterectomia/100,
+        eficaciaOxitocina = input$hpp_eficaciaOxitocina/100,  
+        uHisterectomia = input$hpp_uHisterectomia,
+        costo_oxitocina = input$hpp_costo_oxitocina,
+        descuento = input$hpp_tasa_descuento/100, #Tasa de descuento (INPUT)
+        costoIntervencion = input$hpp_costo_programatico #Costo de la intervención  (INPUT)
       )
     }
     
@@ -787,13 +773,15 @@ server <- function(input, output, session) {
   
   
   observeEvent(input$toggle_avanzado_hpp, {
-    inputs_hide = c("hpp_descuento","hpp_costoIntervencion")
+    browser()
+    load("hpp_map_inputs.RData")
+    inputs_hide = hpp_map_inputs$i_names[hpp_map_inputs$avanzado==T]
     
     
     for (i in inputs_hide) {
       isVisible <- shinyjs::toggleState(id = i)
-      toggle(id = i, anim = TRUE, animType = "slide", condition = isVisible)
-      enable(i)
+      shinyjs::toggle(id = i, anim = TRUE, animType = "slide", condition = isVisible)
+      shinyjs::enable(i)
     }
   })
   

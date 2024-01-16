@@ -99,28 +99,28 @@ server_hpv = function (input, output, session, parameterReactive, scenarios, res
     enable("go_country")
     enable("comparacion_intervencion")
     enable("go_intervencion")
-    hide("comparacion_intervencion", anim = T, animType = "fade")
-    hide("go_intervencion", anim = T, animType = "fade")
-    hide("comparacion_escenario", anim = T, animType = "fade")
-    hide("go_comp", anim = T, animType = "fade")
-    hide("descargar_comp", anim = T, animType = "fade")
-    hide("escenarios_guardados", anim = T, animType = "fade")
-    hide("tabla_inputs", anim = T, animType = "fade")
-    hide("tabla_inputs_multiple", anim = T, animType = "fade")
-    hide("header_comparacion_resultados", anim = T, animType = "fade")
-    hide("header_tabla_inputs", anim = T, animType = "fade")
-    hide("header_tabla_inputs_multiple", anim = T, animType = "fade")
-    hide(500,show("inputs_summary_table", anim = T, animType = "fade"))
+    shinyjs::hide("comparacion_intervencion", anim = T, animType = "fade")
+    shinyjs::hide("go_intervencion", anim = T, animType = "fade")
+    shinyjs::hide("comparacion_escenario", anim = T, animType = "fade")
+    shinyjs::hide("go_comp", anim = T, animType = "fade")
+    shinyjs::hide("descargar_comp", anim = T, animType = "fade")
+    shinyjs::hide("escenarios_guardados", anim = T, animType = "fade")
+    shinyjs::hide("tabla_inputs", anim = T, animType = "fade")
+    shinyjs::hide("tabla_inputs_multiple", anim = T, animType = "fade")
+    shinyjs::hide("header_comparacion_resultados", anim = T, animType = "fade")
+    shinyjs::hide("header_tabla_inputs", anim = T, animType = "fade")
+    shinyjs::hide("header_tabla_inputs_multiple", anim = T, animType = "fade")
+    shinyjs::hide(500,shinyjs::show("inputs_summary_table", anim = T, animType = "fade"))
   })
   
   observeEvent(input$go_country,{
     if (length(input$comparacion_country)==0) {
       shinyalert("Advertencia", "Debe seleccionar al menos un país", type = "error")
     } else {
-      show("comparacion_intervencion")
-      show("go_intervencion")
-      disable("comparacion_country")
-      disable("go_country")
+      shinyjs::show("comparacion_intervencion")
+      shinyjs::show("go_intervencion")
+      shinyjs::disable("comparacion_country")
+      shinyjs::disable("go_country")
     }
     
   })
@@ -129,10 +129,10 @@ server_hpv = function (input, output, session, parameterReactive, scenarios, res
     if (length(input$comparacion_intervencion)==0) {
       shinyalert("Advertencia", "Debe seleccionar al menos una intervención", type = "error")
     } else {
-      show("comparacion_escenario")
-      show("go_comp")
-      disable("comparacion_intervencion")
-      disable("go_intervencion")
+      shinyjs::show("comparacion_escenario")
+      shinyjs::show("go_comp")
+      shinyjs::disable("comparacion_intervencion")
+      shinyjs::disable("go_intervencion")
       
     }
     
@@ -174,26 +174,26 @@ server_hpv = function (input, output, session, parameterReactive, scenarios, res
   
   
   observeEvent(input$go_comp, {
-    show(500,show("inputs_summary_table", anim = T, animType = "fade"))
-    show("escenarios_guardados")
-    show("tabla_inputs")
-    show("tabla_inputs_multiple")
-    show("restart")
-    show("header_tabla_inputs")
-    show("header_tabla_inputs_multiple")
-    hide("go_comp")
-    hide("comparacion_escenario")
+    shinyjs::show(500,shinyjs::show("inputs_summary_table", anim = T, animType = "fade"))
+    shinyjs::show("escenarios_guardados")
+    shinyjs::show("tabla_inputs")
+    shinyjs::show("tabla_inputs_multiple")
+    shinyjs::show("restart")
+    shinyjs::show("header_tabla_inputs")
+    shinyjs::show("header_tabla_inputs_multiple")
+    shinyjs::hide("go_comp")
+    shinyjs::hide("comparacion_escenario")
     
     
     if (length(input$comparacion_escenario)==0) {
       shinyalert("Advertencia", "Debe seleccionar al menos una intervención", type = "error")
-      hide("header_comparacion_resultados")
-      hide("columna_resultados_borde")
+      shinyjs::hide("header_comparacion_resultados")
+      shinyjs::hide("columna_resultados_borde")
     } else {
-      show("header_comparacion_resultados")
-      show("columna_resultados_borde")
-      disable("go_intervencion")
-      show("descarga_comp")
+      shinyjs::show("header_comparacion_resultados")
+      shinyjs::show("columna_resultados_borde")
+      shinyjs::disable("go_intervencion")
+      shinyjs::show("descarga_comp")
       
       
       
@@ -389,29 +389,33 @@ server_hpv = function (input, output, session, parameterReactive, scenarios, res
               output$hpp_table_saved = renderReactable({
                 if (length(sel_escenario)>0) {
                   enable("hpp_savedScenarios")
-                  table = data.frame(Indicador=hpp_run()$Indicador)
+                  table=hpp_run()
+                  table = table %>% dplyr::select(indicador)
                   
                   for (i in sel_escenario) {
                     scn_name = i
-                    table[[i]] = hpp_scenarios$savedScenarios[[i]]$Valor
+                    table[[i]] = hpp_scenarios$savedScenarios[[i]]$valor
                   }
                   
-                  cat_epi = c(2,4:8)
-                  cat_costos = c(1,3)
+                  cat_epi = 1:4
+                  cat_costos = 4:nrow(table)
+                  
                   table$cat=""
                   table$cat[cat_epi] = "Resultados epidemiológicos"
                   table$cat[cat_costos] = "Resultados económicos"
-                  table[[i]][table$cat=="Resultados económicos"] = paste0("$",table[[2]][table$cat=="Resultados económicos"])
                   
                   columns = list(
                     cat = colDef(name = "Categoría", align = "left"),
-                    Indicador = colDef(name = "Indicador", align = "left")
+                    indicador = colDef(name = "Indicador", align = "left")
                   )
                   
                   for (i in setdiff(1:ncol(table),c(1,ncol(table)))) {
-                    table[i] = format(table[i], bigmark=",", decimalmark=".") 
+                    table[i] = format(round(table[i],1), bigmark=",", decimalmark=".") 
                     columns[[colnames(table)[i]]] = colDef(name = colnames(table)[i], align = "right")
                   }
+                  
+                  rownames(table)=c(1:nrow(table))
+                  
                   reactable(
                     table,
                     groupBy = "cat",

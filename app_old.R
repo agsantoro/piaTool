@@ -1102,37 +1102,37 @@ server <- function(input, output, session) {
     )
   })
   
-  hide("scenarioName")
-  hide("saveScenario2")
-  hide("hearts_scenarioName")
-  hide("hearts_saveScenario2")
-  hide("hpp_scenarioName")
-  hide("hpp_saveScenario2")
-  hide("hepC_scenarioName")
-  hide("hepC_saveScenario2")
+  shinyjs::hide("scenarioName")
+  shinyjs::hide("saveScenario2")
+  shinyjs::hide("hearts_scenarioName")
+  shinyjs::hide("hearts_saveScenario2")
+  shinyjs::hide("hpp_scenarioName")
+  shinyjs::hide("hpp_saveScenario2")
+  shinyjs::hide("hepC_scenarioName")
+  shinyjs::hide("hepC_saveScenario2")
   
   observeEvent(input$saveScenario, {
-    show("scenarioName", anim = T, animType = "fade")
-    show("saveScenario2", anim = T, animType = "fade")
-    hide("saveScenario", anim = T, animType = "fade")
+    shinyjs::show("scenarioName", anim = T, animType = "fade")
+    shinyjs::show("saveScenario2", anim = T, animType = "fade")
+    shinyjs::hide("saveScenario", anim = T, animType = "fade")
   })
   
   observeEvent(input$hearts_saveScenario, {
-    show("hearts_scenarioName", anim = T, animType = "fade")
-    show("hearts_saveScenario2", anim = T, animType = "fade")
-    hide("hearts_saveScenario", anim = T, animType = "fade")
+    shinyjs::show("hearts_scenarioName", anim = T, animType = "fade")
+    shinyjs::show("hearts_saveScenario2", anim = T, animType = "fade")
+    shinyjs::hide("hearts_saveScenario", anim = T, animType = "fade")
   })
   
   observeEvent(input$hpp_saveScenario, {
-    show("hpp_scenarioName", anim = T, animType = "fade")
-    show("hpp_saveScenario2", anim = T, animType = "fade")
-    hide("hpp_saveScenario", anim = T, animType = "fade")
+    shinyjs::show("hpp_scenarioName", anim = T, animType = "fade")
+    shinyjs::show("hpp_saveScenario2", anim = T, animType = "fade")
+    shinyjs::hide("hpp_saveScenario", anim = T, animType = "fade")
   })
   
   observeEvent(input$hepC_saveScenario, {
-    show("hepC_scenarioName", anim = T, animType = "fade")
-    show("hepC_saveScenario2", anim = T, animType = "fade")
-    hide("hepC_saveScenario", anim = T, animType = "fade")
+    shinyjs::show("hepC_scenarioName", anim = T, animType = "fade")
+    shinyjs::show("hepC_saveScenario2", anim = T, animType = "fade")
+    shinyjs::hide("hepC_saveScenario", anim = T, animType = "fade")
   })
   
   scenarios = reactiveValues()
