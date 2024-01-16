@@ -24,7 +24,7 @@ hpp = function (pais,
   # Carga información de países
   # load("hpp/data/datosPais.RData")
   # write.xlsx(datosPais,file="hpp/data/datosPais.xlsx")
-  datosPais = read.xlsx("hpp/data/datosPais.xlsx")
+  datosPais = read_xlsx("hpp/data/datosPais.xlsx")
   
   # filtra por país seleccionado
   datosPais = datosPais[datosPais$pais==pais,]
@@ -55,11 +55,14 @@ hpp = function (pais,
   edadAlParto = datosPais$value[datosPais$indicador == "EDAD.AL.PARTO"]
   añosDescontados = descontarValor(descuento, (expectativaAlParto - edadAlParto))*-1
   
+  
   #Calculamos el valor descontado de qalys perdidos por una histerectomia
   Dalys_Histerectomia = (1 - uHisterectomia) * añosDescontados
+  Dalys_HisterectomiaNoD = (1 - uHisterectomia) * (datosPais$value[datosPais$indicador=="EXPECTATIVA.DE.VIDA.A.LA.EDAD.DE.PARTO"] - datosPais$value[datosPais$indicador=="EDAD.AL.PARTO"])
   
   #Dalys por muerte prematuro al valer 0 la utilidad se pierde 1 por año asique es igual al valor de años descontados.
   Dalys_MuertePrematura = añosDescontados
+  Dalys_MuertePrematuraNoD = (datosPais$value[datosPais$indicador=='EXPECTATIVA.DE.VIDA.A.LA.EDAD.DE.PARTO'] - datosPais$value[datosPais$indicador=='EDAD.AL.PARTO'])
   
   #Dalys por histerectomia.
   Dalys_Total = Dalys_Histerectomia * (pHPP_Severa * pHisterectomia) + (Dalys_MuertePrematura * pCFR)
@@ -133,6 +136,9 @@ hpp = function (pais,
     (runRama$recibeOxitocina$siHPP * runSetearCostos$costoHPP + runRama$noRecibeOxitocina$siHPP * runSetearCostos$costoHPP) + (runSetearCostos$costoOxitocina * runRama$poblacion * runRama$usoOxitocina) + runSetearCostoIntervencion[[1]]
   }
   
+  getCostoMedico = function() {
+    runRama$recibeOxitocina$siHPP * runSetearCostos$costoHPP + runRama$noRecibeOxitocina$siHPP * runSetearCostos$costoHPP
+  }
   
   getQalyLost = function() {
     runRama$recibeOxitocina$siHPP * runSetearQalyLost$qalyLost + runRama$noRecibeOxitocina$siHPP * runSetearQalyLost$qalyLost
@@ -151,6 +157,7 @@ hpp = function (pais,
   resultados = list(
     costoIntervencion = costoIntervencion,
     Dalys_Histerectomia = Dalys_Histerectomia,
+    Dalys_HisterectomiaNoD = Dalys_HisterectomiaNoD,
     mHPP = getMuertes(),
     hpp = getHPP(),
     nHPPCountry = nHPPCountry,
@@ -161,9 +168,14 @@ hpp = function (pais,
     pHPP_Severa=pHPP_Severa,
     pHisterectomia=pHisterectomia,
     Dalys_MuertePrematura=Dalys_MuertePrematura,
+    Dalys_MuertePrematuraNoD=Dalys_MuertePrematuraNoD,
     getCosto = getCosto(),
-    poblacionAfectada = datosPais$value[datosPais$indicador=="PARTOS.ANUALES"] * usoOxitocina
-    
+    getCostoMedico = getCostoMedico(),
+    poblacionAfectada = 
+      if (usoOxitocina == datosPais$value[datosPais$indicador=="USO.DE.OXITOCINA"]) {
+        datosPais$value[datosPais$indicador=="PARTOS.ANUALES"] * usoOxitocina   
+      } else {usoOxitocina * datosPais$value[datosPais$indicador=="pINSTITUCIONALES"] * datosPais$value[datosPais$indicador=="PARTOS.ANUALES"]}
+      
   )
   return(resultados)
 }
@@ -203,74 +215,50 @@ resultados_comparados = function(pais,
     costoIntervencion = costoIntervencion #Costo de la intervención  (INPUT)
   )
   
-  comparacion = list(
-    "Diferencia de costo" = target$getCosto - base$getCosto,
-    "Diferencia de Qualys" = target$QalyLost - base$QalyLost,
-    "Hemorragias Post Parto Evitadas" = base$hpp-target$hpp,
-    "Muertes por Hemorragias Post Parto Evitadas" = (base$hpp-target$hpp) * base$pCFR,
-    "Histerectomias por Hemorragias Post Parto Evitadas" = (base$hpp - target$hpp) * (base$pHPP_Severa * base$pHisterectomia),
-    "Años de vida por muerte prematura salvados" = base$Dalys_MuertePrematura * ((base$hpp - target$hpp) * base$pCFR),
-    "Años de vida por discapacidad salvados" = base$Dalys_Histerectomia * ((base$hpp - target$hpp) * (base$pHPP_Severa * base$pHisterectomia)),
-    "Población base afectada" = datosPais$value[datosPais$indicador=="PARTOS.ANUALES"] * uso_oxitocina_base,
-    "Población intervención afectada" = round(datosPais$value[datosPais$indicador=="PARTOS.ANUALES"] * uso_oxitocina_target * datosPais$value[datosPais$indicador=="pINSTITUCIONALES"],0),
-    "Costo Oxitocina" = paste0("U$S ",datosPais$value[datosPais$indicador=="COSTO.Oxitocina"]),
-    "Ahorro" = -1 * (target$getCosto - base$getCosto)
-  )  
+  comparacionSinDesc = list()
+  comparacionSinDesc["Hemorragias posparto evitadas (n)"] = base$hpp-target$hpp
+  comparacionSinDesc["Muertes evitadas (n)"] = (base$hpp-target$hpp) * base$pCFR
+  comparacionSinDesc["Años de vida salvados"] = -1*base$Dalys_MuertePrematuraNoD * ((target$hpp - base$hpp) * base$pCFR)
+  comparacionSinDesc["Años de vida ajustados por discapacidad evitados"] = ((base$Dalys_MuertePrematuraNoD * ((-target$hpp + base$hpp) * base$pCFR)) + (base$Dalys_HisterectomiaNoD * ((-target$hpp + base$hpp) * (base$pHPP_Severa * base$pHisterectomia))))
+  comparacionSinDesc["Diferencia de costos respecto al escenario basal (USD)"] = target$getCosto - base$getCosto
+  comparacionSinDesc["Razón de costo-efectividad incremental por año de vida salvado (USD)"] = comparacionSinDesc$`Diferencia de costos respecto al escenario basal (USD)` / (base$Dalys_MuertePrematuraNoD * ((base$hpp - target$hpp) * base$pCFR))
+  comparacionSinDesc["Razón de costo-efectividad incremental por Año de Vida Ajustado por Discapacidad evitado (USD)"] = comparacionSinDesc[["Diferencia de costos respecto al escenario basal (USD)"]]  / comparacionSinDesc[["Años de vida ajustados por discapacidad evitados"]]
+  comparacionSinDesc["Costo total de la intervención (USD)"] = -1 * (costoIntervencion + ((base$poblacionAfectada - target$poblacionAfectada) * datosPais$value[datosPais$indicador=="COSTO.Oxitocina"]))
+  comparacionSinDesc["Retorno de Inversión (%)"] = -comparacionSinDesc$`Diferencia de costos respecto al escenario basal (USD)` / comparacionSinDesc$`Costo total de la intervención (USD)` * 100
+  comparacionSinDesc["Costos evitados atribuibles a la intervención (USD)"] = base$getCostoMedico - target$getCostoMedico
+  comparacionSinDesc["Razón de costo-efectividad incremental por vida salvada (USD)"] = (comparacionSinDesc$`Diferencia de costos respecto al escenario basal (USD)` / comparacionSinDesc$`Muertes evitadas (n)`)
   
-  # costo-efectividad
+  comparacionDesc = list()
+  comparacionDesc["Hemorragias posparto evitadas (n)"] = NA
+  comparacionDesc["Muertes evitadas (n)"] = NA
+  comparacionDesc["Años de vida salvados"] = base$Dalys_MuertePrematura * ((base$hpp - target$hpp) * base$pCFR)
+  comparacionDesc["Años de vida ajustados por discapacidad evitados"] = (base$Dalys_Histerectomia * ((-target$hpp + base$hpp) * (base$pHPP_Severa * base$pHisterectomia))) + (base$Dalys_MuertePrematura * ((-target$hpp + base$hpp) * base$pCFR))
+  comparacionDesc["Costo total de la intervención (USD)"] = -1 * (costoIntervencion + ((base$poblacionAfectada - target$poblacionAfectada) * datosPais$value[datosPais$indicador=="COSTO.Oxitocina"]))
+  comparacionDesc["Diferencia de costos respecto al escenario basal (USD)"] = target$getCosto - base$getCosto
+  comparacionDesc["Razón de costo-efectividad incremental por año de vida salvado (USD)"] = comparacionDesc$`Diferencia de costos respecto al escenario basal (USD)` / ((base$Dalys_MuertePrematura * ((-target$hpp + base$hpp) * base$pCFR)))
+  comparacionDesc["Razón de costo-efectividad incremental por Año de Vida Ajustado por Discapacidad evitado (USD)"] = comparacionSinDesc[["Diferencia de costos respecto al escenario basal (USD)"]] / comparacionDesc[["Años de vida ajustados por discapacidad evitados"]]
+  comparacionDesc["Retorno de Inversión (%)"] = -comparacionDesc$`Diferencia de costos respecto al escenario basal (USD)` / comparacionDesc$`Costo total de la intervención (USD)`* 100
+  comparacionDesc["Costos evitados atribuibles a la intervención (USD)"] = base$getCostoMedico - target$getCostoMedico
+  comparacionDesc["Razón de costo-efectividad incremental por vida salvada (USD)"] = (comparacionDesc$`Diferencia de costos respecto al escenario basal (USD)` / comparacionSinDesc$`Muertes evitadas (n)`)
+
+  comparacion = data.frame(
+    indicador = names(comparacionSinDesc),
+    valor = unlist(comparacionSinDesc),
+    valor_desc = unlist(comparacionDesc)
+  )
   
-  #ICER
-  if (comparacion$`Diferencia de costo` > 0 & comparacion$`Diferencia de Qualys` < 0) {
-    comparacion$ICER <- round(comparacion$`Diferencia de costo` / abs(comparacion$`Diferencia de Qualys`), 3)
-  } else if (comparacion$`Diferencia de costo` <= 0 & comparacion$`Diferencia de Qualys` < 0) {
-    comparacion$ICER <- 'Costo-Ahorrativo'
-  } else {
-    comparacion$ICER <- 'Dominada'
-  }
-  
-  #ICERL
-  if (comparacion$`Diferencia de costo` > 0 & comparacion$`Años de vida por muerte prematura salvados` > 0) {
-    comparacion$ICERL <- round(comparacion$`Diferencia de costo` / comparacion$`Años de vida por muerte prematura salvados`, 3)
-  } else if (comparacion$`Diferencia de costo` <= 0 & comparacion$`Años de vida por muerte prematura salvados` > 0) {
-    comparacion$ICERL <- 'Costo-Ahorrativo'
-  } else {
-    comparacion$ICERL <- 'Dominada'
-  }
-  
-  #ICERM
-  if (comparacion$`Diferencia de costo` > 0 & comparacion$`Muertes por Hemorragias Post Parto Evitadas` > 0) {
-    comparacion$ICERM <- round(comparacion$`Diferencia de costo` / comparacion$`Muertes por Hemorragias Post Parto Evitadas`, 3)
-  } else if (comparacion$`Diferencia de costo` <= 0 & comparacion$`Muertes por Hemorragias Post Parto Evitadas` > 0) {
-    comparacion$ICERM <- 'Costo-Ahorrativo'
-  } else {
-    comparacion$ICERM <- 'Dominada'
-  }
-  
-  # inversión
-  comparacion$Inversion = (target$costoIntervencion + ((comparacion$`Población intervención afectada` - comparacion$`Población base afectada`) * datosPais$value[datosPais$indicador=="COSTO.Oxitocina"]))
-  
-  # ROI
-  comparacion$ROI = round((((-comparacion$`Diferencia de costo`)) / comparacion$Inversion) * 100, 2)
-  
-  # Costo cada 100 mil
-  comparacion$`Costo cada mil` = round((target$getCosto - base$getCosto) / (datosPais$value[datosPais$indicador=='PARTOS.ANUALES'] * datosPais$value[datosPais$indicador=='pINSTITUCIONALES']) * 1000,1)
-  
-  # Qalys cada 100 mil
-  comparacion$`Qalys cada mil` = round((target$QalyLost - base$QalyLost) / (datosPais$value[datosPais$indicador=='PARTOS.ANUALES'] * datosPais$value[datosPais$indicador=='pINSTITUCIONALES']) * 1000,1)
-  list(base=base,
-       target=target,
-       comparacion=comparacion)
+  return(comparacion)
   
 }
 
 
-a=resultados_comparados(
+resultados_comparados(
   pais = "Argentina",
   uso_oxitocina_base = 0.711,
   uso_oxitocina_target = 0.80087,
   descuento = 0.05,
   costoIntervencion = 0
-)$comparacion
+)
 
 # b=resultados_comparados(
 #   pais = "Argentina",
