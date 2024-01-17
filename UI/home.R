@@ -17,6 +17,7 @@ ui_home <- fluidPage(
         <div class="w-3/5">
             <div class="py-10 text-center text-7xl font-bold border-l-2 ml-6 border-orange-300">
                 <div style="color: #1D9ADD;"><b>Programme Impact Assessment Tool</b></div>
+                <div class = "text-3xl mt-4" style="color: #1D9ADD; text-3xl"><b>Departamento de Evidencia e Inteligencia para la Acción en Salud (EIH)</b></div>
             </div>
         </div>
         <div class="w-1/5">

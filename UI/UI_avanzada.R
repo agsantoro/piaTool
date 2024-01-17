@@ -284,7 +284,7 @@ ui_avanzada <-
       div(style= "width: 50%;",
         p(
         style = "text-align: left;",
-        "PIA Tool v0.4 - Desarrollado por IECS")
+        "PIA Tool v0.4 - Desarrollado por IECS y el Departamento de Evidencia e Inteligencia para la Acción en Salud (PAHO)")
       ),
       div(
         style= "width: 50%;",
