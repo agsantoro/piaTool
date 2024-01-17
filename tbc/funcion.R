@@ -1,9 +1,8 @@
-input = list()
 library(tidyverse)
-input$country = "Argentina"
 
+inputs_tbc <- readxl::read_excel("tbc/data/inputs_tbc.xlsx")
 
-modelo_tbc <- function( pais_seleccionado,
+modelo_tbc <- function(pais_seleccionado,
                        VOTrrExito,
                        VOTadherencia,
                        costo_evento_VOT,
@@ -37,15 +36,14 @@ modelo_tbc <- function( pais_seleccionado,
                        tasa_descuento_anual,
                        costo_intervencion_vDOT
                        ){
-  
   pais_seleccionado = str_to_title(pais_seleccionado)
   
-  inputs_tbc <<- readxl::read_excel("tbc/data/inputs_tbc.xlsx")
+  inputs_tbc <- readxl::read_excel("tbc/data/inputs_tbc.xlsx")
   
-  inputs_tbc <<- inputs_tbc %>%
+  inputs_tbc <- inputs_tbc %>%
     mutate(PAIS = ifelse(PAIS == "GLOBAL", "GLOBAL",  str_to_title(tolower(PAIS))))
   
-  inputs_tbc <<- inputs_tbc %>%
+  inputs_tbc <- inputs_tbc %>%
     mutate(PAIS = case_when(
       PAIS == "México" ~ "Mexico",
       PAIS == "Perú" ~ "Peru",
@@ -57,24 +55,24 @@ modelo_tbc <- function( pais_seleccionado,
   
   ## parametro que no estan en tabla de inputs: 
   
-  costo_intervencion_VOT <<- 0#Costo programático de vDOT
+  costo_intervencion_VOT <- 0#Costo programático de vDOT
   
-  tasa_descuento_anual <<- 0.03 # TASA DE DESCUENTO
+  tasa_descuento_anual <- 0.03 # TASA DE DESCUENTO
   
-  Horizonte_temporal_meses <<- 12
+  Horizonte_temporal_meses <- 12
   
-  cantidad_vot_semana <<- 5
-  cantidad_dot_semana <<- 5
+  cantidad_vot_semana <- 5
+  cantidad_dot_semana <- 5
   #----------
   #Cantidad de meses que dura la inducción
-  Induccion_duracion <<- inputs_tbc %>%
+  Induccion_duracion <- inputs_tbc %>%
     filter(tipo == "GLOBAL" &
              PARAMETRO == "Induccion duracion:") %>%
     select(VALOR) %>%
     as.numeric()
 
   #Costo programático DOT
-  costo_intervencion_DOT<<- inputs_tbc %>%
+  costo_intervencion_DOT<- inputs_tbc %>%
     filter(tipo == "GLOBAL" &
              PARAMETRO == "Costo de la intervención DOT") %>%
     select(VALOR) %>%
@@ -84,13 +82,13 @@ modelo_tbc <- function( pais_seleccionado,
  
     
   #Esperanza de vida
-  esperanza_vida <<-  inputs_tbc %>%
+  esperanza_vida <-  inputs_tbc %>%
     filter(tipo == "PAISES" & PAIS==pais_seleccionado &
              PARAMETRO == "Esperanza de vida:") %>%
     select(VALOR) %>%
     as.numeric()
     
-  costo_internacion_falla_terapeu <<- costo_internacion*cantidadDiasInternacion 
+  costo_internacion_falla_terapeu <- costo_internacion*cantidadDiasInternacion 
   
   
   
@@ -99,21 +97,21 @@ modelo_tbc <- function( pais_seleccionado,
   # calculo de utilidad_restante_descontada
   
   # Calcula las filas de inicio y fin del rango
-  inicio_rango <<- mediana_edad_paciente + 1
+  inicio_rango <- mediana_edad_paciente + 1
   
-  fin_rango <<- esperanza_vida
+  fin_rango <- esperanza_vida
   
-  valores_rango <<- inputs_tbc %>%
+  valores_rango <- inputs_tbc %>%
     filter(PAIS==pais_seleccionado & tipo=="UTILIDADES") %>% 
     mutate(PARAMETRO=as.numeric(PARAMETRO)) %>% 
     filter(PARAMETRO<=fin_rango&PARAMETRO>=inicio_rango)%>%
     select(VALOR) %>% as.vector()
   
   # Calcula el VNA
-  vna <<- sum(valores_rango$VALOR / (1 + tasa_descuento_anual)^(1:length(valores_rango$VALOR)))
+  vna <- sum(valores_rango$VALOR / (1 + tasa_descuento_anual)^(1:length(valores_rango$VALOR)))
   
   # Suma el valor mediana de utilidad
-  utilidad_restante_descontada <<- vna +  inputs_tbc %>%
+  utilidad_restante_descontada <- vna +  inputs_tbc %>%
     filter(PAIS==pais_seleccionado & tipo=="UTILIDADES" & PARAMETRO==mediana_edad_paciente) %>%
     select(VALOR) %>% 
     as.numeric()
@@ -121,40 +119,40 @@ modelo_tbc <- function( pais_seleccionado,
   # calculo de utilidad_restante
   
   # epi demo-----
-  utilidad_restante <<- sum(valores_rango$VALOR)+  inputs_tbc %>%
+  utilidad_restante <- sum(valores_rango$VALOR)+  inputs_tbc %>%
     filter(PAIS==pais_seleccionado & tipo=="UTILIDADES" & PARAMETRO==mediana_edad_paciente) %>%
     select(VALOR) %>% 
     as.numeric()
   
-  anos_vida_restantes <<- esperanza_vida - mediana_edad_paciente
-  pago <<- 1
-  num_periodos <<- anos_vida_restantes - 1
+  anos_vida_restantes <- esperanza_vida - mediana_edad_paciente
+  pago <- 1
+  num_periodos <- anos_vida_restantes - 1
   
   # Calcular el Valor Actual (VA), en una fn que intenta aproximar a la VA del excel
-  va <<- pago * ((1 - (1 + tasa_descuento_anual) ^ (-num_periodos)) / tasa_descuento_anual)
+  va <- pago * ((1 - (1 + tasa_descuento_anual) ^ (-num_periodos)) / tasa_descuento_anual)
   
   
   # Ajusta el resultado sumando 1
-  anos_vida_restantes_descontados <<- va + 1
+  anos_vida_restantes_descontados <- va + 1
   
 
   #asunciones#-----
   
-  pFallaResistencia <<- inputs_tbc %>%
+  pFallaResistencia <- inputs_tbc %>%
     filter(tipo == "GLOBAL" &
              PARAMETRO == "Porcentaje de pacientes con falla debido a multiresistencia") %>%
     select(VALOR) %>%
     as.numeric()
   
   
-  fallaDuracion <<- inputs_tbc %>%
+  fallaDuracion <- inputs_tbc %>%
     filter(tipo == "GLOBAL" &
              PARAMETRO == "Meses que reciben tratamiento el grupo que falla:") %>%
     select(VALOR) %>%
     as.numeric()
     
     
-  pFallaAdherencia <<- inputs_tbc %>%
+  pFallaAdherencia <- inputs_tbc %>%
     filter(tipo == "GLOBAL" &
              PARAMETRO == "Porcentaje de pacientes con falla debido a mala adherencia") %>%
     select(VALOR) %>%
@@ -162,21 +160,21 @@ modelo_tbc <- function( pais_seleccionado,
   
     
   
-  pFallaReinicia <<- inputs_tbc %>%
+  pFallaReinicia <- inputs_tbc %>%
     filter(tipo == "GLOBAL" &
              PARAMETRO == "Porcentaje de pacientes que ante fallas reinician") %>%
     select(VALOR) %>%
     as.numeric()
     
     
-  pReinicia <<- inputs_tbc %>%
+  pReinicia <- inputs_tbc %>%
     filter(tipo == "GLOBAL" &
              PARAMETRO == "Porcentaje que reinicia el tratamiento en el año:") %>%
     select(VALOR) %>%
     as.numeric()
     
   
-  ttoPerdido_Duracion <<- inputs_tbc %>%
+  ttoPerdido_Duracion <- inputs_tbc %>%
     filter(tipo == "GLOBAL" &
              PARAMETRO == "Duración del tratamiento de los que pierden seguimiento:") %>%
     select(VALOR) %>%
@@ -184,14 +182,14 @@ modelo_tbc <- function( pais_seleccionado,
     
   
   
-  pPerdidoConsulta <<- inputs_tbc %>%
+  pPerdidoConsulta <- inputs_tbc %>%
     filter(tipo == "GLOBAL" &
              PARAMETRO == "Porcentaje de perdida de tratamiento consulta emergencias:") %>%
     select(VALOR) %>%
     as.numeric()
     
     
-  PerdidoCantidadConsultas <<- inputs_tbc %>%
+  PerdidoCantidadConsultas <- inputs_tbc %>%
     filter(tipo == "GLOBAL" &
              PARAMETRO == "Cantidad de consultas por paciente con perdida de tratamiento:") %>%
     select(VALOR) %>%
@@ -199,7 +197,7 @@ modelo_tbc <- function( pais_seleccionado,
     
     
   
-  GrupoMuerte_Meses_Vividos <<- inputs_tbc %>%
+  GrupoMuerte_Meses_Vividos <- inputs_tbc %>%
     filter(tipo == "GLOBAL" &
              PARAMETRO == "Meses que sobreviven el grupo de pacientes que mueren:") %>%
     select(VALOR) %>%
@@ -207,14 +205,14 @@ modelo_tbc <- function( pais_seleccionado,
     
     
   
-  GrupoMuerte_Meses_Tratados <<- inputs_tbc %>%
+  GrupoMuerte_Meses_Tratados <- inputs_tbc %>%
     filter(tipo == "GLOBAL" &
              PARAMETRO == "Meses que reciben tratamiento el grupo de pacientes que mueren:") %>%
     select(VALOR) %>%
     as.numeric()
     
   
-  costo_ponderado_trat_falla <<- (pFallaResistencia * ((Induccion_duracion * costo_trat_multires_induccion) + ((12 - fallaDuracion - Induccion_duracion) * costo_trat_multires_consolidacion)) +
+  costo_ponderado_trat_falla <- (pFallaResistencia * ((Induccion_duracion * costo_trat_multires_induccion) + ((12 - fallaDuracion - Induccion_duracion) * costo_trat_multires_consolidacion)) +
                                    pFallaAdherencia * ((Induccion_duracion * costo_trat_induccion + (12 - fallaDuracion - Induccion_duracion) * costo_trat_consolidacion) * pFallaReinicia + 
                                                          (12 - fallaDuracion) * costo_trat_consolidacion * (1 - pFallaReinicia))) / (12 - fallaDuracion)
   
@@ -224,35 +222,35 @@ modelo_tbc <- function( pais_seleccionado,
   
   #comienzo el arbol------
   ##Sat------
-  trat_exitoso <<- cohorte*pExitoso
-  trat_no_exitoso <<- cohorte-trat_exitoso
-  falla_terapeutica <<- trat_no_exitoso*pFalla
+  trat_exitoso <- cohorte*pExitoso
+  trat_no_exitoso <- cohorte-trat_exitoso
+  falla_terapeutica <- trat_no_exitoso*pFalla
   
-  muerte <<- trat_no_exitoso*pMuerte
+  muerte <- trat_no_exitoso*pMuerte
   
-  perdida_seguimiento <<- trat_no_exitoso-(falla_terapeutica +muerte)
+  perdida_seguimiento <- trat_no_exitoso-(falla_terapeutica +muerte)
   
   ##
   
-  costo_a <<-trat_exitoso*((costo_trat_induccion*Induccion_duracion)+
+  costo_a <-trat_exitoso*((costo_trat_induccion*Induccion_duracion)+
                             (costo_trat_consolidacion*(ttoExitoso_Duracion-Induccion_duracion)) +
                             (costo_seguimiento * ttoExitoso_Duracion) +
                             (costo_examenes_complemen * ttoExitoso_Duracion))
   
-  utilidad_a <<- trat_exitoso*(((12-ttoExitoso_Duracion) * (utilidad_pob_gral/12))+
+  utilidad_a <- trat_exitoso*(((12-ttoExitoso_Duracion) * (utilidad_pob_gral/12))+
                                 (ttoExitoso_Duracion*((utilidad_pob_gral-disutilidad_tbc_activa)/12)))
   
   ##
-  costo_b <<- falla_terapeutica * ((((Induccion_duracion * costo_trat_induccion) + ((fallaDuracion-Induccion_duracion) * costo_trat_consolidacion)) +
+  costo_b <- falla_terapeutica * ((((Induccion_duracion * costo_trat_induccion) + ((fallaDuracion-Induccion_duracion) * costo_trat_consolidacion)) +
                                      ((12-fallaDuracion) *costo_ponderado_trat_falla))+
                                     (12 * (costo_examenes_complemen + costo_seguimiento)  ) + (prob_internacion_con_falla * costo_internacion_falla_terapeu ))
   
   
-  utilidad_b <<- falla_terapeutica*(utilidad_pob_gral-disutilidad_tbc_activa)
+  utilidad_b <- falla_terapeutica*(utilidad_pob_gral-disutilidad_tbc_activa)
   
   
   ##
-  costo_c <<- perdida_seguimiento*  ( (Induccion_duracion*costo_trat_induccion) +
+  costo_c <- perdida_seguimiento*  ( (Induccion_duracion*costo_trat_induccion) +
                                        ((ttoPerdido_Duracion-Induccion_duracion)*costo_trat_consolidacion) +
                                        ( (costo_seguimiento + costo_examenes_complemen)*ttoPerdido_Duracion)    +
                                        ( ((Induccion_duracion*costo_trat_induccion) + 
@@ -262,42 +260,42 @@ modelo_tbc <- function( pais_seleccionado,
   
   
   
-  utilidad_c <<- perdida_seguimiento* (utilidad_pob_gral-disutilidad_tbc_activa)
+  utilidad_c <- perdida_seguimiento* (utilidad_pob_gral-disutilidad_tbc_activa)
   
   #
-  costo_d <<- muerte *((costo_trat_induccion*(Induccion_duracion))+
+  costo_d <- muerte *((costo_trat_induccion*(Induccion_duracion))+
                         (costo_trat_consolidacion*(GrupoMuerte_Meses_Tratados-Induccion_duracion)) +
                         (costo_seguimiento * GrupoMuerte_Meses_Tratados) +
                         (costo_examenes_complemen * GrupoMuerte_Meses_Tratados))
   
   
   
-  utilidad_d <<- muerte*((utilidad_pob_gral-disutilidad_tbc_activa)/12)*GrupoMuerte_Meses_Vividos
+  utilidad_d <- muerte*((utilidad_pob_gral-disutilidad_tbc_activa)/12)*GrupoMuerte_Meses_Vividos
   
   ##total SAT------------------
   
-  costo <<- costo_a+costo_b+costo_c+costo_d
-  QALYS <<- utilidad_a+utilidad_b+utilidad_c+utilidad_d
-  AVP <<- muerte* anos_vida_restantes
-  AVP_ajustados_MP <<- muerte*utilidad_restante
-  AVP_descontado <<- muerte*anos_vida_restantes_descontados
-  AVP_ajustados_MP_descontado <<- muerte*utilidad_restante_descontada
-  AVP_ajustados_discapacidad <<- ((utilidad_pob_gral*trat_exitoso)-utilidad_a)+
+  costo <- costo_a+costo_b+costo_c+costo_d
+  QALYS <- utilidad_a+utilidad_b+utilidad_c+utilidad_d
+  AVP <- muerte* anos_vida_restantes
+  AVP_ajustados_MP <- muerte*utilidad_restante
+  AVP_descontado <- muerte*anos_vida_restantes_descontados
+  AVP_ajustados_MP_descontado <- muerte*utilidad_restante_descontada
+  AVP_ajustados_discapacidad <- ((utilidad_pob_gral*trat_exitoso)-utilidad_a)+
     ((utilidad_pob_gral*muerte* (6/12))-utilidad_d)+
     ((falla_terapeutica *utilidad_pob_gral)-utilidad_b)+
     ((perdida_seguimiento*utilidad_pob_gral)-utilidad_c)
   
-  AVP_ajustados <<- AVP_ajustados_discapacidad+AVP_ajustados_MP
-  AVP_ajustados_descontado <<- AVP_ajustados_MP_descontado+AVP_ajustados_discapacidad
-  costo_VOT_DOT <<- 0
+  AVP_ajustados <- AVP_ajustados_discapacidad+AVP_ajustados_MP
+  AVP_ajustados_descontado <- AVP_ajustados_MP_descontado+AVP_ajustados_discapacidad
+  costo_VOT_DOT <- 0
   
-  Años_vida_ajustados_discapacidad <<- AVP+AVP_ajustados_discapacidad
-  Años_vida_ajustados_discapacidad_descontado <<- AVP_descontado+AVP_ajustados_discapacidad
+  Años_vida_ajustados_discapacidad <- AVP+AVP_ajustados_discapacidad
+  Años_vida_ajustados_discapacidad_descontado <- AVP_descontado+AVP_ajustados_discapacidad
   
   
   ## armo vector
   
-  SAT <<- c(trat_exitoso,
+  SAT <- c(trat_exitoso,
            trat_exitoso/cohorte,
            round(perdida_seguimiento,2),
            muerte,
@@ -324,47 +322,47 @@ modelo_tbc <- function( pais_seleccionado,
   
   
   ##
-  trat_exitoso <<- (cohorte*pExitoso*DOTadherencia*DOTrrExito) +
+  trat_exitoso <- (cohorte*pExitoso*DOTadherencia*DOTrrExito) +
     (cohorte*pExitoso*(1-DOTadherencia))
   
   
   ##
   
-  trat_no_exitoso <<- cohorte-trat_exitoso
+  trat_no_exitoso <- cohorte-trat_exitoso
   
-  falla_terapeutica <<- (trat_no_exitoso*pFalla*DOTadherencia*DOTrrFalla)+
+  falla_terapeutica <- (trat_no_exitoso*pFalla*DOTadherencia*DOTrrFalla)+
     (trat_no_exitoso*pFalla*(1-DOTadherencia))
   
-  muerte <<- (trat_no_exitoso*pMuerte*DOTadherencia*DOTrrMuerte)+
+  muerte <- (trat_no_exitoso*pMuerte*DOTadherencia*DOTrrMuerte)+
     (trat_no_exitoso*pMuerte*(1-DOTadherencia))
   
-  perdida_seguimiento <<- trat_no_exitoso-(falla_terapeutica+muerte)
+  perdida_seguimiento <- trat_no_exitoso-(falla_terapeutica+muerte)
   
   ##
   
-  costo_a <<-trat_exitoso*((costo_trat_induccion*Induccion_duracion)+
+  costo_a <-trat_exitoso*((costo_trat_induccion*Induccion_duracion)+
                             (costo_trat_consolidacion*(ttoExitoso_Duracion-Induccion_duracion)) +
                             (costo_evento_DOT*cantidad_dot_semana*4*ttoExitoso_Duracion) +
                             (costo_seguimiento * ttoExitoso_Duracion)+
                             (costo_examenes_complemen * ttoExitoso_Duracion))
   
-  utilidad_a <<- trat_exitoso*(((12-ttoExitoso_Duracion) * (utilidad_pob_gral/12))+
+  utilidad_a <- trat_exitoso*(((12-ttoExitoso_Duracion) * (utilidad_pob_gral/12))+
                                 (ttoExitoso_Duracion*((utilidad_pob_gral-disutilidad_tbc_activa)/12)))
   
   
   ##
-  costo_b <<- falla_terapeutica * ((((Induccion_duracion * costo_trat_induccion) +
+  costo_b <- falla_terapeutica * ((((Induccion_duracion * costo_trat_induccion) +
                                       ((fallaDuracion-Induccion_duracion) * costo_trat_consolidacion)) +
                                      ((12-fallaDuracion) *costo_ponderado_trat_falla))+
                                     (12 * (costo_examenes_complemen + costo_seguimiento+(cantidad_dot_semana * 4  *costo_evento_DOT))  ) +
                                     (prob_internacion_con_falla * costo_internacion_falla_terapeu ))
   
   
-  utilidad_b <<- falla_terapeutica*(utilidad_pob_gral-disutilidad_tbc_activa)
+  utilidad_b <- falla_terapeutica*(utilidad_pob_gral-disutilidad_tbc_activa)
   
   ##
   
-  costo_c <<- perdida_seguimiento*  ( (Induccion_duracion*costo_trat_induccion) +
+  costo_c <- perdida_seguimiento*  ( (Induccion_duracion*costo_trat_induccion) +
                                        ((ttoPerdido_Duracion-Induccion_duracion)*costo_trat_consolidacion) +
                                        ( (costo_seguimiento + costo_examenes_complemen + (4*cantidad_dot_semana*costo_evento_DOT))*ttoPerdido_Duracion)    +
                                        ( ((Induccion_duracion*costo_trat_induccion) + 
@@ -374,11 +372,11 @@ modelo_tbc <- function( pais_seleccionado,
   
   
   
-  utilidad_c <<- perdida_seguimiento* (utilidad_pob_gral-disutilidad_tbc_activa)
+  utilidad_c <- perdida_seguimiento* (utilidad_pob_gral-disutilidad_tbc_activa)
   
   
   ##
-  costo_d <<- muerte *((costo_trat_induccion*(Induccion_duracion))+
+  costo_d <- muerte *((costo_trat_induccion*(Induccion_duracion))+
                         (costo_trat_consolidacion*
                            (GrupoMuerte_Meses_Tratados-Induccion_duracion)) +
                         (costo_evento_DOT * cantidad_dot_semana*4*GrupoMuerte_Meses_Tratados) +
@@ -386,32 +384,32 @@ modelo_tbc <- function( pais_seleccionado,
   
   #=($G$32*$G$20*4*GrupoMuerte_Meses_Tratados)+(($G$29+$G$30))
   
-  utilidad_d <<- muerte*((utilidad_pob_gral-disutilidad_tbc_activa)/12)*GrupoMuerte_Meses_Vividos
+  utilidad_d <- muerte*((utilidad_pob_gral-disutilidad_tbc_activa)/12)*GrupoMuerte_Meses_Vividos
   
   ##DOT total
   
-  costo <<- costo_a+costo_b+costo_c+costo_d
-  QALYS <<- utilidad_a+utilidad_b+utilidad_c+utilidad_d
-  AVP <<- muerte* anos_vida_restantes
-  AVP_ajustados_MP <<- muerte*utilidad_restante
-  AVP_descontado <<- muerte*anos_vida_restantes_descontados
-  AVP_ajustados_MP_descontado <<- muerte*utilidad_restante_descontada
-  AVP_ajustados_discapacidad <<- ((utilidad_pob_gral*trat_exitoso)-utilidad_a)+
+  costo <- costo_a+costo_b+costo_c+costo_d
+  QALYS <- utilidad_a+utilidad_b+utilidad_c+utilidad_d
+  AVP <- muerte* anos_vida_restantes
+  AVP_ajustados_MP <- muerte*utilidad_restante
+  AVP_descontado <- muerte*anos_vida_restantes_descontados
+  AVP_ajustados_MP_descontado <- muerte*utilidad_restante_descontada
+  AVP_ajustados_discapacidad <- ((utilidad_pob_gral*trat_exitoso)-utilidad_a)+
     ((utilidad_pob_gral*muerte* (6/12))-utilidad_d)+
     ((falla_terapeutica *utilidad_pob_gral)-utilidad_b)+
     ((perdida_seguimiento*utilidad_pob_gral)-utilidad_c)
   
-  AVP_ajustados <<- AVP_ajustados_discapacidad+AVP_ajustados_MP
-  AVP_ajustados_descontado <<- AVP_ajustados_MP_descontado+AVP_ajustados_discapacidad
-  costo_VOT_DOT <<- ((trat_exitoso*ttoExitoso_Duracion) +
+  AVP_ajustados <- AVP_ajustados_discapacidad+AVP_ajustados_MP
+  AVP_ajustados_descontado <- AVP_ajustados_MP_descontado+AVP_ajustados_discapacidad
+  costo_VOT_DOT <- ((trat_exitoso*ttoExitoso_Duracion) +
                       (falla_terapeutica *12) +
                       (perdida_seguimiento * ttoPerdido_Duracion) +
                       (muerte* GrupoMuerte_Meses_Tratados)) * (4 * costo_evento_DOT * cantidad_dot_semana)
   
   
   
-  Años_vida_ajustados_discapacidad <<- AVP+AVP_ajustados_discapacidad
-  Años_vida_ajustados_discapacidad_descontado <<- AVP_descontado+AVP_ajustados_discapacidad
+  Años_vida_ajustados_discapacidad <- AVP+AVP_ajustados_discapacidad
+  Años_vida_ajustados_discapacidad_descontado <- AVP_descontado+AVP_ajustados_discapacidad
   
   
   ### creo vector
@@ -442,36 +440,36 @@ modelo_tbc <- function( pais_seleccionado,
   ##VOT--------
   
   ##
-  trat_exitoso <<- (cohorte*pExitoso*VOTadherencia*DOTrrExito*VOTrrExito) +
+  trat_exitoso <- (cohorte*pExitoso*VOTadherencia*DOTrrExito*VOTrrExito) +
     (cohorte*pExitoso*(1-VOTadherencia))
   
   
   ##
   
-  trat_no_exitoso <<- cohorte-trat_exitoso
+  trat_no_exitoso <- cohorte-trat_exitoso
   
-  falla_terapeutica <<- (trat_no_exitoso*pFalla*VOTadherencia*DOTrrFalla*VOTrrFalla)+
+  falla_terapeutica <- (trat_no_exitoso*pFalla*VOTadherencia*DOTrrFalla*VOTrrFalla)+
     (trat_no_exitoso*pFalla*(1-VOTadherencia))
   
-  muerte <<- (trat_no_exitoso*pMuerte*VOTadherencia*DOTrrMuerte*VOTrrMuerte)+
+  muerte <- (trat_no_exitoso*pMuerte*VOTadherencia*DOTrrMuerte*VOTrrMuerte)+
     (trat_no_exitoso*pMuerte*(1-VOTadherencia))
   
-  perdida_seguimiento <<- trat_no_exitoso-(falla_terapeutica+muerte)
+  perdida_seguimiento <- trat_no_exitoso-(falla_terapeutica+muerte)
   
   
   ##
   
-  costo_a <<-trat_exitoso*((costo_trat_induccion*Induccion_duracion)+
+  costo_a <-trat_exitoso*((costo_trat_induccion*Induccion_duracion)+
                             (costo_trat_consolidacion*(ttoExitoso_Duracion-Induccion_duracion)) +
                             (costo_evento_VOT*cantidad_dot_semana*4*ttoExitoso_Duracion) +
                             (costo_seguimiento * ttoExitoso_Duracion)+
                             (costo_examenes_complemen * ttoExitoso_Duracion))
   
-  utilidad_a <<- trat_exitoso*(((12-ttoExitoso_Duracion) * (utilidad_pob_gral/12))+(ttoExitoso_Duracion*((utilidad_pob_gral-disutilidad_tbc_activa)/12)))
+  utilidad_a <- trat_exitoso*(((12-ttoExitoso_Duracion) * (utilidad_pob_gral/12))+(ttoExitoso_Duracion*((utilidad_pob_gral-disutilidad_tbc_activa)/12)))
   
   
   ##
-  costo_b <<- falla_terapeutica * ( (((Induccion_duracion * costo_trat_induccion) +
+  costo_b <- falla_terapeutica * ( (((Induccion_duracion * costo_trat_induccion) +
                                       ((fallaDuracion-Induccion_duracion) * 
                                          costo_trat_consolidacion)) +
                                      ((12-fallaDuracion) *costo_ponderado_trat_falla))+
@@ -482,11 +480,11 @@ modelo_tbc <- function( pais_seleccionado,
                                        costo_internacion_falla_terapeu ))
   
   
-  utilidad_b <<- falla_terapeutica*(utilidad_pob_gral-disutilidad_tbc_activa)
+  utilidad_b <- falla_terapeutica*(utilidad_pob_gral-disutilidad_tbc_activa)
   
   ##
   
-  costo_c <<- perdida_seguimiento* ( (Induccion_duracion*costo_trat_induccion) +
+  costo_c <- perdida_seguimiento* ( (Induccion_duracion*costo_trat_induccion) +
                                        ((ttoPerdido_Duracion-Induccion_duracion)*
                                           costo_trat_consolidacion) +
                                        ( (costo_seguimiento + costo_examenes_complemen +
@@ -503,12 +501,12 @@ modelo_tbc <- function( pais_seleccionado,
   
   
   
-  utilidad_c <<- perdida_seguimiento* (utilidad_pob_gral-disutilidad_tbc_activa)
+  utilidad_c <- perdida_seguimiento* (utilidad_pob_gral-disutilidad_tbc_activa)
   
   
   ##
   
-  costo_d <<- muerte *((costo_trat_induccion*Induccion_duracion)+
+  costo_d <- muerte *((costo_trat_induccion*Induccion_duracion)+
                         (costo_trat_consolidacion*(GrupoMuerte_Meses_Tratados-Induccion_duracion))+
                         (costo_evento_VOT*cantidad_vot_semana*4*GrupoMuerte_Meses_Tratados) + 
                         (costo_seguimiento * GrupoMuerte_Meses_Tratados) + 
@@ -516,37 +514,37 @@ modelo_tbc <- function( pais_seleccionado,
   
   
   
-  utilidad_d <<- muerte*((utilidad_pob_gral-disutilidad_tbc_activa)/
+  utilidad_d <- muerte*((utilidad_pob_gral-disutilidad_tbc_activa)/
                           12)*GrupoMuerte_Meses_Vividos
   
   ##VOT total ------
   
-  costo <<- costo_a+costo_b+costo_c+costo_d
-  QALYS <<- utilidad_a+utilidad_b+utilidad_c+utilidad_d
-  AVP <<- muerte* anos_vida_restantes
-  AVP_ajustados_MP <<- muerte*utilidad_restante
-  AVP_descontado <<- muerte*anos_vida_restantes_descontados
-  AVP_ajustados_MP_descontado <<- muerte*utilidad_restante_descontada
-  AVP_ajustados_discapacidad <<- ((utilidad_pob_gral*trat_exitoso)-utilidad_a)+
+  costo <- costo_a+costo_b+costo_c+costo_d
+  QALYS <- utilidad_a+utilidad_b+utilidad_c+utilidad_d
+  AVP <- muerte* anos_vida_restantes
+  AVP_ajustados_MP <- muerte*utilidad_restante
+  AVP_descontado <- muerte*anos_vida_restantes_descontados
+  AVP_ajustados_MP_descontado <- muerte*utilidad_restante_descontada
+  AVP_ajustados_discapacidad <- ((utilidad_pob_gral*trat_exitoso)-utilidad_a)+
     ((utilidad_pob_gral*muerte* (6/12))-utilidad_d)+
     ((falla_terapeutica *utilidad_pob_gral)-utilidad_b)+
     ((perdida_seguimiento*utilidad_pob_gral)-utilidad_c)
   
-  AVP_ajustados <<- AVP_ajustados_discapacidad+AVP_ajustados_MP
-  AVP_ajustados_descontado <<- AVP_ajustados_MP_descontado+
+  AVP_ajustados <- AVP_ajustados_discapacidad+AVP_ajustados_MP
+  AVP_ajustados_descontado <- AVP_ajustados_MP_descontado+
     AVP_ajustados_discapacidad
-  costo_VOT_DOT <<- ((trat_exitoso*ttoExitoso_Duracion) +
+  costo_VOT_DOT <- ((trat_exitoso*ttoExitoso_Duracion) +
                       (falla_terapeutica *12) +
                       (perdida_seguimiento * ttoPerdido_Duracion) +
                       (muerte* GrupoMuerte_Meses_Tratados)) * (4 * costo_evento_VOT * cantidad_vot_semana)
   
-  Años_vida_ajustados_discapacidad <<- AVP+AVP_ajustados_discapacidad
-  Años_vida_ajustados_discapacidad_descontado <<- AVP_descontado+AVP_ajustados_discapacidad
+  Años_vida_ajustados_discapacidad <- AVP+AVP_ajustados_discapacidad
+  Años_vida_ajustados_discapacidad_descontado <- AVP_descontado+AVP_ajustados_discapacidad
   
   ### creo vector
-  costos_evitados <<- (as.numeric(SAT[12])-(costo-costo_VOT_DOT))
+  costos_evitados <- (as.numeric(SAT[12])-(costo-costo_VOT_DOT))
   
-  VOT <<- c(trat_exitoso,
+  VOT <- c(trat_exitoso,
            trat_exitoso/cohorte,
            perdida_seguimiento,
            muerte,
@@ -570,7 +568,7 @@ modelo_tbc <- function( pais_seleccionado,
   
   ### resultados -----
   # Nombres de los parámetros, como se ven en tu tabla.
-  parametros <<- c("Tratamientos exitosos (n)", 
+  parametros <- c("Tratamientos exitosos (n)", 
                   "Porcentaje de éxito (%)",
                   "Perdida de seguimiento", 
                   "Muertes evitadas (n) no se usa",
@@ -592,7 +590,7 @@ modelo_tbc <- function( pais_seleccionado,
                   "Años_vida_ajustados_discapacidad_descontado")
   
   # Crear el dataframe
-  resultados <<- data.frame(Parametro=parametros, SAT=SAT, DOT=DOT, VOT=VOT)
+  resultados <- data.frame(Parametro=parametros, SAT=SAT, DOT=DOT, VOT=VOT)
   
   ###agrego caluclo de
   ##Años de vida ajustados por discapacidad descontados prevenidos
@@ -602,8 +600,8 @@ modelo_tbc <- function( pais_seleccionado,
   # Años de vida salvados		
   # Años de vida salvados descontados		
   
-  resultados$SAT <<- as.numeric(resultados$SAT)
-  new_rows <<- data.frame(
+  resultados$SAT <- as.numeric(resultados$SAT)
+  new_rows <- data.frame(
     Parametro = c("Años de vida ajustados por discapacidad evitados",
                   "Años de vida ajustados por discapacidad descontados evitados",
                   "Diferencia de costos respecto al escenario basal (USD)",
@@ -626,12 +624,12 @@ modelo_tbc <- function( pais_seleccionado,
   )
   
   
-  resultados <<- rbind(resultados, new_rows)
-  resultados[-1] <<- lapply(resultados[-1], function(x) if(is.numeric(x)) round(x, 2) else x)
+  resultados <- rbind(resultados, new_rows)
+  resultados[-1] <- lapply(resultados[-1], function(x) if(is.numeric(x)) round(x, 2) else x)
   
   
-  resultados <<- resultados[c(1,24,21,25,10,11,23,14,13,18),]
-  names(resultados)[4] <<- "vDOT"
+  resultados <- resultados[c(1,24,21,25,10,11,23,14,13,18),]
+  names(resultados)[4] <- "vDOT"
   return(
     resultados
     )
@@ -656,7 +654,8 @@ modelo_tbc <- function( pais_seleccionado,
 #            datos_paises,
 #            asunciones)
 
-get_tbc_params = function () {
+get_tbc_params = function (input) {
+  pais_seleccionado = input$country
   params = list()
   params$VOTrrExito = 1
   params$VOTadherencia = 0.78
@@ -855,10 +854,9 @@ get_tbc_hover = function () {
 
 
 ## pruebas
-# pais_seleccionado <- "ARGENTINA"
-# params <- get_tbc_params()
+# params <- get_tbc_params(list(country="Argentina"))
 # 
-# TBC <- modelo_tbc(pais_seleccionado,
+# TBC <- modelo_tbc("Argentina",
 #                   params$VOTrrExito,
 #                   params$VOTadherencia,
 #                   params$costo_evento_VOT,
@@ -891,6 +889,6 @@ get_tbc_hover = function () {
 #                   params$costo_trat_multires_consolidacion,
 #                   params$tasa_descuento_anual,
 #                   params$costo_intervencion_vDOT)
-
-
-#inputs_tbc <- readxl::read_excel("tbc/data/inputs_tbc.xlsx")
+# 
+# 
+# 

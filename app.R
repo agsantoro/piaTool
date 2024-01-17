@@ -675,25 +675,41 @@ server <- function(input, output, session) {
   ##### TBC #####
   
   tbc_run <- reactive({
-    params = get_tbc_params()
     
     if (length(input$VOTrrExito)!=0) {
-      table = modelo_tbc(input$pExitoso/100,
-                         input$pMuerte/100,
-                         input$pFalla/100,
-                         input$DOTrrMuerte,
-                         input$DOTrrFalla,
-                         input$DOTadherencia/100,
-                         input$DOTrrExito,
+      table = modelo_tbc(input$country,
                          input$VOTrrExito,
                          input$VOTadherencia/100,
+                         input$costo_evento_VOT,
+                         input$cantidad_vot_semana,
+                         input$ttoExitoso_Duracion,
+                         input$pExitoso/100,
+                         input$pFalla/100,
+                         input$pMuerte/100,
                          input$VOTrrFalla,
                          input$VOTrrMuerte,
-                         input$country,
-                         input$cantidad_vot_semana,
+                         input$DOTrrExito,
+                         input$DOTrrFalla,
+                         input$DOTrrMuerte,
+                         input$DOTadherencia/100,
                          input$cantidad_dot_semana,
-                         datos_paises,
-                         asunciones)
+                         input$mediana_edad_paciente,
+                         input$cohorte,
+                         input$utilidad_pob_gral,
+                         input$disutilidad_tbc_activa,
+                         input$prob_internacion_con_falla/100,
+                         input$cantidadDiasInternacion,
+                         input$costo_trat_induccion,
+                         input$costo_trat_consolidacion,
+                         input$costo_seguimiento,
+                         input$costo_examenes_complemen,
+                         input$costo_evento_DOT,
+                         input$costo_internacion,
+                         input$costoConsulta,
+                         input$costo_trat_multires_induccion,
+                         input$costo_trat_multires_consolidacion,
+                         input$tasa_descuento_anual/100,
+                         input$costo_intervencion_vDOT)
       table
     }
     
@@ -785,7 +801,8 @@ server <- function(input, output, session) {
   })
   
   observeEvent(input$toggle_avanzado_tbc, {
-    inputs_hide = names(get_tbc_params())[4:13]
+    load("tbc_map_inputs.Rdata")
+    inputs_hide = tbc_map_inputs$i_names[tbc_map_inputs$avanzado]
     
     
     for (i in inputs_hide) {

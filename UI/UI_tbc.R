@@ -1,16 +1,18 @@
 ui_tbc = function (input) {
   renderUI({
-    
     if (is.null(input$country) == F) {
       tbc_map_inputs = data.frame(
         intervencion = "VDOT Tuberculosis",
-        i_names = names(get_tbc_params()),
+        i_names = names(get_tbc_params(input=input)),
         i_labels = get_tbc_params_labels()
       )
-
+      
+      bsc = 1:3
+      avz = 4:nrow(tbc_map_inputs)
+    
       tbc_map_inputs$avanzado = NA
-      tbc_map_inputs$avanzado[1:3] = T
-      tbc_map_inputs$avanzado[4:13] = F
+      tbc_map_inputs$avanzado[bsc] = F
+      tbc_map_inputs$avanzado[avz] = T
 
       rownames(tbc_map_inputs) = 1:nrow(tbc_map_inputs)
 
@@ -21,13 +23,13 @@ ui_tbc = function (input) {
 
     }
     
-    porcentajes = c(3,4,5,6,9)
+    porcentajes = c(2,6,7,8,14,20,31)
     
     inputs_hover = get_tbc_hover()
     
     tagList(
       
-      lapply(1:3, function(i) {
+      lapply(bsc, function(i) {
         if (i %in% porcentajes) {
           sliderInput(tbc_map_inputs$i_names[i],
                       tags$div(
@@ -37,14 +39,17 @@ ui_tbc = function (input) {
                              title = inputs_hover[i])
                       ),
                       
-                      min=0, max=100, get_tbc_params()[[i]]*100)
+                      min=0, 
+                      max=100,
+                      step = 0.01,
+                      value = get_tbc_params(input)[[i]]*100)
         } else {
           numericInput(tbc_map_inputs$i_names[i],tags$div(
             tbc_map_inputs$i_labels[i],
             icon("circle-info",
                  "fa-1x",
                  title = inputs_hover[i])
-          ),get_tbc_params()[[i]])
+          ),get_tbc_params(input)[[i]])
         }
         
       }),
@@ -53,21 +58,24 @@ ui_tbc = function (input) {
                   actionLink(inputId = "toggle_avanzado_tbc", label=icon("stream", style = "color: white;"))
       ),
 
-      lapply(4:13, function(i) {
+      lapply(avz, function(i) {
         if (i %in% porcentajes) {
           hidden(sliderInput(tbc_map_inputs$i_names[i],tags$div(
             tbc_map_inputs$i_labels[i],
             icon("circle-info",
                  "fa-1x",
                  title = inputs_hover[i])
-          ),min=0, max=100, get_tbc_params()[[i]]*100))
+          ),min=0, 
+          max=100,
+          step = 0.01,
+          value = get_tbc_params(input)[[i]]*100))
         } else {
           hidden(numericInput(tbc_map_inputs$i_names[i],tags$div(
             tbc_map_inputs$i_labels[i],
             icon("circle-info",
                  "fa-1x",
                  title = inputs_hover[i])
-          ),get_tbc_params()[[i]]))
+          ),get_tbc_params(input)[[i]]))
         }
         
       })
@@ -86,18 +94,16 @@ ui_tbc = function (input) {
 
 ui_resultados_tbc = function(input,output,resultados) {
   
-  tbc_run = resultados()
+  tbc_run = resultados()[,c(1,4)]
   
   output$tbc_summaryTable = renderReactable({
     
     if (length(tbc_run)>1) {
       table = tbc_run
-      table$SAT[c(1:10,12)] = format(round(as.numeric(table$SAT[c(1:10,12)]),1),big.mark = ".",decimal.mark = ",")
-      table$VOT = format(round(table$VOT,1),big.mark = ".",decimal.mark = ",")
-      table$DOT = format(round(table$DOT,1),big.mark = ".",decimal.mark = ",")
+      table$vDOT = format(round(table$vDOT,1),big.mark = ".",decimal.mark = ",")
       
-      cat_epi = 1:9
-      cat_costos = 10:17
+      cat_epi = 1:4
+      cat_costos = 5:nrow(table)
       
       table$cat=""
       table$cat[cat_epi] = "Resultados epidemiológicos"
@@ -114,10 +120,8 @@ ui_resultados_tbc = function(input,output,resultados) {
         ),
         columns = list(
           cat = colDef(name = "Categoría", align = "left"),
-          Parametro = colDef(name = "Parámetro", align = "left"),
-          SAT = colDef(name = "SAT", align = "right"),
-          DOT = colDef(name = "DOT", align = "right"),
-          VOT = colDef(name = "VOT", align = "right")
+          Parametro = colDef(name = "Indicador", align = "left"),
+          vDOT = colDef(name = "Valor", align = "right")
         ),
         bordered = TRUE,
         highlight = TRUE
