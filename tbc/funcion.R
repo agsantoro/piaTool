@@ -431,7 +431,7 @@ modelo_tbc <- function(pais_seleccionado,
            ((costo-as.numeric(SAT[12]))/(as.numeric(SAT[20])-Años_vida_ajustados_discapacidad_descontado)),
            ((costo-as.numeric(SAT[12]))/(as.numeric(SAT[8])-AVP_ajustados_descontado)),
            ((costo-as.numeric(SAT[12]))/(as.numeric(SAT[4])-muerte)),
-           (costos_evitados-costo_VOT_DOT)/costo_VOT_DOT,
+           (costos_evitados-costo_VOT_DOT)/costo_VOT_DOT*100,
            Años_vida_ajustados_discapacidad,
            Años_vida_ajustados_discapacidad_descontado
   )
@@ -561,7 +561,7 @@ modelo_tbc <- function(pais_seleccionado,
            ((costo-as.numeric(SAT[12]))/(as.numeric(SAT[20])-Años_vida_ajustados_discapacidad_descontado)),
            ((costo-as.numeric(SAT[12]))/(as.numeric(SAT[8])-AVP_ajustados_descontado)),
            ((costo-as.numeric(SAT[12]))/(as.numeric(SAT[4])-muerte)),
-           (costos_evitados-costo_VOT_DOT)/costo_VOT_DOT,
+           (costos_evitados-costo_VOT_DOT)/costo_VOT_DOT*100,
            Años_vida_ajustados_discapacidad,
            Años_vida_ajustados_discapacidad_descontado
   )
