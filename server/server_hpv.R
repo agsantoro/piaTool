@@ -508,41 +508,31 @@ server_hpv = function (input, output, session, parameterReactive, scenarios, res
                 
                 if (length(sel_escenario)>0) {
                   enable("tbc_savedScenarios")
+                  browser()
+                  tbc_run = data.frame(indicador = tbc_run()[,c(1)])
+                  table = tbc_run
                   
-                  table = tbc_run()
-                  table$SAT[c(1:10,12)] = format(round(as.numeric(table$SAT[c(1:10,12)]),1),big.mark = ".",decimal.mark = ",")
-                  table$VOT = format(round(table$VOT,1),big.mark = ".",decimal.mark = ",")
-                  table$DOT = format(round(table$DOT,1),big.mark = ".",decimal.mark = ",")
-                  
-                  table = data.frame(
-                    Parametro = rep(table$Parametro,3),
-                    Clasif = c(rep("SAT",17),rep("DOT",17),rep("VOT",17)),
-                    Valor = c(table$SAT,table$DOT,table$VOT)
-                  )
-                  
-                  cat_epi = 1:9
-                  cat_costos = 10:17
+                  cat_epi = 1:4
+                  cat_costos = 5:nrow(table)
                   
                   table$cat=""
                   table$cat[cat_epi] = "Resultados epidemiológicos"
                   table$cat[cat_costos] = "Resultados económicos"
-                  table$cat = rep(table$cat[1:17],3)
                   
+        
                   columns = list()
                   
                   for (i in sel_escenario) {
                     scn_name = i
-                    col = c(tbc_scenarios$savedScenarios[[i]]$SAT,tbc_scenarios$savedScenarios[[i]]$DOT,tbc_scenarios$savedScenarios[[i]]$VOT)
-                    col[setdiff(1:length(col),c(11,13:17))] = format(round(as.numeric(col[setdiff(1:length(col),c(11,13:17))]),1),big.mark = ".",decimal.mark = ",")
+                    col = tbc_scenarios$savedScenarios[[i]]$vDOT
                     table[[i]] = col  
                     columns[[i]] = colDef(name = i, align = "right")
                     
                   }
                 
                   columns[["cat"]] = colDef(name = "Categoría", align = "left")
-                  columns[["Parametro"]] = colDef(name = "Parámetro", align = "left")
+                  columns[["indicador"]] = colDef(name = "Parámetro", align = "left")
                 
-                table$Valor = NULL
                 
                   reactable(
                     table,
