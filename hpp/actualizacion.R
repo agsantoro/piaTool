@@ -19,8 +19,6 @@ hpp = function (pais,
                 costoIntervencion = 0 #Costo de la intervención  (INPUT)
 ) {
   
-  browser()
-  
   # Carga información de países
   # load("hpp/data/datosPais.RData")
   # write.xlsx(datosPais,file="hpp/data/datosPais.xlsx")

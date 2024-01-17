@@ -773,8 +773,7 @@ server <- function(input, output, session) {
   
   
   observeEvent(input$toggle_avanzado_hpp, {
-    browser()
-    load("hpp_map_inputs.RData")
+    load("hpp_map_inputs.Rdata")
     inputs_hide = hpp_map_inputs$i_names[hpp_map_inputs$avanzado==T]
     
     
