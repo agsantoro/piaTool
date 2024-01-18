@@ -768,8 +768,52 @@ server_hpv = function (input, output, session, parameterReactive, scenarios, res
             browser()
             
             ########## ACÁ METÉ LOS GRÁFICOS ##########
+          
+            compa <- table
+         
+            compa<- compa %>%
+              mutate(Intervencion_escenario = paste(scenarioName, intervencion, sep = '/'),
+                     value = round(value, 1))
             
             
+            # Colores de fondo para cada gráfico
+            background_colors <- c("#FCE0DC", "#E4D2EC", "#C0E2F1", "#C1F2E6", "#FCF5C6")
+          
+            unique_indicators <- unique(compa$indicador)
+            
+            #  gráficos
+            list_of_plots <- lapply(seq_along( unique(compa$indicador)), function(idx) {
+              indicador <- unique_indicators[idx]
+              data_subset <-filter(compa, indicador == !!indicador)
+              chart <- hchart(data_subset, "bar", hcaes(x = Intervencion_escenario, y = value, name = intervencion)) %>%
+                hc_chart(backgroundColor = background_colors[idx %% length(background_colors) + 1]) %>% # Establecer color de fondo
+                hc_title(text = paste("Indicador:", indicador)) %>%
+                hc_plotOptions(series = list(
+                  color = 'black' # Configurar el color de las barras a negro
+                  # dataLabels = list(
+                  #   enabled = TRUE, 
+                  #   format = '{point.y}',  # Usar el nombre de la opción de punto para la etiqueta
+                  #   color = 'black', # Cambiar el color del texto a negro
+                  #   align = 'right', # Alinear a la derecha (fuera de la barra)
+                  #   inside = FALSE, # Asegurar que la etiqueta esté fuera de la barra
+                  #   verticalAlign = 'middle', # Alinear verticalmente en el medio
+                  #   y = 0, # Ajustar posición vertical
+                  #   x = 5  # Ajustar posición horizontal (un poco a la derecha de la barra)
+                  # )
+                )) %>%
+                hc_xAxis(title = list(text = "Escenario selecionado")) %>%
+                hc_yAxis(title = list(text = ""), opposite = TRUE) %>%
+                hc_tooltip(pointFormat = paste('Valor de',indicador,': <b>{point.y:,.0f}</b><br/>'))
+              chart
+            })
+            
+            # cuadrícula
+            hw_grid(list_of_plots, rowheight = 240, ncol=5) %>%
+              htmltools::browsable()
+            
+            
+
+
             ###########################################
             
             # output$grafico_multiple1 = renderHighchart({
