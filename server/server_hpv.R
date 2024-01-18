@@ -695,110 +695,131 @@ server_hpv = function (input, output, session, parameterReactive, scenarios, res
             intervenciones_seleccionadas = input$comparacion_intervencion
             escenarios_seleccionados = input$comparacion_escenario
             
-            ROI= list()
+            AVAD = list()
+            COSTO_TOTAL = list()
+            DIF_COSTO = list()
             RCEI_AVAD = list()
+            ROI = list()
             
             for (j in escenarios_seleccionados[escenarios_seleccionados %in% summary_scenarios$table$scenarioName[summary_scenarios$table$intervencion=="Vacuna contra el HPV"]]) {
-              ROI[[j]] = scenarios$savedScenarios[[j]]$outcomes$undisc[scenarios$savedScenarios[[j]]$outcomes$outcomes=="Retorno de inversión"]
+              AVAD[[j]] = scenarios$savedScenarios[[j]]$outcomes$undisc[scenarios$savedScenarios[[j]]$outcomes$outcomes=="Años de Vida Ajustados por Discapacidad evitados (AVAD)"]
+              COSTO_TOTAL[[j]] = scenarios$savedScenarios[[j]]$outcomes$undisc[scenarios$savedScenarios[[j]]$outcomes$outcomes=="Costo total de la intervención (USD)"]
+              DIF_COSTO[[j]] = scenarios$savedScenarios[[j]]$outcomes$undisc[scenarios$savedScenarios[[j]]$outcomes$outcomes=="Diferencia de Costos respecto al escenario basal (USD)"]
+              ROI[[j]] = scenarios$savedScenarios[[j]]$outcomes$undisc[scenarios$savedScenarios[[j]]$outcomes$outcomes=="Retorno de Inversión (%)"]
               RCEI_AVAD[[j]] = scenarios$savedScenarios[[j]]$outcomes$undisc[scenarios$savedScenarios[[j]]$outcomes$outcomes=="Razón de costo-efectividad incremental por Años de Vida Ajustados por Discapacidad evitados (USD)"]
             }
             
             for (j in escenarios_seleccionados[escenarios_seleccionados %in% summary_scenarios$table$scenarioName[summary_scenarios$table$intervencion=="HEARTS"]]) {
-              ROI[[j]] = hearts_scenarios$savedScenarios[[j]]$Valor[hearts_scenarios$savedScenarios[[j]]$Indicador=="Retorno de inversión"]
-              RCEI_AVAD[[j]] = hearts_scenarios$savedScenarios[[j]]$Valor[hearts_scenarios$savedScenarios[[j]]$Indicador=="Razón de costo-efectividad incremental por Año de Vida Ajustado por Discapacidad evitado"]
+              AVAD[[j]] = as.numeric(hearts_scenarios$savedScenarios[[j]]$Valor[hearts_scenarios$savedScenarios[[j]]$Indicador=="Años de vida ajustados por discapacidad evitados"])
+              COSTO_TOTAL[[j]] = as.numeric(hearts_scenarios$savedScenarios[[j]]$Valor[hearts_scenarios$savedScenarios[[j]]$Indicador=="Costos totales de la intervención (USD)"])
+              DIF_COSTO[[j]] = as.numeric(hearts_scenarios$savedScenarios[[j]]$Valor[hearts_scenarios$savedScenarios[[j]]$Indicador=="Diferencia de costos respecto al escenario basal (USD)"])
+              ROI[[j]] = as.numeric(hearts_scenarios$savedScenarios[[j]]$Valor[hearts_scenarios$savedScenarios[[j]]$Indicador=="Retorno de inversión (%)"])
+              RCEI_AVAD[[j]] = as.numeric(hearts_scenarios$savedScenarios[[j]]$Valor[hearts_scenarios$savedScenarios[[j]]$Indicador=="Razón de costo-efectividad incremental por Año de Vida Ajustado por Discapacidad evitado (USD)"])
             }
             
             for (j in escenarios_seleccionados[escenarios_seleccionados %in% summary_scenarios$table$scenarioName[summary_scenarios$table$intervencion=="Hemorragia postparto"]]) {
-              ROI[[j]] = hpp_scenarios$savedScenarios[[j]]$Valor[hpp_scenarios$savedScenarios[[j]]$Indicador=="Retorno de Inversión (%)"]
-              RCEI_AVAD[[j]] = hpp_scenarios$savedScenarios[[j]]$Valor[hpp_scenarios$savedScenarios[[j]]$Indicador=="Diferencia de costos respecto al escenario basal (USD)"] / hpp_scenarios$savedScenarios[[j]]$Valor[hpp_scenarios$savedScenarios[[j]]$Indicador=="Años de vida ajustados por discapacidad evitados"]
+              AVAD[[j]] = hpp_scenarios$savedScenarios[[j]]$valor[hpp_scenarios$savedScenarios[[j]]$indicador=="Años de vida ajustados por discapacidad evitados"]
+              COSTO_TOTAL[[j]] = hpp_scenarios$savedScenarios[[j]]$valor[hpp_scenarios$savedScenarios[[j]]$indicador=="Costo total de la intervención (USD)"]
+              DIF_COSTO[[j]] = hpp_scenarios$savedScenarios[[j]]$valor[hpp_scenarios$savedScenarios[[j]]$indicador=="Diferencia de costos respecto al escenario basal (USD)"]
+              ROI[[j]] = hpp_scenarios$savedScenarios[[j]]$valor[hpp_scenarios$savedScenarios[[j]]$indicador=="Retorno de Inversión (%)"]
+              RCEI_AVAD[[j]] = hpp_scenarios$savedScenarios[[j]]$valor[hpp_scenarios$savedScenarios[[j]]$indicador=="Razón de costo-efectividad incremental por Año de Vida Ajustado por Discapacidad evitado (USD)"]
             }
             
-            for (j in escenarios_seleccionados[escenarios_seleccionados %in% summary_scenarios$table$scenarioName[summary_scenarios$table$intervencion=="Hepatitis C"]]) {
-              ROI[[j]] = hepC_scenarios$savedScenarios[[j]]$Valor[hepC_scenarios$savedScenarios[[j]]$Indicador=="Retorno de Inversión (%)"]
-              RCEI_AVAD[[j]] = hepC_scenarios$savedScenarios[[j]]$Valor[hepC_scenarios$savedScenarios[[j]]$Indicador=="Retorno de Inversión (%)"]
-            }
+            # for (j in escenarios_seleccionados[escenarios_seleccionados %in% summary_scenarios$table$scenarioName[summary_scenarios$table$intervencion=="Hepatitis C"]]) {
+            #   browser()
+            #   ROI[[j]] = hepC_scenarios$savedScenarios[[j]]$Valor[hepC_scenarios$savedScenarios[[j]]$Indicador=="Retorno de Inversión (%)"]
+            #   RCEI_AVAD[[j]] = hepC_scenarios$savedScenarios[[j]]$Valor[hepC_scenarios$savedScenarios[[j]]$Indicador=="Retorno de Inversión (%)"]
+            # }
             
             for (j in escenarios_seleccionados[escenarios_seleccionados %in% summary_scenarios$table$scenarioName[summary_scenarios$table$intervencion=="VDOT Tuberculosis"]]) {
-              
-              ROI[[j]] = tbc_scenarios$savedScenarios[[j]]$VOT[tbc_scenarios$savedScenarios[[j]]$Parametro=="Retorno de Inversión (%)"]
-              RCEI_AVAD[[j]] = tbc_scenarios$savedScenarios[[j]]$VOT[tbc_scenarios$savedScenarios[[j]]$Parametro=="Razón de costo-efectividad incremental por Año de Vida Ajustado por Discapacidad evitado (USD)"]
+              AVAD[[j]] = tbc_scenarios$savedScenarios[[j]]$vDOT[tbc_scenarios$savedScenarios[[j]]$Parametro=="Años de vida ajustados por discapacidad evitados"]
+              COSTO_TOTAL[[j]] = tbc_scenarios$savedScenarios[[j]]$vDOT[tbc_scenarios$savedScenarios[[j]]$Parametro=="Costo total de la intervención (USD)"]
+              DIF_COSTO[[j]] = tbc_scenarios$savedScenarios[[j]]$vDOT[tbc_scenarios$savedScenarios[[j]]$Parametro=="Diferencia de costos respecto al escenario basal (USD)"]
+              ROI[[j]] = tbc_scenarios$savedScenarios[[j]]$vDOT[tbc_scenarios$savedScenarios[[j]]$Parametro=="Retorno de Inversión (%)"]
+              RCEI_AVAD[[j]] = tbc_scenarios$savedScenarios[[j]]$vDOT[tbc_scenarios$savedScenarios[[j]]$Parametro=="Razon de costo-efectividad incremental por año de vida ajustado por discapacidad prevenido"]
             }
             
-            for (j in escenarios_seleccionados[escenarios_seleccionados %in% summary_scenarios$table$scenarioName[summary_scenarios$table$intervencion=="Profilaxis Pre Exposición VIH"]]) {
-              ROI[[j]] = prep_scenarios$savedScenarios[[j]]$Valor[prep_scenarios$savedScenarios[[j]]$Parametro=="Retorno de Inversión"]
-              RCEI_AVAD[[j]] = prep_scenarios$savedScenarios[[j]]$Valor[prep_scenarios$savedScenarios[[j]]$Parametro=="Razón de costo-efectividad incremental (RCEI) por Años de Vida Ajustados por Discapacidad (AVAD) Evitados (descontado)"]
-            }
+            # for (j in escenarios_seleccionados[escenarios_seleccionados %in% summary_scenarios$table$scenarioName[summary_scenarios$table$intervencion=="Profilaxis Pre Exposición VIH"]]) {
+            #   browser()
+            #   ROI[[j]] = prep_scenarios$savedScenarios[[j]]$Valor[prep_scenarios$savedScenarios[[j]]$Parametro=="Retorno de Inversión"]
+            #   RCEI_AVAD[[j]] = prep_scenarios$savedScenarios[[j]]$Valor[prep_scenarios$savedScenarios[[j]]$Parametro=="Razón de costo-efectividad incremental (RCEI) por Años de Vida Ajustados por Discapacidad (AVAD) Evitados (descontado)"]
+            # }
             
             escenarios = names(unlist(ROI))
-            roi_table = 
-              data.frame(scenarioName = escenarios,
-                         value = unlist(ROI)) %>% left_join(summary_scenarios$table)
             
-            roi_table$scenarioName = paste0("Escenario: ","<b>",roi_table$scenarioName,"</b> <br>",roi_table$country,"<br>",roi_table$intervencion)
+            indicadores = c(
+              "AVAD",
+              "COSTO_TOTAL",
+              "DIF_COSTO",
+              "ROI",
+              "RCEI_AVAD")
             
-            roi_table <- roi_table %>% arrange(desc(value))
-            roi_table$value = round(roi_table$value,2)
+            table = data.frame()
+            for (i in indicadores) {
+              append = data.frame(
+                indicador = i,
+                scenarioName = escenarios,
+                value = unlist(eval(parse(text=i)))) %>% left_join(summary_scenarios$table)
+              table = rbind(table,append)
+            }
             
-            iceravad_table = 
-              data.frame(scenarioName = escenarios,
-                         value = unlist(RCEI_AVAD)) %>% left_join(summary_scenarios$table)
+            table = table %>% dplyr::select(scenarioName,country,intervencion, indicador, value)
             
-            iceravad_table$scenarioName = paste0("Escenario: ","<b>",iceravad_table$scenarioName,"</b> <br>",iceravad_table$country,"<br>",iceravad_table$intervencion)
+            browser()
             
-            iceravad_table <- iceravad_table %>% arrange(desc(value))
-            iceravad_table$value = round(iceravad_table$value,2)
             
-            output$grafico_multiple1 = renderHighchart({
-              show("escenarios_guardados")
-              
-                grafico <- highchart() %>%
-                  hc_chart(type = "column") %>%
-                  hc_title(text = "Comparación del retorno de la inversión entre escenarios guardados") %>%
-                  hc_xAxis(categories = roi_table$scenarioName) %>%
-                  hc_plotOptions(column = list(
-                    colorByPoint = TRUE,
-                    dataLabels = list(enabled = TRUE)
-                  )) %>%
-                  hc_add_series(
-                    data = roi_table,
-                    type = "column",
-                    hcaes(y = value, color = intervencion),
-                    name = "ROI"
-                  ) 
-                
-                grafico %>% hc_legend(list(
-                  enabled = F
-                )) %>%
-                  hc_add_theme(hc_theme_elementary())
-                
-              
-            })
             
-            output$grafico_multiple2 = renderHighchart({
-              show("escenarios_guardados")
-              
-              grafico <- highchart() %>%
-                hc_chart(type = "column") %>%
-                hc_title(text = "Comparación de la RCEI por AVADS evitados") %>%
-                hc_xAxis(categories = iceravad_table$scenarioName) %>%
-                hc_plotOptions(column = list(
-                  colorByPoint = TRUE,
-                  dataLabels = list(enabled = TRUE)
-                )) %>%
-                hc_add_series(
-                  data = iceravad_table,
-                  type = "column",
-                  hcaes(y = value, color = intervencion),
-                  name = "ROI"
-                ) 
-              
-              grafico %>% hc_legend(list(
-                enabled = F
-              )) %>%
-                hc_add_theme(hc_theme_elementary())
-              
-              
-            })
+            # output$grafico_multiple1 = renderHighchart({
+            #   show("escenarios_guardados")
+            #   
+            #     grafico <- highchart() %>%
+            #       hc_chart(type = "column") %>%
+            #       hc_title(text = "Comparación del retorno de la inversión entre escenarios guardados") %>%
+            #       hc_xAxis(categories = roi_table$scenarioName) %>%
+            #       hc_plotOptions(column = list(
+            #         colorByPoint = TRUE,
+            #         dataLabels = list(enabled = TRUE)
+            #       )) %>%
+            #       hc_add_series(
+            #         data = roi_table,
+            #         type = "column",
+            #         hcaes(y = value, color = intervencion),
+            #         name = "ROI"
+            #       ) 
+            #     
+            #     grafico %>% hc_legend(list(
+            #       enabled = F
+            #     )) %>%
+            #       hc_add_theme(hc_theme_elementary())
+            #     
+            #   
+            # })
+            # 
+            # output$grafico_multiple2 = renderHighchart({
+            #   show("escenarios_guardados")
+            #   
+            #   grafico <- highchart() %>%
+            #     hc_chart(type = "column") %>%
+            #     hc_title(text = "Comparación de la RCEI por AVADS evitados") %>%
+            #     hc_xAxis(categories = iceravad_table$scenarioName) %>%
+            #     hc_plotOptions(column = list(
+            #       colorByPoint = TRUE,
+            #       dataLabels = list(enabled = TRUE)
+            #     )) %>%
+            #     hc_add_series(
+            #       data = iceravad_table,
+            #       type = "column",
+            #       hcaes(y = value, color = intervencion),
+            #       name = "ROI"
+            #     ) 
+            #   
+            #   grafico %>% hc_legend(list(
+            #     enabled = F
+            #   )) %>%
+            #     hc_add_theme(hc_theme_elementary())
+            #   
+            #   
+            # })
           }
           
           
