@@ -767,7 +767,10 @@ server_hpv = function (input, output, session, parameterReactive, scenarios, res
             
             browser()
             
+            ########## ACÁ METÉ LOS GRÁFICOS ##########
             
+            
+            ###########################################
             
             # output$grafico_multiple1 = renderHighchart({
             #   show("escenarios_guardados")
