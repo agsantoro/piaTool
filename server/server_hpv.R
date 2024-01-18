@@ -768,12 +768,12 @@ server_hpv = function (input, output, session, parameterReactive, scenarios, res
             
             
             ########## ACÁ METÉ LOS GRÁFICOS ##########
-
+          
           
             compa <- table
          
             compa<- compa %>%
-              mutate(Intervencion_escenario = paste(scenarioName, intervencion, sep = '/'),
+              mutate(Intervencion_escenario = paste0(intervencion,'<br>',"(",scenarioName,")" ),
                      value = round(value, 1))
             
             compa$indicador[compa$indicador=="AVAD"] = "Años de vida ajustados por discapacidad evitados"
@@ -785,8 +785,8 @@ server_hpv = function (input, output, session, parameterReactive, scenarios, res
             
             
             # Colores de fondo para cada gráfico
-            background_colors <- c("#FCE0DC", "#E4D2EC", "#C0E2F1", "#C1F2E6", "#FCF5C6")
-          
+            background_colors <- c("#FEDCB4", "#FCE3CB", "#c6efef", "#b2ceea", "#A8B7CC")
+            
             unique_indicators <- unique(compa$indicador)
             
             #  gráficos
@@ -795,9 +795,10 @@ server_hpv = function (input, output, session, parameterReactive, scenarios, res
               data_subset <-filter(compa, indicador == !!indicador)
               chart <- hchart(data_subset, "bar", hcaes(x = Intervencion_escenario, y = value, name = intervencion)) %>%
                 hc_chart(backgroundColor = background_colors[idx %% length(background_colors) + 1]) %>% # Establecer color de fondo
-                hc_title(text = paste("Indicador:", indicador)) %>%
+                hc_title(text = paste("Indicador:", indicador),
+                         style = list(fontSize = "14px")) %>%
                 hc_plotOptions(series = list(
-                  color = 'black' # Configurar el color de las barras a negro
+                  color = '#596775' # Configurar el color de las barras a negro
                   # dataLabels = list(
                   #   enabled = TRUE, 
                   #   format = '{point.y}',  # Usar el nombre de la opción de punto para la etiqueta
@@ -809,8 +810,15 @@ server_hpv = function (input, output, session, parameterReactive, scenarios, res
                   #   x = 5  # Ajustar posición horizontal (un poco a la derecha de la barra)
                   # )
                 )) %>%
-                hc_xAxis(title = list(text = "Escenario selecionado")) %>%
-                hc_yAxis(title = list(text = ""), opposite = TRUE) %>%
+                hc_xAxis(title = list(text = "Escenario selecionado"),
+                         categories=data_subset$Intervencion_escenario) %>%
+                hc_yAxis(title = list(text = ""),
+                         opposite = TRUE,
+                         plotLines = list(list(
+                           value = 0, 
+                           color = 'white',
+                           width = 2 # Puedes ajustar el grosor de la línea aquí
+                         )) )%>%
                 hc_tooltip(pointFormat = paste('Valor de',indicador,': <b>{point.y:,.0f}</b><br/>'))
               chart
             })
