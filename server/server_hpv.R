@@ -765,15 +765,23 @@ server_hpv = function (input, output, session, parameterReactive, scenarios, res
             
             table = table %>% dplyr::select(scenarioName,country,intervencion, indicador, value)
             
-            browser()
+            
             
             ########## ACÁ METÉ LOS GRÁFICOS ##########
+
           
             compa <- table
          
             compa<- compa %>%
               mutate(Intervencion_escenario = paste(scenarioName, intervencion, sep = '/'),
                      value = round(value, 1))
+            
+            compa$indicador[compa$indicador=="AVAD"] = "Años de vida ajustados por discapacidad evitados"
+            compa$indicador[compa$indicador=="COSTO_TOTAL"] = "Costo total de la intervención (USD)"
+            compa$indicador[compa$indicador=="DIF_COSTO"] = "Diferencia de costos respecto al escenario basal (USD)"
+            compa$indicador[compa$indicador=="ROI"] = "Retorno de Inversión (%)"
+            compa$indicador[compa$indicador=="RCEI_AVAD"] = "Razon de costo-efectividad incremental por año de vida ajustado por discapacidad prevenido"
+          
             
             
             # Colores de fondo para cada gráfico
@@ -808,8 +816,18 @@ server_hpv = function (input, output, session, parameterReactive, scenarios, res
             })
             
             # cuadrícula
-            hw_grid(list_of_plots, rowheight = 240, ncol=5) %>%
-              htmltools::browsable()
+            
+            
+              # hw_grid(list_of_plots, rowheight = 240, ncol=5, add_htmlgrid_css = F) %>%
+              #   htmltools::browsable()
+              # 
+            
+            
+            output$grafico_multiple1 = renderHighchart({list_of_plots[[1]]})
+            output$grafico_multiple2 = renderHighchart({list_of_plots[[2]]})
+            output$grafico_multiple3 = renderHighchart({list_of_plots[[3]]})
+            output$grafico_multiple4 = renderHighchart({list_of_plots[[4]]})
+            output$grafico_multiple5 = renderHighchart({list_of_plots[[5]]})
             
             
 
@@ -921,19 +939,33 @@ server_hpv = function (input, output, session, parameterReactive, scenarios, res
           })
           
           shiny::tagList(
-            br(),
-            highchartOutput("grafico_multiple1"),
-            br(),
-            highchartOutput("grafico_multiple2"),
-            br(),
-            tags$header(id = "header_tabla_inputs_multiple", class="text-1xl flex justify-between items-center p-5 mt-4", style="background-color: #FF671B; color: white; text-align: center", 
-                                      tags$h1(style="display: inline-block; margin: 0 auto;", class="flex-grow mt-8 mb-8",tags$b("Descripción de escenarios guardados")),
-                                      actionLink(inputId = "toggle_tabla_inputs_multiple", label=icon("stream", style = "color: white;"))
-                          ),
-            br(),
-            hidden(reactableOutput("prueba")),
-            br(),
-            br()
+            fluidRow(
+              column(4,
+                     highchartOutput("grafico_multiple1")),
+              column(4,
+                     highchartOutput("grafico_multiple2")),
+              column(4,
+                     highchartOutput("grafico_multiple3")),
+              column(4, class = "mt-2",
+                     highchartOutput("grafico_multiple4")),
+              column(4, class = "mt-2",
+                     highchartOutput("grafico_multiple5"))
+              
+            ),
+            fluidRow(
+              column(12,
+                     br(),
+                     tags$header(id = "header_tabla_inputs_multiple", class="text-1xl flex justify-between items-center p-5 mt-4", style="background-color: #FF671B; color: white; text-align: center", 
+                                 tags$h1(style="display: inline-block; margin: 0 auto;", class="flex-grow mt-8 mb-8",tags$b("Descripción de escenarios guardados")),
+                                 actionLink(inputId = "toggle_tabla_inputs_multiple", label=icon("stream", style = "color: white;"))
+                     ),
+                     br(),
+                     hidden(reactableOutput("prueba")),
+                     br(),
+                     br()
+                     )
+            )
+            
           )
           
           # tagList(

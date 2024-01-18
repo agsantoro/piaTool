@@ -199,9 +199,9 @@ ui_avanzada <-
              br()
     ),
     
-    fluidRow(style = "padding-top: 15px;",
-      column(2),
-      column(8,id="columna_resultados_borde",
+    div(style = "padding-top: 15px;", class ='inline',
+      #column(2),
+      id="columna_resultados_borde",
              hidden(
                tags$header(id = "header_comparacion_resultados", class="text-1xl flex justify-between items-center p-5 mt-4", style="background-color: #FF671B; color: white; text-align: center",
                            tags$h1(style="display: inline-block; margin: 0 auto;", class="flex-grow mt-8 mb-8",tags$b("Resultados")),
@@ -212,9 +212,9 @@ ui_avanzada <-
              br(),
              hidden(uiOutput("escenarios_guardados")),
              hidden(uiOutput("inputs_summary_table"))),
-      column(2)
+      #column(2)
              
-    )
+    
     
   ),
   # tabPanel(

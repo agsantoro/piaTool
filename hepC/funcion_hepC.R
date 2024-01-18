@@ -27,7 +27,6 @@ hepC_conTrat = function (
     input_Costo_Tratamiento = input$Costo_Tratamiento,
     input_Costo_Evaluacion = input$Costo_Evaluacion
 ) {
-  browser()
   pais = input_pais
   edadFinal = 85
   ciclosPorAño = 12
