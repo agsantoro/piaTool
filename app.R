@@ -17,6 +17,83 @@ source("UI/UI_routes.R", encoding = "UTF-8")
 source("server/server_hpv.R", encoding = "UTF-8")
 
 server <- function(input, output, session) {
+  
+  firstHPV = reactiveValues()
+  firstHPV$value = T
+  
+  firstHEARTS = reactiveValues()
+  firstHEARTS$value = T
+  
+  firstHPP = reactiveValues()
+  firstHPP$value = T
+  
+  firstHepC = reactiveValues()
+  firstHepC$value = T
+  
+  firstTBC = reactiveValues()
+  firstTBC$value = T
+  
+  firstPREP = reactiveValues()
+  firstPREP$value = T
+  
+  
+  observeEvent(
+    list(
+      input$intervencion,
+      input$country
+    ), {
+    if(is.null(input$country) == F) {
+      if (firstHPV$value & input$intervencion == "Vacuna contra el HPV") {
+        showModal(modalDialog(
+          title = "Primera vez",
+          "Primera vez que corre HPV"
+        ))
+        firstHPV$value = F
+      } 
+      else if (firstHEARTS$value & input$intervencion == "HEARTS") {
+        showModal(modalDialog(
+          title = "Primera vez",
+          "Primera vez que corre HEARTS"
+        ))
+        firstHEARTS$value = F
+      }
+      
+      else if (firstHPP$value & input$intervencion == "Hemorragia postparto") {
+        showModal(modalDialog(
+          title = "Primera vez",
+          "Primera vez que corre HPP"
+        ))
+        firstHPP$value = F
+      }
+      
+      else if (firstHepC$value & input$intervencion == "Hepatitis C") {
+        showModal(modalDialog(
+          title = "Primera vez",
+          "Primera vez que corre Hep C"
+        ))
+        firstHepC$value = F
+      }
+      
+      else if (firstTBC$value & input$intervencion == "VDOT Tuberculosis") {
+        showModal(modalDialog(
+          title = "Primera vez",
+          "Primera vez que corre VDOT"
+        ))
+        firstTBC$value = F
+      }
+      
+      else if (firstPrep$value & input$intervencion == "Profilaxis Pre Exposición VIH") {
+        showModal(modalDialog(
+          title = "Primera vez",
+          "Primera vez que corre PREP"
+        ))
+        firstPREP$value = F
+      }
+      
+    }
+    
+  })
+  
   #hide("row_comparacion")
   hide("columna_borde")
   hide("columna_resultados_borde")
