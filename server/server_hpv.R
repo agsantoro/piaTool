@@ -508,7 +508,6 @@ server_hpv = function (input, output, session, parameterReactive, scenarios, res
                 
                 if (length(sel_escenario)>0) {
                   enable("tbc_savedScenarios")
-                  browser()
                   tbc_run = data.frame(indicador = tbc_run()[,c(1)])
                   table = tbc_run
                   
