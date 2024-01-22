@@ -82,7 +82,7 @@ server <- function(input, output, session) {
         firstTBC$value = F
       }
       
-      else if (firstPrep$value & input$intervencion == "Profilaxis Pre Exposición VIH") {
+      else if (firstPREP$value & input$intervencion == "Profilaxis Pre Exposición VIH") {
         showModal(modalDialog(
           title = "Primera vez",
           "Primera vez que corre PREP"
