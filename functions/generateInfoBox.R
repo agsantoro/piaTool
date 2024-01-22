@@ -18,7 +18,7 @@ info_box = function(
 
   HTML(
     glue(
-      "<div class='shadow-lg m-3 rounded-lg text-slate-50 bg-slate-400' style = 'background-color: '>
+      "<div class='shadow-lg m-3 rounded-lg text-slate-50 bg-slate-400 p-3' style = 'background-color: '>
 <div class='flex'> 
   <div class = 'flex-1 text-4xl text-left px-4 pt-3 pb-3 border-slate-800'>{nombre_scn}</div>
   <div class='ml-auto mr-4 mt-3'>

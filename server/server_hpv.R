@@ -209,7 +209,6 @@ server_hpv = function (input, output, session, parameterReactive, scenarios, res
       sel_escenario = input$comparacion_escenario
       
       if (length(sel_intervencion)==1) {
-        
         output$escenarios_guardados = renderUI({
           # mira intervención seleccionada
           if (length(sel_intervencion)>0) {
@@ -660,7 +659,7 @@ server_hpv = function (input, output, session, parameterReactive, scenarios, res
                   highlight = TRUE
                 )  
               } else {
-                hide("header_tabla_inputs")}
+                hide("header_tabla_inputs_multiple")}
               
             }
           })
@@ -690,6 +689,9 @@ server_hpv = function (input, output, session, parameterReactive, scenarios, res
       } else {
         
         output$escenarios_guardados = renderUI({
+          shinyjs::hide("header_comparacion_resultados")
+          shinyjs::hide("header_tabla_inputs")
+          shinyjs::hide("inputs_summary_table")
           if (length(input$comparacion_intervencion)>1) {
             intervenciones_seleccionadas = input$comparacion_intervencion
             escenarios_seleccionados = input$comparacion_escenario
@@ -731,19 +733,12 @@ server_hpv = function (input, output, session, parameterReactive, scenarios, res
             # }
             
             for (j in escenarios_seleccionados[escenarios_seleccionados %in% summary_scenarios$table$scenarioName[summary_scenarios$table$intervencion=="VDOT Tuberculosis"]]) {
-              AVAD[[j]] = tbc_scenarios$savedScenarios[[j]]$vDOT[tbc_scenarios$savedScenarios[[j]]$Parametro=="Años de vida ajustados por discapacidad evitados"]
-              COSTO_TOTAL[[j]] = tbc_scenarios$savedScenarios[[j]]$vDOT[tbc_scenarios$savedScenarios[[j]]$Parametro=="Costo total de la intervención (USD)"]
-              DIF_COSTO[[j]] = tbc_scenarios$savedScenarios[[j]]$vDOT[tbc_scenarios$savedScenarios[[j]]$Parametro=="Diferencia de costos respecto al escenario basal (USD)"]
-              ROI[[j]] = tbc_scenarios$savedScenarios[[j]]$vDOT[tbc_scenarios$savedScenarios[[j]]$Parametro=="Retorno de Inversión (%)"]
-              RCEI_AVAD[[j]] = tbc_scenarios$savedScenarios[[j]]$vDOT[tbc_scenarios$savedScenarios[[j]]$Parametro=="Razon de costo-efectividad incremental por año de vida ajustado por discapacidad prevenido"]
+              AVAD[[j]] = round(tbc_scenarios$savedScenarios[[j]]$vDOT[tbc_scenarios$savedScenarios[[j]]$Parametro=="Años de vida ajustados por discapacidad evitados"],1)
+              COSTO_TOTAL[[j]] = round(tbc_scenarios$savedScenarios[[j]]$vDOT[tbc_scenarios$savedScenarios[[j]]$Parametro=="Costo total de la intervención (USD)"],1)
+              DIF_COSTO[[j]] = round(tbc_scenarios$savedScenarios[[j]]$vDOT[tbc_scenarios$savedScenarios[[j]]$Parametro=="Diferencia de costos respecto al escenario basal (USD)"],1)
+              ROI[[j]] = round(tbc_scenarios$savedScenarios[[j]]$vDOT[tbc_scenarios$savedScenarios[[j]]$Parametro=="Retorno de Inversión (%)"],1)
+              RCEI_AVAD[[j]] = round(tbc_scenarios$savedScenarios[[j]]$vDOT[tbc_scenarios$savedScenarios[[j]]$Parametro=="Razon de costo-efectividad incremental por año de vida ajustado por discapacidad prevenido"],1)
             }
-            
-            # for (j in escenarios_seleccionados[escenarios_seleccionados %in% summary_scenarios$table$scenarioName[summary_scenarios$table$intervencion=="Profilaxis Pre Exposición VIH"]]) {
-            #   browser()
-            #   ROI[[j]] = prep_scenarios$savedScenarios[[j]]$Valor[prep_scenarios$savedScenarios[[j]]$Parametro=="Retorno de Inversión"]
-            #   RCEI_AVAD[[j]] = prep_scenarios$savedScenarios[[j]]$Valor[prep_scenarios$savedScenarios[[j]]$Parametro=="Razón de costo-efectividad incremental (RCEI) por Años de Vida Ajustados por Discapacidad (AVAD) Evitados (descontado)"]
-            # }
-            
             escenarios = names(unlist(ROI))
             
             indicadores = c(
@@ -754,6 +749,7 @@ server_hpv = function (input, output, session, parameterReactive, scenarios, res
               "RCEI_AVAD")
             
             table = data.frame()
+            
             for (i in indicadores) {
               append = data.frame(
                 indicador = i,
@@ -836,14 +832,46 @@ server_hpv = function (input, output, session, parameterReactive, scenarios, res
             output$grafico_multiple4 = renderHighchart({list_of_plots[[4]]})
             output$grafico_multiple5 = renderHighchart({list_of_plots[[5]]})
             
-            browser()
-            
+            output$tabla_escenarios_guardados = renderReactable({
+              
+              table_data = data.frame(
+                scenarioName = paste0(table$scenarioName," (",table$country," / ",table$intervencion),
+                table$indicador,
+                table$value
+              ) %>% dplyr::mutate(
+                table.indicador = case_when(table$indicador == "AVAD" ~ "Años de vida ajustados por discapacidad evitados",
+                                            table$indicador == "COSTO_TOTAL" ~ "Costos totales de la intervención (USD)",
+                                            table$indicador == "DIF_COSTO"  ~ "Diferencia de costos respecto al escenario basal (USD)",
+                                            table$indicador == "ROI"  ~ "Retorno de inversión (%)",
+                                            table$indicador == "RCEI_AVAD" ~  "Razón de costo-efectividad incremental por Año de Vida Ajustado por Discapacidad evitado (USD)"),
+                table.value = format(round(table.value,1), big.mark=".", decimal.mark=",")
+              )
+              
+              reactable(
+                table_data,
+                defaultExpanded = T,
+                groupBy = "scenarioName",
+                pagination = F,
+                columns = list(
+                  scenarioName = colDef(name = "Escenario guardado", align = "left"),
+                  table.indicador = colDef(name = "Input", align = "left"),
+                  table.value = colDef(name = "Valor", align = "right")
+                ),
+                defaultColDef = colDef(
+                  headerStyle = list(background = "#236292", color = "white", borderWidth = "0")
+                )
+                
+              )
+              
+              
+              
+            })
             
             output$infoBoxAVAD = renderUI({
               best = max(table$value[table$indicador=="AVAD"])
               nombre_scn = table$scenarioName[table$indicador == "AVAD" & table$value == best]
               hito = "Mayor cantidad de AVAD salvados"
-              valor = best
+              valor = format(round(best,1),big.mark=".",small.mark=",")
               intervencion = table$intervencion[table$indicador == "AVAD" & table$value == best]
               
               info_box(
@@ -854,12 +882,57 @@ server_hpv = function (input, output, session, parameterReactive, scenarios, res
 
             })
             
+            output$infoBoxCostoTotal = renderUI({
+              best = min(table$value[table$indicador=="COSTO_TOTAL"])
+              nombre_scn = table$scenarioName[table$indicador == "COSTO_TOTAL" & table$value == best]
+              hito = "Menor costo total de la intervención (%)"
+              valor = format(round(best,1),big.mark=".",small.mark=",")
+              intervencion = table$intervencion[table$indicador == "COSTO_TOTAL" & table$value == best]
+              
+              info_box(
+                nombre_scn = nombre_scn,
+                hito = hito,
+                valor = valor,
+                intervencion = intervencion)
+              
+            })
+            
+            output$infoBoxDiferenciaCosto = renderUI({
+              best = min(table$value[table$indicador=="DIF_COSTO"])
+              nombre_scn = table$scenarioName[table$indicador == "DIF_COSTO" & table$value == best]
+              hito = "Menor diferencia de costo respecto del escenario basal (%)"
+              valor = format(round(best,1),big.mark=".",small.mark=",")
+              intervencion = table$intervencion[table$indicador == "DIF_COSTO" & table$value == best]
+              
+              info_box(
+                nombre_scn = nombre_scn,
+                hito = hito,
+                valor = valor,
+                intervencion = intervencion)
+              
+            })
+            
             output$infoBoxROI = renderUI({
               best = max(table$value[table$indicador=="ROI"])
               nombre_scn = table$scenarioName[table$indicador == "ROI" & table$value == best]
               hito = "Mayor retorno de inversión (%)"
-              valor = best
+              valor = format(round(best,1),big.mark=".",small.mark=",")
               intervencion = table$intervencion[table$indicador == "ROI" & table$value == best]
+              
+              info_box(
+                nombre_scn = nombre_scn,
+                hito = hito,
+                valor = valor,
+                intervencion = intervencion)
+              
+            })
+            
+            output$infoBoxRCEIAVAD = renderUI({
+              best = min(table$value[table$indicador=="RCEI_AVAD"])
+              nombre_scn = table$scenarioName[table$indicador == "RCEI_AVAD" & table$value == best]
+              hito = "Menor razón de costo incremental por AVAD evitado (%)"
+              valor = format(round(best,1),big.mark=".",small.mark=",")
+              intervencion = table$intervencion[table$indicador == "RCEI_AVAD" & table$value == best]
               
               info_box(
                 nombre_scn = nombre_scn,
@@ -924,24 +997,45 @@ server_hpv = function (input, output, session, parameterReactive, scenarios, res
           
           shiny::tagList(
             fluidRow(
-              column(4,
-                     highchartOutput("grafico_multiple1")),
-              column(4,
-                     highchartOutput("grafico_multiple2")),
-              column(4,
-                     highchartOutput("grafico_multiple3")),
-              column(4, class = "mt-2",
-                     highchartOutput("grafico_multiple4")),
-              column(4, class = "mt-2",
-                     highchartOutput("grafico_multiple5"))
-              ),
-            fluidRow(
-              column(3, htmlOutput("infoBoxAVAD")),
-              column(3, htmlOutput("infoBoxROI"))
+              column(9,
+                     tags$header(class="text-1xl flex justify-between items-center p-5 mt-4",style="background-color: #FF671B; color: white; text-align: center", 
+                                 tags$h1(style="display: inline-block; margin: 0 auto;", class="flex-grow mt-8 mb-8",tags$b("Generales")),
+                     ),
+                     br(),
+                     reactableOutput("tabla_escenarios_guardados"), align="center"),
+              column(3,
+                     tags$header(class="text-1xl flex justify-between items-center p-5 mt-4", style="background-color: #FF671B; color: white; text-align: center", 
+                                 tags$h1(style="display: inline-block; margin: 0 auto;", class="flex-grow mt-8 mb-8",tags$b("Destacados")),
+                     ),
+                     br(),
+                     htmlOutput("infoBoxAVAD"),
+                     htmlOutput("infoBoxCostoTotal"),
+                     htmlOutput("infoBoxDiferenciaCosto"),
+                     htmlOutput("infoBoxROI"),
+                     htmlOutput("infoBoxRCEIAVAD"), align = "center")
+                     
             ),
-              
-              
             
+            fluidRow(
+              
+              column(
+                12,
+                br(),
+                tags$header(class="text-1xl flex justify-between items-center p-5 mt-4", style="background-color: #FF671B; color: white; text-align: center", 
+                            tags$h1(style="display: inline-block; margin: 0 auto;", class="flex-grow mt-8 mb-8",tags$b("Gráficos")),
+                            
+                ),
+                br()
+              ), align="center"),
+            fluidRow(
+              column(4,highchartOutput("grafico_multiple1")),
+              column(4,highchartOutput("grafico_multiple2")),
+              column(4,highchartOutput("grafico_multiple3"))
+            ),
+            fluidRow(
+              column(4,highchartOutput("grafico_multiple4")),
+              column(4,highchartOutput("grafico_multiple5"))
+            ),
             fluidRow(
               br(),
               column(12,
