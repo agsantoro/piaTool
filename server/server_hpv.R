@@ -836,62 +836,39 @@ server_hpv = function (input, output, session, parameterReactive, scenarios, res
             output$grafico_multiple4 = renderHighchart({list_of_plots[[4]]})
             output$grafico_multiple5 = renderHighchart({list_of_plots[[5]]})
             
+            browser()
             
-
-
-            ###########################################
             
-            # output$grafico_multiple1 = renderHighchart({
-            #   show("escenarios_guardados")
-            #   
-            #     grafico <- highchart() %>%
-            #       hc_chart(type = "column") %>%
-            #       hc_title(text = "Comparación del retorno de la inversión entre escenarios guardados") %>%
-            #       hc_xAxis(categories = roi_table$scenarioName) %>%
-            #       hc_plotOptions(column = list(
-            #         colorByPoint = TRUE,
-            #         dataLabels = list(enabled = TRUE)
-            #       )) %>%
-            #       hc_add_series(
-            #         data = roi_table,
-            #         type = "column",
-            #         hcaes(y = value, color = intervencion),
-            #         name = "ROI"
-            #       ) 
-            #     
-            #     grafico %>% hc_legend(list(
-            #       enabled = F
-            #     )) %>%
-            #       hc_add_theme(hc_theme_elementary())
-            #     
-            #   
-            # })
-            # 
-            # output$grafico_multiple2 = renderHighchart({
-            #   show("escenarios_guardados")
-            #   
-            #   grafico <- highchart() %>%
-            #     hc_chart(type = "column") %>%
-            #     hc_title(text = "Comparación de la RCEI por AVADS evitados") %>%
-            #     hc_xAxis(categories = iceravad_table$scenarioName) %>%
-            #     hc_plotOptions(column = list(
-            #       colorByPoint = TRUE,
-            #       dataLabels = list(enabled = TRUE)
-            #     )) %>%
-            #     hc_add_series(
-            #       data = iceravad_table,
-            #       type = "column",
-            #       hcaes(y = value, color = intervencion),
-            #       name = "ROI"
-            #     ) 
-            #   
-            #   grafico %>% hc_legend(list(
-            #     enabled = F
-            #   )) %>%
-            #     hc_add_theme(hc_theme_elementary())
-            #   
-            #   
-            # })
+            output$infoBoxAVAD = renderUI({
+              best = max(table$value[table$indicador=="AVAD"])
+              nombre_scn = table$scenarioName[table$indicador == "AVAD" & table$value == best]
+              hito = "Mayor cantidad de AVAD salvados"
+              valor = best
+              intervencion = table$intervencion[table$indicador == "AVAD" & table$value == best]
+              
+              info_box(
+                nombre_scn = nombre_scn,
+                hito = hito,
+                valor = valor,
+                intervencion = intervencion)
+
+            })
+            
+            output$infoBoxROI = renderUI({
+              best = max(table$value[table$indicador=="ROI"])
+              nombre_scn = table$scenarioName[table$indicador == "ROI" & table$value == best]
+              hito = "Mayor retorno de inversión (%)"
+              valor = best
+              intervencion = table$intervencion[table$indicador == "ROI" & table$value == best]
+              
+              info_box(
+                nombre_scn = nombre_scn,
+                hito = hito,
+                valor = valor,
+                intervencion = intervencion)
+              
+            })
+            
           }
           
           
@@ -957,9 +934,16 @@ server_hpv = function (input, output, session, parameterReactive, scenarios, res
                      highchartOutput("grafico_multiple4")),
               column(4, class = "mt-2",
                      highchartOutput("grafico_multiple5"))
-              
-            ),
+              ),
             fluidRow(
+              column(3, htmlOutput("infoBoxAVAD")),
+              column(3, htmlOutput("infoBoxROI"))
+            ),
+              
+              
+            
+            fluidRow(
+              br(),
               column(12,
                      br(),
                      tags$header(id = "header_tabla_inputs_multiple", class="text-1xl flex justify-between items-center p-5 mt-4", style="background-color: #FF671B; color: white; text-align: center", 

@@ -45,47 +45,54 @@ server <- function(input, output, session) {
     if(is.null(input$country) == F) {
       if (firstHPV$value & input$intervencion == "Vacuna contra el HPV") {
         showModal(modalDialog(
-          title = getIntroText2("Vacuna contra el HPV")$titulo,
-          getIntroText2("Vacuna contra el HPV")$texto
+          title = HTML(glue("<div class= 'p-4 m-0 text-3xl text-center text-white' style='background-color: #1D9ADD;'>{getModalText('Vacuna contra el HPV')$titulo}</div>")),
+          footer = modalButton("Continuar"),
+          getModalText("Vacuna contra el HPV")$texto
+          
         ))
         firstHPV$value = F
       } 
       else if (firstHEARTS$value & input$intervencion == "HEARTS") {
         showModal(modalDialog(
-          title = getIntroText2("HEARTS")$titulo,
-          getIntroText2("HEARTS")$texto
+          title = HTML(glue("<div class= 'p-4 m-0 text-3xl text-center text-white' style='background-color: #1D9ADD;'>{getModalText('HEARTS')$titulo}</div>")),
+          footer = modalButton("Continuar"),
+          getModalText("HEARTS")$texto
         ))
         firstHEARTS$value = F
       }
       
       else if (firstHPP$value & input$intervencion == "Hemorragia postparto") {
         showModal(modalDialog(
-          title = getIntroText2("Hemorragia postparto")$titulo,
-          getIntroText2("Hemorragia postparto")$texto
+          title = HTML(glue("<div class= 'p-4 m-0 text-3xl text-center text-white' style='background-color: #1D9ADD;'>{getModalText('Hemorragia postparto')$titulo}</div>")),
+          footer = modalButton("Continuar"),
+          getModalText("Hemorragia postparto")$texto
         ))
         firstHPP$value = F
       }
       
       else if (firstHepC$value & input$intervencion == "Hepatitis C") {
         showModal(modalDialog(
-          title = getIntroText2("Hepatitis C")$titulo,
-          getIntroText2("Hepatitis C")$texto
+          title = HTML(glue("<div class= 'p-4 m-0 text-3xl text-center text-white' style='background-color: #1D9ADD;'>{getModalText('Hepatitis C')$titulo}</div>")),
+          footer = modalButton("Continuar"),
+          getModalText("Hepatitis C")$texto
         ))
         firstHepC$value = F
       }
       
       else if (firstTBC$value & input$intervencion == "VDOT Tuberculosis") {
         showModal(modalDialog(
-          title = getIntroText2("VDOT Tuberculosis")$titulo,
-          getIntroText2("VDOT Tuberculosis")$texto
+          title = HTML(glue("<div class= 'p-4 m-0 text-3xl text-center text-white' style='background-color: #1D9ADD;'>{getModalText('VDOT Tuberculosis')$titulo}</div>")),
+          footer = modalButton("Continuar"),
+          getModalText("VDOT Tuberculosis")$texto
         ))
         firstTBC$value = F
       }
       
       else if (firstPREP$value & input$intervencion == "Profilaxis Pre Exposición VIH") {
         showModal(modalDialog(
-          title = getIntroText2("Profilaxis Pre Exposición VIH")$titulo,
-          getIntroText2("Profilaxis Pre Exposición VIH")$texto
+          title = HTML(glue("<div class= 'p-4 m-0 text-3xl text-center text-white' style='background-color: #1D9ADD;'>{getModalText('Profilaxis Pre Exposición VIH')$titulo}</div>")),
+          footer = modalButton("Continuar"),
+          getModalText("Profilaxis Pre Exposición VIH")$texto
         ))
         firstPREP$value = F
       }
