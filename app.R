@@ -45,47 +45,47 @@ server <- function(input, output, session) {
     if(is.null(input$country) == F) {
       if (firstHPV$value & input$intervencion == "Vacuna contra el HPV") {
         showModal(modalDialog(
-          title = "Primera vez",
-          "Primera vez que corre HPV"
+          title = getIntroText2("Vacuna contra el HPV")$titulo,
+          getIntroText2("Vacuna contra el HPV")$texto
         ))
         firstHPV$value = F
       } 
       else if (firstHEARTS$value & input$intervencion == "HEARTS") {
         showModal(modalDialog(
-          title = "Primera vez",
-          "Primera vez que corre HEARTS"
+          title = getIntroText2("HEARTS")$titulo,
+          getIntroText2("HEARTS")$texto
         ))
         firstHEARTS$value = F
       }
       
       else if (firstHPP$value & input$intervencion == "Hemorragia postparto") {
         showModal(modalDialog(
-          title = "Primera vez",
-          "Primera vez que corre HPP"
+          title = getIntroText2("Hemorragia postparto")$titulo,
+          getIntroText2("Hemorragia postparto")$texto
         ))
         firstHPP$value = F
       }
       
       else if (firstHepC$value & input$intervencion == "Hepatitis C") {
         showModal(modalDialog(
-          title = "Primera vez",
-          "Primera vez que corre Hep C"
+          title = getIntroText2("Hepatitis C")$titulo,
+          getIntroText2("Hepatitis C")$texto
         ))
         firstHepC$value = F
       }
       
       else if (firstTBC$value & input$intervencion == "VDOT Tuberculosis") {
         showModal(modalDialog(
-          title = "Primera vez",
-          "Primera vez que corre VDOT"
+          title = getIntroText2("VDOT Tuberculosis")$titulo,
+          getIntroText2("VDOT Tuberculosis")$texto
         ))
         firstTBC$value = F
       }
       
       else if (firstPREP$value & input$intervencion == "Profilaxis Pre Exposición VIH") {
         showModal(modalDialog(
-          title = "Primera vez",
-          "Primera vez que corre PREP"
+          title = getIntroText2("Profilaxis Pre Exposición VIH")$titulo,
+          getIntroText2("Profilaxis Pre Exposición VIH")$texto
         ))
         firstPREP$value = F
       }
