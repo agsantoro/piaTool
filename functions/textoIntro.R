@@ -24,3 +24,25 @@ getTextoIntro = function () {
   </div>
 ')
 }
+
+# texto_intro <- read_excel("C:/Users/penninivel/Downloads/texto_intervenciones.xlsx")
+# saveRDS(texto_intro,"texto_intro.RData")
+
+#"texto_intro.RData" quedó guardado en carpeta piaTool
+getIntroText2 <- function(intervencion) {
+  
+  texto_intro <- readRDS("texto_intro.RData")
+  data_textos <- subset(texto_intro, Intervencion == intervencion)
+  
+  text_intro_list <- list(
+    titulo = HTML(data_textos$titulo),
+    texto = HTML(data_textos$texto)
+  )
+  
+  # Retornar la lista
+  return(text_intro_list)
+}
+
+# 
+# library(htmltools)
+# getIntroText2("HEARTS")
