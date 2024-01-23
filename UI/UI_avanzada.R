@@ -177,7 +177,7 @@ ui_avanzada <-
   ),
   tabPanel(
     id = "EG",
-    HTML('<div class = "text-white")>Escenarios guardados</div>'),
+    HTML('<div class = "text-white")>Comparación de escenarios</div>'),
     fluidRow(id = "row_comparacion",
              class = "bg-slate-200 mb-10",
              
@@ -284,7 +284,7 @@ ui_avanzada <-
       div(style= "width: 50%;",
         p(
         style = "text-align: left;",
-        "PIA Tool v0.4 - Desarrollado por IECS y el Departamento de Evidencia e Inteligencia para la Acción en Salud (PAHO)")
+        "PIA Tool v0.45 - Desarrollado por IECS y el Departamento de Evidencia e Inteligencia para la Acción en Salud (PAHO)")
       ),
       div(
         style= "width: 50%;",

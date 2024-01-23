@@ -281,7 +281,7 @@ server <- function(input, output, session) {
   
   observeEvent(input$NVP, {
     if (nrow(summary_scenarios$table)!=0) {hide("no_esc")}
-    if (input$NVP == "<div class = \"text-white\")>Escenarios guardados</div>") {
+    if (input$NVP == "<div class = \"text-white\")>Comparación de escenarios</div>") {
       if (nrow(summary_scenarios$table)>0) {
         shinyjs::show("row_comparacion", anim = T, animType = "fade")
         shinyjs::show("panel_comparacion", anim = T, animType = "fade")

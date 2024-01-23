@@ -854,7 +854,7 @@ server_hpv = function (input, output, session, parameterReactive, scenarios, res
                 pagination = F,
                 columns = list(
                   scenarioName = colDef(name = "Escenario guardado", align = "left"),
-                  table.indicador = colDef(name = "Input", align = "left"),
+                  table.indicador = colDef(name = "Indicador", align = "left"),
                   table.value = colDef(name = "Valor", align = "right")
                 ),
                 defaultColDef = colDef(
