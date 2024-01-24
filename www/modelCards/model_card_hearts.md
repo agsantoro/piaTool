@@ -70,7 +70,7 @@ Respecto a las limitaciones relacionadas con los costos, es importante señalar 
 
 <table>
   <tr>
-   <td colspan="4" >
+   <td colspan="3" >
 <h2>
     <strong>Parámetros epidemiológicos</strong></h2>
 
@@ -94,36 +94,6 @@ Respecto a las limitaciones relacionadas con los costos, es importante señalar 
 
 
    </td>
-   <td>
-<h2><strong>Tipo de parámetro</strong></h2>
-
-
-   </td>
-  </tr>
-  <tr>
-   <td>
-<h2>Porcentaje de personas diagnosticadas que se encuentran en  tratamiento (basal).</h2>
-
-
-   </td>
-   <td>
-<h2>Porcentaje de personas que están recibiendo tratamiento en relación con el total de individuos que han sido diagnosticados con hipertensión en un punto inicial o línea de base.</h2>
-
-
-   </td>
-   <td>
-<h2>Observatorio Mundial de la Salud de la OMS. </h2>
-
-
-<h2>NCD RisC<sup><a href="https://paperpile.com/c/R7cCn1/8WDiH+iDDLz">5,8</a></sup></h2>
-
-
-   </td>
-   <td>
-<h2>Básico bloqueado // Avanzado parametrizable</h2>
-
-
-   </td>
   </tr>
   <tr>
    <td>
@@ -144,8 +114,20 @@ Respecto a las limitaciones relacionadas con los costos, es importante señalar 
 
 
    </td>
+  </tr>
+  <tr>
    <td>
-<h2>Básico</h2>
+<h2>Población total del país</h2>
+
+
+   </td>
+   <td>
+<h2>Población total (proyectada para el año 2023) de cada país.</h2>
+
+
+   </td>
+   <td>
+<h2>Instituto de estadística de cada uno de los 8 países</h2>
 
 
    </td>
@@ -169,14 +151,12 @@ Respecto a las limitaciones relacionadas con los costos, es importante señalar 
 
 
    </td>
-   <td>
-<h2>Avanzado</h2>
-
-
-   </td>
   </tr>
   <tr>
-   <td>Porcentaje de adultos con hipertensión diagnosticados 
+   <td>
+<h2>Porcentaje de adultos con hipertensión diagnosticados </h2>
+
+
    </td>
    <td>
 <h2>Porcentaje de individuos entre 30 y 79 años previamente diagnosticados con hipertensión, proporcionando un punto de referencia inicial.</h2>
@@ -191,8 +171,23 @@ Respecto a las limitaciones relacionadas con los costos, es importante señalar 
 
 
    </td>
+  </tr>
+  <tr>
    <td>
-<h2>Avanzado</h2>
+<h2>Porcentaje de personas diagnosticadas que se encuentran en  tratamiento (basal).</h2>
+
+
+   </td>
+   <td>
+<h2>Porcentaje de personas que están recibiendo tratamiento en relación con el total de individuos que han sido diagnosticados con hipertensión en un punto inicial o línea de base.</h2>
+
+
+   </td>
+   <td>
+<h2>Observatorio Mundial de la Salud de la OMS. </h2>
+
+
+<h2>NCD RisC<sup><a href="https://paperpile.com/c/R7cCn1/8WDiH+iDDLz">5,8</a></sup></h2>
 
 
    </td>
@@ -216,30 +211,6 @@ Respecto a las limitaciones relacionadas con los costos, es importante señalar 
 
 
    </td>
-   <td>
-<h2>Avanzado</h2>
-
-
-   </td>
-  </tr>
-  <tr>
-   <td>
-<h2>Población total del país</h2>
-
-
-   </td>
-   <td>
-<h2>Población total (proyectada para el año 2023) de cada país.</h2>
-
-
-   </td>
-   <td>
-<h2>Instituto de estadística de cada uno de los 8 países</h2>
-
-
-   </td>
-   <td>Avanzado
-   </td>
   </tr>
   <tr>
    <td>
@@ -256,8 +227,6 @@ Respecto a las limitaciones relacionadas con los costos, es importante señalar 
 <h2>Internações: Sistema de Informações Hospitalares/Ministério da Saúde - 2022<sup><a href="https://paperpile.com/c/R7cCn1/0kSTw">10</a></sup></h2>
 
 
-   </td>
-   <td>Avanzado
    </td>
   </tr>
   <tr>
@@ -276,8 +245,6 @@ Respecto a las limitaciones relacionadas con los costos, es importante señalar 
 
 
    </td>
-   <td>Avanzado
-   </td>
   </tr>
 </table>
 
@@ -285,7 +252,7 @@ Respecto a las limitaciones relacionadas con los costos, es importante señalar 
 
 <table>
   <tr>
-   <td colspan="4" >
+   <td colspan="3" >
     <strong>Parámetros de costos </strong>
    </td>
   </tr>
@@ -297,13 +264,11 @@ Respecto a las limitaciones relacionadas con los costos, es importante señalar 
    </td>
    <td><strong>Fuente</strong>
    </td>
-   <td><strong>Tipo de parámetro</strong>
-   </td>
   </tr>
   <tr>
    <td>Costo farmacológico anual promedio por paciente (USD)
    </td>
-   <td>Costo del tratamiento farmacológico promedio por paciente, ponderado por la proporción de pacientes que están en cada STEP de hipertensión para el país especifico.  (USD oficial a tasa de cambio nominal de cada país).
+   <td>Costo del tratamiento farmacológico promedio por paciente, ponderado por la proporción de pacientes que están en cada STEP de hipertensión para el país específico.  
    </td>
    <td>Páginas oficiales de precios de medicamentos: ARG,<sup><a href="https://paperpile.com/c/R7cCn1/Ju9ba">11</a></sup> BRA,<sup><a href="https://paperpile.com/c/R7cCn1/bvVBm">12</a></sup> COL,<sup><a href="https://paperpile.com/c/R7cCn1/5iqft">13</a></sup> ECU<sup><a href="https://paperpile.com/c/R7cCn1/Qw0jm">14</a></sup> y PER.<sup><a href="https://paperpile.com/c/R7cCn1/ElIxm">15</a></sup> 
 <p>
@@ -312,42 +277,52 @@ Actualizado por inflación<sup><a href="https://paperpile.com/c/R7cCn1/K9Ite">16
 Estimación indirecta*: CRC, MEX.
 <p>
 En dólares estadounidenses.<sup><a href="https://paperpile.com/c/R7cCn1/LLXZW+MRUip+HF0BY+h7YZG+EZdD7+lzRAB+MUwL1">18–24</a></sup>
-   </td>
-   <td>Avanzado 
-   </td>
-  </tr>
-  <tr>
-   <td>Costo de evento de enfermedad isquémica (USD)
-   </td>
-   <td>Costos de tratar un evento de enfermedad coronaria isquémica por país para abril de 2023. (USD oficial a tasa de cambio nominal de cada país).
-   </td>
-   <td>Pichon-Riviere y cols.,<sup><a href="https://paperpile.com/c/R7cCn1/yZZbn">25</a></sup> actualizados por inflación.<sup><a href="https://paperpile.com/c/R7cCn1/wx2G5+MRUip+QiELC+m4sVN+mpZTx+sEYWn+Tsaq4+aDl2w">19,26–32</a></sup>
 <p>
-En dólares estadounidenses.<sup><a href="https://paperpile.com/c/R7cCn1/LLXZW+MRUip+HF0BY+h7YZG+EZdD7+lzRAB+MUwL1">18–24</a></sup>
-   </td>
-   <td>Avanzado
+Valores en USD oficial a tasa de cambio nominal de cada país para abril de 2023.
    </td>
   </tr>
   <tr>
    <td>Costo de seguimiento anual promedio por paciente (USD)
    </td>
-   <td>Costos de seguimiento (farmacológico, consultas médicas, etc) anual por paciente. (USD oficial a tasa de cambio nominal de cada país).  
+   <td>Costos de seguimiento (farmacológico, consultas médicas, etc) anual por paciente. 
    </td>
    <td>Nomencladores específicos para ARG<sup><a href="https://paperpile.com/c/R7cCn1/XYsx">33</a></sup>, BRA <sup><a href="https://paperpile.com/c/R7cCn1/Z01f">34</a></sup>, CHL <sup><a href="https://paperpile.com/c/R7cCn1/PlyG+xXkJ">35,36</a></sup> y COL <sup><a href="https://paperpile.com/c/R7cCn1/w6pC+3Zmo">37,38</a></sup>. 
 <p>
 Estimación indirecta* para CRC, ECU, MEX y PER.
+<p>
+Valores en USD oficial a tasa de cambio nominal de cada país para abril de 2023.
    </td>
-   <td>Avanzado
+  </tr>
+  <tr>
+   <td>Costo de evento de enfermedad coronaria isquémica (USD)
+   </td>
+   <td>Costos de tratar un evento de enfermedad coronaria isquémica. 
+   </td>
+   <td>Pichon-Riviere y cols.,<sup><a href="https://paperpile.com/c/R7cCn1/yZZbn">25</a></sup> actualizados por inflación.<sup><a href="https://paperpile.com/c/R7cCn1/wx2G5+MRUip+QiELC+m4sVN+mpZTx+sEYWn+Tsaq4+aDl2w">19,26–32</a></sup>
+<p>
+En dólares estadounidenses.<sup><a href="https://paperpile.com/c/R7cCn1/LLXZW+MRUip+HF0BY+h7YZG+EZdD7+lzRAB+MUwL1">18–24</a></sup>
+<p>
+Valores en USD oficial a tasa de cambio nominal de cada país para abril de 2023.
+   </td>
+  </tr>
+  <tr>
+   <td>Costo de evento de accidente cerebrovascular (USD)
+   </td>
+   <td>Costos de tratar un evento de accidente cerebrovascular. 
+   </td>
+   <td>Pichon-Riviere y cols.,<sup><a href="https://paperpile.com/c/R7cCn1/yZZbn">25</a></sup> actualizados por inflación.<sup><a href="https://paperpile.com/c/R7cCn1/wx2G5+MRUip+QiELC+m4sVN+mpZTx+sEYWn+Tsaq4+aDl2w">19,26–32</a></sup>
+<p>
+En dólares estadounidenses.<sup><a href="https://paperpile.com/c/R7cCn1/LLXZW+MRUip+HF0BY+h7YZG+EZdD7+lzRAB+MUwL1">18–24</a></sup>
+<p>
+Valores en USD oficial a tasa de cambio nominal de cada país para abril de 2023.
    </td>
   </tr>
   <tr>
    <td>Tasa de descuento (%)
    </td>
-   <td>Se utiliza para traer al presente los costos y beneficios en salud futuros. (USD oficial a tasa de cambio nominal de cada país).
+   <td>Se utiliza para traer al presente los costos y beneficios en salud futuros. 
    </td>
    <td>Manual metodológico para elaboración de Evaluaciones Económicas <sup><a href="https://paperpile.com/c/R7cCn1/Tkvz">39</a></sup>
-   </td>
-   <td>Avanzado
    </td>
   </tr>
   <tr>
@@ -356,9 +331,6 @@ Estimación indirecta* para CRC, ECU, MEX y PER.
    <td>Costo de implementar y sostener la intervención en un año. (USD oficial a tasa de cambio nominal de cada país).
    </td>
    <td>Se deja la posibilidad al usuario de completar este dato si cuenta con él
-   </td>
-   <td>
-    Básico Bloqueado (no se modifica) (fácilmente visible) // Avanzado modificable
    </td>
   </tr>
 </table>
@@ -373,106 +345,90 @@ Estimación indirecta* para CRC, ECU, MEX y PER.
 
 
 
-1. **Eventos Coronarios (EC) evitados (n): **número de EC evitados tras la implementación de la intervención.
+1. **Población de adultos entre 30 y 79 años con hipertensión que inició tratamiento (n): **número total de adultos en ese rango de edad que han sido diagnosticados recientemente con hipertensión y han comenzado un tratamiento para la misma.
 
-    Ej: **EC** **evitados en Argentina n = 67.531,3. **En este caso el modelo indica que la intervención propuesta tiene el potencial de evitar 67.531,3 EC en la población argentina. 
+    Ej: **Población de adultos entre 30 y 79 años con hipertensión que inició tratamiento n = 5.418.194,4. **En este caso el modelo indica que la intervención propuesta tiene el potencial hacer que 5.418.194,4 adultos entre 30 y 79 años con hipertensión inicien tratamiento.**	**
 
-2. **Tasa de EC evitados cada 100.000 habitantes (n/100.000 hab):** número de EC incidentes evitados por cada 100.000 habitantes tras la implementación de la intervención.
+2. **Eventos Coronarios (EC) evitados (n): **número de EC evitados tras la implementación de la intervención.
 
-    Ej: **Tasa de EC evitados cada 100.000 habitantes en Argentina =  148,8. **En este caso el modelo indica que la intervención propuesta tiene el potencial de evitar 148,8 EC por cada 100.000 habitantes en Argentina.
+    Ej: **EC** **evitados n = 67.531,3. **En este caso el modelo indica que la intervención propuesta tiene el potencial de evitar 67.531,3 EC en la población. 
 
-3. **Accidente Cerebrovascular (ACV) evitados (n): **número de eventos por ACV evitados tras la implementación de la intervención.
+3. **Tasa de EC evitados cada 100.000 habitantes (n/100.000 hab):** número de EC incidentes evitados por cada 100.000 habitantes tras la implementación de la intervención.
 
-    Ej: **ACV evitados en Argentina n = 9.411,0. **En este caso el modelo indica que la intervención propuesta tiene el potencial de evitar 9.411,0 eventos por ACV en la población argentina. 
+    Ej: **Tasa de EC evitados cada 100.000 habitantes =  148,8. **En este caso el modelo indica que la intervención propuesta tiene el potencial de evitar 148,8 EC por cada 100.000 habitantes.
 
-4. **Tasa de ACV evitados cada 100.000 habitantes (n/100.000 hab): **número de ACV incidentes evitados por cada 100.000 habitantes tras la implementación de la intervención.
+4. **Accidente Cerebrovascular (ACV) evitados (n): **número de eventos por ACV evitados tras la implementación de la intervención.
 
-    Ej: **Tasa de nuevos ACV evitados cada 100.000 habitantes en Argentina = 20,9. **En este caso el modelo indica que la intervención propuesta tiene el potencial de evitar 20,9 ACV por cada 100.000 habitantes en Argentina.
+    Ej: **ACV evitados n = 9.411,0. **En este caso el modelo indica que la intervención propuesta tiene el potencial de evitar 9.411,0 eventos por ACV en la población. 
 
-5. **Muertes evitadas por EC (n): **número de muertes por EC evitadas tras la implementación de la intervención
+5. **Tasa de ACV evitados cada 100.000 habitantes (n/100.000 hab): **número de ACV incidentes evitados por cada 100.000 habitantes tras la implementación de la intervención.
 
-    Ej: **Muertes evitadas por EC en Argentina n = 4.221. **En este caso el modelo indica que la intervención propuesta tiene el potencial de evitar 4.221 muertes por EC en la población argentina. 
+    Ej: **Tasa de nuevos ACV evitados cada 100.000 habitantes = 20,9. **En este caso el modelo indica que la intervención propuesta tiene el potencial de evitar 20,9 ACV por cada 100.000 habitantes.
 
-6. **Muertes por EC por cada 100.000 habitantes que podrían evitarse (n/100.000 hab): **número de muertes por EC por cada 100.000 habitantes que podrían ser evitadas tras la implementación de la intervención.
+6. **Muertes evitadas por EC (n): **número de muertes por EC evitadas tras la implementación de la intervención
 
-    Ej: **Muertes evitadas por EC por cada 100.000 habitantes que podrían evitarse en Argentina = 9,3. **En este caso el modelo indica que la intervención propuesta tiene el potencial de evitar 9,3 muertes por EC por cada 100.000 habitantes en Argentina. 
+    Ej: **Muertes evitadas por EC n = 4.221. **En este caso el modelo indica que la intervención propuesta tiene el potencial de evitar 4.221 muertes por EC en la población. 
 
-7. **Muertes evitadas por ACV (n): **número de muertes por ACV evitadas tras la implementación de la intervención.
+7. **Muertes por EC por cada 100.000 habitantes que podrían evitarse (n/100.000 hab): **número de muertes por EC por cada 100.000 habitantes que podrían ser evitadas tras la implementación de la intervención.
 
-    Ej: **Muertes evitadas por ACV en Argentina n= 1400. **En este caso el modelo indica que la intervención propuesta tiene el potencial de evitar 1400 muertes por ACV en la población argentina. 
+    Ej: **Muertes evitadas por EC por cada 100.000 habitantes que podrían evitarse = 9,3. **En este caso el modelo indica que la intervención propuesta tiene el potencial de evitar 9,3 muertes por EC por cada 100.000 habitantes. 
 
-8. **Muertes por ACV por cada 100.000 habitantes que podrían evitarse (n/100.000): **número de muertes por ACV por cada 100.000 habitantes que podrían ser evitadas tras la implementación de la intervención.
+8. **Muertes evitadas por ACV (n): **número de muertes por ACV evitadas tras la implementación de la intervención.
 
-    Ej: **Muertes evitadas por ACV por cada 100.000 habitantes que podrían evitarse en Argentina  = 3,2. **En este caso el modelo indica que la intervención propuesta tiene el potencial de evitar 3,2 muertes por ACV por cada 100.000 habitantes en Argentina.
+    Ej: **Muertes evitadas por ACV n= 1400. **En este caso el modelo indica que la intervención propuesta tiene el potencial de evitar 1400 muertes por ACV en la población. 
 
-9. **Muertes evitadas (n): **número de muertes por EC y ACV evitadas tras la implementación de la intervención.
+9. **Muertes por ACV por cada 100.000 habitantes que podrían evitarse (n/100.000): **número de muertes por ACV por cada 100.000 habitantes que podrían ser evitadas tras la implementación de la intervención.
 
-    Ej: **Muertes evitadas en Argentina n = 5600 **En este caso el modelo indica que la intervención propuesta tiene el potencial de evitar 5600 muertes por EC y ACV en la población argentina. 
+    Ej: **Muertes evitadas por ACV por cada 100.000 habitantes que podrían evitarse = 3,2. **En este caso el modelo indica que la intervención propuesta tiene el potencial de evitar 3,2 muertes por ACV por cada 100.000 habitantes.
 
-10. **Muertes por cada 100.000 habitantes que podrían evitarse (n/100.000): **número de muertes por EC y ACV por cada 100.000 habitantes que podrían ser evitadas tras la implementación de la intervención.
+10. **Muertes evitadas (n): **número de muertes por EC y ACV evitadas tras la implementación de la intervención.
 
-    Ej: **Muertes por cada 100.000 habitantes que podrían evitarse en Argentina  = 12. **En este caso el modelo indica que la intervención propuesta tiene el potencial de evitar 12 muertes por EC y ACV por cada 100.000 habitantes en Argentina.
+    Ej: **Muertes evitadas n = 5600 **En este caso el modelo indica que la intervención propuesta tiene el potencial de evitar 5600 muertes por EC y ACV en la población. 
 
-11. **Población de adultos entre 30 y 79 años con hipertensión que inició tratamiento (n): **número total de adultos en ese rango de edad que han sido diagnosticados recientemente con hipertensión y han comenzado un tratamiento para la misma.
+11. **Muertes totales por cada 100.000 habitantes que podrían evitarse (n/100.000): **número de muertes por EC y ACV por cada 100.000 habitantes que podrían ser evitadas tras la implementación de la intervención.
 
-    Ej: **Población de adultos entre 30 y 79 años con hipertensión que inició tratamiento en Argentina n = 5.418.194,4. **En este caso el modelo indica que la intervención propuesta tiene el potencial hacer que 5.418.194,4 adultos entre 30 y 79 años con hipertensión inicien tratamiento en Argentina.**	**
+    Ej: **Muertes totales por cada 100.000 habitantes que podrían evitarse = 12. **En este caso el modelo indica que la intervención propuesta tiene el potencial de evitar 12 muertes por EC y ACV por cada 100.000 habitantes.
 
-12. **Años de vida ajustados por discapacidad evitados (n):  **especifica la cantidad de años que se salvaron de la carga de discapacidad causada por eventos de EC y ACV en la población.
+12. **Años de vida salvados:** cantidad de años que se preservarán al evitar muertes prematuras causadas por EC y ACV en la población.
 
-    Ej: **Años de vida ajustados por discapacidad evitados en Argentina n = 92.000. **En este caso, el modelo indica que la intervención propuesta tiene el potencial de evitar la pérdida de **92.000 **años de vida ajustados por discapacidad en la población argentina.
+    Ej: **Años de vida salvados n=86000. **En este caso, el modelo indica que la intervención propuesta tiene el potencial de evitar la pérdida de **86000 **años debido a muertes prematuras en la población. 
 
-13. **Años de vida ajustados por discapacidad evitados descontados: **especifica la cantidad de años descontados que se salvaron de la carga de discapacidad causada por eventos de EC y ACV y por muerte prematura en la población.
+13. **Años de vida ajustados por discapacidad evitados (n):  **especifica la cantidad de años que se salvaron de la carga de discapacidad causada por eventos de EC y ACV en la población.
 
-    Ej: **Años de vida ajustados por discapacidad evitados descontados en Argentina n = 59.000: **en promedio, se evitan **59.000 **años de vida ajustados por discapacidad por muerte prematura y carga de enfermedad luego de aplicar el descuento.
-
-14. **Años de vida salvados:** cantidad de años que se preservarán al evitar muertes prematuras causadas por EC y ACV en la población.
-
-    Ej: **Años de vida salvados en Argentina n=86000. **En este caso, el modelo indica que la intervención propuesta tiene el potencial de evitar la pérdida de **86000 **años debido a muertes prematuras en la población argentina. 
-
-15. **Años de vida salvados descontados: **cantidad de años descontados que se preservarán al evitar muertes prematuras causadas por EC y ACV en la población.
-
-    Ej: **Años de vida salvados descontados: = 57.000:** en promedio, se salvan **57.000 **años por muerte prematura luego de aplicar el descuento.
+    Ej: **Años de vida ajustados por discapacidad evitados n = 92.000. **En este caso, el modelo indica que la intervención propuesta tiene el potencial de evitar la pérdida de **92.000 **años de vida ajustados por discapacidad en la población.
 
 
 **Resultados económicos**
 
 
 
-16. **Costo total de la intervención (USD):** el costo total anual de la intervención en relación con la población objetivo que se alcanza con el tratamiento. 
+14. **Costo total de la intervención (USD):** el costo total anual de la intervención en relación con la población objetivo que se alcanza con el tratamiento. 
 
-    Ej: **Costo total de la intervención en Argentina USD = $201.416.348,6 USD: **el costo total anual de la intervención en relación con la población objetivo que se alcanza con el tratamiento en Argentina es de $201.416.348,6 USD. ** ** 
+    Ej: **Costo total de la intervención USD = $201.416.348,6 USD: **el costo total anual de la intervención en relación con la población objetivo que se alcanza con el tratamiento es de $201.416.348,6 USD. ** ** 
 
-17. **Costos evitados atribuibles a la intervención (USD):** los costos evitados incluyen los costos específicos de tratar un evento de infarto agudo de miocardio, un evento de angina coronaria no infarto y un accidente cerebrovascular para cada uno de los países. Se calculan teniendo en cuenta el número de eventos evitados gracias al tratamiento.
+15. **Costos evitados atribuibles a la intervención (USD):** los costos evitados incluyen los costos específicos de tratar un evento de infarto agudo de miocardio, un evento de angina coronaria no infarto y un accidente cerebrovascular para cada uno de los países. Se calculan teniendo en cuenta el número de eventos evitados gracias al tratamiento.
 
-    Ej: **Costos evitados atribuibles a la intervención en Argentina = $258.024.719,4 USD: **los costos médicos directos evitados por eventos cardiovasculares gracias a la intervención son de $258.024.719,4 USD en Argentina   
+    Ej: **Costos evitados atribuibles a la intervención = $258.024.719,4 USD: **los costos médicos directos evitados por eventos cardiovasculares gracias a la intervención son de $258.024.719,4 USD.  
 
-18. **Diferencia de costos respecto al escenario basal (USD):** la diferencia de costos surge de restarle a los costos de la intervención los costos evitados por eventos coronarios y accidentes cerebrovasculares.
+16. **Diferencia de costos respecto al escenario basal (USD):** la diferencia de costos surge de restarle a los costos de la intervención los costos evitados por eventos coronarios y accidentes cerebrovasculares.
 
-    Ej: **Diferencia de costos respecto al escenario basal en Argentina USD = -$56.608.370,8 USD: **la diferencia de costos de la intervención debido a los costos evitados por eventos coronarios y accidentes cerebrovasculares es de -$56.608.370,8 USD.** ** 
+    Ej: **Diferencia de costos respecto al escenario basal USD = -$56.608.370,8 USD: **la diferencia de costos de la intervención debido a los costos evitados por eventos coronarios y accidentes cerebrovasculares es de -$56.608.370,8 USD.** ** 
 
-19. **Razón de costo-efectividad incremental (RCEI) por año de vida salvado (AVS) (USD): **diferencia de costos dividido por el número de años salvados gracias a la intervención.
+17. **Razón de costo-efectividad incremental (RCEI) por vida salvada (VS) (USD): **costo adicional por cada vida que se salva como resultado de la implementación de la vacunación. 
+
+    Ej: **RCEI por VS = $300 USD: **en promedio, cada vida salvada por la implementación de la vacunación cuesta un adicional de $**300 **USD. ** **
+
+18. **Razón de costo-efectividad incremental (RCEI) por año de vida salvado (AVS) (USD): **diferencia de costos dividido por el número de años salvados gracias a la intervención.
 
     Ej: **RCEI por AVS = $9.564 USD: **cada año adicional de vida salvado con la intervención cuesta $9.564 USD. 
 
-20. **Razón de costo-efectividad incremental (RCEI) por año de vida salvado (AVS) descontado (USD): **diferencia de costos dividido por el número de años de vida salvados descontados gracias a la intervención.
+19. **Razón de costo-efectividad incremental (RCEI) por  Año de Vida Ajustado por Discapacidad evitado (USD): **diferencia de costos dividido por el número de años de vida ajustados por discapacidad evitados gracias a la intervención. 
 
-    Ej: **RCEI por año de vida salvado descontado = $570 USD:** en promedio, cada año de vida salvado luego de aplicar el descuento cuesta un adicional de** $570 USD.**
+    Ej: **RCEI por año de vida ajustado por discapacidad evitado = -$615 USD: **evitar un año de vida ajustado por discapacidad con la intervención cuesta $615 USD
 
-21. **Razón de costo-efectividad incremental (RCEI) por  Año de Vida Ajustado por Discapacidad evitado (USD): **diferencia de costos dividido por el número de años de vida ajustados por discapacidad evitados gracias a la intervención. 
+20. **Retorno de Inversión (ROI) (%): **relación entre los beneficios económicos obtenidos y el costo de la intervención. Un ROI positivo indica que la intervención no sólo cubre su costo, sino que también genera un beneficio económico adicional (en intervenciones costo-ahorrativas). Se define como los ingresos menos la inversión, dividido por la inversión. En el caso de que el ROI sea negativo, significa que los beneficios económicos alcanzados con la intervención no alcanzan para recuperar la inversión inicial. 
 
-    Ej: **RCEI por año de vida ajustado por discapacidad evitado en Argentina = -$615 USD: **evitar un año de vida ajustado por discapacidad con la intervención cuesta $615 USD
-
-22. **Razón de costo-efectividad incremental (RCEI) por Año de Vida Ajustado por Discapacidad evitado descontado (USD)**: diferencia de costos dividido por el número de años de vida ajustados por discapacidad descontados  prevenidos gracias a la intervención.
-
-    Ej: **RCEI por Año de Vida Ajustado por Discapacidad evitado descontado = $470 USD:** en promedio, cada año de vida ajustado por discapacidad evitado luego de aplicar el descuento cuesta un adicional de** $470 USD.**
-
-23. **Razón de costo-efectividad incremental (RCEI) por vida salvada (VS) (USD): **costo adicional por cada vida que se salva como resultado de la implementación de la vacunación. 
-
-    Ej: **RCEI por VS = $300 USD: **en promedio, cada vida salvada en Argentina por la implementación de la vacunación cuesta un adicional de $**300 **USD. ** **
-
-24. **Retorno de Inversión (ROI) (%): **relación entre los beneficios económicos obtenidos y el costo de la intervención. Un ROI positivo indica que la intervención no sólo cubre su costo, sino que también genera un beneficio económico adicional (en intervenciones costo-ahorrativas). Se define como los ingresos menos la inversión, dividido por la inversión. En el caso de que el ROI sea negativo, significa que los beneficios económicos alcanzados con la intervención no alcanzan para recuperar la inversión inicial. 
-
-    Ej: **Retorno de la inversión (ROI) en Argentina = 28%: **en Argentina, para un ROI del 28% por cada 1 USD invertido en la intervención, se ganan 0.28 céntimos de USD además de recuperar el capital inicial.
+    Ej: **Retorno de la inversión (ROI) = 28%: **por cada 1 USD invertido en la intervención, se ganan 0.28 céntimos de USD además de recuperar el capital inicial.
 
 
 
@@ -609,8 +565,6 @@ Referencias
    <td colspan="3" >
     <strong>Parámetros epidemiológicos</strong>
    </td>
-   <td>
-   </td>
   </tr>
   <tr>
    <td>
@@ -620,8 +574,6 @@ Referencias
    </td>
    <td><strong>Fuente</strong>
    </td>
-   <td>
-   </td>
   </tr>
   <tr>
    <td>Número de muertes totales por ECI entre 30 y 79 años
@@ -630,8 +582,6 @@ Referencias
    </td>
    <td>Global Burden of Disease<sup><a href="https://paperpile.com/c/R7cCn1/VhPsw">7</a></sup> 
    </td>
-   <td>
-   </td>
   </tr>
   <tr>
    <td>Número de muertes totales por ACV entre 30 y 79 años
@@ -639,8 +589,6 @@ Referencias
    <td>Número total de muertes por ACV, desglosado por sexo y grupo de edad (30 a 79 años), en cada pais (última actualización año 2019).
    </td>
    <td>Global Burden of Disease<sup><a href="https://paperpile.com/c/R7cCn1/VhPsw">7</a></sup> 
-   </td>
-   <td>
    </td>
   </tr>
 </table>
@@ -652,8 +600,6 @@ Referencias
    <td colspan="3" >
     <strong>Parámetros de costos </strong>
    </td>
-   <td>
-   </td>
   </tr>
   <tr>
    <td>
@@ -663,8 +609,6 @@ Referencias
    </td>
    <td><strong>Fuente</strong>
    </td>
-   <td>
-   </td>
   </tr>
   <tr>
    <td>Consulta médica
@@ -673,8 +617,6 @@ Referencias
    </td>
    <td>Nomencladores de cada país, actualizados por inflación en dólares estadounidenses.<sup><a href="https://paperpile.com/c/R7cCn1/wx2G5+MRUip+m4sVN+mpZTx+sEYWn+Tsaq4+aDl2w+QiELC+LLXZW+HF0BY+h7YZG+EZdD7+lzRAB+MUwL1">18–24,26–32</a></sup>
    </td>
-   <td>
-   </td>
   </tr>
   <tr>
    <td>Costo anual de consulta médica en paciente promedio
@@ -682,8 +624,6 @@ Referencias
    <td>Tiene en cuenta el número de visitas médicas anuales necesarias por paciente según nivel de riesgo cardiovascular calculado y la proporción de pacientes con ese nivel de riesgo, por país para abril de 2023.
    </td>
    <td>Nomencladores de cada país, actualizados por inflación en dólares estadounidenses.<sup><a href="https://paperpile.com/c/R7cCn1/wx2G5+MRUip+m4sVN+mpZTx+sEYWn+Tsaq4+aDl2w+QiELC+LLXZW+HF0BY+h7YZG+EZdD7+lzRAB+MUwL1">18–24,26–32</a></sup>
-   </td>
-   <td>
    </td>
   </tr>
   <tr>
@@ -699,8 +639,6 @@ Estimación indirecta*: CRC, MEX.
 <p>
 En dólares estadounidenses.<sup><a href="https://paperpile.com/c/R7cCn1/LLXZW+MRUip+HF0BY+h7YZG+EZdD7+lzRAB+MUwL1">18–24</a></sup>
    </td>
-   <td>
-   </td>
   </tr>
   <tr>
    <td>Costo farmacológico anual por paciente en Step 3
@@ -714,8 +652,6 @@ Actualizado por inflación<sup><a href="https://paperpile.com/c/R7cCn1/K9Ite">16
 Estimación indirecta*: CRC, MEX.
 <p>
 En dólares estadounidenses.<sup><a href="https://paperpile.com/c/R7cCn1/LLXZW+MRUip+HF0BY+h7YZG+EZdD7+lzRAB+MUwL1">18–24</a></sup>
-   </td>
-   <td>
    </td>
   </tr>
   <tr>
@@ -731,8 +667,6 @@ Estimación indirecta*: CRC, MEX.
 <p>
 En dólares estadounidenses.<sup><a href="https://paperpile.com/c/R7cCn1/LLXZW+MRUip+HF0BY+h7YZG+EZdD7+lzRAB+MUwL1">18–24</a></sup>
    </td>
-   <td>
-   </td>
   </tr>
   <tr>
    <td>Costo farmacológico anual por paciente en Step 5
@@ -746,8 +680,6 @@ Actualizado por inflación<sup><a href="https://paperpile.com/c/R7cCn1/K9Ite">16
 Estimación indirecta*: CRC, MEX.
 <p>
 En dólares estadounidenses.<sup><a href="https://paperpile.com/c/R7cCn1/LLXZW+MRUip+HF0BY+h7YZG+EZdD7+lzRAB+MUwL1">18–24</a></sup>
-   </td>
-   <td>
    </td>
   </tr>
   <tr>
@@ -763,8 +695,6 @@ Estimación indirecta*: CRC, MEX.
 <p>
 En dólares estadounidenses.<sup><a href="https://paperpile.com/c/R7cCn1/LLXZW+MRUip+HF0BY+h7YZG+EZdD7+lzRAB+MUwL1">18–24</a></sup>
    </td>
-   <td>
-   </td>
   </tr>
   <tr>
    <td>Costo de evento coronario no infarto
@@ -774,8 +704,6 @@ En dólares estadounidenses.<sup><a href="https://paperpile.com/c/R7cCn1/LLXZW+M
    <td>Pichon-Riviere y cols.,<sup><a href="https://paperpile.com/c/R7cCn1/yZZbn">25</a></sup> actualizados por inflación.<sup><a href="https://paperpile.com/c/R7cCn1/wx2G5+MRUip+QiELC+m4sVN+mpZTx+sEYWn+Tsaq4+aDl2w">19,26–32</a></sup>
 <p>
 En dólares estadounidenses.<sup><a href="https://paperpile.com/c/R7cCn1/LLXZW+MRUip+HF0BY+h7YZG+EZdD7+lzRAB+MUwL1">18–24</a></sup>
-   </td>
-   <td>
    </td>
   </tr>
   <tr>
@@ -787,10 +715,9 @@ En dólares estadounidenses.<sup><a href="https://paperpile.com/c/R7cCn1/LLXZW+M
 <p>
 En dólares estadounidenses.<sup><a href="https://paperpile.com/c/R7cCn1/LLXZW+MRUip+HF0BY+h7YZG+EZdD7+lzRAB+MUwL1">18–24</a></sup>
    </td>
-   <td>
-   </td>
   </tr>
 </table>
 
 
 *Debido a que no se contó con información específica del país, los costos fueron calculados mediante estimación indirecta usando el PIB per cápita de cada país y la proporción del costo buscado en el PIB per cápita de los países con información.
+

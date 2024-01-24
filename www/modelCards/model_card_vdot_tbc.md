@@ -56,7 +56,7 @@ Desde una perspectiva económica, la estimación de costos para Costa Rica, Ecua
 
 <table>
   <tr>
-   <td colspan="4" >
+   <td colspan="3" >
     <strong>Parámetros epidemiológicos</strong>
    </td>
   </tr>
@@ -68,18 +68,6 @@ Desde una perspectiva económica, la estimación de costos para Costa Rica, Ecua
    </td>
    <td><strong>Fuente</strong>
    </td>
-   <td><strong>Tipo de parámetros</strong>
-   </td>
-  </tr>
-  <tr>
-   <td>Riesgo Relativo del tratamiento exitoso con DOT vs tratamiento autosupervisado 
-   </td>
-   <td>Riesgo relativo de éxito en el tratamiento de la tuberculosis comparando el DOT con el tratamiento autosupervisado.
-   </td>
-   <td>Alipanah y cols.<sup><a href="https://paperpile.com/c/W3ldUH/2GlOn">7</a></sup>
-   </td>
-   <td>Básico bloqueado (no se modifica) (fácilmente visible) // Avanzado modificable
-   </td>
   </tr>
   <tr>
    <td>Riesgo relativo tratamiento exitoso vDOT vs DOT
@@ -87,8 +75,6 @@ Desde una perspectiva económica, la estimación de costos para Costa Rica, Ecua
    <td>Riesgo relativo de éxito en el tratamiento de la tuberculosis al comparar vDOT con el DOT.
    </td>
    <td>Ridho y cols.<sup><a href="https://paperpile.com/c/W3ldUH/ATdT2">8</a></sup>
-   </td>
-   <td>Básico
    </td>
   </tr>
   <tr>
@@ -98,7 +84,21 @@ Desde una perspectiva económica, la estimación de costos para Costa Rica, Ecua
    </td>
    <td>Story y cols.<sup><a href="https://paperpile.com/c/W3ldUH/GyU93">9</a></sup>
    </td>
-   <td>Básico
+  </tr>
+  <tr>
+   <td>Cantidad de dosis supervisadas mediante vDOT por semana
+   </td>
+   <td>Número total de veces que un paciente con tuberculosis recibe supervisión para la toma de sus medicamentos a través de vDOT durante una semana.
+   </td>
+   <td>Definido por el usuario
+   </td>
+  </tr>
+  <tr>
+   <td>Duración del tratamiento completo de la tuberculosis pulmonar (meses)
+   </td>
+   <td>Período total de tiempo requerido para completar un régimen terapéutico estándar para la tuberculosis pulmonar, que típicamente dura alrededor de 6 meses. Sin embargo, esta duración puede variar dependiendo de la resistencia a los medicamentos, la gravedad de la enfermedad, y otras condiciones médicas del paciente.
+   </td>
+   <td>OMS/OPS<sup><a href="https://paperpile.com/c/W3ldUH/lXaU">14</a></sup>
    </td>
   </tr>
   <tr>
@@ -108,8 +108,6 @@ Desde una perspectiva económica, la estimación de costos para Costa Rica, Ecua
    </td>
    <td>Alipanah y cols.<sup><a href="https://paperpile.com/c/W3ldUH/2GlOn">7</a></sup>
    </td>
-   <td>Avanzado
-   </td>
   </tr>
   <tr>
    <td>Porcentaje  de falla terapéutica dado tratamiento no exitoso mediante tratamiento autosupervisado
@@ -117,8 +115,6 @@ Desde una perspectiva económica, la estimación de costos para Costa Rica, Ecua
    <td>Porcentaje de pacientes que responden negativamente al tratamiento autosupervisado.
    </td>
    <td>Alipanah y cols.<sup><a href="https://paperpile.com/c/W3ldUH/2GlOn">7</a></sup>
-   </td>
-   <td>Avanzado
    </td>
   </tr>
   <tr>
@@ -128,37 +124,13 @@ Desde una perspectiva económica, la estimación de costos para Costa Rica, Ecua
    </td>
    <td>Alipanah y cols.<sup><a href="https://paperpile.com/c/W3ldUH/2GlOn">7</a></sup>
    </td>
-   <td>Avanzado
-   </td>
   </tr>
   <tr>
-   <td>Riesgo relativo de muerte de DOT vs tratamiento autosupervisado
+   <td>Riesgo relativo de falla terapéutica con vDOT vs DOT
    </td>
-   <td>Riesgo relativo de mortalidad en pacientes bajo DOT frente a aquellos que gestionan su tratamiento autosupervisado.
+   <td>Riesgo relativo de falla terapéutica en pacientes bajo vDOT frente a aquellos que reciben DOT.
    </td>
-   <td>Ridolfi y cols.<sup><a href="https://paperpile.com/c/W3ldUH/AvrSh">10</a></sup>
-   </td>
-   <td>Avanzado
-   </td>
-  </tr>
-  <tr>
-   <td>Riesgo relativo de falla terapéutica del DOT vs tratamiento autosupervisado
-   </td>
-   <td>Riesgo relativo de falla terapéutica en pacientes bajo DOT frente a aquellos que gestionan su tratamiento autosupervisado.
-   </td>
-   <td>Ridolfi y cols.<sup><a href="https://paperpile.com/c/W3ldUH/AvrSh">10</a></sup>
-   </td>
-   <td>Avanzado
-   </td>
-  </tr>
-  <tr>
-   <td>Porcentaje de adherencia al DOT
-   </td>
-   <td>Porcentaje que refleja la adherencia adecuada al DOT para tuberculosis, estableciendo que un paciente cumple con el tratamiento de manera correcta si asiste y completa al menos el 80% de las sesiones de medicación supervisadas.
-   </td>
-   <td>Story y cols.<sup><a href="https://paperpile.com/c/W3ldUH/GyU93">9</a></sup>
-   </td>
-   <td>Avanzado
+   <td>Asunción
    </td>
   </tr>
   <tr>
@@ -168,27 +140,37 @@ Desde una perspectiva económica, la estimación de costos para Costa Rica, Ecua
    </td>
    <td>Asunción
    </td>
-   <td>Avanzado
+  </tr>
+  <tr>
+   <td>Riesgo Relativo del tratamiento exitoso con DOT vs tratamiento autosupervisado 
+   </td>
+   <td>Riesgo relativo de éxito en el tratamiento de la tuberculosis comparando el DOT con el tratamiento autosupervisado.
+   </td>
+   <td>Alipanah y cols.<sup><a href="https://paperpile.com/c/W3ldUH/2GlOn">7</a></sup>
    </td>
   </tr>
   <tr>
-   <td>Riesgo relativo de falla terapéutica con vDOT vs DOT
+   <td>Riesgo relativo de falla terapéutica del DOT vs tratamiento autosupervisado
    </td>
-   <td>Riesgo relativo de falla terapéutica en pacientes bajo vDOT frente a aquellos que reciben DOT.
+   <td>Riesgo relativo de falla terapéutica en pacientes bajo DOT frente a aquellos que gestionan su tratamiento autosupervisado.
    </td>
-   <td>Asunción
-   </td>
-   <td>Avanzado
+   <td>Ridolfi y cols.<sup><a href="https://paperpile.com/c/W3ldUH/AvrSh">10</a></sup>
    </td>
   </tr>
   <tr>
-   <td>Cantidad de dosis supervisadas mediante vDOT por semana
+   <td>Riesgo relativo de muerte de DOT vs tratamiento autosupervisado
    </td>
-   <td>Número total de veces que un paciente con tuberculosis recibe supervisión para la toma de sus medicamentos a través de vDOT durante una semana.
+   <td>Riesgo relativo de mortalidad en pacientes bajo DOT frente a aquellos que gestionan su tratamiento autosupervisado.
    </td>
-   <td>Definido por el usuario
+   <td>Ridolfi y cols.<sup><a href="https://paperpile.com/c/W3ldUH/AvrSh">10</a></sup>
    </td>
-   <td>Avanzado
+  </tr>
+  <tr>
+   <td>Porcentaje de adherencia al DOT
+   </td>
+   <td>Porcentaje que refleja la adherencia adecuada al DOT para tuberculosis, estableciendo que un paciente cumple con el tratamiento de manera correcta si asiste y completa al menos el 80% de las sesiones de medicación supervisadas.
+   </td>
+   <td>Story y cols.<sup><a href="https://paperpile.com/c/W3ldUH/GyU93">9</a></sup>
    </td>
   </tr>
   <tr>
@@ -198,18 +180,6 @@ Desde una perspectiva económica, la estimación de costos para Costa Rica, Ecua
    </td>
    <td>Definido por el usuario
    </td>
-   <td>Avanzado
-   </td>
-  </tr>
-  <tr>
-   <td>Utilidad de la población general
-   </td>
-   <td>Utilidad de la población general para la mediana de edad de tuberculosis.
-   </td>
-   <td>EQ-5D<sup><a href="https://paperpile.com/c/W3ldUH/RuKAt">11</a></sup>
-   </td>
-   <td>Avanzado 
-   </td>
   </tr>
   <tr>
    <td>Mediana de edad de diagnóstico de tuberculosis
@@ -217,8 +187,6 @@ Desde una perspectiva económica, la estimación de costos para Costa Rica, Ecua
    <td>Mediana de edad de los pacientes con diagnóstico de tuberculosis para el país.
    </td>
    <td>Morgado y cols.<sup><a href="https://paperpile.com/c/W3ldUH/C45Ea">12</a></sup>
-   </td>
-   <td>Avanzado
    </td>
   </tr>
   <tr>
@@ -228,7 +196,13 @@ Desde una perspectiva económica, la estimación de costos para Costa Rica, Ecua
    </td>
    <td> (Cohorte hipotética)
    </td>
-   <td>Básico
+  </tr>
+  <tr>
+   <td>Utilidad de la población general
+   </td>
+   <td>Utilidad de la población general para la mediana de edad de tuberculosis.
+   </td>
+   <td>EQ-5D<sup><a href="https://paperpile.com/c/W3ldUH/RuKAt">11</a></sup>
    </td>
   </tr>
   <tr>
@@ -238,18 +212,6 @@ Desde una perspectiva económica, la estimación de costos para Costa Rica, Ecua
    </td>
    <td>Calculado a partir del peso por discapacidad del Global Burden of Disease<sup><a href="https://paperpile.com/c/W3ldUH/7Pbw">13</a></sup>
    </td>
-   <td>Avanzado
-   </td>
-  </tr>
-  <tr>
-   <td>Duración de la internación por tuberculosis
-   </td>
-   <td>Indica el número promedio de días que un paciente con tuberculosis esta hospitalizado tras no responder adecuadamente a un tratamiento inicial.
-   </td>
-   <td>Opinión de experto
-   </td>
-   <td>Avanzado
-   </td>
   </tr>
   <tr>
    <td>Porcentaje de pacientes con falla terapéutica que requieren internación
@@ -258,17 +220,13 @@ Desde una perspectiva económica, la estimación de costos para Costa Rica, Ecua
    </td>
    <td>Asunción
    </td>
-   <td>Avanzado
-   </td>
   </tr>
   <tr>
-   <td>Duración del tratamiento completo de la tuberculosis pulmonar
+   <td>Duración de la internación por tuberculosis (días)
    </td>
-   <td>Período total de tiempo requerido para completar un régimen terapéutico estándar para la tuberculosis pulmonar, que típicamente dura alrededor de 6 meses. Sin embargo, esta duración puede variar dependiendo de la resistencia a los medicamentos, la gravedad de la enfermedad, y otras condiciones médicas del paciente.
+   <td>Indica el número promedio de días que un paciente con tuberculosis esta hospitalizado tras no responder adecuadamente a un tratamiento inicial.
    </td>
-   <td>OMS/OPS<sup><a href="https://paperpile.com/c/W3ldUH/lXaU">14</a></sup>
-   </td>
-   <td>Avanzado
+   <td>Opinión de experto
    </td>
   </tr>
 </table>
@@ -277,7 +235,7 @@ Desde una perspectiva económica, la estimación de costos para Costa Rica, Ecua
 
 <table>
   <tr>
-   <td colspan="4" >
+   <td colspan="3" >
     <strong>Parámetros de costos</strong>
    </td>
   </tr>
@@ -289,17 +247,25 @@ Desde una perspectiva económica, la estimación de costos para Costa Rica, Ecua
    </td>
    <td><strong>Fuente</strong>
    </td>
-   <td><strong>Tipo de parámetro</strong>
+  </tr>
+  <tr>
+   <td>Costo de una consulta de vDOT (USD)
+   </td>
+   <td>Costo de una consulta de supervisión de una dosis de terapia directamente observada por video.
+   </td>
+   <td>Se asumió como una porción del costo de la hora de una enfermera para todos los países.<sup><a href="https://paperpile.com/c/W3ldUH/z5KyI">21</a>,<a href="https://paperpile.com/c/W3ldUH/fMnrU">22</a>, <a href="https://paperpile.com/c/W3ldUH/mrvkL">23</a>,<a href="https://paperpile.com/c/W3ldUH/F1m6s">24</a>,<a href="https://paperpile.com/c/W3ldUH/StVbB">25</a>,<a href="https://paperpile.com/c/W3ldUH/72AbM+qeRjo+QXkF3">26–28</a></sup>
+<p>
+Valores en USD oficial a tasa de cambio nominal de cada país para noviembre de 2023.
    </td>
   </tr>
   <tr>
    <td>Costo mensual de tratamiento de inducción (USD)
    </td>
-   <td>Costo mensual del tratamiento farmacológico de inducción para tuberculosis (USD oficial a tasa de cambio nominal de cada país).
+   <td>Costo mensual del tratamiento farmacológico de inducción para tuberculosis.
    </td>
    <td>Fondo estratégico de la OPS <sup><a href="https://paperpile.com/c/W3ldUH/QIleb">15</a></sup>
-   </td>
-   <td>Avanzado
+<p>
+Valores en USD oficial a tasa de cambio nominal de cada país para noviembre de 2023.
    </td>
   </tr>
   <tr>
@@ -309,120 +275,99 @@ Desde una perspectiva económica, la estimación de costos para Costa Rica, Ecua
    </td>
    <td>Fondo estratégico de la OPS <sup><a href="https://paperpile.com/c/W3ldUH/QIleb">15</a></sup>
    </td>
-   <td>Avanzado
-   </td>
   </tr>
   <tr>
    <td>Costo mensual de seguimiento (USD)
    </td>
-   <td>Costo mensual de controles médicos (no contempla exámenes complementarios) (USD oficial a tasa de cambio nominal de cada país).
+   <td>Costo mensual de controles médicos (no contempla exámenes complementarios).
    </td>
    <td>Nomencladores específicos para Argentina,<sup><a href="https://paperpile.com/c/W3ldUH/I5g1h">16</a></sup> Brasil,<sup><a href="https://paperpile.com/c/W3ldUH/I5g1h+c5X1Y">16,17</a></sup> Chile<sup><a href="https://paperpile.com/c/W3ldUH/AJmjX">18</a>,<a href="https://paperpile.com/c/W3ldUH/tGyhd">19</a></sup> y Colombia,<sup><a href="https://paperpile.com/c/W3ldUH/XBsSZ">20</a></sup> estimación indirecta* para Costa Rica, Ecuador, México y Perú.
-   </td>
-   <td>Avanzado
+<p>
+Valores en USD oficial a tasa de cambio nominal de cada país para noviembre de 2023.
    </td>
   </tr>
   <tr>
    <td>Costo promedio mensual de exámenes complementarios (USD)
    </td>
-   <td>Costo promedio mensual de exámenes complementarios (USD oficial a tasa de cambio nominal de cada país).
+   <td>Costo promedio mensual de exámenes complementarios.
    </td>
    <td>Nomencladores específicos para Argentina,<sup><a href="https://paperpile.com/c/W3ldUH/I5g1h">16</a></sup> Brasil,<sup><a href="https://paperpile.com/c/W3ldUH/I5g1h+c5X1Y">16,17</a></sup> Chile<sup><a href="https://paperpile.com/c/W3ldUH/AJmjX">18</a>,<a href="https://paperpile.com/c/W3ldUH/tGyhd">19</a></sup> y Colombia,<sup><a href="https://paperpile.com/c/W3ldUH/XBsSZ">20</a></sup> estimación indirecta* para Costa Rica, Ecuador, México y Perú.
-   </td>
-   <td>Avanzado
-   </td>
-  </tr>
-  <tr>
-   <td>Costo promedio de 1 día de internación por tuberculosis (USD)
-   </td>
-   <td>Costo promedio de 1 día de internación por falla terapéutica en tuberculosis (por complicación de patología o falta de adherencia al tratamiento) (USD oficial a tasa de cambio nominal de cada país).
-   </td>
-   <td>Nomencladores específicos para Argentina,<sup><a href="https://paperpile.com/c/W3ldUH/I5g1h">16</a></sup> Brasil,<sup><a href="https://paperpile.com/c/W3ldUH/I5g1h+c5X1Y">16,17</a></sup> Chile<sup><a href="https://paperpile.com/c/W3ldUH/AJmjX">18</a>,<a href="https://paperpile.com/c/W3ldUH/tGyhd">19</a></sup> y Colombia,<sup><a href="https://paperpile.com/c/W3ldUH/XBsSZ">20</a></sup> estimación indirecta* para Costa Rica, Ecuador, México y Perú.
-   </td>
-   <td>Avanzado
+<p>
+Valores en USD oficial a tasa de cambio nominal de cada país para noviembre de 2023.
    </td>
   </tr>
   <tr>
    <td>Costo de una consulta de DOT (USD)
    </td>
-   <td>Costo de una consulta de supervisión de una dosis de DOT (USD oficial a tasa de cambio nominal de cada país).
+   <td>Costo de una consulta de supervisión de una dosis de DOT.
    </td>
    <td>Se asumió como una porción del costo de la hora de una enfermera para todos los países.<sup><a href="https://paperpile.com/c/W3ldUH/z5KyI">21</a>, <a href="https://paperpile.com/c/W3ldUH/fMnrU">22</a>, <a href="https://paperpile.com/c/W3ldUH/mrvkL">23</a>,<a href="https://paperpile.com/c/W3ldUH/F1m6s">24</a>,<a href="https://paperpile.com/c/W3ldUH/StVbB">25</a>,<a href="https://paperpile.com/c/W3ldUH/72AbM+qeRjo+QXkF3">26–28</a></sup>
-   </td>
-   <td>
-    Avanzado
-   </td>
-  </tr>
-  <tr>
-   <td>Costo de una consulta de vDOT (USD)
-   </td>
-   <td>Costo de una consulta de supervisión de una dosis de terapia directamente observada por video (USD oficial a tasa de cambio nominal de cada país).
-   </td>
-   <td>Se asumió como una porción del costo de la hora de una enfermera para todos los países.<sup><a href="https://paperpile.com/c/W3ldUH/z5KyI">21</a>,<a href="https://paperpile.com/c/W3ldUH/fMnrU">22</a>, <a href="https://paperpile.com/c/W3ldUH/mrvkL">23</a>,<a href="https://paperpile.com/c/W3ldUH/F1m6s">24</a>,<a href="https://paperpile.com/c/W3ldUH/StVbB">25</a>,<a href="https://paperpile.com/c/W3ldUH/72AbM+qeRjo+QXkF3">26–28</a></sup>
-   </td>
-   <td>
-    Básico
+<p>
+Valores en USD oficial a tasa de cambio nominal de cada país para noviembre de 2023.
    </td>
   </tr>
   <tr>
-   <td>Costo programático anual de vDOT (USD)
+   <td>Costo promedio de 1 día de internación por tuberculosis (USD)
    </td>
-   <td>Costo de implementar y sostener vDOT en un año (USD oficial a tasa de cambio nominal de cada país).
+   <td>Costo promedio de 1 día de internación por falla terapéutica en tuberculosis (por complicación de patología o falta de adherencia al tratamiento).
    </td>
-   <td>Se ofrece la opción al usuario de completar este dato si dispone de la información necesaria.
-   </td>
-   <td>Basico Bloqueado (no se modifica) (fácilmente visible) // Avanzado modificable
-   </td>
-  </tr>
-  <tr>
-   <td>Costo programático anual de DOT (USD)
-   </td>
-   <td>Costo de implementar y mantener DOT en un año (USD oficial a tasa de cambio nominal de cada país).
-   </td>
-   <td>Se ofrece la opción al usuario de completar este dato si dispone de la información necesaria.
-   </td>
-   <td>
-    Avanzado
+   <td>Nomencladores específicos para Argentina,<sup><a href="https://paperpile.com/c/W3ldUH/I5g1h">16</a></sup> Brasil,<sup><a href="https://paperpile.com/c/W3ldUH/I5g1h+c5X1Y">16,17</a></sup> Chile<sup><a href="https://paperpile.com/c/W3ldUH/AJmjX">18</a>,<a href="https://paperpile.com/c/W3ldUH/tGyhd">19</a></sup> y Colombia,<sup><a href="https://paperpile.com/c/W3ldUH/XBsSZ">20</a></sup> estimación indirecta* para Costa Rica, Ecuador, México y Perú.
+<p>
+Valores en USD oficial a tasa de cambio nominal de cada país para noviembre de 2023.
    </td>
   </tr>
   <tr>
    <td>Costo de consulta a emergencias (USD)
    </td>
-   <td>Costo de 1 consulta a emergencias en pacientes con tuberculosis activa (USD oficial a tasa de cambio nominal de cada país).
+   <td>Costo de 1 consulta a emergencias en pacientes con tuberculosis activa.
    </td>
    <td>Nomencladores específicos para Argentina<sup><a href="https://paperpile.com/c/W3ldUH/I5g1h">16</a></sup>, Brasil<sup><a href="https://paperpile.com/c/W3ldUH/I5g1h+c5X1Y">16,17</a></sup>, Chile<sup><a href="https://paperpile.com/c/W3ldUH/AJmjX">18</a>,<a href="https://paperpile.com/c/W3ldUH/tGyhd">19</a></sup> y Colombia<sup><a href="https://paperpile.com/c/W3ldUH/XBsSZ">20</a></sup>, estimación indirecta* para Costa Rica, Ecuador, México y Perú.
-   </td>
-   <td>Avanzado
+<p>
+Valores en USD oficial a tasa de cambio nominal de cada país para noviembre de 2023.
    </td>
   </tr>
   <tr>
    <td>Costo de tratamiento mensual de inducción en tuberculosis  multirresistente (USD)
    </td>
-   <td>Costo mensual del tratamiento de inducción promedio para tuberculosis multirresistente (USD oficial a tasa de cambio nominal de cada país).
+   <td>Costo mensual del tratamiento de inducción promedio para tuberculosis multirresistente.
    </td>
    <td>Fondo estratégico de la OPS<sup><a href="https://paperpile.com/c/W3ldUH/QIleb">15</a></sup>
-   </td>
-   <td>Avanzado
+<p>
+Valores en USD oficial a tasa de cambio nominal de cada país para noviembre de 2023.
    </td>
   </tr>
   <tr>
    <td>Costo de tratamiento mensual de consolidación en tuberculosis MR (USD)
    </td>
-   <td>Costo mensual del tratamiento de consolidación promedio para tuberculosis multirresistente (USD oficial a tasa de cambio nominal de cada país).
+   <td>Costo mensual del tratamiento de consolidación promedio para tuberculosis multirresistente.
    </td>
    <td>Fondo estratégico de la OPS<sup><a href="https://paperpile.com/c/W3ldUH/QIleb">15</a></sup>
-   </td>
-   <td>Avanzado
+<p>
+Valores en USD oficial a tasa de cambio nominal de cada país para noviembre de 2023.
    </td>
   </tr>
   <tr>
-   <td>Tasa de descuento 
+   <td>Tasa de descuento (%) 
    </td>
    <td>Se utiliza para traer al presente los costos y beneficios en salud futuros.
    </td>
    <td>Manual metodológico para elaboración de Evaluaciones Económicas<sup><a href="https://paperpile.com/c/W3ldUH/Ffwur">29</a></sup>
    </td>
-   <td>Avanzado
+  </tr>
+  <tr>
+   <td>Costo programático anual de DOT (USD)
+   </td>
+   <td>Costo de implementar y mantener DOT en un año.
+   </td>
+   <td>Se ofrece la opción al usuario de completar este dato si dispone de la información necesaria.
+   </td>
+  </tr>
+  <tr>
+   <td>Costo programático anual de vDOT (USD)
+   </td>
+   <td>Costo de implementar y sostener vDOT en un año.
+   </td>
+   <td>Se ofrece la opción al usuario de completar este dato si dispone de la información necesaria.
    </td>
   </tr>
 </table>
@@ -439,38 +384,38 @@ Desde una perspectiva económica, la estimación de costos para Costa Rica, Ecua
 
     Ej: **Tratamientos exitosos (n): n = 733,2. **En este caso, el modelo indica que la implementación de vDOT podría resultar en aproximadamente 733 casos exitosos de tratamiento.
 
-2. **Porcentaje de éxito (%): **mide la proporción de pacientes que completan exitosamente su tratamiento de tuberculosis bajo la intervención de vDOT, expresado como un porcentaje.
-
-    Ej: **Porcentaje de éxito (%): % = 70. **En este caso, el modelo indica que la implementación de vDOT podría resultar en aproximadamente un 70% exitosos de tratamiento.
-
-3. **Muertes evitadas (n): **número de evitadas mientras reciben tratamiento para la tuberculosis bajo el vDOT.
+2. **Muertes evitadas (n): **número de evitadas mientras reciben tratamiento para la tuberculosis bajo el vDOT.
 
     Ej: **Muertes evitadas: n = 61,4. **En este caso, el modelo indica que la  implementación del vDOT podría evitar la muerte de 61 pacientes aproximadamente
+
+3. **Años de vida salvados: **mide la cantidad de años de vida perdidos por muerte prematura que se evitan como resultado del vDOT comparandolo con el tratamiento autosupervisado.
+
+    Ej: **Años de vida salvados = 758,8. **En este caso, el modelo indica que el vDOT tiene el potencial de evitar 758.8 años de vida por muerte prematura en pacientes con tuberculosis.
 
 4. **Años de vida ajustados por discapacidad evitados: **mide la cantidad de años de años de vida ajustados por discapacidad que se evitan como resultado del vDOT
 
     Ej: **Años de vida ajustados por discapacidad evitados = 758,8. **En este caso, el modelo indica que el vDOT tiene el potencial de evitar 758.8 años de vida ajustados por discapacidad en pacientes con tuberculosis.
-
-5. **Años de vida salvados: **mide la cantidad de años de años de vida perdidos por muerte prematura que se evitan como resultado del vDOT comparandolo con el tratamiento autosupervisado.
-
-    Ej: **Años de vida salvados = 758,8. **En este caso, el modelo indica que el vDOT tiene el potencial de evitar 758.8 años de vida por muerte prematura en pacientes con tuberculosis.
 
 
 **Resultados económicos**
 
 
 
-6. **Costo total de la intervención (USD):** el costo total del vDOT durante la duración del tratamiento por el número de personas de la cohorte que recibirán la intervención en USD oficial a tasa de cambio nominal de cada país.
+5. **Costo total de la intervención (USD):** el costo total del vDOT durante la duración del tratamiento por el número de personas de la cohorte que recibirán la intervención en USD oficial a tasa de cambio nominal de cada país.
 
     Ej: **(USD) = $40.431,3 USD:** realizar vDOT durante la duración del tratamiento para las personas de la cohorte que recibirán la intervención vale $40.431,3 USD. 
 
-7. **Costos evitados atribuibles a la intervención (USD):** los costos evitados por eventos en salud asociados a tuberculosis o tratamiento adicional de tuberculosis por utilizar vDOT en lugar de tratamiento autosupervisado.
+6. **Costos evitados atribuibles a la intervención (USD):** los costos evitados por eventos en salud asociados a tuberculosis o tratamiento adicional de tuberculosis por utilizar vDOT en lugar de tratamiento autosupervisado.
 
     Ej: **Costos evitados atribuibles a la intervención  (USD) = $450.000,2 USD:** el uso de vDOT evita $450.000,2 USD gracias a ahorros en atención médica de eventos en salud de tuberculosis y tratamientos adicionales para tuberculosis.
 
-8. **Diferencia de costos respecto al escenario basal (USD):** diferencia de costos entre el vDOT y no intervención (tratamiento autosupervisado).
+7. **Diferencia de costos respecto al escenario basal (USD):** diferencia de costos entre el vDOT y no intervención (tratamiento autosupervisado).
 
     Ej: **Diferencia de costos respecto al escenario basal (USD) = $568.025,5 USD:** si se implementa terapia directamente observada por video se tendría una diferencia de costos de $568.025,5 USD en comparación con tratamiento autosupervisado.
+
+8. **Razón de costo-efectividad incremental por vida salvada (USD): **costo adicional por cada vida que se salva como resultado de la implementación de la intervención (vDOT o DOT).
+
+    Ej: **Razón de costo-efectividad incremental por vida salvada (USD) = $12.546,3 USD: **en promedio, cada vida salvada en Argentina por la implementación de la intervención (vDOT o DOT) cuesta un adicional de $12.546,3 USD. 
 
 9. **Razón de costo-efectividad incremental por Año de vida salvado:** hace referencia al costo adicional del vDOT por cada año de vida salvado adicional en comparación con tratamiento autosupervisado. Se trata de la diferencia en costos de la intervención dividido la diferencia en efectividad en años de vida salvados, entre el vDOT y el tratamiento autosupervisado.
 

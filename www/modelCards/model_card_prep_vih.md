@@ -59,7 +59,7 @@ Desde el punto de vista económico, la estimación de costos para países como C
 
 <table>
   <tr>
-   <td colspan="4" >
+   <td colspan="3" >
     <strong>Parámetros Epidemiológicos.</strong>
    </td>
   </tr>
@@ -71,7 +71,13 @@ Desde el punto de vista económico, la estimación de costos para países como C
    </td>
    <td><strong>Fuente</strong>
    </td>
-   <td><strong>Tipo de parámetros</strong>
+  </tr>
+  <tr>
+   <td>Duración de la intervención de uso de PrEP (años)
+   </td>
+   <td>Período de tiempo en años durante el cual se implementará la intervención de uso de PrEP a nivel de la población.
+   </td>
+   <td>Decisión del usuario
    </td>
   </tr>
   <tr>
@@ -81,8 +87,6 @@ Desde el punto de vista económico, la estimación de costos para países como C
    </td>
    <td>Asunción
    </td>
-   <td>Avanzado
-   </td>
   </tr>
   <tr>
    <td>Edad máxima inicial
@@ -91,87 +95,188 @@ Desde el punto de vista económico, la estimación de costos para países como C
    </td>
    <td>Asunción
    </td>
-   <td>Avanzado
-   </td>
   </tr>
   <tr>
-   <td>Aceptabilidad del tratamiento con PrEP en la población
+   <td>Aceptabilidad del tratamiento con PrEP en la población (%)
    </td>
-   <td>Porcentaje de personas sanas en la cohorte que recibirán PrEP. Puede utilizarse para reflejar la disposición de la población hacia el uso de la PrEP o la cobertura de la intervención objetivo.
+   <td>Porcentaje de personas sanas en la cohorte que recibirán PrEP. Puede utilizarse para reflejar la disposición de la población hacia el uso de PrEP o la cobertura de la intervención objetivo.
    </td>
    <td>Soares y cols.<sup><a href="https://paperpile.com/c/usbJYy/a9cxE">7</a></sup>
    </td>
-   <td>Avanzado
+  </tr>
+  <tr>
+   <td>Adherencia al uso de PrEP en la población (%)
+   </td>
+   <td>Porcentaje de personas con indicación a PrEP para la prevención de infección por VIH que siguen el régimen de tratamiento, incluyendo la consistencia y regularidad en la toma del medicamento. La adherencia impacta directamente en la efectividad final del uso de PrEP.
+   </td>
+   <td>Hojilla y cols<sup><a href="https://paperpile.com/c/usbJYy/RuzJU">4</a></sup>
    </td>
   </tr>
   <tr>
-   <td>Duración de tratamiento con PrEP
+   <td>Eficacia del uso de PrEP en la población (%)
    </td>
-   <td>Se refiere al período de tiempo durante el cual se implementará la intervención.
+   <td>Porcentaje de reducción del riesgo de contagio de HIV en la población a analizar que recibe PrEP, asumiendo una adherencia mayor a 80%.
    </td>
-   <td>
-   </td>
-   <td>Básico
+   <td>Hojilla y cols<sup><a href="https://paperpile.com/c/usbJYy/RuzJU">4</a></sup>
    </td>
   </tr>
   <tr>
    <td>Edad de fin de indicación de PrEP
    </td>
-   <td>Define la edad máxima para el uso de PrEP en la prevención del VIH, utilizada para análisis o simulaciones.
+   <td>Edad máxima en años que el modelo asume que una persona buscará recibir PrEP o tendrá indicación del mismo.
    </td>
    <td>Asunción 
    </td>
-   <td>Avanzado
+  </tr>
+  <tr>
+   <td>Prevalencia de VIH en la población en riesgo (%)
+   </td>
+   <td>Porcentaje de individuos en la población en estudio que viven con VIH.
+   </td>
+   <td>UNAIDS<sup><a href="https://paperpile.com/c/usbJYy/0sobY">9</a></sup>
    </td>
   </tr>
   <tr>
-   <td>Límite de edad de riesgo
+   <td>Personas que viven con VIH y que conocen su diagnóstico (%)
    </td>
-   <td>Establece la edad desde la cual el riesgo de contagio del VIH por vía sexual se considera mínima.
+   <td>Porcentaje de personas que conocen su diagnóstico entre la población de personas que viven con VIH.
    </td>
-   <td>Asunción 
-   </td>
-   <td>Avanzado
+   <td>UNAIDS<sup><a href="https://paperpile.com/c/usbJYy/0sobY">9</a></sup>
    </td>
   </tr>
   <tr>
-   <td>Límite de edad de contagio
+   <td>Personas que viven con VIH que reciben Terapia Antirretroviral (TARV) (%)
    </td>
-   <td>Establece la edad desde la cual se considera que el papel de la persona en la transmisión del VIH es mínimo.
+   <td>Porcentaje de personas que viven con VIH  y reciben TARV entre la población  que conoce su diagnóstico de VIH.
    </td>
-   <td>Asunción 
-   </td>
-   <td>Avanzado
+   <td>UNAIDS<sup><a href="https://paperpile.com/c/usbJYy/0sobY">9</a></sup>
    </td>
   </tr>
   <tr>
-   <td>Eficacia PrEP en la población
+   <td>Personas que viven con VIH que tiene carga viral suprimida (%)
    </td>
-   <td>Porcentaje de reducción del riesgo de contagio de HIV en la población a analizar que recibe PrEP asumiendo adherencia perfecta.
+   <td>Porcentaje de individuos que viven con VIH con carga viral negativa en la población entre la población que conoce su diagnóstico y recibe tratamiento. Es el porcentaje de individuos que han reducido a niveles muy bajos o indetectables la presencia de VIH en sangre gracias al tratamiento, indicando un control efectivo del virus.
    </td>
-   <td>Hojilla y cols<sup><a href="https://paperpile.com/c/usbJYy/RuzJU">4</a></sup>
-   </td>
-   <td>Avanzado
+   <td>UNAIDS<sup><a href="https://paperpile.com/c/usbJYy/0sobY">9</a></sup>
    </td>
   </tr>
   <tr>
-   <td>Adherencia PrEP en la población
+   <td>Probabilidad anual de muerte por VIH
    </td>
-   <td>Se refiere al grado en que las personas siguen el régimen de tratamiento de la PrEP para la prevención del VIH, incluyendo la consistencia y regularidad en la toma del medicamento. Impacta en la efectividad final de PrEP.
+   <td>Indica la probabilidad anual de que una persona que vive con VIH fallezca debido a la enfermedad o a complicaciones asociadas.
    </td>
-   <td>Hojilla y cols<sup><a href="https://paperpile.com/c/usbJYy/RuzJU">4</a></sup>
+   <td>Global Burden of Disease<sup><a href="https://paperpile.com/c/usbJYy/ZqBxA">10</a></sup> 
+<p>
+CEPAL<sup><a href="https://paperpile.com/c/usbJYy/NT7y3">11</a></sup>
+<p>
+UNAIDS<sup><a href="https://paperpile.com/c/usbJYy/0sobY">9</a></sup>
    </td>
-   <td>Avanzado
+  </tr>
+</table>
+
+
+
+<table>
+  <tr>
+   <td colspan="3" >
+    <strong>Parámetros de Costos.</strong>
    </td>
   </tr>
   <tr>
-   <td>Tasa de descuento anual
+   <td>
+    <strong>Parámetro</strong>
+   </td>
+   <td><strong>Descripción</strong>
+   </td>
+   <td><strong>Fuente</strong>
+   </td>
+  </tr>
+  <tr>
+   <td>Costo anual del uso de PrEP (USD)
+   </td>
+   <td>Costo de recibir PrEP diario por un año. Incluye Emtricitabine/Tenofovir.
+   </td>
+   <td>Fondo estratégico de la OPS<sup><a href="https://paperpile.com/c/usbJYy/htAl9">18</a></sup>
+<p>
+Valores en USD oficial a tasa de cambio nominal de cada país para octubre de 2023.
+   </td>
+  </tr>
+  <tr>
+   <td>Costo de seguimiento anual de PrEP (USD)
+   </td>
+   <td>Costo de seguimiento médico anual de una persona bajo la estrategia PrEP.
+   </td>
+   <td>Nomencladores específicos para Argentina,<sup><a href="https://paperpile.com/c/usbJYy/TuiJc">13</a></sup> Brasil,<sup><a href="https://paperpile.com/c/usbJYy/TuiJc+VsFRY">13,14</a></sup> Chile<sup><a href="https://paperpile.com/c/usbJYy/XSGVN">15</a>,<a href="https://paperpile.com/c/usbJYy/cB34N">16</a></sup> y Colombia,<sup><a href="https://paperpile.com/c/usbJYy/jUa5q">17</a></sup> estimación indirecta* para Costa Rica, Ecuador, México y Perú.
+<p>
+Valores en USD oficial a tasa de cambio nominal de cada país para octubre de 2023.
+   </td>
+  </tr>
+  <tr>
+   <td>Costo anual de testeo PrEP (USD)
+   </td>
+   <td>Costo de realizar los exámenes complementarios pertinentes a la estrategia PrEP durante un año. Incluye tests VIH y creatinina trimestral.
+   </td>
+   <td>Nomencladores específicos para Argentina,<sup><a href="https://paperpile.com/c/usbJYy/TuiJc">13</a></sup> Brasil,<sup><a href="https://paperpile.com/c/usbJYy/TuiJc+VsFRY">13,14</a></sup> Chile<sup><a href="https://paperpile.com/c/usbJYy/XSGVN">15</a>,<a href="https://paperpile.com/c/usbJYy/cB34N">16</a></sup> y Colombia,<sup><a href="https://paperpile.com/c/usbJYy/jUa5q">17</a></sup> estimación indirecta* para Costa Rica, Ecuador, México y Perú.
+<p>
+Valores en USD oficial a tasa de cambio nominal de cada país para octubre de 2023.
+   </td>
+  </tr>
+  <tr>
+   <td>Costo anual de tratamiento de VIH (USD)
+   </td>
+   <td>Costo anual en USD de recibir tratamiento antirretroviral para VIH. Incluye Dolutegravir, Lamivudine, Tenofovir, Efavirenz, Emtricitabine, Darunavir, Ritonavir, Emtricitabina y Abacavir.
+   </td>
+   <td>Fondo estratégico de la OPS<sup><a href="https://paperpile.com/c/usbJYy/htAl9">18</a></sup>
+<p>
+Valores en USD oficial a tasa de cambio nominal de cada país para octubre de 2023.
+   </td>
+  </tr>
+  <tr>
+   <td>Costo anual de seguimiento de VIH (USD)
+   </td>
+   <td>Costo anual en USD de seguimiento de una persona que vive con VIH. Incluye consultas médicas, pruebas de laboratorio, estudios de imagen y consejería y educación sexual.
+   </td>
+   <td>Nomencladores específicos para Argentina,<sup><a href="https://paperpile.com/c/usbJYy/TuiJc">13</a></sup> Brasil,<sup><a href="https://paperpile.com/c/usbJYy/TuiJc+VsFRY">13,14</a></sup> Chile<sup><a href="https://paperpile.com/c/usbJYy/XSGVN">15</a>,<a href="https://paperpile.com/c/usbJYy/cB34N">16</a></sup> y Colombia,<sup><a href="https://paperpile.com/c/usbJYy/jUa5q">17</a></sup> estimación indirecta* para Costa Rica, Ecuador, México y Perú.
+<p>
+Valores en USD oficial a tasa de cambio nominal de cada país para octubre de 2023.
+   </td>
+  </tr>
+  <tr>
+   <td>Costo de consulta con infectología (USD)
+   </td>
+   <td>Costo de una consulta con infectología.
+   </td>
+   <td>Nomencladores específicos para Argentina,<sup><a href="https://paperpile.com/c/usbJYy/TuiJc">13</a></sup> Brasil,<sup><a href="https://paperpile.com/c/usbJYy/TuiJc+VsFRY">13,14</a></sup> Chile<sup><a href="https://paperpile.com/c/usbJYy/XSGVN">15</a>,<a href="https://paperpile.com/c/usbJYy/cB34N">16</a></sup> y Colombia,<sup><a href="https://paperpile.com/c/usbJYy/jUa5q">17</a></sup> estimación indirecta* para Costa Rica, Ecuador, México y Perú.
+<p>
+Valores en USD oficial a tasa de cambio nominal de cada país para octubre de 2023.
+   </td>
+  </tr>
+  <tr>
+   <td>Costo anual de complicaciones asociados al VIH (USD)
+   </td>
+   <td>Costo ponderado anual de complicaciones en pacientes infectados con VIH. Se estimó utilizando la probabilidad de internación por complicaciones asociadas a la enfermedad de estos pacientes, la mediana de días de internación y el costo promedio de estadía hospitalaria.
+   </td>
+   <td>Mediana de días de hospitalización: Seng y cols.<sup><a href="https://paperpile.com/c/usbJYy/4zvz">19 </a></sup>
+<p>
+Costo de día de internación<sup>: </sup>nomencladores específicos para Argentina,<sup><a href="https://paperpile.com/c/usbJYy/TuiJc">13</a></sup> Brasil,<sup><a href="https://paperpile.com/c/usbJYy/TuiJc+VsFRY">13,14</a></sup> Chile<sup><a href="https://paperpile.com/c/usbJYy/XSGVN">15</a>,<a href="https://paperpile.com/c/usbJYy/cB34N">16</a></sup> y Colombia,<sup><a href="https://paperpile.com/c/usbJYy/jUa5q">17</a></sup> estimación indirecta* para Costa Rica, Ecuador, México y Perú.
+<p>
+Valores en USD oficial a tasa de cambio nominal de cada país para octubre de 2023.
+   </td>
+  </tr>
+  <tr>
+   <td>Tasa de descuento (%)
    </td>
    <td>Se utiliza para traer al presente los costos y beneficios en salud futuros.
    </td>
-   <td>Manual metodológico para elaboración de Evaluaciones Económicas <sup><a href="https://paperpile.com/c/usbJYy/RffA">8</a></sup>
+   <td>Manual metodológico para elaboración de Evaluaciones Económicas<sup><a href="https://paperpile.com/c/W3ldUH/Ffwur">29</a></sup>
    </td>
-   <td>Avanzado
+  </tr>
+  <tr>
+   <td>Costo programático anual de PrEP (USD)
+   </td>
+   <td>Costo de implementar y mantener PrEP en un año.
+   </td>
+   <td>Se ofrece la opción al usuario de completar este dato si dispone de la información necesaria.
    </td>
   </tr>
 </table>
@@ -184,44 +289,55 @@ Desde el punto de vista económico, la estimación de costos para países como C
 
 
 
-1. **Años de vida ajustados por discapacidad evitados: **mide el número de años ajustados por discapacidad que se evitan como resultado de prevenir la infección por VIH con PrEP. Engloban los años de vida salvados al evitar una muerte prematura contra la expectativa de vida del país y la pérdida de utilidad de padecer la infección durante los años de sobrevida.
+1. **Casos de VIH evitados (n): **número de infecciones de VIH que se evitan atribuibles a la intervención.
 
-    **Ej: Años de vida ajustados por discapacidad evitados = 150 AVAD evitados**. Esto indica que la prevención del VIH mediante PrEP, se han preservado 150 años de vida ajustados por discapacidad que suelen asociarse con la infección por VIH.
+    Ej.:** Casos de VIH evitados (n) = 200.** En este caso el modelo indica que el uso de PrEP tiene el potencial de evitar 200 casos nuevos de VIH.
 
-2. **Años de vida salvados:** mide la cantidad de años de vida adicionales salvados como resultado de evitar una muerte prematura (según la expectativa de vida del país) asociada a la infección por VIH.
+2. **Muertes evitadas (n): **número de muertes asociadas a la infección por VIH que pueden evitarse mediante el uso de PrEP.
 
-    Ej.:** 200 años de vida salvados.** Esto indica que la prevención del VIH mediante PrEP, tiene el potencial de salvar 200 años de vida por muerte prematura.
+    Ej.: **Muertes evitadas (n) = 20. **En este caso el modelo indica que el uso de PrEP tiene el potencial de evitar 20 muertes asociadas a la infección por el VIH. 
 
-3. **Casos de VIH evitados (n): **número de infecciones de VIH que se evitan atribuibles a la intervención.
+3. **Años de vida salvados:** mide la cantidad de años de vida adicionales salvados como resultado de evitar una muerte prematura (según la expectativa de vida del país) asociada a la infección por VIH.
 
-    Ej.:** 200 casos de VIH evitados.** Esto indica que la prevención del VIH mediante PrEP, tiene el potencial de prevenir 200 nuevos casos de VIH.
+    Ej.:** Años de vida salvados =** **200. **En este caso, el modelo indica que el uso de PrEP tiene el potencial de evitar la pérdida de 200 años debido a muertes prematuras asociadas al VIH.
 
-4. **Muertes evitadas (n): **Indica el número de muertes asociadas a la infección por VIH que pueden evitarse gracias a la prevención de la infección por utilizar PrEP.
+4. **Años de vida ajustados por discapacidad evitados: **mide el número de años ajustados por discapacidad que se evitan como resultado de prevenir la infección por VIH con el uso de PrEP. Engloban los años de vida salvados al evitar una muerte prematura contra la expectativa de vida del país y la pérdida de utilidad de padecer la infección durante los años de sobrevida.
 
-    Ej.: ** 20 muertes evitadas.** Esto expresa que gracias a la prevención de la infección atribuible a la intervención con PrEP podrían evitarse 20 muertes asociadas al VIH.
+    **Ej: Años de vida ajustados por discapacidad evitados = 150**. En este caso el modelo indica que el uso de PrEP tiene el potencial de salvar 150 años ajustados por discapacidad que suelen asociarse con la infección por VIH. 
 
 
 **Resultados económicos **
 
 
 
-5. **Costo total de la intervención: **el costo de implementar PrEP durante el tiempo definido (5 años, 10 años o toda la vida) para el total de las personas que recibirán tratamiento incluyendo el costo programático de la intervención si se especificara.
+5. **Costo total de la intervención (USD): **el costo de implementar PrEP durante el tiempo definido (1 años, 3 años o 5 años) para el total de las personas que recibirán tratamiento incluyendo el costo programático de la intervención si se especificara (USD oficial a tasa de cambio nominal de cada país).
 
-    Ej: **Costos de la intervención PrEP (USD) = $589.431,3 USD:** el costo de implementar PrEP en el tiempo definido es en total de $589.431,3 USD.
+    Ej: **Costo total de la intervención (USD) = $589.431,3 USD:** el costo total de implementar PrEP en el tiempo definido es de $589.431,3 USD.
 
-6. **Razón de costo-efectividad incremental (RCEI) por Año de vida salvado (AVS):** hace referencia al costo adicional de la intervención (PrEP) por cada año de vida salvado adicional en comparación con no PrEP. Se trata de la diferencia en costos (intervención vs no intervención) dividido la diferencia en efectividad expresada en AVS (intervención vs no intervención).
+6. **Costos evitados atribuibles a la intervención (USD): **Son los costos asociados al seguimiento, tratamiento y complicaciones de la infección por VIH que se evitarían gracias a la intervención (USD oficial a tasa de cambio nominal de cada país).
+
+    Ej: **Costos evitados atribuibles a la intervención (USD) = $2.589.431,3 USD:** los costos evitados gracias a la prevención de la infección por VIH atribuible a la intervención es de $2.589.431,3** **USD.
+
+7. **Diferencia de costos respecto al escenario basal (USD): **Es la diferencia de costos que existe entre el escenario con la intervención respecto al escenario sin la intervención. Refleja la diferencia entre los costos evitados y los costos de la intervención (USD oficial a tasa de cambio nominal de cada país).
+
+    Ej: **Diferencia de costos respecto al escenario basal (USD) = $-1.589.431,3 USD:** esto quiere decir que en el escenario con la intervención una vez incluido el costo de la misma se obtiene un ahorro de $-1.589.431,3 USD.
+
+8. **Razón de costo-efectividad incremental (RCEI) por vida salvada (VS) (USD): **costo adicional por cada vida que se salva como resultado de la implementación del uso de PrEP en comparación con no utilizarlo (USD oficial a tasa de cambio nominal de cada país).
+
+    Ej: **RCEI por VS = $5.994 USD: **en promedio, cada vida salvada por la implementación del uso de PrEP cuesta un adicional de $5.994 USD.
+
+9. **Razón de costo-efectividad incremental (RCEI) por Año de vida salvado (AVS):** hace referencia al costo adicional de la intervención (PrEP) por cada año de vida salvado adicional en comparación con no PrEP. Se trata de la diferencia en costos (intervención vs no intervención) dividido la diferencia en efectividad expresada en AVS (intervención vs no intervención) (USD oficial a tasa de cambio nominal de cada país).
 
     Ej: **RCEI por AVS = $69.3 USD: **al implementar la intervención, me cuesta $69.3 USD obtener un AVS adicional en comparación con la no intervención.
 
-7. **Retorno de Inversión (ROI) (%):** relación entre los beneficios y los costos obtenidos por la intervención. Un ROI positivo indica que la intervención no solo cubre su costo, sino que también genera un beneficio económico adicional.  En el caso de que el ROI sea negativo, significa que los beneficios económicos alcanzados con la vacunación no alcanzan para recuperar la inversión inicial. Se define como los ingresos/ahorros menos la inversión, dividido por la inversión.
+10. **Razón de costo-efectividad incremental (RCEI) por Años de Vida Ajustados por Discapacidad (AVAD) Evitados: **hace referencia al costo adicional que debo invertir con la nueva intervención (PrEP) para evitar un año de vida ajustado por discapacidad adicional en comparación con no PrEP. Se trata de la diferencia en costos (intervención vs no intervención) dividido la diferencia de AVAD evitados (intervención vs no intervención) (USD oficial a tasa de cambio nominal de cada país).
+
+    Ej: **RCEI por AVAD evitado:** $78,8 USD me cuesta evitar un AVAD adicional al implementar la intervención (PrEP) en comparación con no PrEP.
+
+11. **Retorno de Inversión (ROI) (%):** relación entre los beneficios y los costos obtenidos por la intervención. Un ROI positivo indica que la intervención no solo cubre su costo, sino que también genera un beneficio económico adicional.  En el caso de que el ROI sea negativo, significa que los beneficios económicos alcanzados con la vacunación no alcanzan para recuperar la inversión inicial. Se define como los ingresos/ahorros menos la inversión, dividido por la inversión.
 
     Ej: **Retorno de Inversión (ROI) (%):** un ROI del 65% significa que el 65% de la inversión se obtiene como ganancia luego de recuperar el capital invertido, es decir, por cada $1 USD invertido en la intervención, se obtiene un retorno de $0.65 USD de retorno de la inversión adicional. 
 
-
-**Nota aclaratoria: **el término “descontado” se refiere al proceso de ajustar los valores futuros de dinero a su equivalente en el presente. La tasa de descuento tomada como referencia es 5%.
-
-
-## 
 
 
 ## Referencias
@@ -282,3 +398,66 @@ Desde el punto de vista económico, la estimación de costos para países como C
 
 
     19.	[Seng R, Mutuon P, Riou J, et al. Hospitalization of HIV positive patients: Significant demand affecting all hospital sectors. Rev Epidemiol Sante Publique. 2018;66(1):7-17.](http://paperpile.com/b/usbJYy/4zvz)
+
+Anexo: Tabla de parámetros incluídos en el modelo. 
+
+
+<table>
+  <tr>
+   <td colspan="3" >
+    <strong>Parámetros epidemiológicos.</strong>
+   </td>
+  </tr>
+  <tr>
+   <td>
+    <strong>Parámetro</strong>
+   </td>
+   <td><strong>Descripción</strong>
+   </td>
+   <td><strong>Fuente</strong>
+   </td>
+  </tr>
+  <tr>
+   <td>Esperanza de vida al nacer
+   </td>
+   <td>El número promedio de años de vida que se podría esperar que una persona de un país dado viva si las tasas de mortalidad por edad específica permanecieran estables.
+   </td>
+   <td>OPS
+   </td>
+  </tr>
+  <tr>
+   <td>Utilidad de población general año 0 al 100
+   </td>
+   <td>Se refiere a valores anuales que representan la evaluación de la calidad de vida de la población general a lo largo de un período que abarca desde el año 0 hasta el año 100.
+   </td>
+   <td>OMS
+   </td>
+  </tr>
+  <tr>
+   <td>Tasa mortalidad año 15 al 100
+   </td>
+   <td>Se refiere a una medida que indica la cantidad de personas que fallecen en cada año dentro de un período de tiempo que va desde el año 15 hasta el año 100.
+   </td>
+   <td>OMS<sup><a href="https://paperpile.com/c/usbJYy/s6k1V">12</a></sup>
+   </td>
+  </tr>
+  <tr>
+   <td>Límite de edad de riesgo
+   </td>
+   <td>Establece la edad desde la cual el riesgo de contagio del VIH por vía sexual se considera mínima.
+   </td>
+   <td>Asunción 
+   </td>
+  </tr>
+  <tr>
+   <td>Límite de edad de contagio
+   </td>
+   <td>Establece la edad desde la cual se considera que el papel de la persona en la transmisión del VIH es mínimo.
+   </td>
+   <td>Asunción 
+   </td>
+  </tr>
+</table>
+
+
+* Los costos de Argentina, Brasil, Colombia, Ecuador, México y Perú  fueron calculados con base en el estudio de Gómez y cols. ajustando al PIB per cápita de cada país y a la prevalencia de cáncer de cuello uterino en cada país, mediante la metodología de estimación indirecta.

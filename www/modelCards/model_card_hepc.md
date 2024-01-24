@@ -65,8 +65,6 @@ Desde una perspectiva económica, la estimación de costos para Costa Rica, Ecua
    <td colspan="3" >
     <strong>Parámetros epidemiológicos.</strong>
    </td>
-   <td>
-   </td>
   </tr>
   <tr>
    <td>
@@ -76,17 +74,13 @@ Desde una perspectiva económica, la estimación de costos para Costa Rica, Ecua
    </td>
    <td><strong>Fuente</strong>
    </td>
-   <td>
-   </td>
   </tr>
   <tr>
-   <td>Porcentaje de pacientes que abandonan el tratamiento
+   <td>Duración del tratamiento (meses)
    </td>
-   <td>Porcentaje de pacientes que abandonan el tratamiento.
+   <td>Duración del tratamiento con Sofosbuvir (400 mg) y Velpatasvir (100 mg) en meses
    </td>
-   <td>Mendizabal y cols.<sup><a href="https://paperpile.com/c/TwRd3v/EglvT">4</a></sup>
-   </td>
-   <td>Avanzado
+   <td>Asociación Argentina para el Estudio de la Enfermedades del higado<sup><a href="https://paperpile.com/c/TwRd3v/0nwgT">5</a></sup>
    </td>
   </tr>
   <tr>
@@ -98,17 +92,13 @@ Desde una perspectiva económica, la estimación de costos para Costa Rica, Ecua
    </td>
    <td>Mendizabal y cols.<sup><a href="https://paperpile.com/c/TwRd3v/EglvT">4</a></sup>
    </td>
-   <td>Avanzado
-   </td>
   </tr>
   <tr>
-   <td>Duración del tratamiento (meses)
+   <td>Porcentaje de pacientes que abandonan el tratamiento
    </td>
-   <td>Duración del tratamiento con Sofosbuvir (400 mg) y Velpatasvir (100 mg) en meses
+   <td>Porcentaje de pacientes que abandonan el tratamiento.
    </td>
-   <td>Asociación Argentina para el Estudio de la Enfermedades del higado<sup><a href="https://paperpile.com/c/TwRd3v/0nwgT">5</a></sup>
-   </td>
-   <td>Básico
+   <td>Mendizabal y cols.<sup><a href="https://paperpile.com/c/TwRd3v/EglvT">4</a></sup>
    </td>
   </tr>
   <tr>
@@ -118,8 +108,6 @@ Desde una perspectiva económica, la estimación de costos para Costa Rica, Ecua
    </td>
    <td>Asunción
    </td>
-   <td>Avanzado
-   </td>
   </tr>
   <tr>
    <td>Porcentaje de personas en estadío de fibrosis F0 al diagnóstico
@@ -128,8 +116,6 @@ Desde una perspectiva económica, la estimación de costos para Costa Rica, Ecua
    </td>
    <td>Mendizabal y cols.<sup><a href="https://paperpile.com/c/TwRd3v/EglvT">4</a></sup>
    </td>
-   <td>Avanzado
-   </td>
   </tr>
   <tr>
    <td>Porcentaje de personas en estadío de fibrosis F1 al diagnóstico.
@@ -137,8 +123,6 @@ Desde una perspectiva económica, la estimación de costos para Costa Rica, Ecua
    <td>Porcentaje de personas en estadío de fibrosis F1 al diagnóstico.
    </td>
    <td>Mendizabal y cols.<sup><a href="https://paperpile.com/c/TwRd3v/EglvT">4</a></sup>
-   </td>
-   <td>Avanzado
    </td>
   </tr>
   <tr>
@@ -148,8 +132,6 @@ Desde una perspectiva económica, la estimación de costos para Costa Rica, Ecua
    </td>
    <td>Mendizabal y cols.<sup><a href="https://paperpile.com/c/TwRd3v/EglvT">4</a></sup>
    </td>
-   <td>Avanzado
-   </td>
   </tr>
   <tr>
    <td>Porcentaje de personas en estadío de fibrosis F3 al diagnóstico.
@@ -157,8 +139,6 @@ Desde una perspectiva económica, la estimación de costos para Costa Rica, Ecua
    <td>Porcentaje de personas en estadío de fibrosis F3 al diagnóstico.
    </td>
    <td>Mendizabal y cols.<sup><a href="https://paperpile.com/c/TwRd3v/EglvT">4</a></sup>
-   </td>
-   <td>Avanzado
    </td>
   </tr>
   <tr>
@@ -168,7 +148,21 @@ Desde una perspectiva económica, la estimación de costos para Costa Rica, Ecua
    </td>
    <td>Mendizabal y cols.<sup><a href="https://paperpile.com/c/TwRd3v/EglvT">4</a></sup>
    </td>
-   <td>Avanzado
+  </tr>
+  <tr>
+   <td>Carga de discapacidad asociada a la cirrosis descompensada 
+   </td>
+   <td>Carga de discapacidad (Disability Weight) asociada a la CD en términos de la pérdida de calidad de vida que esta enfermedad puede causar en una persona.
+   </td>
+   <td>OMS<sup>31</sup>
+   </td>
+  </tr>
+  <tr>
+   <td>Carga de discapacidad asociada al carcinoma hepatocelular 
+   </td>
+   <td>Carga de discapacidad (Disability Weight) asociada al CHC en términos de la pérdida de calidad de vida que esta enfermedad puede causar en una persona.
+   </td>
+   <td>OMS<sup>31</sup>
    </td>
   </tr>
 </table>
@@ -180,8 +174,6 @@ Desde una perspectiva económica, la estimación de costos para Costa Rica, Ecua
    <td colspan="3" >
     <strong>Parámetros de costos.</strong>
    </td>
-   <td>
-   </td>
   </tr>
   <tr>
    <td>
@@ -191,68 +183,6 @@ Desde una perspectiva económica, la estimación de costos para Costa Rica, Ecua
    </td>
    <td><strong>Fuente</strong>
    </td>
-   <td>
-   </td>
-  </tr>
-  <tr>
-   <td>Costo anual estadío de fibrosis F0 a F2 (USD)
-   </td>
-   <td>Costo anual del seguimiento, tratamiento y complicaciones de estadíos de fibrosis F0 a F2 en el país (USD oficial a tasa de cambio nominal de cada país).
-   </td>
-   <td>Valores ajustados por inflación<sup><a href="https://paperpile.com/c/TwRd3v/86PCj+I2J7C+MsYJs+6VvmC+75xmu+pRDm5+GPXER">7–13</a></sup> en dólares<sup><a href="https://paperpile.com/c/TwRd3v/brY1b+p1lA9+JsL0p+ckmkF+QmtTq+CfxjP+oBQcY">14–20</a></sup> para: ARG,<sup><a href="https://paperpile.com/c/TwRd3v/Egs1t">21</a></sup>, BRA,<sup><a href="https://paperpile.com/c/TwRd3v/FHNZi">22</a></sup> COL,<sup><a href="https://paperpile.com/c/TwRd3v/Egs1t">21</a></sup> y CHL.<sup><a href="https://paperpile.com/c/TwRd3v/yjxdS">23</a></sup>
-<p>
-Estimación indirecta: CRC, MEX, ECU y PER.<sup>*</sup>
-   </td>
-   <td>Avanzado
-   </td>
-  </tr>
-  <tr>
-   <td>Costo anual de estadío de  fibrosis F3 (USD) 
-   </td>
-   <td>Costo anual del seguimiento, tratamiento y complicaciones de estadio de fibrosis F3 en el país específico de análisis. (USD oficial a tasa de cambio nominal de cada país).
-   </td>
-   <td>Valores ajustados por inflación<sup><a href="https://paperpile.com/c/TwRd3v/86PCj+I2J7C+MsYJs+6VvmC+75xmu+pRDm5+GPXER">7–13</a></sup> en dólares<sup><a href="https://paperpile.com/c/TwRd3v/brY1b+p1lA9+JsL0p+ckmkF+QmtTq+CfxjP+oBQcY">14–20</a></sup> para: ARG,<sup><a href="https://paperpile.com/c/TwRd3v/Egs1t">21</a></sup> BRA,<sup><a href="https://paperpile.com/c/TwRd3v/FHNZi">22</a></sup> COL,<sup><a href="https://paperpile.com/c/TwRd3v/Egs1t">21</a></sup> y CHL.<sup><a href="https://paperpile.com/c/TwRd3v/yjxdS">23</a></sup>
-<p>
-Estimación indirecta: CRC, MEX, ECU y PER.<sup>*</sup>
-   </td>
-   <td>Avanzado
-   </td>
-  </tr>
-  <tr>
-   <td>Costo anual de estadío de fibrosis F4 (USD)
-   </td>
-   <td>Costo anual del seguimiento, tratamiento y complicaciones de estadio de fibrosis F4 (cirrosis) en el país específico de análisis. (USD oficial a tasa de cambio nominal de cada país).
-   </td>
-   <td>Valores ajustados por inflación<sup><a href="https://paperpile.com/c/TwRd3v/86PCj+I2J7C+MsYJs+6VvmC+75xmu+pRDm5+GPXER">7–13</a></sup> en dólares<sup><a href="https://paperpile.com/c/TwRd3v/brY1b+p1lA9+JsL0p+ckmkF+QmtTq+CfxjP+oBQcY">14–20</a></sup> para: ARG,<sup><a href="https://paperpile.com/c/TwRd3v/Egs1t">21</a></sup> BRA,<sup><a href="https://paperpile.com/c/TwRd3v/FHNZi">22</a></sup> COL,<sup><a href="https://paperpile.com/c/TwRd3v/Egs1t">21</a></sup> y CHL.<sup><a href="https://paperpile.com/c/TwRd3v/yjxdS">23</a></sup>
-<p>
-Estimación indirecta: CRC, MEX, ECU y PER.<sup>*</sup>
-   </td>
-   <td>Avanzado
-   </td>
-  </tr>
-  <tr>
-   <td>Costo anual de cirrosis descompensada (USD)
-   </td>
-   <td>Costo anual del seguimiento, tratamiento y complicaciones de la cirrosis descompensada en el país específico de análisis. (USD oficial a tasa de cambio nominal de cada país).
-   </td>
-   <td>Valores ajustados por inflación<sup><a href="https://paperpile.com/c/TwRd3v/86PCj+I2J7C+MsYJs+6VvmC+75xmu+pRDm5+GPXER">7–13</a></sup> en dólares<sup><a href="https://paperpile.com/c/TwRd3v/brY1b+p1lA9+JsL0p+ckmkF+QmtTq+CfxjP+oBQcY">14–20</a></sup> para: ARG,<sup><a href="https://paperpile.com/c/TwRd3v/Egs1t">21</a></sup>, BRA,<sup><a href="https://paperpile.com/c/TwRd3v/FHNZi">22</a></sup> COL,<sup><a href="https://paperpile.com/c/TwRd3v/Egs1t">21</a></sup>CHL<sup><a href="https://paperpile.com/c/TwRd3v/yjxdS">23</a></sup> y MEX.<sup><a href="https://paperpile.com/c/TwRd3v/yvFyk">24</a></sup>
-<p>
-Estimación indirecta: CRC, MEX, ECU y PER.<sup>*</sup>
-   </td>
-   <td>Avanzado
-   </td>
-  </tr>
-  <tr>
-   <td>Costos de carcinoma hepatocelular (USD) 
-   </td>
-   <td>Costo anual del seguimiento, tratamiento y complicaciones del cáncer de hígado en el país específico de análisis (USD oficial a tasa de cambio nominal de cada país).
-   </td>
-   <td>Valores ajustados por inflación<sup><a href="https://paperpile.com/c/TwRd3v/86PCj+I2J7C+MsYJs+6VvmC+75xmu+pRDm5+GPXER">7–13</a></sup> en dólares<sup><a href="https://paperpile.com/c/TwRd3v/brY1b+p1lA9+JsL0p+ckmkF+QmtTq+CfxjP+oBQcY">14–20</a></sup> para: ARG,<sup><a href="https://paperpile.com/c/TwRd3v/Egs1t">21</a></sup>, BRA,<sup><a href="https://paperpile.com/c/TwRd3v/FHNZi">22</a></sup> COL,<sup><a href="https://paperpile.com/c/TwRd3v/Egs1t">21</a></sup>CHL<sup><a href="https://paperpile.com/c/TwRd3v/yjxdS">23</a></sup> y MEX.<sup><a href="https://paperpile.com/c/TwRd3v/yvFyk">24</a></sup>
-<p>
-Estimación indirecta: CRC, MEX, ECU y PER.<sup>*</sup>
-   </td>
-   <td>Avanzado
-   </td>
   </tr>
   <tr>
    <td>Costo de tratamiento mensual de Sofosbuvir/ Velpatasvir
@@ -261,21 +191,87 @@ Estimación indirecta: CRC, MEX, ECU y PER.<sup>*</sup>
    </td>
    <td>Costo de tratamiento mensual de Sofosbuvir/ Velpatasvir
 <p>
-(Epclusa®). Régimen de AAD (antivirales de acción directa) de 4 semanas. (USD oficial a tasa de cambio nominal de cada país).
+(Epclusa®). Régimen de AAD (antivirales de acción directa) de 4 semanas. 
    </td>
    <td>Organización Panamericana de la Salud<sup><a href="https://paperpile.com/c/TwRd3v/EYkPv">25</a></sup>.
-   </td>
-   <td>Avanzado
+<p>
+Valor expresado en USD oficial a tasa de cambio nominal de cada país
    </td>
   </tr>
   <tr>
-   <td>Tasa de descuento
+   <td>Costo anual de estadío de fibrosis F0 a F2 (USD)
+   </td>
+   <td>Costo anual del seguimiento, tratamiento y complicaciones de estadíos de fibrosis F0 a F2 en el país.
+   </td>
+   <td>Valores ajustados por inflación<sup><a href="https://paperpile.com/c/TwRd3v/86PCj+I2J7C+MsYJs+6VvmC+75xmu+pRDm5+GPXER">7–13</a></sup> en dólares<sup><a href="https://paperpile.com/c/TwRd3v/brY1b+p1lA9+JsL0p+ckmkF+QmtTq+CfxjP+oBQcY">14–20</a></sup> para: ARG,<sup><a href="https://paperpile.com/c/TwRd3v/Egs1t">21</a></sup>, BRA,<sup><a href="https://paperpile.com/c/TwRd3v/FHNZi">22</a></sup> COL,<sup><a href="https://paperpile.com/c/TwRd3v/Egs1t">21</a></sup> y CHL.<sup><a href="https://paperpile.com/c/TwRd3v/yjxdS">23</a></sup>
+<p>
+Estimación indirecta: CRC, MEX, ECU y PER.<sup>*</sup>
+<p>
+Valor expresado en USD oficial a tasa de cambio nominal de cada país
+   </td>
+  </tr>
+  <tr>
+   <td>Costo anual de estadío de  fibrosis F3 (USD) 
+   </td>
+   <td>Costo anual del seguimiento, tratamiento y complicaciones de estadio de fibrosis F3 en el país específico de análisis. 
+   </td>
+   <td>Valores ajustados por inflación<sup><a href="https://paperpile.com/c/TwRd3v/86PCj+I2J7C+MsYJs+6VvmC+75xmu+pRDm5+GPXER">7–13</a></sup> en dólares<sup><a href="https://paperpile.com/c/TwRd3v/brY1b+p1lA9+JsL0p+ckmkF+QmtTq+CfxjP+oBQcY">14–20</a></sup> para: ARG,<sup><a href="https://paperpile.com/c/TwRd3v/Egs1t">21</a></sup> BRA,<sup><a href="https://paperpile.com/c/TwRd3v/FHNZi">22</a></sup> COL,<sup><a href="https://paperpile.com/c/TwRd3v/Egs1t">21</a></sup> y CHL.<sup><a href="https://paperpile.com/c/TwRd3v/yjxdS">23</a></sup>
+<p>
+Estimación indirecta: CRC, MEX, ECU y PER.<sup>*</sup>
+<p>
+Valor expresado en USD oficial a tasa de cambio nominal de cada país
+   </td>
+  </tr>
+  <tr>
+   <td>Costo anual de estadío de fibrosis F4 (USD)
+   </td>
+   <td>Costo anual del seguimiento, tratamiento y complicaciones de estadio de fibrosis F4 (cirrosis) en el país específico de análisis. 
+   </td>
+   <td>Valores ajustados por inflación<sup><a href="https://paperpile.com/c/TwRd3v/86PCj+I2J7C+MsYJs+6VvmC+75xmu+pRDm5+GPXER">7–13</a></sup> en dólares<sup><a href="https://paperpile.com/c/TwRd3v/brY1b+p1lA9+JsL0p+ckmkF+QmtTq+CfxjP+oBQcY">14–20</a></sup> para: ARG,<sup><a href="https://paperpile.com/c/TwRd3v/Egs1t">21</a></sup> BRA,<sup><a href="https://paperpile.com/c/TwRd3v/FHNZi">22</a></sup> COL,<sup><a href="https://paperpile.com/c/TwRd3v/Egs1t">21</a></sup> y CHL.<sup><a href="https://paperpile.com/c/TwRd3v/yjxdS">23</a></sup>
+<p>
+Estimación indirecta: CRC, MEX, ECU y PER.<sup>*</sup>
+<p>
+Valor expresado en USD oficial a tasa de cambio nominal de cada país
+   </td>
+  </tr>
+  <tr>
+   <td>Costo anual de cirrosis descompensada (USD)
+   </td>
+   <td>Costo anual del seguimiento, tratamiento y complicaciones de la cirrosis descompensada en el país específico de análisis.
+   </td>
+   <td>Valores ajustados por inflación<sup><a href="https://paperpile.com/c/TwRd3v/86PCj+I2J7C+MsYJs+6VvmC+75xmu+pRDm5+GPXER">7–13</a></sup> en dólares<sup><a href="https://paperpile.com/c/TwRd3v/brY1b+p1lA9+JsL0p+ckmkF+QmtTq+CfxjP+oBQcY">14–20</a></sup> para: ARG,<sup><a href="https://paperpile.com/c/TwRd3v/Egs1t">21</a></sup>, BRA,<sup><a href="https://paperpile.com/c/TwRd3v/FHNZi">22</a></sup> COL,<sup><a href="https://paperpile.com/c/TwRd3v/Egs1t">21</a></sup>CHL<sup><a href="https://paperpile.com/c/TwRd3v/yjxdS">23</a></sup> y MEX.<sup><a href="https://paperpile.com/c/TwRd3v/yvFyk">24</a></sup>
+<p>
+Estimación indirecta: CRC, MEX, ECU y PER.<sup>*</sup>
+<p>
+Valor expresado en USD oficial a tasa de cambio nominal de cada país
+   </td>
+  </tr>
+  <tr>
+   <td>Costo anual de carcinoma hepatocelular (USD) 
+   </td>
+   <td>Costo anual del seguimiento, tratamiento y complicaciones del cáncer de hígado en el país específico de análisis.
+   </td>
+   <td>Valores ajustados por inflación<sup><a href="https://paperpile.com/c/TwRd3v/86PCj+I2J7C+MsYJs+6VvmC+75xmu+pRDm5+GPXER">7–13</a></sup> en dólares<sup><a href="https://paperpile.com/c/TwRd3v/brY1b+p1lA9+JsL0p+ckmkF+QmtTq+CfxjP+oBQcY">14–20</a></sup> para: ARG,<sup><a href="https://paperpile.com/c/TwRd3v/Egs1t">21</a></sup>, BRA,<sup><a href="https://paperpile.com/c/TwRd3v/FHNZi">22</a></sup> COL,<sup><a href="https://paperpile.com/c/TwRd3v/Egs1t">21</a></sup>CHL<sup><a href="https://paperpile.com/c/TwRd3v/yjxdS">23</a></sup> y MEX.<sup><a href="https://paperpile.com/c/TwRd3v/yvFyk">24</a></sup>
+<p>
+Estimación indirecta: CRC, MEX, ECU y PER.<sup>*</sup>
+<p>
+Valor expresado en USD oficial a tasa de cambio nominal de cada país
+   </td>
+  </tr>
+  <tr>
+   <td>Tasa de descuento (%)
    </td>
    <td>Se utiliza para traer al presente los costos y beneficios en salud futuros.
    </td>
    <td>Manual metodológico para elaboración de Evaluaciones Económicas <sup><a href="https://paperpile.com/c/TwRd3v/xS95">26</a></sup>
    </td>
-   <td>Avanzado
+  </tr>
+  <tr>
+   <td>Costo programático anual de la intervención (USD)
+   </td>
+   <td>Costo de implementar y sostener la intervención en un año.
+   </td>
+   <td>Se deja la posibilidad al usuario de completar este dato si cuenta con él
    </td>
   </tr>
 </table>
@@ -300,40 +296,48 @@ Estimación indirecta: CRC, MEX, ECU y PER.<sup>*</sup>
 
     Ej: **Muertes evitadas n= 3.581. **En este caso, el modelo indica que el tratamiento tiene el potencial de evitar 3.581200 muertes por hepatopatías en la población con infección por HCV. 
 
-4. **Años de Vida Ajustados por Discapacidad (AVAD) evitados (años):** mide la cantidad de años de vida ajustados por discapacidad que se evitan como resultado de la implementación de la intervención.
-
-    Ej: **AVAD evitados: n= 200. **En este caso, el modelo indica que la intervención propuesta tiene el potencial de evitar una pérdida de 200 AVAD en la población.
-
-5. **Años de vida salvados:** cantidad de años de vida ganados al prevenir muertes debido a infección por VHC.
+4. **Años de vida salvados:** cantidad de años de vida ganados al prevenir muertes debido a infección por VHC.
 
     Ej: **Años de vida salvados n=200. **En este caso, el modelo indica que la intervención propuesta tiene el potencial de prevenir la pérdida de 200 años de vida en la población en estudio. 
+
+5. **Años de Vida Ajustados por Discapacidad (AVAD) evitados (años):** mide la cantidad de años de vida ajustados por discapacidad que se evitan como resultado de la implementación de la intervención.
+
+    Ej: **AVAD evitados: n= 200. **En este caso, el modelo indica que la intervención propuesta tiene el potencial de evitar una pérdida de 200 AVAD en la población.
 
 
 **Resultados económicos**
 
 
 
-6. **Diferencia de costos (USD):** diferencia de costos entre la rama tratamiento y no tratamiento.
+6. **Costo total de la intervención (USD): **se calcula multiplicando la cantidad de tratamientos instaurados por el tiempo de duración de los mismos contemplando el abandono y los costos de seguimiento del mismo. Se incluye, además, el costo programático de la intervención si lo hubiera.
 
-    Ej: **Diferencia de costos en Argentina = $256.854 USD:** implementar el tratamiento en relación con no implementarlo hace referencia a un costo adicional de $256.854 USD en Argentina.
+    Ej: **Costo total de la vacunación (USD) = $2.589.564 USD: **el costo total de instaurar tratamiento a la cohorte infectada asciende a $2.589.564 USD.** ** 
 
-7. **Razón de costo-efectividad incremental (RCEI) por cirrosis evitada:** costo adicional del tratamiento antiviral por cada caso adicional de cirrosis que se logra prevenir, en comparación con la ausencia de tratamiento. Se trata de la diferencia en costos (intervención vs no intervención) dividido la diferencia en efectividad de cirrosis evitada (intervención vs no intervención).
+7. **Costos evitados atribuibles a la intervención (USD): **representa el ahorro en costos de tratamiento de la progresión de la fibrosis hepática y sus consecuencias como la cirrosis descompensada y el hepatocarcinoma debido a la respuesta viral sostenida conseguida con el tratamiento.
+
+    Ej: **Costos evitados atribuibles a la intervención (USD) = $3.255.983,1 USD: **el modelo indica que el tratamiento  tiene la capacidad de ahorrar $3.255.983,1 USD en eventos en salud asociados a la progresión de enfermedad.
+
+8. **Diferencia de costos respecto al escenario basal (USD):** la diferencia de costos surge de restarle a los costos de la intervención los costos ahorrados por evitar la progresión del compromiso hepático incluyendo sus consecuencias como la cirrosis descompensada o el hepatocarcinoma.
+
+    Ej: **Diferencia de costos respecto al escenario basal (USD) = $35.115 USD: **el modelo indica que la diferencia entre el costo de la intervención y los ahorros generados por la misma son $35.115 USD.
+
+9. **Razón de costo-efectividad incremental (RCEI) por cirrosis evitada:** costo adicional del tratamiento antiviral por cada caso adicional de cirrosis que se logra prevenir, en comparación con la ausencia de tratamiento. Se trata de la diferencia en costos (intervención vs no intervención) dividido la diferencia en efectividad de cirrosis evitada (intervención vs no intervención).
 
     Ej: **RCEI por cirrosis evitada (USD) = -$6.650,6 USD:** este valor indica que el nuevo tratamiento domina a no recibir tratamiento. Es decir que en promedio, prevenir un caso de cirrosis con el tratamiento ahorra $6.650,6 USD en comparación con no administrar tratamiento. 
 
-8. **Razón de costo-efectividad incremental (RCEI) por vida salvada: **costo adicional del tratamiento antiviral por vida salvada adicional al evitar una muerte por hepatopatía en comparación con la ausencia de tratamiento. Se trata de la diferencia en costos (intervención vs no intervención) dividido la diferencia en efectividad expresada muertes evitadas (intervención vs no intervención).
+10. **Razón de costo-efectividad incremental (RCEI) por vida salvada: **costo adicional del tratamiento antiviral por vida salvada adicional al evitar una muerte por hepatopatía en comparación con la ausencia de tratamiento. Se trata de la diferencia en costos (intervención vs no intervención) dividido la diferencia en efectividad expresada muertes evitadas (intervención vs no intervención).
 
     Ej: **RCEI por vida salvada =** **-$6.310,1 USD: **este valor indica que el nuevo tratamiento domina a no recibir tratamiento, en promedio, prevenir un caso de muerte por hepatopatía con el tratamiento ahorra además $6.310,1 USD en comparación con no administrar tratamiento. 
 
-9. **Razón de costo-efectividad incremental (RCEI) por Años de Vida Ajustados por Discapacidad (AVAD) evitada: **costo adicional del tratamiento antirretroviral por cada Año de Vida ajustado por discapacidad adicional que se evita en comparación con la ausencia de tratamiento. Se trata de la diferencia en costos (intervención vs no intervención) dividido la diferencia en efectividad expresada en años de vida ajustados por discapacidad evitados (intervención vs no intervención).
-
-    Ej: **RCEI por AVAD adicional =** $**347,1 USD: **el tratamiento antiviral cuesta $347,1 USD adicionales por cada AVAD evitado en comparación con la ausencia de tratamiento. 
-
-10. **Razón de costo-efectividad incremental (RCEI) por Año de vida salvado (AVS):** costo adicional del tratamiento antirretroviral por cada AVS en comparación con la ausencia de tratamiento. Se trata de la diferencia en costos (intervención vs no intervención) dividido la diferencia en efectividad en AVS (intervención vs no intervención).
+11. **Razón de costo-efectividad incremental (RCEI) por Año de vida salvado (AVS):** costo adicional del tratamiento antirretroviral por cada AVS en comparación con la ausencia de tratamiento. Se trata de la diferencia en costos (intervención vs no intervención) dividido la diferencia en efectividad en AVS (intervención vs no intervención).
 
     Ej: **RCEI por AVS =** $**375,2 USD: **el tratamiento antiviral cuesta $375,2 USD adicionales por cada AVS en comparación con la ausencia de tratamiento. 
 
-11. **Retorno de Inversión (ROI) (%):** relación entre los beneficios económicos obtenidos y el costo del tratamiento antirretroviral. Un ROI positivo indica que el tratamiento antirretroviral no solo cubre su costo, sino que también genera un beneficio económico adicional. En el caso de que el ROI sea negativo, significa que los beneficios económicos alcanzados con la vacunación no alcanzan para recuperar la inversión inicial. Se define como los ingresos menos la inversión, dividido por la inversión. 
+12. **Razón de costo-efectividad incremental (RCEI) por Años de Vida Ajustados por Discapacidad (AVAD) evitada: **costo adicional del tratamiento antirretroviral por cada Año de Vida ajustado por discapacidad adicional que se evita en comparación con la ausencia de tratamiento. Se trata de la diferencia en costos (intervención vs no intervención) dividido la diferencia en efectividad expresada en años de vida ajustados por discapacidad evitados (intervención vs no intervención).
+
+    Ej: **RCEI por AVAD adicional =** $**347,1 USD: **el tratamiento antiviral cuesta $347,1 USD adicionales por cada AVAD evitado en comparación con la ausencia de tratamiento. 
+
+13. **Retorno de Inversión (ROI) (%):** relación entre los beneficios económicos obtenidos y el costo del tratamiento antirretroviral. Un ROI positivo indica que el tratamiento antirretroviral no solo cubre su costo, sino que también genera un beneficio económico adicional. En el caso de que el ROI sea negativo, significa que los beneficios económicos alcanzados con la vacunación no alcanzan para recuperar la inversión inicial. Se define como los ingresos menos la inversión, dividido por la inversión. 
 
     Ej: **Retorno de Inversión (ROI) (%):** para un ROI del 14% por cada 1 USD invertido en el tratamiento antirretroviral, se obtiene un retorno de 0.14 USD además del capital inicial. 
 
@@ -430,7 +434,7 @@ Estimación indirecta: CRC, MEX, ECU y PER.<sup>*</sup>
 ## Anexo
 
 
-## Descripción parametros internos del modelo
+## Descripción parámetros internos del modelo
 
 
 <table>
@@ -446,22 +450,6 @@ Estimación indirecta: CRC, MEX, ECU y PER.<sup>*</sup>
    <td><strong>Descripción</strong>
    </td>
    <td><strong>Fuente</strong>
-   </td>
-  </tr>
-  <tr>
-   <td>Disability Weight de CHC
-   </td>
-   <td>Carga de discapacidad asociada al CHC en términos de la pérdida de calidad de vida que esta enfermedad puede causar en una persona.
-   </td>
-   <td>OMS<sup>31</sup>
-   </td>
-  </tr>
-  <tr>
-   <td>Disability Weight de CD
-   </td>
-   <td>Carga de discapacidad asociada a la CD en términos de la pérdida de calidad de vida que esta enfermedad puede causar en una persona.
-   </td>
-   <td>OMS<sup>31</sup>
    </td>
   </tr>
   <tr>
@@ -584,3 +572,4 @@ Estimación indirecta: CRC, MEX, ECU y PER.<sup>*</sup>
 
 
 <sup>a</sup>Se dividió la proporción de F0-F1 por dos para obtener dos estadios distintos.
+

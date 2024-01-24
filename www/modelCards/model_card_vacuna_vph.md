@@ -82,6 +82,22 @@ En resumen, tanto el parámetro de costos relacionado con el cáncer de cuello u
    </td>
   </tr>
   <tr>
+   <td>Porcentaje de cobertura objetivo (esquema completo)
+   </td>
+   <td>El porcentaje esperado de niñas en el grupo de edad relevante que recibirán el esquema completo de la vacuna luego de la intervención.
+   </td>
+   <td>Nogueira-Rodrigues y cols.<sup><a href="https://paperpile.com/c/jo7Z6Z/9o7B">12</a></sup>
+   </td>
+  </tr>
+  <tr>
+   <td>Grupo de edad objetivo
+   </td>
+   <td>Edad a la que normalmente se administran las vacunas contra el VPH. Tenga en cuenta que PRIME solo es adecuado para evaluar las vacunas contra el HPV administradas a niñas en las edades recomendadas por la OMS, de 9 a 13 años.
+   </td>
+   <td>Asunción
+   </td>
+  </tr>
+  <tr>
    <td>Tamaño de la cohorte en edad de vacunación (mujeres) 
    </td>
    <td>Número de mujeres en el país correspondientes a la edad de vacunación de rutina, definida por el "grupo de edad objetivo". 
@@ -98,27 +114,19 @@ En resumen, tanto el parámetro de costos relacionado con el cáncer de cuello u
    </td>
   </tr>
   <tr>
-   <td>Porcentaje de cobertura objetivo (esquema completo)
+   <td>Eficacia de la vacuna contra el VPH 16/18 (%)
    </td>
-   <td>El porcentaje esperado de niñas en el grupo de edad relevante que recibirán el esquema completo de la vacuna luego de la intervención.
+   <td>Indica la reducción del riesgo de infecciones persistentes y lesiones precancerosas por los tipos 16 y 18 del VPH.
    </td>
-   <td>Nogueira-Rodrigues y cols.<sup><a href="https://paperpile.com/c/jo7Z6Z/9o7B">12</a></sup>
-   </td>
-  </tr>
-  <tr>
-   <td>Porcentaje de eficacia de la vacuna contra el VPH 16/18
-   </td>
-   <td>Indica la reducción del riesgo de infecciones persistentes y lesiones precancerosas por los tipos 16 y 18 del VPH.*
-   </td>
-   <td>Arbyn y cols.<sup><a href="https://paperpile.com/c/jo7Z6Z/Ck463">13</a></sup>
+   <td>
    </td>
   </tr>
   <tr>
-   <td>Grupo de edad objetivo
+   <td>Porcentaje de casos de cáncer de cuello de útero debidos al VPH 16/18
    </td>
-   <td>Edad a la que normalmente se administran las vacunas contra el VPH. Tenga en cuenta que PRIME solo es adecuado para evaluar las vacunas contra el HPV administradas a niñas en las edades recomendadas por la OMS, de 9 a 13 años.
+   <td>Porcentaje de casos de cáncer de cuello uterino que son atribuibles a las cepas 16 y 18 del VPH.
    </td>
-   <td>Asunción
+   <td>
    </td>
   </tr>
   <tr>
@@ -145,14 +153,6 @@ En resumen, tanto el parámetro de costos relacionado con el cáncer de cuello u
    <td>Global Burden of Disease<sup><a href="https://paperpile.com/c/jo7Z6Z/9I3gQ">14</a></sup>
    </td>
   </tr>
-  <tr>
-   <td>Proporción de casos de cáncer de cuello de útero debidos al VPH 16/18
-   </td>
-   <td>Proporción de casos de cáncer de cuello uterino que son atribuibles a las cepas 16 y 18 del VPH.
-   </td>
-   <td>
-   </td>
-  </tr>
 </table>
 
 
@@ -175,45 +175,59 @@ En resumen, tanto el parámetro de costos relacionado con el cáncer de cuello u
    </td>
   </tr>
   <tr>
-   <td>Costo de vacunación (esquema completo)(USD)
+   <td>Costo de vacunación (esquema completo) (USD)
    </td>
-   <td>Costo de vacunación completa por niña para abril de 2023.
+   <td>Costo de vacunación de esquema completo por niña inmunizada.
    </td>
-   <td>PAI OPS 2020 actualizado por inflación.<sup><a href="https://paperpile.com/c/jo7Z6Z/YzDgB">10</a></sup>
+   <td>PAI OPS 2020 actualizado por inflación hasta abril de 2023 (USD oficial a tasa de cambio nominal de cada país para).<sup><a href="https://paperpile.com/c/jo7Z6Z/YzDgB">10</a></sup>
    </td>
   </tr>
   <tr>
-   <td>Costos administrativos de la vacuna (esquema completo)(USD)
+   <td>Costos administrativos de la vacuna (esquema completo) (USD)
    </td>
-   <td>Costo de administración, entrega y almacenamiento de la vacuna por niña completamente inmunizada para abril de 2023.
+   <td>Costo de administración, entrega y almacenamiento de la vacuna por cada esquema completo de vacunación por niña.
    </td>
    <td>Asunción según Jit y cols.<sup><a href="https://paperpile.com/c/jo7Z6Z/7jCp2">4</a></sup>
+<p>
+Datos para abril de 2023 (USD oficial a tasa de cambio nominal de cada país)
    </td>
   </tr>
   <tr>
-   <td>Costo total de vacunación (esquema completo)(USD)
+   <td>Costo total de vacunación (esquema completo) (USD)
    </td>
-   <td>Costo total (precio de la vacuna más el costo administrativo) por niña completamente inmunizada para abril de 2023.
+   <td>Costo total (precio de la vacuna más el costo administrativo) de esquema completo de vacunación por niña.
    </td>
    <td>Cálculo propio.
+<p>
+Datos para abril de 2023 (USD oficial a tasa de cambio nominal de cada país)
    </td>
   </tr>
   <tr>
    <td>Costo del tratamiento del cáncer (USD)
    </td>
-   <td>Costo promedio del tratamiento de un cáncer cervical a lo largo de la vida, expresado en dólares de abril de 2023.
+   <td>Costo promedio del tratamiento de un cáncer cervical a lo largo de la vida
    </td>
    <td>Gómez y cols.<sup><a href="https://paperpile.com/c/jo7Z6Z/OcJ3P">11</a></sup>: CHL y CRC<sup>*</sup>.
 <p>
 Estimación indirecta<sup>**</sup>: ARG, BRA, COL, ECU, MEX y PER.
+<p>
+Datos expresados en dólares de abril de 2023 (USD oficial a tasa de cambio nominal de cada país).
    </td>
   </tr>
   <tr>
-   <td>Tasa de descuento
+   <td>Tasa de descuento (%)
    </td>
    <td>Se utiliza para traer al presente los costos y beneficios en salud futuros.
    </td>
    <td>Manual metodológico para elaboración de Evaluaciones Económicas <sup><a href="https://paperpile.com/c/jo7Z6Z/FrPuk">15</a></sup>
+   </td>
+  </tr>
+  <tr>
+   <td>Costo programático anual de la intervención (USD)
+   </td>
+   <td>Costo de implementar y sostener la intervención en un año.
+   </td>
+   <td>xxx
    </td>
   </tr>
 </table>
@@ -232,19 +246,19 @@ Estimación indirecta<sup>**</sup>: ARG, BRA, COL, ECU, MEX y PER.
 
 1. **Cánceres de cuello uterino evitados (n):** número de cánceres de cuello uterino prevenidos tras la intervención.
 
-    Ej:  **Cánceres de cuello uterino evitados en Argentina n = 4.382,2. **En este caso, el modelo indica que la intervención propuesta tiene el potencial de evitar 4.382,2 casos de cáncer de cuello uterino en la población argentina.
+    Ej:  **Cánceres de cuello uterino evitados n = 4.382,2. **En este caso, el modelo indica que la intervención propuesta tiene el potencial de evitar 4.382,2 casos de cáncer de cuello uterino en la población.
 
 2. **Muertes evitadas (n)**: número de muertes prevenidas tras la implementación de la intervención. 
 
-    Ej: **Muertes evitadas en Argentina n= 2.062,6. **En este caso, el modelo indica que la intervención propuesta tiene el potencial de prevenir 2.062,6 muertes en la población argentina. 
+    Ej: **Muertes evitadas n= 2.062,6. **En este caso, el modelo indica que la intervención propuesta tiene el potencial de prevenir 2.062,6 muertes en la población. 
 
 3. **Años de vida salvados:** ** **cantidad de años que se preservarán al evitar muertes prematuras causadas por el cáncer de cuello uterino en la población.
 
-    Ej: **Años de vida salvados en Argentina n=1.500. **En este caso, el modelo indica que la intervención propuesta tiene el potencial de evitar la pérdida de 1500 años debido a muertes prematuras en la población argentina. 
+    Ej: **Años de vida salvados n=1.500. **En este caso, el modelo indica que la intervención propuesta tiene el potencial de evitar la pérdida de 1500 años debido a muertes prematuras en la población. 
 
 4. **Años de Vida Ajustados por Discapacidad evitados:** especifica la cantidad de años que se salvaron de la carga de discapacidad causada por el cáncer de cuello uterino en la población.
 
-    Ej: **Años de vida ajustados por discapacidad evitados en Argentina n= 48.753,6. **En este caso, el modelo indica que la intervención propuesta tiene el potencial de evitar la pérdida de 48.753,6 años debida a la discapacidad provocada por el cáncer cervical  en la población argentina.
+    Ej: **Años de vida ajustados por discapacidad evitados n= 48.753,6. **En este caso, el modelo indica que la intervención propuesta tiene el potencial de evitar la pérdida de 48.753,6 años debida a la discapacidad provocada por el cáncer cervical  en la población.
 
 
 **Resultados económicos**
@@ -257,7 +271,7 @@ Estimación indirecta<sup>**</sup>: ARG, BRA, COL, ECU, MEX y PER.
 
 6. **Costos evitados atribuibles a la intervención (USD):** representa el ahorro en costos de tratamiento del cáncer de cuello uterino debido a los casos prevenidos por la vacunación. 
 
-    Ej: **Costos evitados atribuibles a la intervención en Argentina = $3.255.983,1 USD: **el modelo indica que la vacunación tiene la capacidad de ahorrar $3.255.983,1 USD en tratamiento de cáncer de cuello uterino gracias a los casos de cáncer evitados en Argentina. 
+    Ej: **Costos evitados atribuibles a la intervención = $3.255.983,1 USD: **el modelo indica que la vacunación tiene la capacidad de ahorrar $3.255.983,1 USD en tratamiento de cáncer de cuello uterino gracias a los casos de cáncer evitados. 
 
 7. **Diferencia de Costos respecto al escenario basal (USD): **la diferencia de costos surge de restarle a los costos de la intervención los costos ahorrados por cáncer de cuello uterino evitados gracias a la intervención.
 
@@ -268,29 +282,29 @@ Estimación indirecta<sup>**</sup>: ARG, BRA, COL, ECU, MEX y PER.
     _Aclaración: se reporta para los países cuyo costo neto ha sido positivo._
 
 
-    Ej: **RCEI por cáncer de cuello uterino prevenido (USD =  $2.821,2 USD): **el costo adicional asociado con la implementación de la vacunación por cada caso de cáncer de cuello uterino que se evita en Argentina es de $2.821,2 USD.
+    Ej: **RCEI por cáncer de cuello uterino prevenido (USD =  $2.821,2 USD): **el costo adicional asociado con la implementación de la vacunación por cada caso de cáncer de cuello uterino que se evita es de $2.821,2 USD.
 
 9. **Razón de costo-efectividad incremental (RCEI) por vida salvada (VS) (USD): **costo adicional por cada vida que se salva como resultado de la implementación de la vacunación. 
 
-    Ej: **RCEI por VS en Argentina = $5.994 USD: **en promedio, cada vida salvada en Argentina por la implementación de la vacunación cuesta un adicional de $5.994 USD. ** **
+    Ej: **RCEI por VS = $5.994 USD: **en promedio, cada vida salvada por la implementación de la vacunación cuesta un adicional de $5.994 USD. ** **
 
 10. **Razón de costo-efectividad incremental (RCEI) por Año de Vida Salvado (AVS) (USD):** costo adicional por cada año de vida salvado como resultado de la implementación de la vacunación.
 
     _Aclaración: se calcula para los países cuyo costo neto ha sido positivo._
 
 
-    Ej: **RCEI AVS en Argentina = $253,6 USD: **en promedio, cada año adicional de vida salvado con la implementación de la vacunación cuesta $253,6 USD.  
+    Ej: **RCEI AVS = $253,6 USD: **en promedio, cada año adicional de vida salvado con la implementación de la vacunación cuesta $253,6 USD.  
 
 11. **Razón de costo-efectividad incremental (RCEI) por Años de Vida Ajustados por Discapacidad (Años de vida ajustados por discapacidad) prevenido (USD):** costo adicional por cada año de vida ajustado por discapacidad que se evita como resultado de la implementación de la vacunación. 
 
     _Aclaración: se calcula para los países cuyo costo neto ha sido positivo._
 
 
-    Ej: **RCEI por Años de vida ajustados por discapacidad prevenido en Argentina (USD) = $239 USD: **en Argentina, el costo adicional por cada año de vida ajustado por discapacidad que se evita como resultado de la implementación de la vacunación es de $239 USD.**  **
+    Ej: **RCEI por Años de vida ajustados por discapacidad prevenido (USD) = $239 USD: **el costo adicional por cada año de vida ajustado por discapacidad que se evita como resultado de la implementación de la vacunación es de $239 USD.**  **
 
 12. **Retorno de Inversión (ROI) (%):** relación entre los beneficios económicos obtenidos y el costo de la vacunación. Un ROI positivo indica que la vacunación no solo cubre su costo, sino que también genera un beneficio económico adicional (en intervenciones costo-ahorrativas). Se define como los ingresos menos la inversión, dividido por la inversión. En el caso de que el ROI sea negativo, significa que los beneficios económicos alcanzados con la vacunación no alcanzan para recuperar la inversión inicial. 
 
-    Ej: **Retorno de la inversión en Argentina = 35%:** por cada $1 USD invertido en la vacunación, se ganan 0.35 céntimos de USD además de recuperar el capital inicial.
+    Ej: **Retorno de la inversión = 35%:** por cada $1 USD invertido en la vacunación, se ganan 0.35 céntimos de USD además de recuperar el capital inicial.
 
 
 **Nota aclaratoria **
