@@ -37,4 +37,4 @@ Este es un proyecto en desarrollo.
 
 ## Acerca de
 
-Desarrollado por el Instituto de Efectividad Clínica y Sanitaria ([www.iecs.org.ar](www.iecs.org.ar)) para la Organización Panamericana de la Salud.
+Desarrollado por el Instituto de Efectividad Clínica y Sanitaria ([www.iecs.org.ar](www.iecs.org.ar)) para el Departamento de Evidencia e Inteligencia para la Acción en Salud (EIH) de la Organización Panamericana de la Salud.
