@@ -590,14 +590,18 @@ hepC_sinTrat = function (
     arrayModelo$ccAcumulados[i] <- arrayModelo$ccAcumulados[i - 1] + arrayModelo$F3[i - 1] * pF3_F4
     arrayModelo$addDC[i] <- arrayModelo$F4[i - 1] * pF4_DC
     arrayModelo$dcAcumulados[i] <- arrayModelo$dcAcumulados[i - 1] + arrayModelo$addDC[i]
+    
+    
+    browser(expr = {i==14})
     arrayModelo$DC[i] <- arrayModelo$DC[i - 1] - (arrayModelo$DC[i - 1] * bm_actual + arrayModelo$DC[i - 1] * pDC_LDR + arrayModelo$DC[i - 1] * pDC_HCC) + arrayModelo$addDC[i]
+    
     
     
     #Vemos si paso 1 año desde que empezo el modelo
     
     if (i > ciclosPorAño) {
       #Restamos a los que ingresaron hace 1 año los que pasaron a BM, LDR o HCC porque los que quedaron van a pasar a DC1.
-      arrayModelo$addDC1[i] <- arrayModelo$addDC[i - ciclosPorAño] - (arrayModelo$addDC[i - ciclosPorAño] * (ABM[arrayModelo$ano[i - ciclosPorAño]]) + arrayModelo$addDC[i - ciclosPorAño] * pADC_HCC + arrayModelo$addDC[i - ciclosPorAño] * pADC_LDR)
+      arrayModelo$addDC1[i] <- arrayModelo$addDC[i - ciclosPorAño] - (arrayModelo$addDC[i - ciclosPorAño] * (ABM[arrayModelo$ano[i - ciclosPorAño]+1]) + arrayModelo$addDC[i - ciclosPorAño] * pADC_HCC + arrayModelo$addDC[i - ciclosPorAño] * pADC_LDR)
       if (i==13) {arrayModelo$addDC1[i]=0} 
       #if (i==15) {browser()} 
       arrayModelo$DC[i] <- arrayModelo$DC[i] - arrayModelo$addDC1[i]
@@ -625,7 +629,7 @@ hepC_sinTrat = function (
     arrayModelo$CostoHCC[i] <- arrayModelo$HCC[i] * CostoHCC
     arrayModelo$CostoCiclo[i] <- arrayModelo$costoF0[i] + arrayModelo$costoF1[i] + arrayModelo$CostoF2[i] + arrayModelo$CostoF3[i] + arrayModelo$CostoF4[i] + arrayModelo$CostoDC[i] + arrayModelo$CostoHCC[i]
     arrayModelo$costoAcumulado[i] <- arrayModelo$costoAcumulado[i - 1] + arrayModelo$CostoCiclo[i]
-    arrayModelo$dCostoAcumulado[i] <- arrayModelo$dCostoAcumulado[i - 1] + (arrayModelo$CostoCiclo[i] / ((1 + tasaDescuento) ^ i))
+    arrayModelo$dCostoAcumulado[i] <- arrayModelo$dCostoAcumulado[i - 1] + (arrayModelo$CostoCiclo[i] / ((1 + tasaDescuento) ^ (i-1)))
   }
   
   
@@ -634,6 +638,7 @@ hepC_sinTrat = function (
   arrayModelo$utilidadAcumuladoDescontado[i] = ((arrayModelo$F0[i] * uF0a + arrayModelo$F1[i] * uF1a + arrayModelo$F2[i] * uF2a + arrayModelo$F3[i] * uF3a + arrayModelo$F4[i] * uF4a) + (arrayModelo$SVRF0F2[i] * uF0SVRa + arrayModelo$SVRF3[i] * uF3SVRa + arrayModelo$SVRF4[i] * uF4SVRa) + (arrayModelo$DC[i] * uDCa + arrayModelo$DC1[i] * uDCa + arrayModelo$HCC[i] * uHCCa))
   arrayModelo$añosVidaDescontados[i] <- (arrayModelo$F0[i] + arrayModelo$F1[i] + arrayModelo$F2[i] + arrayModelo$F3[i] + arrayModelo$F4[i]) + (arrayModelo$SVRF0F2[i] + arrayModelo$SVRF3[i] + arrayModelo$SVRF4[i]) + (arrayModelo$DC[i] + arrayModelo$DC1[i] + arrayModelo$HCC[i])
   arrayModelo$añosVida[i] <- arrayModelo$añosVida[i - 1] + ((arrayModelo$F0[i] + arrayModelo$F1[i] + arrayModelo$F2[i] + arrayModelo$F3[i] + arrayModelo$F4[i]) + (arrayModelo$SVRF0F2[i] + arrayModelo$SVRF3[i] + arrayModelo$SVRF4[i]) + (arrayModelo$DC[i] + arrayModelo$DC1[i] + arrayModelo$HCC[i]))
+  
   
   j=i+11
   arrayModelo$utilidadAcumuladoDescontado[(i+1):j] <- arrayModelo$utilidadAcumuladoDescontado[i]
@@ -647,14 +652,13 @@ hepC_sinTrat = function (
   
   for (i in loop) {
     # Asignación para arrayModelo$utilidadAcumuladoDescontado
-    arrayModelo$utilidadAcumuladoDescontado[i] <- arrayModelo$utilidadAcumuladoDescontado[i - 1] + (((arrayModelo$F0[i] * uF0a + arrayModelo$F1[i] * uF1a + arrayModelo$F2[i] * uF2a + arrayModelo$F3[i] * uF3a + arrayModelo$F4[i] * uF4a) + (arrayModelo$SVRF0F2[i] * uF0SVRa + arrayModelo$SVRF3[i] * uF3SVRa + arrayModelo$SVRF4[i] * uF4SVRa) + (arrayModelo$DC[i] * uDCa + arrayModelo$DC1[i] * uDCa + arrayModelo$HCC[i] * uHCCa)) / ((1 + AtasaDescuento) ^ ((i / 12) - 1)))
+    arrayModelo$utilidadAcumuladoDescontado[i] <- arrayModelo$utilidadAcumuladoDescontado[i - 1] + (((arrayModelo$F0[i] * uF0a + arrayModelo$F1[i] * uF1a + arrayModelo$F2[i] * uF2a + arrayModelo$F3[i] * uF3a + arrayModelo$F4[i] * uF4a) + (arrayModelo$SVRF0F2[i] * uF0SVRa + arrayModelo$SVRF3[i] * uF3SVRa + arrayModelo$SVRF4[i] * uF4SVRa) + (arrayModelo$DC[i] * uDCa + arrayModelo$DC1[i] * uDCa + arrayModelo$HCC[i] * uHCCa)) / ((1 + AtasaDescuento) ^ (((i-1) / 12) - 1)))
     
     arrayModelo$añosVidaDescontados[i] <- arrayModelo$añosVidaDescontados[i - 1] + (((arrayModelo$F0[i] + arrayModelo$F1[i] + arrayModelo$F2[i] + arrayModelo$F3[i] + arrayModelo$F4[i]) + (arrayModelo$SVRF0F2[i] + arrayModelo$SVRF3[i] + arrayModelo$SVRF4[i]) + (arrayModelo$DC[i] + arrayModelo$DC1[i] + arrayModelo$HCC[i])) / ((1 + AtasaDescuento) ^ ((i / 12) - 1)))
     arrayModelo$añosVida[i] <- arrayModelo$añosVida[i - 1] + ((arrayModelo$F0[i] + arrayModelo$F1[i] + arrayModelo$F2[i] + arrayModelo$F3[i] + arrayModelo$F4[i]) + (arrayModelo$SVRF0F2[i] + arrayModelo$SVRF3[i] + arrayModelo$SVRF4[i]) + (arrayModelo$DC[i] + arrayModelo$DC1[i] + arrayModelo$HCC[i]))
     arrayModelo$utilidadAcumulado[i] <- arrayModelo$utilidadAcumulado[i - 1] + ((arrayModelo$F0[i] * uF0a + arrayModelo$F1[i] * uF1a + arrayModelo$F2[i] * uF2a + arrayModelo$F3[i] * uF3a + arrayModelo$F4[i] * uF4a) + (arrayModelo$SVRF0F2[i] * uF0SVRa + arrayModelo$SVRF3[i] * uF3SVRa + arrayModelo$SVRF4[i] * uF4SVRa) + (arrayModelo$DC[i] * uDCa + arrayModelo$DC1[i] * uDCa + arrayModelo$HCC[i] * uHCCa))
     
     j=i+11
-    
     arrayModelo$utilidadAcumuladoDescontado[(i+1):j] <- arrayModelo$utilidadAcumuladoDescontado[i]
     arrayModelo$añosVidaDescontados[(i+1):j] <- arrayModelo$añosVidaDescontados[i]
     arrayModelo$añosVida[(i+1):j] <- arrayModelo$añosVida[i]
