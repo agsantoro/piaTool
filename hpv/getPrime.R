@@ -235,11 +235,10 @@ getPrime = function (
   ##### incidence plot #####
   
   y1 = ceCx16_18IncidencePreVac * 100000
-  y1 = c(rep(NA,(targetAgeGroup+1)),y1[1:(length(y1)-(targetAgeGroup+1))])
+  #y1 = c(rep(NA,(targetAgeGroup+1)),y1[1:(length(y1)-(targetAgeGroup+1))])
   y1[age>75] = NA
-  
-  y2 = ceCx16_18IncidencePostVac * 100000
-  y2=c(rep(NA,(targetAgeGroup+1)),y2[1:(length(y1)-(targetAgeGroup+1))])
+  y2 = 100000 * ceCx16_18IncidencePreVac * (1-input$coverageAllDosis/100*input$vaccineEfficacyVsHPV16_18/100) 
+  #y2=c(rep(NA,(targetAgeGroup+1)),y2[1:(length(y1)-(targetAgeGroup+1))])
   y2[age>75] = NA
   
   dataPlot = data.frame(

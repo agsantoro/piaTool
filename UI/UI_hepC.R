@@ -1,59 +1,59 @@
 ui_hepC = function (input, datosPais) {
-  
   country_sel = str_to_title(input$country)
   
   renderUI({
     input_names = c(
-      'Costo de cirrosis descompensada (USD)' = "aCostoDC", 
-      'Costos de estadío de fibrosis F0 a F2 (USD)' = "aCostoF0F2", 
-      'Costos de estadío de fibrosis F3 (USD)' = "aCostoF3", 
-      'Costos de estadío de fibrosis F4 (USD)' = "aCostoF4", 
-      'Costos de carcinoma hepatocelular (USD)' = "aCostoHCC", 
-      'Tasa de descuento (%)' = "AtasaDescuento", 
-      'Tamaño de la cohorte (n)' = "cohorte", 
-      'Costo de la evaluación de la respuesta al tratamiento' = "Costo_Evaluacion", 
+      'Duración del tratamiento (meses)' = "tDuracion_Meses",
       'Costo de tratamiento mensual con Sofosbuvir/ Velpatasvir (Epclusa®) (USD)' = "Costo_Tratamiento",
+      'Eficacia de Sofosbuvir/ Velpatasvir (Epclusa®) (%)' = "pSVR", 
+      'Porcentaje de pacientes que abandonan el tratamiento (%)' = "pAbandono", 
+      'Tamaño de la cohorte (n)' = "cohorte", 
       'Porcentaje de personas en estadío de fibrosis F0 al diagnóstico (%)' = "F0", 
       'Porcentaje de personas en estadío de fibrosis F1 al diagnóstico (%)' = "F1", 
       'Porcentaje de personas en estadío de fibrosis F2 al diagnóstico (%)' = "F2", 
       'Porcentaje de personas en estadío de fibrosis F3 al diagnóstico (%)' = "F3", 
       'Porcentaje de personas en estadío de fibrosis F4 al diagnóstico (%)' = "F4", 
-      'Porcentaje de pacientes que abandonan el tratamiento (%)' = "pAbandono", 
-      'Eficacia de Sofosbuvir/ Velpatasvir (Epclusa®) (%)' = "pSVR", 
-      'Duración del tratamiento (meses)' = "tDuracion_Meses"
-    )
+      'Costos de estadío de fibrosis F0 a F2 al diagnóstico' = "aCostoF0F2", 
+      'Costos de estadío de fibrosis F3 al diagnóstico' = "aCostoF3", 
+      'Costos de estadío de fibrosis F4 al diagnóstico' = "aCostoF4",
+      'Costo anual de cirrosis descompensada (USD)' = "aCostoDC", 
+      'Costos anual de carcinoma hepatocelular (USD)' = "aCostoHCC", 
+#     'Tasa de descuento (%)' = "AtasaDescuento", 
+      'Costo de la evaluación de la respuesta al tratamiento' = "Costo_Evaluacion")
     
     inputs_hover = c(
-      'Costo de cirrosis descompensada (USD)',
-      'Costos de estadío de fibrosis F0 a F2 (USD)',
-      'Costos de estadío de fibrosis F3 (USD)',
-      'Costos de estadío de fibrosis F4 (USD)',
-      'Costos de carcinoma hepatocelular (USD)',
-      'Se utiliza para traer al presente los costos y beneficios en salud futuros',
-      'Número de personas mayores de 18 años con infección por VHC que ingresan al modelo',
-      'Costo de la evaluación de la respuesta al tratamiento',
-      'Costo de tratamiento mensual de Sofosbuvir/ Velpatasvir (Epclusa®) para julio de 2023. Régimen de AAD (antivirales de acción directa) de 4 semanas. (USD oficial a tasa de cambio nominal de cada país)',
-      'Porcentaje de personas en estadío de fibrosis F0 al diagnóstico',
-      'Porcentaje de personas en estadío de fibrosis F1 al diagnóstico',
-      'Porcentaje de personas en estadío de fibrosis F2 al diagnóstico',
-      'Porcentaje de personas en estadío de fibrosis F3 al diagnóstico',
-      'Porcentaje de personas en estadío de fibrosis F4 al diagnóstico',
-      'Porcentaje de pacientes que abandonan el tratamiento',
-      'Porcentaje de la capacidad del tratamiento antiviral específico que combina los medicamentos Sofosbuvir y Velpatasvir para eliminar o reducir la carga viral del VHC',
-      'Duración del tratamiento con Sofosbuvir (400 mg) y Velpatasvir (100 mg) en meses'
+      "Duración del tratamiento con Sofosbuvir (400 mg) y Velpatasvir (100 mg) en meses",
+      "Costo de tratamiento mensual de Sofosbuvir/ Velpatasvir (Epclusa®). Régimen de AAD (antivirales de acción directa) de 4 semanas.",
+      "Porcentaje de pacientes que logran la eliminación viral con el tratamiento antiviral específico que combina los medicamentos Sofosbuvir y Velpatasvir",
+      "Porcentaje de pacientes que abandonan el tratamiento",
+      "Número de personas mayores de 18 años con infección por VHC que ingresan al modelo",
+      "Porcentaje de personas en estadío de fibrosis F0 al diagnóstico",
+      "Porcentaje de personas en estadío de fibrosis F1 al diagnóstico",
+      "Porcentaje de personas en estadío de fibrosis F2 al diagnóstico",
+      "Porcentaje de personas en estadío de fibrosis F3 al diagnóstico",
+      "Porcentaje de personas en estadío de fibrosis F4 al diagnóstico",
+      "Costo anual del seguimiento, tratamiento y complicaciones de estadíos de fibrosis F0 a F2",
+      "Costo anual del seguimiento, tratamiento y complicaciones de estadio de fibrosis F3",
+      "Costo anual del seguimiento, tratamiento y complicaciones de estadio de fibrosis F4 (cirrosis)",
+      "Costo anual del seguimiento, tratamiento y complicaciones de la cirrosis descompensada",
+      "Costo anual del seguimiento, tratamiento y complicaciones del cáncer de hígado",
+      "Costo de implementar y sostener la intervención en un año"
+      
     )
     
-    porcentajes = c(6,10:16)
+    bsc = 1:2
+    avz = setdiff(1:length(inputs_hover),bsc)
+    porcentajes = c(3,4,6:10)
     
     
     default = list()
     default$cohorte = datosPais$valor[datosPais$pais==country_sel & datosPais$dimension=="epi" & datosPais$indicador=="Cohorte"]
     default$AtasaDescuento = datosPais$valor[datosPais$pais==country_sel & datosPais$dimension=="epi" & datosPais$indicador=="Descuento"]
-    default$F0 = datosPais$valor[datosPais$pais==country_sel & datosPais$dimension=="epi" & datosPais$indicador=="F0"]
-    default$F1 = datosPais$valor[datosPais$pais==country_sel & datosPais$dimension=="epi" & datosPais$indicador=="F1"]
-    default$F2 = datosPais$valor[datosPais$pais==country_sel & datosPais$dimension=="epi" & datosPais$indicador=="F2"]
-    default$F3 = datosPais$valor[datosPais$pais==country_sel & datosPais$dimension=="epi" & datosPais$indicador=="F3"]
-    default$F4 = datosPais$valor[datosPais$pais==country_sel & datosPais$dimension=="epi" & datosPais$indicador=="CC"]
+    default$F0 = datosPais$valor[datosPais$pais==country_sel & datosPais$dimension=="epi" & datosPais$indicador=="F0"]/100
+    default$F1 = datosPais$valor[datosPais$pais==country_sel & datosPais$dimension=="epi" & datosPais$indicador=="F1"]/100
+    default$F2 = datosPais$valor[datosPais$pais==country_sel & datosPais$dimension=="epi" & datosPais$indicador=="F2"]/100
+    default$F3 = datosPais$valor[datosPais$pais==country_sel & datosPais$dimension=="epi" & datosPais$indicador=="F3"]/100
+    default$F4 = datosPais$valor[datosPais$pais==country_sel & datosPais$dimension=="epi" & datosPais$indicador=="CC"]/100
     default$aCostoF0F2 = datosPais$valor[datosPais$pais==country_sel & datosPais$dimension=="costos" & datosPais$indicador=="F0-F2"]
     default$aCostoF3 = datosPais$valor[datosPais$pais==country_sel & datosPais$dimension=="costos" & datosPais$indicador=="F3"]
     default$aCostoF4 = datosPais$valor[datosPais$pais==country_sel & datosPais$dimension=="costos" & datosPais$indicador=="F4"]
@@ -67,13 +67,13 @@ ui_hepC = function (input, datosPais) {
     
     if (is.null(input$country) == F) {
       i_names = c()
-      for (i in 1:17) {
+      for (i in 1:length(inputs_hover)) {
         i_names = c(i_names,input_names[i])
       }
       
       i_labels = c()
       
-      for (i in 1:17) {
+      for (i in 1:length(inputs_hover)) {
         i_labels = c(i_labels,names(input_names)[i])
       }
       
@@ -84,8 +84,8 @@ ui_hepC = function (input, datosPais) {
       )
       
       hepC_map_inputs$avanzado = NA
-      hepC_map_inputs$avanzado[15:17] = T
-      hepC_map_inputs$avanzado[1:14] = F
+      hepC_map_inputs$avanzado[avz] = T
+      hepC_map_inputs$avanzado[bsc] = F
       
       rownames(hepC_map_inputs) = 1:nrow(hepC_map_inputs)
       
@@ -97,7 +97,7 @@ ui_hepC = function (input, datosPais) {
     }
     
     tagList(
-          lapply(input_names[15:17], function(i) {
+          lapply(input_names[bsc], function(i) {
             
             if (which(input_names==i) %in% porcentajes) {
               sliderInput(
@@ -114,19 +114,17 @@ ui_hepC = function (input, datosPais) {
                 
                 
               )
-            } else {
-              numericInput(
-                i,
-                tags$div(
-                  names(input_names[input_names==i]),
-                  icon("circle-info",
-                       "fa-1x",
-                       title = inputs_hover[which(input_names==i)])
-                ),
-                default[[i]]
-                
-              )
-            }
+            } else {numericInput(
+              i,
+              tags$div(
+                names(input_names[input_names==i]),
+                icon("circle-info",
+                     "fa-1x",
+                     title = inputs_hover[which(input_names==i)])
+              ),
+              default[[i]]
+              
+            )}
             
             
           })
@@ -135,7 +133,7 @@ ui_hepC = function (input, datosPais) {
                     tags$h1(style="display: inline-block; margin: 0 auto;", class="flex-grow mt-8 mb-8",tags$b("Avanzado")),
                     actionLink(inputId = "toggle_avanzado_hepC", label=icon("stream", style = "color: white;"))
         ),
-          lapply(input_names[1:14], function(i) {
+          lapply(input_names[avz], function(i) {
             hidden(
               if (which(input_names==i) %in% porcentajes) {
                 sliderInput(
@@ -148,7 +146,7 @@ ui_hepC = function (input, datosPais) {
                   ),
                   min=0,
                   max=100,
-                  default[[i]]
+                  default[[i]]*100
                   
                 )
               } else {
