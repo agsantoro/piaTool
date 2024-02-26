@@ -41,6 +41,7 @@ flags <- c(
 )
 
 # load functions
+source("functions/graf_esc.R", encoding = "UTF-8")
 source("functions/generateInfoBox.R", encoding = "UTF-8")
 source("functions/textoIntro.R", encoding = "UTF-8")
 source("hpv/getPrime.R", encoding = "UTF-8")

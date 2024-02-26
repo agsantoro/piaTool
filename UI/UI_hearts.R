@@ -320,6 +320,24 @@ ui_resultados_hearts = function(input,output,resultados) {
       
     })
     
+    output$hearts_grafico = renderUI({
+      
+      if(length(run_hearts)>0) {
+        table = run_hearts$resumen_resultados
+        indicadores = c(
+          'Años de vida ajustados por discapacidad evitados',
+          'Costos totales de la intervención (USD)',
+          'Diferencia de costos respecto al escenario basal (USD)',
+          'Retorno de inversión (%)',
+          'Razón de costo-efectividad incremental por Año de Vida Ajustado por Discapacidad evitado (USD)'
+        )
+        table = table[table$indicador %in% indicadores,]
+        
+        graf_esc(table,output)
+        
+      }
+    })
+    
     output$hearts_grafico_2 = renderPlotly({
       if (length(run_hearts)>0) {
         x = 0:100
@@ -509,6 +527,10 @@ ui_resultados_hearts = function(input,output,resultados) {
     })
     
     tagList(
+      fluidRow(
+        column(12,
+               uiOutput("hearts_grafico"))
+      ),
       fluidRow(
         column(6,
                plotlyOutput("hearts_grafico_1")),

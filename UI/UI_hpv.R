@@ -163,6 +163,28 @@ ui_hpv_basica = function (input,inputs_hpv, run_hearts) {
   }) 
 }
 
+ui_grafico_nuevo_hpv = function(resultados, input, output) {
+  
+  if (length(input$coverageBase)>0) {
+    table = resultados$outcomes
+    
+    indicadores = c(
+      'Años de Vida Ajustados por Discapacidad evitados (AVAD)',
+      'Costo total de la intervención (USD)',
+      'Diferencia de Costos respecto al escenario basal (USD)',
+      'Retorno de Inversión (%)',
+      'Razón de costo-efectividad incremental por Años de Vida Ajustados por Discapacidad evitados (USD)'
+    )
+    
+    table = table[table$outcomes %in% indicadores,c("outcomes", "undisc")]
+    colnames(table) = c("indicador","valor")
+    
+    renderUI({
+      graf_esc(table,output)
+    })
+  }
+}
+
 ui_grafico_hpv = function (resultados, input) {
   renderHighchart({
     if (length(input$coverageBase)>0) {
@@ -173,6 +195,8 @@ ui_grafico_hpv = function (resultados, input) {
   })
   
 }
+
+
 
 ui_tabla_hpv = function (resultados, input) {
   if (length(input$coverageBase)>0) {

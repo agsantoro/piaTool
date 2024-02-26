@@ -173,6 +173,23 @@ ui_resultados_hpp = function(input,output,resultados) {
   
   hpp_run = resultados()
   
+  
+  output$hpp_grafico = renderUI({
+    if (length(hpp_run)>1) {
+      indicadores = c(
+        'Años de vida ajustados por discapacidad evitados',
+        'Costo total de la intervención (USD)',
+        'Diferencia de costos respecto al escenario basal (USD)',
+        'Retorno de Inversión (%)',
+        'Razón de costo-efectividad incremental por Año de Vida Ajustado por Discapacidad evitado (USD)'
+      )
+      
+      table = hpp_run[hpp_run$indicador %in% indicadores, c("indicador","valor")]
+      
+      graf_esc(table, output)
+    }
+  })
+  
   output$hpp_summaryTable = renderReactable({
     
     if (length(hpp_run)>1) {
@@ -215,7 +232,13 @@ ui_resultados_hpp = function(input,output,resultados) {
   })
   
   tagList(
-    reactableOutput("hpp_summaryTable")
+    fluidRow(
+      column(12,
+             uiOutput("hpp_grafico")
+             ),
+      column(12,
+             reactableOutput("hpp_summaryTable"))
+    )
   )
   
 }

@@ -96,6 +96,26 @@ ui_resultados_tbc = function(input,output,resultados) {
   
   tbc_run = resultados()[,c(1,4)]
   
+  output$tbc_grafico = renderUI({
+    if (length(tbc_run)>1) {
+
+      indicadores = c(
+        'Años de vida ajustados por discapacidad evitados',
+        'Costo total de la intervención (USD)',
+        'Diferencia de costos respecto al escenario basal (USD)',
+        'Retorno de Inversión (%)',
+        'Razon de costo-efectividad incremental por año de vida salvado'
+      )
+      
+      table = tbc_run[tbc_run$Parametro %in% indicadores,]
+      colnames(table) = c("indicador","valor")
+      
+      
+      graf_esc(table, output)
+      
+    }
+  })
+  
   output$tbc_summaryTable = renderReactable({
     
     if (length(tbc_run)>1) {
@@ -131,6 +151,11 @@ ui_resultados_tbc = function(input,output,resultados) {
   })
   
   tagList(
+    fluidRow(
+      column(12,
+             uiOutput("tbc_grafico"))
+    )
+    ,
     reactableOutput("tbc_summaryTable")
   )
   # hpp_run = resultados()

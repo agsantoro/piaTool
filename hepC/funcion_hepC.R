@@ -551,13 +551,14 @@ hepC_sinTrat = function (
   arrayModelo$BM = 0
   # arrayModelo$utilidadCiclo = 0
   arrayModelo$utilidadAcumuladoDescontado = 0
+  arrayModelo$disutilidadAcumuladaDescontado = 0
   arrayModelo$SVRF0F2 = 0
   arrayModelo$SVRF3 = 0
   arrayModelo$SVRF4 = 0
   arrayModelo$añosVidaDescontados = 0
   arrayModelo$CostoDC <- 0
   arrayModelo$CostoHCC <-  0
-  
+  arrayModelo$disutilidadAcumulada <-  0
   
   add_rows = data.frame(matrix(NA, nrow=lengthArray-1, ncol=ncol(arrayModelo)))
   colnames(add_rows) = colnames(arrayModelo)
@@ -592,7 +593,6 @@ hepC_sinTrat = function (
     arrayModelo$dcAcumulados[i] <- arrayModelo$dcAcumulados[i - 1] + arrayModelo$addDC[i]
     
     
-    browser(expr = {i==14})
     arrayModelo$DC[i] <- arrayModelo$DC[i - 1] - (arrayModelo$DC[i - 1] * bm_actual + arrayModelo$DC[i - 1] * pDC_LDR + arrayModelo$DC[i - 1] * pDC_HCC) + arrayModelo$addDC[i]
     
     
@@ -636,14 +636,19 @@ hepC_sinTrat = function (
   # primer año 
   i=13
   arrayModelo$utilidadAcumuladoDescontado[i] = ((arrayModelo$F0[i] * uF0a + arrayModelo$F1[i] * uF1a + arrayModelo$F2[i] * uF2a + arrayModelo$F3[i] * uF3a + arrayModelo$F4[i] * uF4a) + (arrayModelo$SVRF0F2[i] * uF0SVRa + arrayModelo$SVRF3[i] * uF3SVRa + arrayModelo$SVRF4[i] * uF4SVRa) + (arrayModelo$DC[i] * uDCa + arrayModelo$DC1[i] * uDCa + arrayModelo$HCC[i] * uHCCa))
+  arrayModelo$disutilidadAcumuladaDescontado[i] <- arrayModelo$disutilidadAcumuladaDescontado[i-1] + (((arrayModelo$DC1[i] * (1 - uDCa)) + (arrayModelo$DC[i] * (1 - uDCa)) + (arrayModelo$HCC[i] * (1 - uHCCa))) / ((1 + AtasaDescuento) ^ (((i-1) / 12) - 1)))
   arrayModelo$añosVidaDescontados[i] <- (arrayModelo$F0[i] + arrayModelo$F1[i] + arrayModelo$F2[i] + arrayModelo$F3[i] + arrayModelo$F4[i]) + (arrayModelo$SVRF0F2[i] + arrayModelo$SVRF3[i] + arrayModelo$SVRF4[i]) + (arrayModelo$DC[i] + arrayModelo$DC1[i] + arrayModelo$HCC[i])
   arrayModelo$añosVida[i] <- arrayModelo$añosVida[i - 1] + ((arrayModelo$F0[i] + arrayModelo$F1[i] + arrayModelo$F2[i] + arrayModelo$F3[i] + arrayModelo$F4[i]) + (arrayModelo$SVRF0F2[i] + arrayModelo$SVRF3[i] + arrayModelo$SVRF4[i]) + (arrayModelo$DC[i] + arrayModelo$DC1[i] + arrayModelo$HCC[i]))
-  
+  arrayModelo$disutilidadAcumulada[i] <- arrayModelo$disutilidadAcumulada[i-1] + (arrayModelo$DC1[i] * (1 - uDCa)) + (arrayModelo$DC[i] * (1 - uDCa)) + (arrayModelo$HCC[i] * (1 - uHCCa))
   
   j=i+11
   arrayModelo$utilidadAcumuladoDescontado[(i+1):j] <- arrayModelo$utilidadAcumuladoDescontado[i]
+  arrayModelo$disutilidadAcumuladaDescontado[(i+1):j] <- arrayModelo$disutilidadAcumuladaDescontado[i]
   arrayModelo$añosVidaDescontados[(i+1):j] <- arrayModelo$añosVidaDescontados[i]
   arrayModelo$añosVida[(i+1):j] <- arrayModelo$añosVida[i]
+  arrayModelo$disutilidadAcumulada[(i+1):j] <- arrayModelo$disutilidadAcumulada[i]
+  
+  
   # resto años
   
   loop = seq(24,nrow(arrayModelo), by=12)
@@ -653,25 +658,28 @@ hepC_sinTrat = function (
   for (i in loop) {
     # Asignación para arrayModelo$utilidadAcumuladoDescontado
     arrayModelo$utilidadAcumuladoDescontado[i] <- arrayModelo$utilidadAcumuladoDescontado[i - 1] + (((arrayModelo$F0[i] * uF0a + arrayModelo$F1[i] * uF1a + arrayModelo$F2[i] * uF2a + arrayModelo$F3[i] * uF3a + arrayModelo$F4[i] * uF4a) + (arrayModelo$SVRF0F2[i] * uF0SVRa + arrayModelo$SVRF3[i] * uF3SVRa + arrayModelo$SVRF4[i] * uF4SVRa) + (arrayModelo$DC[i] * uDCa + arrayModelo$DC1[i] * uDCa + arrayModelo$HCC[i] * uHCCa)) / ((1 + AtasaDescuento) ^ (((i-1) / 12) - 1)))
-    
-    arrayModelo$añosVidaDescontados[i] <- arrayModelo$añosVidaDescontados[i - 1] + (((arrayModelo$F0[i] + arrayModelo$F1[i] + arrayModelo$F2[i] + arrayModelo$F3[i] + arrayModelo$F4[i]) + (arrayModelo$SVRF0F2[i] + arrayModelo$SVRF3[i] + arrayModelo$SVRF4[i]) + (arrayModelo$DC[i] + arrayModelo$DC1[i] + arrayModelo$HCC[i])) / ((1 + AtasaDescuento) ^ ((i / 12) - 1)))
+    arrayModelo$disutilidadAcumuladaDescontado[i] <- arrayModelo$disutilidadAcumuladaDescontado[i-1] + (((arrayModelo$DC1[i] * (1 - uDCa)) + (arrayModelo$DC[i] * (1 - uDCa)) + (arrayModelo$HCC[i] * (1 - uHCCa))) / ((1 + AtasaDescuento) ^ (((i-1) / 12) - 1)))
+    arrayModelo$añosVidaDescontados[i] <- arrayModelo$añosVidaDescontados[i - 1] + (((arrayModelo$F0[i] + arrayModelo$F1[i] + arrayModelo$F2[i] + arrayModelo$F3[i] + arrayModelo$F4[i]) + (arrayModelo$SVRF0F2[i] + arrayModelo$SVRF3[i] + arrayModelo$SVRF4[i]) + (arrayModelo$DC[i] + arrayModelo$DC1[i] + arrayModelo$HCC[i])) / ((1 + AtasaDescuento) ^ (((i-1) / 12) - 1)))
     arrayModelo$añosVida[i] <- arrayModelo$añosVida[i - 1] + ((arrayModelo$F0[i] + arrayModelo$F1[i] + arrayModelo$F2[i] + arrayModelo$F3[i] + arrayModelo$F4[i]) + (arrayModelo$SVRF0F2[i] + arrayModelo$SVRF3[i] + arrayModelo$SVRF4[i]) + (arrayModelo$DC[i] + arrayModelo$DC1[i] + arrayModelo$HCC[i]))
     arrayModelo$utilidadAcumulado[i] <- arrayModelo$utilidadAcumulado[i - 1] + ((arrayModelo$F0[i] * uF0a + arrayModelo$F1[i] * uF1a + arrayModelo$F2[i] * uF2a + arrayModelo$F3[i] * uF3a + arrayModelo$F4[i] * uF4a) + (arrayModelo$SVRF0F2[i] * uF0SVRa + arrayModelo$SVRF3[i] * uF3SVRa + arrayModelo$SVRF4[i] * uF4SVRa) + (arrayModelo$DC[i] * uDCa + arrayModelo$DC1[i] * uDCa + arrayModelo$HCC[i] * uHCCa))
+    arrayModelo$disutilidadAcumulada[i] <- arrayModelo$disutilidadAcumulada[i-1] + (arrayModelo$DC1[i] * (1 - uDCa)) + (arrayModelo$DC[i] * (1 - uDCa)) + (arrayModelo$HCC[i] * (1 - uHCCa))
     
     j=i+11
     arrayModelo$utilidadAcumuladoDescontado[(i+1):j] <- arrayModelo$utilidadAcumuladoDescontado[i]
+    arrayModelo$disutilidadAcumuladaDescontado[(i+1):j] <- arrayModelo$disutilidadAcumuladaDescontado[i]
     arrayModelo$añosVidaDescontados[(i+1):j] <- arrayModelo$añosVidaDescontados[i]
     arrayModelo$añosVida[(i+1):j] <- arrayModelo$añosVida[i]
     arrayModelo$utilidadAcumulado[(i+1):j] <- arrayModelo$utilidadAcumulado[i]
-    
+    arrayModelo$disutilidadAcumulada[(i+1):j] <- arrayModelo$disutilidadAcumulada[i]
     
     if (i==max(loop)) {
       i=nrow(arrayModelo)
       arrayModelo$utilidadAcumuladoDescontado[i] <- arrayModelo$utilidadAcumuladoDescontado[i - 1] + (((arrayModelo$F0[i] * uF0a + arrayModelo$F1[i] * uF1a + arrayModelo$F2[i] * uF2a + arrayModelo$F3[i] * uF3a + arrayModelo$F4[i] * uF4a) + (arrayModelo$SVRF0F2[i] * uF0SVRa + arrayModelo$SVRF3[i] * uF3SVRa + arrayModelo$SVRF4[i] * uF4SVRa) + (arrayModelo$DC[i] * uDCa + arrayModelo$DC1[i] * uDCa + arrayModelo$HCC[i] * uHCCa)) / ((1 + AtasaDescuento) ^ ((i / 12) - 1)))
+      arrayModelo$disutilidadAcumuladaDescontado[i] <- arrayModelo$disutilidadAcumuladaDescontado[i-1] + (((arrayModelo$DC1[i] * (1 - uDCa)) + (arrayModelo$DC[i] * (1 - uDCa)) + (arrayModelo$HCC[i] * (1 - uHCCa))) / ((1 + AtasaDescuento) ^ (((i-1) / 12) - 1)))
       arrayModelo$añosVidaDescontados[i] <- arrayModelo$añosVidaDescontados[i - 1] + (((arrayModelo$F0[i] + arrayModelo$F1[i] + arrayModelo$F2[i] + arrayModelo$F3[i] + arrayModelo$F4[i]) + (arrayModelo$SVRF0F2[i] + arrayModelo$SVRF3[i] + arrayModelo$SVRF4[i]) + (arrayModelo$DC[i] + arrayModelo$DC1[i] + arrayModelo$HCC[i])) / ((1 + AtasaDescuento) ^ ((i / 12) - 1)))
       arrayModelo$añosVida[i] <- arrayModelo$añosVida[i - 1] + ((arrayModelo$F0[i] + arrayModelo$F1[i] + arrayModelo$F2[i] + arrayModelo$F3[i] + arrayModelo$F4[i]) + (arrayModelo$SVRF0F2[i] + arrayModelo$SVRF3[i] + arrayModelo$SVRF4[i]) + (arrayModelo$DC[i] + arrayModelo$DC1[i] + arrayModelo$HCC[i]))  
       arrayModelo$utilidadAcumulado[i] <- arrayModelo$utilidadAcumulado[i - 1] + ((arrayModelo$F0[i] * uF0a + arrayModelo$F1[i] * uF1a + arrayModelo$F2[i] * uF2a + arrayModelo$F3[i] * uF3a + arrayModelo$F4[i] * uF4a) + (arrayModelo$SVRF0F2[i] * uF0SVRa + arrayModelo$SVRF3[i] * uF3SVRa + arrayModelo$SVRF4[i] * uF4SVRa) + (arrayModelo$DC[i] * uDCa + arrayModelo$DC1[i] * uDCa + arrayModelo$HCC[i] * uHCCa))
-      
+      arrayModelo$disutilidadAcumulada[i] <- arrayModelo$disutilidadAcumulada[i-1] + (arrayModelo$DC1[i] * (1 - uDCa)) + (arrayModelo$DC[i] * (1 - uDCa)) + (arrayModelo$HCC[i] * (1 - uHCCa))
     }
     
   }
@@ -703,7 +711,6 @@ hepC_sinTrat = function (
     costoTrat = 0
     
   )
-  browser()
   names(resultados) = c(
     "Cirrosis",
     "Cirrosis Descompensadas",

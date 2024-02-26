@@ -3,8 +3,27 @@ server_hpv = function (input, output, session, parameterReactive, scenarios, res
     if (input$intervencion == "Vacuna contra el HPV") {
       if (is.null(input$birthCohortSizeFemale)) {NULL} else {paste(resultados())}
       tagList(
-        ui_grafico_hpv(resultados(),input),
-        ui_tabla_hpv(resultados(),input)
+        fluidRow(
+          column(12,
+                 ui_grafico_nuevo_hpv(resultados(),input, output)
+                 )
+        ),
+        fluidRow(
+          column(12,
+                 ui_grafico_hpv(resultados(),input)
+          )
+        ),
+        fluidRow(
+          column(
+            12,
+            ui_tabla_hpv(resultados(),input)
+          )
+        )
+        
+        
+        
+        
+        
       )  
     } else if (input$intervencion == "HEARTS") {
       tagList(
