@@ -1,19 +1,19 @@
 ##funciones
 
 calcularUtilidadRestante <- function(ciclosPorAno, esperanzaVida, utilidad) {
-  # Esta función devuelve un vector de utilidad restante por ciclo.
-  # Para un ciclo dado, el vector contendrá cuánta utilidad (según la población general) le quedaba por vivir
+  # Esta funciÃ³n devuelve un vector de utilidad restante por ciclo.
+  # Para un ciclo dado, el vector contendrÃ¡ cuÃ¡nta utilidad (segÃºn la poblaciÃ³n general) le quedaba por vivir
   # para obtener los qalys perdidos ante una muerte prematura.
   
-  # Vector que contendrá la utilidad restante de cada ciclo.
+  # Vector que contendrÃ¡ la utilidad restante de cada ciclo.
   uti <- numeric(101 * ciclosPorAno)
   
-  # Recorremos desde 0 todos los ciclos comprendidos entre 0 y 100 años.
+  # Recorremos desde 0 todos los ciclos comprendidos entre 0 y 100 aÃ±os.
   for (i in 0:((101 * ciclosPorAno) - 1)) {
-    # Para cada ciclo recorremos desde el ciclo siguiente hasta la cantidad de ciclos correspondiente a la esperanza de vida del país
+    # Para cada ciclo recorremos desde el ciclo siguiente hasta la cantidad de ciclos correspondiente a la esperanza de vida del paÃ­s
     for (z in (i + 1):(esperanzaVida * ciclosPorAno)) {
-      # A uti le asignamos el valor de la utilidad trimestral del año que corresponde al ciclo.
-      # Ajuste para el índice (R empieza en 1, no en 0 como VBA)
+      # A uti le asignamos el valor de la utilidad trimestral del aÃ±o que corresponde al ciclo.
+      # Ajuste para el Ã­ndice (R empieza en 1, no en 0 como VBA)
       idx <- ((z - 1) %/% ciclosPorAno) + 1
       if (idx <= length(utilidad)) {
         uti[i + 1] <- uti[i + 1] + utilidad[idx]
@@ -24,20 +24,20 @@ calcularUtilidadRestante <- function(ciclosPorAno, esperanzaVida, utilidad) {
   return(uti)
 }
 
-escribirResultadosComparacion <- function(escenario, añosVividos, qalysVividos,
+escribirResultadosComparacion <- function(escenario, aÃ±osVividos, qalysVividos,
                                           LyPerdidos, qalysPerdidosMP, QalysPerdidosDIS,
                                           qalysPerdidos, muertesHIV, muertesTotales,
                                           casosHIV, casosHIVDx, TiempoSinDx, 
                                           CostoSano, CostoPrep, CostoHIV, 
-                                          casosTotales, añosVividosD, qalysVividosD,
-                                          añosPerdidosMPD, qalysPerdidosMPD, QalysPerdidosDD,
+                                          casosTotales, aÃ±osVividosD, qalysVividosD,
+                                          aÃ±osPerdidosMPD, qalysPerdidosMPD, QalysPerdidosDD,
                                           qalysPerdidosD, cSanoD, cPrEPD, 
                                           cHIVd, cohorteSizeFinal) {
   resultados <- data.frame(
     Escenario = escenario,
-    AñosVividos = c(añosVividos, añosVividosD),
+    AÃ±osVividos = c(aÃ±osVividos, aÃ±osVividosD),
     QALYsVividos = c(qalysVividos, qalysVividosD),
-    LyPerdidos = c(LyPerdidos, añosPerdidosMPD),
+    LyPerdidos = c(LyPerdidos, aÃ±osPerdidosMPD),
     QALYsPerdidosMP = c(qalysPerdidosMP, qalysPerdidosMPD),
     QALYsPerdidosDIS = c(QalysPerdidosDIS, QalysPerdidosDD),
     QALYsPerdidos = c(qalysPerdidos, qalysPerdidosD),
@@ -97,10 +97,10 @@ escribirOutput <- function(ciclo, ciclosPorAno, sanosSinPrep, sanosOffPrep, sano
   )
   
   # Agregar la fila a un data frame global o escribir en un archivo
-  # Opción 1: Agregar a un data frame global (debes crear 'resultados_df' antes)
+  # OpciÃ³n 1: Agregar a un data frame global (debes crear 'resultados_df' antes)
   # resultados_df <- rbind(resultados_df, fila_datos)
   
-  # Opción 2: Escribir/adjuntar a un archivo CSV
+  # OpciÃ³n 2: Escribir/adjuntar a un archivo CSV
   write.table(fila_datos, file = "prep/resultados.csv", append = TRUE, sep = ",", col.names = FALSE, row.names = FALSE)
   
   return(fila_datos)
@@ -108,22 +108,22 @@ escribirOutput <- function(ciclo, ciclosPorAno, sanosSinPrep, sanosOffPrep, sano
 
 cargarDistribucion <- function(edadMin, edadMax, distribucion_cohortes) {
   
-  # Edad mínima y máxima con datos disponibles
+  # Edad mÃ­nima y mÃ¡xima con datos disponibles
   minDistEdad <- 18
   maxDistEdad <- 50
   
-  # Ajustar rangos basados en los límites de edad proporcionados
+  # Ajustar rangos basados en los lÃ­mites de edad proporcionados
   minR <- ifelse(edadMin <= minDistEdad, edadMin, minDistEdad)
   maxR <- ifelse(edadMax >= maxDistEdad, edadMax, maxDistEdad)
   
-  # Crear un vector para almacenar la distribución basal
+  # Crear un vector para almacenar la distribuciÃ³n basal
   distBasal <- numeric(edadMax - edadMin + 1)
   #names(distBasal) <- as.character(minR:maxR)
   
-  # Cargar datos para el rango de edades (reemplazar con tu método de carga de datos)
+  # Cargar datos para el rango de edades (reemplazar con tu mÃ©todo de carga de datos)
   for (i in 0:32) {
-    # Aquí debes reemplazar el acceso a la hoja de Excel por el método apropiado en R
-    # Por ejemplo, si los datos están en un dataframe llamado 'datosExcel', podrías hacer algo así:
+    # AquÃ­ debes reemplazar el acceso a la hoja de Excel por el mÃ©todo apropiado en R
+    # Por ejemplo, si los datos estÃ¡n en un dataframe llamado 'datosExcel', podrÃ­as hacer algo asÃ­:
     # distBasal[as.character(18 + i)] <- datosExcel[6 + i, 8]
     distBasal[18 + i] <- distribucion_cohortes[5 + i, 8]
   }
@@ -147,7 +147,7 @@ cargarDistribucion <- function(edadMin, edadMax, distribucion_cohortes) {
       distBasal[i] <- distBasal[50]
       dsAcumulada <- dsAcumulada + as.numeric(distBasal[50])
     } else {
-      # Si la edad está en el rango, solo sumar esa probabilidad
+      # Si la edad estÃ¡ en el rango, solo sumar esa probabilidad
       dsAcumulada <- dsAcumulada + as.numeric(distBasal[i])
     }
   }
@@ -155,10 +155,10 @@ cargarDistribucion <- function(edadMin, edadMax, distribucion_cohortes) {
   # Calcular la diferencia entre la probabilidad total deseada y la acumulada
   resto <- 1 - dsAcumulada
   
-  # Calcular la modificación necesaria si hay una diferencia
+  # Calcular la modificaciÃ³n necesaria si hay una diferencia
   modificacion <- ifelse(resto != 0, resto / (edadMax - edadMin + 1), 0)
   
-  # Inicializar la probabilidad acumulada después de realizar los ajustes
+  # Inicializar la probabilidad acumulada despuÃ©s de realizar los ajustes
   drAcumulada <- 0
   
   # Aplicar el ajuste a cada elemento en el rango deseado
@@ -188,8 +188,8 @@ crearParametros <- function(linea) {
   # Leer los datos del archivo Excel
   parametros <- readxl::read_excel("prep/data/parametros.xlsx")
   
-  # Lista de nombres de parámetros a extraer
-  nombres_parametros <- c("Tamaño Cohorte:", "Tasa descuento:", "Edad Minima:", 
+  # Lista de nombres de parÃ¡metros a extraer
+  nombres_parametros <- c("TamaÃ±o Cohorte:", "Tasa descuento:", "Edad Minima:", 
                           "Edad Final:", "Tipo Duracion:", "Duracion PrEP:", 
                           "Edad Maxima Inicial:", "PrEP upTake:", "Edad No Indicacion de PrEP",
                           "Limite edad Riesgo:", "Eficacia PrEP:", "Adherencia PrEP:",
@@ -201,10 +201,10 @@ crearParametros <- function(linea) {
                                  "limiteEdadRiesgo", "eficaciaPrEP", "adherenciaPrEP",
                                  "limiteEdadContagiosos", "tipoCohorte")
   
-  # Crear una lista vacía para almacenar los parámetros
+  # Crear una lista vacÃ­a para almacenar los parÃ¡metros
   parametro <- list()
   
-  # Bucle para extraer cada parámetro
+  # Bucle para extraer cada parÃ¡metro
   for (i in seq_along(nombres_parametros)) {
     nombre_original <- nombres_parametros[i]
     nombre_nuevo <- nombres_parametros_nuevos[i]
@@ -250,12 +250,12 @@ funcionCalculos <- function(parametros,pais) {
     casosTotalesHIV2 <- resultados$CasosTotales[1]
     nuevosCasosHivDx2 <- resultados$CasosHIVDx[1]
     
-    # Cálculos de promedios, diferencias, etc.
+    # CÃ¡lculos de promedios, diferencias, etc.
     #Promedios
     if (tipoCohorte == 0) {
       
-      AñosVividos_prom_escenario1 = resultados_baseline$AñosVividos[1] / parametro1$cohorteSize 
-      AñosVividos_prom_escenario2 = resultados_nuevo$AñosVividos[1] / parametro2$cohorteSize
+      AÃ±osVividos_prom_escenario1 = resultados_baseline$AÃ±osVividos[1] / parametro1$cohorteSize 
+      AÃ±osVividos_prom_escenario2 = resultados_nuevo$AÃ±osVividos[1] / parametro2$cohorteSize
       qalysVividos_prom_escenario1 = resultados_baseline$QALYsVividos[1] / parametro1$cohorteSize 
       qalysVividos_prom_escenario2 = resultados_nuevo$QALYsVividos[1] / parametro2$cohorteSize
     }
@@ -286,13 +286,13 @@ funcionCalculos <- function(parametros,pais) {
     
     ##Columna total del excel
     #30
-    AñosVividos_total <- resultados_nuevo$AñosVividos[1]-resultados_baseline$AñosVividos[1]
+    AÃ±osVividos_total <- resultados_nuevo$AÃ±osVividos[1]-resultados_baseline$AÃ±osVividos[1]
     
     #31
     qalysVividos_total <- resultados_nuevo$QALYsVividos[1]-resultados_baseline$QALYsVividos[1]
     
     #30d
-    AñosVividos_total_d <- resultados_nuevo$AñosVividos[2]-resultados_baseline$AñosVividos[2]
+    AÃ±osVividos_total_d <- resultados_nuevo$AÃ±osVividos[2]-resultados_baseline$AÃ±osVividos[2]
     
     #31d
     qalysVividos_total_d <- resultados_nuevo$QALYsVividos[2]-resultados_baseline$QALYsVividos[2]
@@ -360,8 +360,8 @@ funcionCalculos <- function(parametros,pais) {
     
     
     #47  
-    Costo_incremental_Año_vida <- costo_total/AñosVividos_total
-    Costo_incremental_Año_vida_d <- costo_total_d/AñosVividos_total_d
+    Costo_incremental_AÃ±o_vida <- costo_total/AÃ±osVividos_total
+    Costo_incremental_AÃ±o_vida_d <- costo_total_d/AÃ±osVividos_total_d
     
     ROI <- -costo_total/costo_prep_total*100
     
@@ -369,8 +369,8 @@ funcionCalculos <- function(parametros,pais) {
     
     # Crear una lista para almacenar todos los resultados
     lista_resultados1 <<- data.frame(
-      # AñosVividos_prom_escenario1 = AñosVividos_prom_escenario1,
-      # AñosVividos_prom_escenario2 = AñosVividos_prom_escenario2,
+      # AÃ±osVividos_prom_escenario1 = AÃ±osVividos_prom_escenario1,
+      # AÃ±osVividos_prom_escenario2 = AÃ±osVividos_prom_escenario2,
       # qalysVividos_prom_escenario1 = qalysVividos_prom_escenario1,
       # qalysVividos_prom_escenario2 = qalysVividos_prom_escenario2,
       # LY_perdidos_MP_prom_escenario1 = LY_perdidos_MP_prom_escenario1,
@@ -383,9 +383,9 @@ funcionCalculos <- function(parametros,pais) {
       # qalys_perdidos_prom_escenario2 = qalys_perdidos_prom_escenario2,
       # tiempo_sin_dx_prom_escenario1 = tiempo_sin_dx_prom_escenario1,
       # tiempo_sin_dx_prom_escenario2 = tiempo_sin_dx_prom_escenario2,
-      AñosVividos_total = AñosVividos_total,
+      AÃ±osVividos_total = AÃ±osVividos_total,
       qalysVividos_total = qalysVividos_total,
-      AñosVividos_total_d = AñosVividos_total_d,
+      AÃ±osVividos_total_d = AÃ±osVividos_total_d,
       qalysVividos_total_d = qalysVividos_total_d,
       LY_perdidos_MP_total = LY_perdidos_MP_total,
       qalys_perdidos_disc_total = qalys_perdidos_disc_total,
@@ -407,8 +407,8 @@ funcionCalculos <- function(parametros,pais) {
       costo_total_d = costo_total_d,
       Costo_incremental_Qaly = Costo_incremental_Qaly,
       Costo_incremental_Qaly_d = Costo_incremental_Qaly_d,
-      Costo_incremental_Año_vida = Costo_incremental_Año_vida,
-      Costo_incremental_Año_vida_d = Costo_incremental_Año_vida_d,
+      Costo_incremental_AÃ±o_vida = Costo_incremental_AÃ±o_vida,
+      Costo_incremental_AÃ±o_vida_d = Costo_incremental_AÃ±o_vida_d,
       ROI = ROI,
       ROI_d = ROI_d
     )
@@ -419,7 +419,7 @@ funcionCalculos <- function(parametros,pais) {
     # Renombrar las columnas
     names(lista_resultados) <- c("Valor", "Parametro")
     
-    # Ordena las columnas para que "Parametro" esté primero
+    # Ordena las columnas para que "Parametro" estÃ© primero
     lista_resultados<- lista_resultados[, c("Parametro", "Valor")]
     
   })
@@ -427,4 +427,3 @@ funcionCalculos <- function(parametros,pais) {
   
   return(lista_resultados)
 }
-

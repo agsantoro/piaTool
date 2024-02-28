@@ -905,7 +905,7 @@ server <- function(input, output, session) {
         output,
         input_pais = str_to_title(input$country),
         input_cohorte = input$cohorte,
-        input_AtasaDescuento = input$AtasaDescuento/100,
+        input_AtasaDescuento = 0.03,
         input_F0 = input$F0/100,
         input_F1 = input$F1/100,
         input_F2 = input$F2/100,
@@ -922,7 +922,6 @@ server <- function(input, output, session) {
         input_Costo_Tratamiento = input$Costo_Tratamiento,
         input_Costo_Evaluacion = input$Costo_Evaluacion
       )
-      
       hepC_indicators = names(hepC$Comparacion)
       hepC_values = unlist(hepC$Comparacion)
       

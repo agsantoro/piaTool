@@ -833,29 +833,32 @@ hepC_full = function(
   #resultados$Comparacion[["Años de vida salvados (AVS) (descontado)"]] = anosVidaSalvadosDesc
   
   resultados$Comparacion[["Años de Vida Ajustados por Discapacidad evitados"]] = dalysDiscEvitados
+  resultados$Comparacion[["Costo total de la intervención (USD)"]] = resultados$`Con tratamiento`$`Costos Tratamiento`
   
+  resultados$Comparacion[["Costos evitados atribuibles a la intervención (USD)"]] = resultados$`Sin tratamiento`$Costos - (resultados$`Con tratamiento`$Costos - resultados$`Con tratamiento`$`Costos Tratamiento`)
   
   #resultados$Comparacion[["Años de Vida Ajustados por Discapacidad evitados (AVAD) (descontado)"]] = dalysDiscEvitadosDesc
   
-  resultados$Comparacion[["Diferencia de costos (USD)"]] = diferenciaCostos
-  resultados$Comparacion[["Diferencia de costos (USD) (descontado)"]] = diferenciaCostosDesc
-  resultados$Comparacion[["ICER por SVR"]] = icerSVR
-  resultados$Comparacion[["ICER por SVR (descontado)"]] = icerSVRDesc
+  resultados$Comparacion[["Diferencia de costos respecto al escenario basal (USD)"]] = diferenciaCostos
   resultados$Comparacion[["Razón de costo-efectividad incremental por cirrosis evitada (USD)"]] = icerCirrosisEvitada
-  resultados$Comparacion[["Razón de costo-efectividad incremental por cirrosis evitada (USD) (descontado)"]] = icerCirrosisEvitadaDesc
-  resultados$Comparacion[["ICER por HCC Evitada"]] = icerHCCEvitada
-  resultados$Comparacion[["ICER por HCC Evitada (descontado)"]] = icerHCCEvitadaDesc
-  resultados$Comparacion[["ICER por DC Evitada"]] = icerDCEvitada
-  resultados$Comparacion[["ICER por DC Evitada (descontado)"]] = icerDCEvitadaDesc
-  resultados$Comparacion[["ICER por LRD Evitada"]] = icerLDREvitada
-  resultados$Comparacion[["ICER por LRD Evitada (descontado)"]] = icerLDREvitadaDesc
+  resultados$Comparacion[["Razón de costo-efectividad incremental por vida salvada (USD)"]] = icerLDREvitada
+  resultados$Comparacion[["Razón de costo-efectividad incremental por Año de vida salvado (USD)"]] = icerLYEvitada
   resultados$Comparacion[["Razón de costo-efectividad incremental por Años de Vida Ajustados por Discapacidad evitada (USD)"]] = icerQalyEvitada
-  resultados$Comparacion[["Razón de costo-efectividad incremental por Años de Vida Ajustados por Discapacidad evitada (USD) (descontado)"]] = icerQalyEvitadaDesc
-  resultados$Comparacion[["Razón de costo-efectividad incremental por año de vida salvado por muerte por hepatopatía evitada (USD)"]] = icerLYEvitada
-  resultados$Comparacion[["Razón de costo-efectividad incremental por año de vida salvado por muerte por hepatopatía evitada (USD) (descontado)"]] = icerLYEvitadaDesc
   resultados$Comparacion[["Retorno de Inversión (%)"]] = ROI
-  resultados$Comparacion[["Retorno de Inversión (%) (descontado)"]] = ROIDesc
   
+  # resultados$Comparacion[["Diferencia de costos (USD) (descontado)"]] = diferenciaCostosDesc
+  # resultados$Comparacion[["ICER por SVR"]] = icerSVR
+  # resultados$Comparacion[["ICER por SVR (descontado)"]] = icerSVRDesc
+  # resultados$Comparacion[["Razón de costo-efectividad incremental por cirrosis evitada (USD) (descontado)"]] = icerCirrosisEvitadaDesc
+  # resultados$Comparacion[["ICER por HCC Evitada"]] = icerHCCEvitada
+  # resultados$Comparacion[["ICER por HCC Evitada (descontado)"]] = icerHCCEvitadaDesc
+  # resultados$Comparacion[["ICER por DC Evitada"]] = icerDCEvitada
+  # resultados$Comparacion[["ICER por DC Evitada (descontado)"]] = icerDCEvitadaDesc
+  # resultados$Comparacion[["ICER por LRD Evitada"]] = icerLDREvitada
+  # resultados$Comparacion[["ICER por LRD Evitada (descontado)"]] = icerLDREvitadaDesc
+  # resultados$Comparacion[["Razón de costo-efectividad incremental por Años de Vida Ajustados por Discapacidad evitada (USD) (descontado)"]] = icerQalyEvitadaDesc
+  # resultados$Comparacion[["Razón de costo-efectividad incremental por año de vida salvado por muerte por hepatopatía evitada (USD) (descontado)"]] = icerLYEvitadaDesc
+  # resultados$Comparacion[["Retorno de Inversión (%) (descontado)"]] = ROIDesc
   
   return(resultados)
 }

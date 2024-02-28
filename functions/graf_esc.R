@@ -4,7 +4,6 @@ graf_esc = function(table, output) {
       
       # Gráfico que se muestra para cada indicador
       
-      
       hchart(object = table[i,], type = "bar", hcaes(x = indicador, y = valor)) %>%
         hc_colors(colors = c("#339BDF")) %>%
         hc_plotOptions(series = list(pointWidth = 50, borderColor = 'black',

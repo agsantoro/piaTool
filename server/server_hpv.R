@@ -35,7 +35,15 @@ server_hpv = function (input, output, session, parameterReactive, scenarios, res
       )
     } else if (input$intervencion == "Hepatitis C") {
       tagList(
-        ui_resultados_hepC(input, output, hepC_run),
+        fluidRow(
+          column(12,
+                 ui_grafico_nuevo_hepC(input, output, hepC_run))
+        ),
+        fluidRow(
+          column(12,
+                 ui_resultados_hepC(input, output, hepC_run))
+        )
+        
       )
     } else if (input$intervencion == "VDOT Tuberculosis") {
       tagList(
@@ -745,11 +753,13 @@ server_hpv = function (input, output, session, parameterReactive, scenarios, res
               RCEI_AVAD[[j]] = hpp_scenarios$savedScenarios[[j]]$valor[hpp_scenarios$savedScenarios[[j]]$indicador=="Razón de costo-efectividad incremental por Año de Vida Ajustado por Discapacidad evitado (USD)"]
             }
             
-            # for (j in escenarios_seleccionados[escenarios_seleccionados %in% summary_scenarios$table$scenarioName[summary_scenarios$table$intervencion=="Hepatitis C"]]) {
-            #   browser()
-            #   ROI[[j]] = hepC_scenarios$savedScenarios[[j]]$Valor[hepC_scenarios$savedScenarios[[j]]$Indicador=="Retorno de Inversión (%)"]
-            #   RCEI_AVAD[[j]] = hepC_scenarios$savedScenarios[[j]]$Valor[hepC_scenarios$savedScenarios[[j]]$Indicador=="Retorno de Inversión (%)"]
-            # }
+            for (j in escenarios_seleccionados[escenarios_seleccionados %in% summary_scenarios$table$scenarioName[summary_scenarios$table$intervencion=="Hepatitis C"]]) {
+              AVAD[[j]] = hepC_scenarios$savedScenarios[[j]]$Valor[hepC_scenarios$savedScenarios[[j]]$Indicador=="Años de Vida Ajustados por Discapacidad evitados"]
+              COSTO_TOTAL[[j]] = hepC_scenarios$savedScenarios[[j]]$Valor[hepC_scenarios$savedScenarios[[j]]$Indicador=="Costo total de la intervención (USD)"]
+              DIF_COSTO[[j]] = hepC_scenarios$savedScenarios[[j]]$Valor[hepC_scenarios$savedScenarios[[j]]$Indicador=="Diferencia de costos respecto al escenario basal (USD)"]
+              ROI[[j]] = hepC_scenarios$savedScenarios[[j]]$Valor[hepC_scenarios$savedScenarios[[j]]$Indicador=="Retorno de Inversión (%)"]
+              RCEI_AVAD[[j]] = hepC_scenarios$savedScenarios[[j]]$Valor[hepC_scenarios$savedScenarios[[j]]$Indicador=="Razón de costo-efectividad incremental por Años de Vida Ajustados por Discapacidad evitada (USD)"]
+            }
             
             for (j in escenarios_seleccionados[escenarios_seleccionados %in% summary_scenarios$table$scenarioName[summary_scenarios$table$intervencion=="VDOT Tuberculosis"]]) {
               AVAD[[j]] = round(tbc_scenarios$savedScenarios[[j]]$vDOT[tbc_scenarios$savedScenarios[[j]]$Parametro=="Años de vida ajustados por discapacidad evitados"],1)

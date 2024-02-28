@@ -18,7 +18,7 @@ ui_hepC = function (input, datosPais) {
       'Costos de estadío de fibrosis F4 al diagnóstico' = "aCostoF4",
       'Costo anual de cirrosis descompensada (USD)' = "aCostoDC", 
       'Costos anual de carcinoma hepatocelular (USD)' = "aCostoHCC", 
-      'Tasa de descuento (%)' = "AtasaDescuento", 
+      #'Tasa de descuento (%)' = "AtasaDescuento", 
       'Costo de la evaluación de la respuesta al tratamiento' = "Costo_Evaluacion")
     
     inputs_hover = c(
@@ -37,14 +37,14 @@ ui_hepC = function (input, datosPais) {
       "Costo anual del seguimiento, tratamiento y complicaciones de estadio de fibrosis F4 (cirrosis)",
       "Costo anual del seguimiento, tratamiento y complicaciones de la cirrosis descompensada",
       "Costo anual del seguimiento, tratamiento y complicaciones del cáncer de hígado",
-      "Tasa para traer al presente los costos y beneficios en salud futuros",
+      #"Tasa para traer al presente los costos y beneficios en salud futuros",
       "Costo de implementar y sostener la intervención en un año"
       
     )
     
     bsc = 1:2
     avz = setdiff(1:length(inputs_hover),bsc)
-    porcentajes = c(3,4,6:10,16)
+    porcentajes = c(3,4,6:10)
     
     
     default = list()
@@ -181,6 +181,32 @@ ui_hepC = function (input, datosPais) {
 }
 
 
+ui_grafico_nuevo_hepC = function(input,output,resultados) {
+  table = resultados()
+  if (length(table)>1) {
+    colnames(table) = c("indicador","valor")
+    
+      indicadores = c(
+        'Años de Vida Ajustados por Discapacidad evitados',
+        'Costo total de la intervención (USD)',
+        'Diferencia de costos respecto al escenario basal (USD)',
+        'Retorno de Inversión (%)',
+        'Razón de costo-efectividad incremental por Años de Vida Ajustados por Discapacidad evitada (USD)'
+      )
+      table = table[table$indicador %in% indicadores,]
+      renderUI({
+        graf_esc(table,output)
+      })
+      
+      
+    
+  
+  }
+  
+
+}
+
+
 ui_resultados_hepC = function(input,output,resultados) {
   hepC_run = resultados()
 
@@ -189,9 +215,8 @@ ui_resultados_hepC = function(input,output,resultados) {
     if (length(hepC_run)>1) {
       table = hepC_run
       table$Valor = format(round(table$Valor,1),big.mark = ".",decimal.mark = ",")
-      cat_epi = 1:5
-      cat_costos = 6:nrow(table)
-      
+      cat_epi = 1:4
+      cat_costos = 5:nrow(table)
       table$cat=""
       table$cat[cat_epi] = "Resultados epidemiológicos"
       table$cat[cat_costos] = "Resultados económicos"
