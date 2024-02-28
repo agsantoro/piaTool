@@ -18,7 +18,7 @@ ui_hepC = function (input, datosPais) {
       'Costos de estadío de fibrosis F4 al diagnóstico' = "aCostoF4",
       'Costo anual de cirrosis descompensada (USD)' = "aCostoDC", 
       'Costos anual de carcinoma hepatocelular (USD)' = "aCostoHCC", 
-#     'Tasa de descuento (%)' = "AtasaDescuento", 
+      'Tasa de descuento (%)' = "AtasaDescuento", 
       'Costo de la evaluación de la respuesta al tratamiento' = "Costo_Evaluacion")
     
     inputs_hover = c(
@@ -37,13 +37,14 @@ ui_hepC = function (input, datosPais) {
       "Costo anual del seguimiento, tratamiento y complicaciones de estadio de fibrosis F4 (cirrosis)",
       "Costo anual del seguimiento, tratamiento y complicaciones de la cirrosis descompensada",
       "Costo anual del seguimiento, tratamiento y complicaciones del cáncer de hígado",
+      "Tasa para traer al presente los costos y beneficios en salud futuros",
       "Costo de implementar y sostener la intervención en un año"
       
     )
     
     bsc = 1:2
     avz = setdiff(1:length(inputs_hover),bsc)
-    porcentajes = c(3,4,6:10)
+    porcentajes = c(3,4,6:10,16)
     
     
     default = list()

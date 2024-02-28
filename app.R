@@ -901,12 +901,11 @@ server <- function(input, output, session) {
   hepC_run = reactive({
     if (length(input$cohorte) > 0) {
       hepC = hepC_full(
-        
         input,
         output,
         input_pais = str_to_title(input$country),
         input_cohorte = input$cohorte,
-        input_AtasaDescuento = 0.05,
+        input_AtasaDescuento = input$AtasaDescuento/100,
         input_F0 = input$F0/100,
         input_F1 = input$F1/100,
         input_F2 = input$F2/100,
