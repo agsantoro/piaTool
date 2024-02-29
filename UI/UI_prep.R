@@ -3,13 +3,16 @@ ui_prep = function (input) {
     if (is.null(input$country) == F) {
       prep_map_inputs = data.frame(
         intervencion = "Profilaxis Pre Exposición VIH",
-        i_names = names(get_prep_params()),
+        i_names = names(get_prep_params(input$country)),
         i_labels = get_prep_params_labels()
       )
 
+      bsc = 1:4
+      avz = 5:nrow(prep_map_inputs)
+      
       prep_map_inputs$avanzado = NA
-      prep_map_inputs$avanzado[c(3,5:7,15,17:19,23)] = T
-      prep_map_inputs$avanzado[c(1:24)[!c(1:24) %in% c(3,5:7,15,17:19,23)]] = F
+      prep_map_inputs$avanzado[avz] = T
+      prep_map_inputs$avanzado[bsc] = F
 
       rownames(prep_map_inputs) = 1:nrow(prep_map_inputs)
 
@@ -22,16 +25,16 @@ ui_prep = function (input) {
 
     tagList(
       
-      lapply(c(3,5:7,15,17:19,23), function(i) {
-        numericInput(prep_map_inputs$i_names[i],prep_map_inputs$i_labels[i],get_prep_params()[[i]])
+      lapply(bsc, function(i) {
+        numericInput(prep_map_inputs$i_names[i],prep_map_inputs$i_labels[i],get_prep_params(input$country)[[i]])
       }),
       tags$header(class="text-1xl flex justify-between items-center p-5 mt-4", style="background-color: #FF671B; color: white; text-align: center",
                   tags$h1(style="display: inline-block; margin: 0 auto;", class="flex-grow mt-8 mb-8",tags$b("Avanzado")),
                   actionLink(inputId = "toggle_avanzado_prep", label=icon("stream", style = "color: white;"))
       ),
 
-      lapply(c(1:24)[!c(1:24) %in% c(3,5:7,15,17:19,23)], function(i) {
-        hidden(numericInput(prep_map_inputs$i_names[i],prep_map_inputs$i_labels[i],get_prep_params()[[i]]))
+      lapply(avz, function(i) {
+        hidden(numericInput(prep_map_inputs$i_names[i],prep_map_inputs$i_labels[i],get_prep_params(input$country)[[i]]))
       })
     )
     
@@ -54,8 +57,8 @@ ui_resultados_prep = function(input,output,resultados) {
       
       table$Valor = format(round(table$Valor,1),big.mark = ".",decimal.mark = ",")
       
-      cat_epi = 1:14
-      cat_costos = 15:28
+      cat_epi = 1:6
+      cat_costos = 7:nrow(table)
       
       table$cat=""
       table$cat[cat_epi] = "Resultados epidemiológicos"

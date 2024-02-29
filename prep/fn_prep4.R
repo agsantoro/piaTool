@@ -1,7 +1,5 @@
 options(scipen=999)
 source("prep/FUNCIONES.R")
-paisCol = "ARGENTINA"
-
 input_prep <- readxl::read_excel("prep/data/inputs_prep.xlsx")
 
 funcionPrincipal <- function(linea,paisCol, parametro){
@@ -1443,13 +1441,23 @@ print("fin")
 #                    #tipoCohorte_nuevo = 1 #harcoddeada
 #                    )
 
-get_prep_params = function () {
+get_prep_params = function (paisCol) {
   lista = list(
+    
+    ###basicos
     duracionPrEP = 0,## parametro basico
     cPrEPTratamiento_anual = input_prep %>% 
       filter(PAIS==paisCol & tipo=="COSTOS" & PARAMETRO=="PREP_TTO") %>%
       select(VALOR) %>% 
       as.numeric(),## parametro basico
+    
+    duracionPrEP_nuevo = 5,## parametro basico
+    cPrEPTratamiento_anual_nuevo = input_prep %>% 
+      filter(PAIS==paisCol & tipo=="COSTOS" & PARAMETRO=="PREP_TTO") %>%
+      select(VALOR) %>% 
+      as.numeric(),## parametro basico
+    
+    ####
     edadMinima = 18, 
     edadMaximaInicial = 50,
     PrEPuptake = 0,
@@ -1512,17 +1520,17 @@ get_prep_params = function () {
     
     
     #NUEVOS
-    duracionPrEP_nuevo = 5,## parametro basico
-    cPrEPTratamiento_anual_nuevo = input_prep %>% 
-      filter(PAIS==paisCol & tipo=="COSTOS" & PARAMETRO=="PREP_TTO") %>%
-      select(VALOR) %>% 
-      as.numeric(),## parametro basico
+    
     edadMinima_nuevo = 18, 
     edadMaximaInicial_nuevo = 50,
     PrEPuptake_nuevo = 0.5,
     adherenciaPrEP_nuevo = 0.6,
     eficaciaPrEP_nuevo = 0,
     edadFinPrEP_nuevo = 50,
+    
+    prevalenciaHIV_nuevo = input_prep %>%
+      filter(PAIS==paisCol & PARAMETRO=="% de HIV en la poblacion") %>%
+      select(VALOR) %>% as.numeric(),
     
     ratio_nuevo = input_prep %>%
       filter(PAIS==paisCol & PARAMETRO=="Razon Incidencia/Prevalencia") %>%
@@ -1573,23 +1581,27 @@ get_prep_params = function () {
     
     descuento_nuevo = 0.05,
     
-    costoProgramatico_nuevo = 0#[LEAN 19/1],
+    costoProgramatico_nuevo = 0
     )
   return(lista)
 }
 
 get_prep_params_labels = function () {
   c(
+    #basicos
     "Duración de la intervención de uso de PrEP (años) (Baseline)",
     "Costo anual del uso de PrEP (USD) (Baseline)",
+    "Duración de la intervención de uso de PrEP (años)",
+    "Costo anual del uso de PrEP (USD)",
+    #avanzados
     "Edad mínima inicial(Baseline)",
-    "Edad máxima inicial (Baseline)", ## parametro basico
+    "Edad máxima inicial (Baseline)", 
     "Aceptabilidad del tratamiento con PrEP en la población (%) (Baseline)",
-    "Adherencia al uso de PrEP en la población (%) (Baseline)",## parametro basico
-    "Eficacia del uso de PrEP en la población (%) (Baseline)",##parametro basico
-    "Edad de fin de indicación de PrEP (Baseline)",##parametro basico
+    "Adherencia al uso de PrEP en la población (%) (Baseline)",
+    "Eficacia del uso de PrEP en la población (%) (Baseline)",
+    "Edad de fin de indicación de PrEP (Baseline)",
     "Prevalencia de VIH en la población en riesgo (%) (Baseline)",
-    "RATIO (Baseline)",
+    "Razón incidencia/prevalencia (Baseline)",
     "Personas que viven con VIH y que conocen su diagnóstico (%) (Baseline)",
     "Personas que viven con VIH que reciben Terapia Antirretroviral (TARV) (%) (Baseline)",
     "Personas que viven con VIH que tiene carga viral suprimida (%) (Baseline)",
@@ -1602,16 +1614,15 @@ get_prep_params_labels = function () {
     "Tasa de descuento (%) (Baseline)",
     "Costo programático anual de PrEP (USD) (Baseline)",
     #nuevos
-    "Duración de la intervención de uso de PrEP (años)",
-    "Costo anual del uso de PrEP (USD)",
+   
     "Edad mínima inicial",
-    "Edad máxima inicial", ## parametro basico
+    "Edad máxima inicial", 
     "Aceptabilidad del tratamiento con PrEP en la población (%)",
-    "Adherencia al uso de PrEP en la población (%)", ## parametro basico
-    "Eficacia del uso de PrEP en la población (%)", ##parametro basico
-    "Edad de fin de indicación de PrEP", ##parametro basico
+    "Adherencia al uso de PrEP en la población (%)", 
+    "Eficacia del uso de PrEP en la población (%)", 
+    "Edad de fin de indicación de PrEP", 
     "Prevalencia de VIH en la población en riesgo (%)",
-    "RATIO",
+    "Razón incidencia/prevalencia",
     "Personas que viven con VIH y que conocen su diagnóstico (%)",
     "Personas que viven con VIH que reciben Terapia Antirretroviral (TARV) (%)",
     "Personas que viven con VIH que tiene carga viral suprimida (%)",
@@ -1629,8 +1640,13 @@ get_prep_params_labels = function () {
 
 
 get_prep_hover = function () {
-  c( "Período de tiempo en años durante el cual se implementará la intervención de uso de PrEP a nivel de la población.",
+  
+  c( #basicos
+    "Período de tiempo en años durante el cual se implementará la intervención de uso de PrEP a nivel de la población.",
      "Costo de recibir PrEP diario por un año. Incluye Emtricitabine/Tenofovir.",
+     "Período de tiempo en años durante el cual se implementará la intervención de uso de PrEP a nivel de la población.",
+     "Costo de recibir PrEP diario por un año. Incluye Emtricitabine/Tenofovir.",
+     #avanzados
      "Edad mínima de los participantes en la cohorte inicial del estudio de distribución etaria.",
      "Edad máxima de los integrantes de la cohorte inicial en el estudio de distribución por edades.",
      "Porcentaje de personas sanas en la cohorte que recibirán PrEP. Puede utilizarse para reflejar la disposición de la población hacia el uso de PrEP o la cobertura de la intervención objetivo.",
@@ -1651,8 +1667,7 @@ get_prep_hover = function () {
      "Se utiliza para traer al presente los costos y beneficios en salud futuros.",
      "Costo de implementar y mantener PrEP en un año.",
      #nuevos
-     "Período de tiempo en años durante el cual se implementará la intervención de uso de PrEP a nivel de la población.",
-     "Costo de recibir PrEP diario por un año. Incluye Emtricitabine/Tenofovir.",
+     
      "Edad mínima de los participantes en la cohorte inicial del estudio de distribución etaria.",
      "Edad máxima de los integrantes de la cohorte inicial en el estudio de distribución por edades.",
      "Porcentaje de personas sanas en la cohorte que recibirán PrEP. Puede utilizarse para reflejar la disposición de la población hacia el uso de PrEP o la cobertura de la intervención objetivo.",
@@ -1701,7 +1716,6 @@ prep_outcomes_labels = function() {
 
 # lista_resultados <- funcionCalculos(parametros_prep, "ARGENTINA")
 
-linea <- "Baseline"
-#debug(funcionCalculos)
-#debug(funcionPrincipal)
-funcionCalculos(get_prep_params(), "ARGENTINA")
+#linea <- "Baseline"
+
+#funcionCalculos(get_prep_params(), "ARGENTINA")

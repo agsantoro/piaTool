@@ -942,41 +942,21 @@ server <- function(input, output, session) {
   ##### prep #####
   
   prep_run = reactive({
-    
-    corrida = list(
-      input$cohorteSize,
-      input$descuento,
-      input$edadMinima,
-      input$edadFinal,
-      input$duracionPrEP,
-      input$edadMaximaInicial,
-      input$PrEPuptake,
-      input$edadFinPrEP,
-      input$limiteEdadRiesgo,
-      input$eficaciaPrEP,
-      input$adherenciaPrEP,
-      input$limiteEdadContagiosos,
-      input$cohorteSize_nuevo,
-      input$tasaDescuento_nuevo,
-      input$edadMinima_nuevo,
-      input$edadFinal_nuevo,
-      input$duracionPrEP_nuevo,
-      input$edadMaximaInicial_nuevo,
-      input$PrEPuptake_nuevo,
-      input$edadFinPrEP_nuevo,
-      input$limiteEdadRiesgo_nuevo,
-      input$eficaciaPrEP_nuevo,
-      input$adherenciaPrEP_nuevo,
-      input$limiteEdadContagiosos_nuevo
-    )
-    
-    names(corrida) = names(get_prep_params())
-  
-    if (length(input$edadMinima)>0) {
-      resultados = funcionCalculos(corrida,
-                                   toupper(input$country))
+    if (length(input$duracionPrEP)>0) {
+      
+      corrida = NA
+      
+      for (i in names(get_prep_params(input$country))) {
+        corrida = c(corrida, input[[i]])
+      }
+      
+      corrida = corrida[2:length(corrida)]
+      names(corrida) = names(get_prep_params(input$country))
+      
+      resultados = funcionCalculos(corrida,toupper(input$country))
       resultados
     }
+    
     
     
   })
