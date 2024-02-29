@@ -1,5 +1,4 @@
 ##funciones
-
 calcularUtilidadRestante <- function(ciclosPorAno, esperanzaVida, utilidad) {
   # Esta función devuelve un vector de utilidad restante por ciclo.
   # Para un ciclo dado, el vector contendrá cuánta utilidad (según la población general) le quedaba por vivir
@@ -24,20 +23,22 @@ calcularUtilidadRestante <- function(ciclosPorAno, esperanzaVida, utilidad) {
   return(uti)
 }
 
-escribirResultadosComparacion <- function(escenario, añosVividos, qalysVividos,
+
+
+escribirResultadosComparacion <- function(escenario, anosVividos, qalysVividos,
                                           LyPerdidos, qalysPerdidosMP, QalysPerdidosDIS,
                                           qalysPerdidos, muertesHIV, muertesTotales,
                                           casosHIV, casosHIVDx, TiempoSinDx, 
                                           CostoSano, CostoPrep, CostoHIV, 
-                                          casosTotales, añosVividosD, qalysVividosD,
-                                          añosPerdidosMPD, qalysPerdidosMPD, QalysPerdidosDD,
+                                          casosTotales, anosVividosD, qalysVividosD,
+                                          anosPerdidosMPD, qalysPerdidosMPD, QalysPerdidosDD,
                                           qalysPerdidosD, cSanoD, cPrEPD, 
                                           cHIVd, cohorteSizeFinal) {
   resultados <- data.frame(
     Escenario = escenario,
-    AñosVividos = c(añosVividos, añosVividosD),
+    AnosVividos = c(anosVividos, anosVividosD),
     QALYsVividos = c(qalysVividos, qalysVividosD),
-    LyPerdidos = c(LyPerdidos, añosPerdidosMPD),
+    LyPerdidos = c(LyPerdidos, anosPerdidosMPD),
     QALYsPerdidosMP = c(qalysPerdidosMP, qalysPerdidosMPD),
     QALYsPerdidosDIS = c(QalysPerdidosDIS, QalysPerdidosDD),
     QALYsPerdidos = c(qalysPerdidos, qalysPerdidosD),
@@ -55,12 +56,11 @@ escribirResultadosComparacion <- function(escenario, añosVividos, qalysVividos,
   )
   
   # Escribir el data frame en un archivo Excel
-  nombreArchivo <- paste("prep/Resultados_Escenario_", escenario, ".xlsx", sep = "")
-  write.xlsx(resultados, file = nombreArchivo)
+  #nombreArchivo <- paste("prep/Resultados_Escenario_", escenario, ".xlsx", sep = "")
+  #write.xlsx(resultados, file = nombreArchivo)
   
   return(resultados)
 }
-
 
 
 escribirOutput <- function(ciclo, ciclosPorAno, sanosSinPrep, sanosOffPrep, sanosOnPrep, infectadosSinDx,
@@ -101,7 +101,7 @@ escribirOutput <- function(ciclo, ciclosPorAno, sanosSinPrep, sanosOffPrep, sano
   # resultados_df <- rbind(resultados_df, fila_datos)
   
   # Opción 2: Escribir/adjuntar a un archivo CSV
-  write.table(fila_datos, file = "prep/resultados.csv", append = TRUE, sep = ",", col.names = FALSE, row.names = FALSE)
+  #write.table(fila_datos, file = "prep/resultados.csv", append = TRUE, sep = ",", col.names = FALSE, row.names = FALSE)
   
   return(fila_datos)
 }
@@ -222,208 +222,199 @@ crearParametros <- function(linea) {
 
 funcionCalculos <- function(parametros,pais) {
   
-  withProgress(message = "Ejecutando modelo", value=0, {
-    parametro1 <- list()
-    parametro2 <- list()
-    
-    # Clasificar los elementos en las dos listas
-    for (nombre in names(parametros)) {
-      if (grepl("_nuevo$", nombre)) {
-        parametro2[[gsub("_nuevo$", "", nombre)]] <- parametros[[nombre]]
-      } else {
-        parametro1[[nombre]] <- parametros[[nombre]]
-      }
+  
+  #withProgress(message = "Ejecutando modelo", value=0, {#[LEAN2 tuve que sacar esto.]
+  parametro1 <- list()
+  parametro2 <- list()
+  
+  # Clasificar los elementos en las dos listas
+  for (nombre in names(parametros)) {
+    if (grepl("_nuevo$", nombre)) {
+      parametro2[[gsub("_nuevo$", "", nombre)]] <- parametros[[nombre]]
+    } else {
+      parametro1[[nombre]] <- parametros[[nombre]]
     }
+  }
+  
+  tipoCohorte=1
+  tipoDuracion=1
+  
+  # Aplica funcionPrincipal para ambos escenarios
+  #incProgress(0.2)
+  funcionPrincipal("Baseline", pais, parametro1)
+  resultados_baseline <<- resultados
+  casosTotalesHIV <- resultados$CasosTotales[1]
+  nuevosCasosHivDx <- resultados$CasosHIVDx[1]
+  #incProgress(0.2)[LEAN2 tuve que sacar esto.]
+  funcionPrincipal("Nuevo", pais, parametro2)
+  resultados_nuevo <<- resultados
+  casosTotalesHIV2 <- resultados$CasosTotales[1]
+  nuevosCasosHivDx2 <- resultados$CasosHIVDx[1]
+  
+  # Cálculos de promedios, diferencias, etc.
+  #Promedios
+  if (tipoCohorte == 0) {
     
-    tipoCohorte=1
-    tipoDuracion=1
+    AnosVividos_prom_escenario1 = resultados_baseline$AnosVividos[1] / parametro1$cohorteSize 
+    AnosVividos_prom_escenario2 = resultados_nuevo$AnosVividos[1] / parametro2$cohorteSize
+    qalysVividos_prom_escenario1 = resultados_baseline$QALYsVividos[1] / parametro1$cohorteSize 
+    qalysVividos_prom_escenario2 = resultados_nuevo$QALYsVividos[1] / parametro2$cohorteSize
+  }
+  #LEAN2 TODO ESTO NO VA
+  #32
+  #LY_perdidos_MP_prom_escenario1 = resultados_baseline$LyPerdidos[1] / resultados_baseline$CasosTotales
+  #LY_perdidos_MP_prom_escenario2 = resultados_nuevo$LyPerdidos[1] / resultados_nuevo$CasosTotales
+  
+  #33
+  #qalys_perdidos_disc_prom_escenario1 = resultados_baseline$QALYsPerdidosDIS[1] / resultados_baseline$CasosTotales
+  #qalys_perdidos_disc_prom_escenario2 = resultados_nuevo$QALYsPerdidosDIS[1] / resultados_nuevo$CasosTotales
+  
+  #34
+  #qalys_perdidos_mp_prom_escenario1 = resultados_baseline$QALYsPerdidosMP[1] / resultados_baseline$CasosTotales
+  #qalys_perdidos_mp_prom_escenario2 = resultados_nuevo$QALYsPerdidosMP[1] / resultados_nuevo$CasosTotales
+  
+  #35
+  #qalys_perdidos_prom_escenario1 = resultados_baseline$QALYsPerdidos[1] / resultados_baseline$CasosTotales
+  #qalys_perdidos_prom_escenario2 = resultados_nuevo$QALYsPerdidos[1] / resultados_nuevo$CasosTotales
+  
+  
+  #41
+  #qalys_perdidos_prom_escenario1 = resultados_baseline$TiempoSinDx[1] / resultados_baseline$CasosHIVDx
+  #qalys_perdidos_prom_escenario2 = resultados_nuevo$TiempoSinDx[1] / resultados_nuevo$CasosHIVDx
+  
+  
+  # ahora diferencias
+  
+  ##Columna total del excel
+  #30
+  AnosVividos_total <- resultados_nuevo$AnosVividos[1]-resultados_baseline$AnosVividos[1]
+  
+  #31
+  qalysVividos_total <- resultados_nuevo$QALYsVividos[1]-resultados_baseline$QALYsVividos[1]
+  
+  #30d
+  AnosVividos_total_d <- resultados_nuevo$AnosVividos[2]-resultados_baseline$AnosVividos[2]
+  
+  #31d
+  qalysVividos_total_d <- resultados_nuevo$QALYsVividos[2]-resultados_baseline$QALYsVividos[2]
+  #incProgress(0.2)[LEAN2 tuve que sacar esto.]
+  #32
+  
+  LY_perdidos_MP_total <- resultados_nuevo$LyPerdidos[1]-resultados_baseline$LyPerdidos[1]
+  LY_perdidos_MP_total_d <- resultados_nuevo$LyPerdidos[2] - resultados_baseline$LyPerdidos[2]
+  
+  #33
+  
+  qalys_perdidos_disc_total <-  resultados_nuevo$QALYsPerdidosDIS[1]-resultados_baseline$QALYsPerdidosDIS[1]
+  qalys_perdidos_disc_total_d <-  resultados_nuevo$QALYsPerdidosDIS[2]-resultados_baseline$QALYsPerdidosDIS[2]
+  #34
+  
+  qalys_perdidos_mp_total <-  resultados_nuevo$QALYsPerdidosMP[1]-resultados_baseline$QALYsPerdidosMP[1]
+  
+  #35
+  
+  qalys_perdidos_total <-  resultados_nuevo$QALYsPerdidos[1]-resultados_baseline$QALYsPerdidos[1]
+  
+  #36
+  
+  muertes_hiv_total <-  resultados_nuevo$MuertesHIV[1]-resultados_baseline$MuertesHIV[1]
+  
+  
+  #37
+  
+  muertes_hiv_prop_total <-  resultados_nuevo$ProporcionMuertesHIV[1]-resultados_baseline$ProporcionMuertesHIV[1]
+  #38
+  
+  casos_hiv_nuevos_total <-  resultados_nuevo$CasosHIV[1]-resultados_baseline$CasosHIV[1]
+  
+  #39
+  nuevos_casos_HIV_dx_total= nuevosCasosHivDx2 - nuevosCasosHivDx
+  #incProgress(0.2)[LEAN2 tuve que sacar esto.]
+  
+  # 40
+  casos_totales_HIV_total <- casosTotalesHIV2 - casosTotalesHIV
+  
+  #41
+  tiempo_sin_dx_total <-  resultados_nuevo$TiempoSinDx[1]-resultados_baseline$TiempoSinDx[1]
+  
+  #42
+  costo_sano_testeo_total <-  resultados_nuevo$CostoSano[1]-resultados_baseline$CostoSano[1]
+  #43
+  costo_prep_total <-  resultados_nuevo$CostoPrep[1]-resultados_baseline$CostoPrep[1]
+  #44
+  costo_hiv_total <-  resultados_nuevo$CostoHIV[1]-resultados_baseline$CostoHIV[1]
+  
+  #45
+  costo_total <-  resultados_nuevo$CostoTotal[1]-resultados_baseline$CostoTotal[1]
+  
+  
+  costo_sano_testeo_total_d <- resultados_nuevo$CostoSano[2]-resultados_baseline$CostoSano[2]
+  costo_prep_total_d <- resultados_nuevo$CostoPrep[2]-resultados_baseline$CostoPrep[2]
+  costo_hiv_total_d <- resultados_nuevo$CostoHIV[2]-resultados_baseline$CostoHIV[2]
+  costo_total_d <- resultados_nuevo$CostoTotal[2] - resultados_baseline$CostoTotal[2]
+  
+  #incProgress(0.2)
+  
+  #46
+  
+  Costo_incremental_Qaly <- costo_total/qalysVividos_total
+  Costo_incremental_Qaly_d <- costo_total_d/qalysVividos_total_d
+  Costo_incremental_AVAD <- costo_total / -(qalys_perdidos_disc_total + LY_perdidos_MP_total)
+  Costo_incremental_AVAD_d <- costo_total_d / -(qalys_perdidos_disc_total_d + LY_perdidos_MP_total_d)
+  
+  #47  
+  Costo_incremental_Ano_vida <- costo_total/ -(LY_perdidos_MP_total)
+  Costo_incremental_Ano_vida_d <- costo_total_d/ -(LY_perdidos_MP_total_d)
+  
+  Costo_Incremental_VidaSalvada <- costo_total / -(muertes_hiv_total)
+  Costo_Incremental_VidaSalvada_d <- costo_total_d / -(muertes_hiv_total)
+  
+  
+  ROI <- -costo_total/costo_prep_total*100
+  
+  ROI_d <- -costo_total_d/costo_prep_total_d*100
+  
+  
+  # Crear una lista para almacenar todos los resultados
+  lista_resultados1 <<- data.frame(
+    #epis
+    casosEvitados = -(casos_hiv_nuevos_total), #Casos de HIV evitados
+    muertesEvitadas = -(muertes_hiv_total), # Muertes evitadas
+    AnosVidaSalvados = -LY_perdidos_MP_total, # Años de vida salvados
+    AnosVidaSalvados_d = -LY_perdidos_MP_total_d,
+    AVADEvitados = -(qalys_perdidos_disc_total + LY_perdidos_MP_total),# Años de vida ajustados por discapacidad evitados
+    AVADEvitados_d = -(qalys_perdidos_disc_total_d + LY_perdidos_MP_total_d),
+    #economicos
+    costoIntervencion = costo_prep_total, #Costo total de la intervención
+    costoIntervencion_d = costo_prep_total_d, #Costo total de la intervención descontado
+    costosEvitados = -(costo_hiv_total + costo_sano_testeo_total), #Costos evitados atribuibles a la intervención
+    costosEvitados_d = -(costo_hiv_total_d + costo_sano_testeo_total_d), #Costos evitados atribuibles a la intervención descontados
+    diferenciaCostos = costo_total,#Diferencia de costos respecto al escenario basal
+    diferenciaCostos_d = costo_total_d, #Diferencia de costos descontados
     
-    # Aplica funcionPrincipal para ambos escenarios
-    incProgress(0.2)
-    funcionPrincipal("Baseline", pais, parametro1)
-    resultados_baseline <<- resultados
-    casosTotalesHIV <- resultados$CasosTotales[1]
-    nuevosCasosHivDx <- resultados$CasosHIVDx[1]
-    incProgress(0.2)
-    funcionPrincipal("Nuevo", pais, parametro2)
-    resultados_nuevo <<- resultados
-    casosTotalesHIV2 <- resultados$CasosTotales[1]
-    nuevosCasosHivDx2 <- resultados$CasosHIVDx[1]
+    RCEIVidaSalvada = Costo_Incremental_VidaSalvada, #Razon de costo-efectividad incremental por vida salvada
+    RCEIVidaSalvada_d = Costo_Incremental_VidaSalvada_d, #Razon de costo-efectividad incremental por vida salvada descontada
+    RCEIAnoVidaSalvado = Costo_incremental_Ano_vida, #Razon de costo-efectividad incremental por año de vida salvado 
+    RCEIAnoVidaSalvado_d = Costo_incremental_Ano_vida_d, #Razon de costo-efectividad incremental por año de vida salvado descontada
+    RCEIAVAD = Costo_incremental_AVAD, #RCEI por año de vida ajustado por discapacidad evitado
+    RCEIAVAD_d = Costo_incremental_Qaly_d, #Razon de costo-efectividad incremental por año de vida ajustado por discapacidad evitado descontada
     
-    # Cálculos de promedios, diferencias, etc.
-    #Promedios
-    if (tipoCohorte == 0) {
-      
-      AñosVividos_prom_escenario1 = resultados_baseline$AñosVividos[1] / parametro1$cohorteSize 
-      AñosVividos_prom_escenario2 = resultados_nuevo$AñosVividos[1] / parametro2$cohorteSize
-      qalysVividos_prom_escenario1 = resultados_baseline$QALYsVividos[1] / parametro1$cohorteSize 
-      qalysVividos_prom_escenario2 = resultados_nuevo$QALYsVividos[1] / parametro2$cohorteSize
-    }
-    
-    #32
-    LY_perdidos_MP_prom_escenario1 = resultados_baseline$LyPerdidos[1] / resultados_baseline$CasosTotales
-    LY_perdidos_MP_prom_escenario2 = resultados_nuevo$LyPerdidos[1] / resultados_nuevo$CasosTotales
-    
-    #33
-    qalys_perdidos_disc_prom_escenario1 = resultados_baseline$QALYsPerdidosDIS[1] / resultados_baseline$CasosTotales
-    qalys_perdidos_disc_prom_escenario2 = resultados_nuevo$QALYsPerdidosDIS[1] / resultados_nuevo$CasosTotales
-    
-    #34
-    qalys_perdidos_mp_prom_escenario1 = resultados_baseline$QALYsPerdidosMP[1] / resultados_baseline$CasosTotales
-    qalys_perdidos_mp_prom_escenario2 = resultados_nuevo$QALYsPerdidosMP[1] / resultados_nuevo$CasosTotales
-    
-    #35
-    qalys_perdidos_prom_escenario1 = resultados_baseline$QALYsPerdidos[1] / resultados_baseline$CasosTotales
-    qalys_perdidos_prom_escenario2 = resultados_nuevo$QALYsPerdidos[1] / resultados_nuevo$CasosTotales
-    
-    
-    #41
-    qalys_perdidos_prom_escenario1 = resultados_baseline$TiempoSinDx[1] / resultados_baseline$CasosHIVDx
-    qalys_perdidos_prom_escenario2 = resultados_nuevo$TiempoSinDx[1] / resultados_nuevo$CasosHIVDx
-    
-    
-    # ahora diferencias
-    
-    ##Columna total del excel
-    #30
-    AñosVividos_total <- resultados_nuevo$AñosVividos[1]-resultados_baseline$AñosVividos[1]
-    
-    #31
-    qalysVividos_total <- resultados_nuevo$QALYsVividos[1]-resultados_baseline$QALYsVividos[1]
-    
-    #30d
-    AñosVividos_total_d <- resultados_nuevo$AñosVividos[2]-resultados_baseline$AñosVividos[2]
-    
-    #31d
-    qalysVividos_total_d <- resultados_nuevo$QALYsVividos[2]-resultados_baseline$QALYsVividos[2]
-    incProgress(0.2)
-    #32
-    
-    LY_perdidos_MP_total <- resultados_nuevo$LyPerdidos[1]-resultados_baseline$LyPerdidos[1]
-    
-    #33
-    
-    qalys_perdidos_disc_total <-  resultados_nuevo$QALYsPerdidosDIS[1]-resultados_baseline$QALYsPerdidosDIS[1]
-    
-    #34
-    
-    qalys_perdidos_mp_total <-  resultados_nuevo$QALYsPerdidosMP[1]-resultados_baseline$QALYsPerdidosMP[1]
-    
-    #35
-    
-    qalys_perdidos_total <-  resultados_nuevo$QALYsPerdidos[1]-resultados_baseline$QALYsPerdidos[1]
-    
-    #36
-    
-    muertes_hiv_total <-  resultados_nuevo$MuertesHIV[1]-resultados_baseline$MuertesHIV[1]
-    
-    
-    #37
-    
-    muertes_hiv_prop_total <-  resultados_nuevo$ProporcionMuertesHIV[1]-resultados_baseline$ProporcionMuertesHIV[1]
-    #38
-    
-    casos_hiv_nuevos_total <-  resultados_nuevo$CasosHIV[1]-resultados_baseline$CasosHIV[1]
-    
-    #39
-    nuevos_casos_HIV_dx_total= nuevosCasosHivDx2 - nuevosCasosHivDx
-    incProgress(0.2)
-    
-    # 40
-    casos_totales_HIV_total <- casosTotalesHIV2 - casosTotalesHIV
-    
-    #41
-    tiempo_sin_dx_total <-  resultados_nuevo$TiempoSinDx[1]-resultados_baseline$TiempoSinDx[1]
-    
-    #42
-    costo_sano_testeo_total <-  resultados_nuevo$CostoSano[1]-resultados_baseline$CostoSano[1]
-    #43
-    costo_prep_total <-  resultados_nuevo$CostoPrep[1]-resultados_baseline$CostoPrep[1]
-    #44
-    costo_hiv_total <-  resultados_nuevo$CostoHIV[1]-resultados_baseline$CostoHIV[1]
-    
-    #45
-    costo_total <-  resultados_nuevo$CostoTotal[1]-resultados_baseline$CostoTotal[1]
-    
-    
-    costo_sano_testeo_total_d <- resultados_nuevo$CostoSano[2]-resultados_baseline$CostoSano[2]
-    costo_prep_total_d <- resultados_nuevo$CostoPrep[2]-resultados_baseline$CostoPrep[2]
-    costo_hiv_total_d <- resultados_nuevo$CostoHIV[2]-resultados_baseline$CostoHIV[2]
-    costo_total_d <- resultados_nuevo$CostoTotal[2]-resultados_baseline$CostoTotal[2]
-    
-    incProgress(0.2)
-    
-    #46
-    
-    Costo_incremental_Qaly <- costo_total/qalysVividos_total
-    Costo_incremental_Qaly_d <- costo_total_d/qalysVividos_total_d
-    
-    
-    #47  
-    Costo_incremental_Año_vida <- costo_total/AñosVividos_total
-    Costo_incremental_Año_vida_d <- costo_total_d/AñosVividos_total_d
-    
-    ROI <- -costo_total/costo_prep_total*100
-    
-    ROI_d <- -costo_total_d/costo_prep_total_d*100
-    
-    # Crear una lista para almacenar todos los resultados
-    lista_resultados1 <<- data.frame(
-      # AñosVividos_prom_escenario1 = AñosVividos_prom_escenario1,
-      # AñosVividos_prom_escenario2 = AñosVividos_prom_escenario2,
-      # qalysVividos_prom_escenario1 = qalysVividos_prom_escenario1,
-      # qalysVividos_prom_escenario2 = qalysVividos_prom_escenario2,
-      # LY_perdidos_MP_prom_escenario1 = LY_perdidos_MP_prom_escenario1,
-      # LY_perdidos_MP_prom_escenario2 = LY_perdidos_MP_prom_escenario2,
-      # qalys_perdidos_disc_prom_escenario1 = qalys_perdidos_disc_prom_escenario1,
-      # qalys_perdidos_disc_prom_escenario2 = qalys_perdidos_disc_prom_escenario2,
-      # qalys_perdidos_mp_prom_escenario1 = qalys_perdidos_mp_prom_escenario1,
-      # qalys_perdidos_mp_prom_escenario2 = qalys_perdidos_mp_prom_escenario2,
-      # qalys_perdidos_prom_escenario1 = qalys_perdidos_prom_escenario1,
-      # qalys_perdidos_prom_escenario2 = qalys_perdidos_prom_escenario2,
-      # tiempo_sin_dx_prom_escenario1 = tiempo_sin_dx_prom_escenario1,
-      # tiempo_sin_dx_prom_escenario2 = tiempo_sin_dx_prom_escenario2,
-      AñosVividos_total = AñosVividos_total,
-      qalysVividos_total = qalysVividos_total,
-      AñosVividos_total_d = AñosVividos_total_d,
-      qalysVividos_total_d = qalysVividos_total_d,
-      LY_perdidos_MP_total = LY_perdidos_MP_total,
-      qalys_perdidos_disc_total = qalys_perdidos_disc_total,
-      qalys_perdidos_mp_total = qalys_perdidos_mp_total,
-      qalys_perdidos_total = qalys_perdidos_total,
-      muertes_hiv_total = muertes_hiv_total,
-      muertes_hiv_prop_total = muertes_hiv_prop_total,
-      casos_hiv_nuevos_total = casos_hiv_nuevos_total,
-      nuevos_casos_HIV_dx_total = nuevos_casos_HIV_dx_total,
-      casos_totales_HIV_total = casos_totales_HIV_total,
-      tiempo_sin_dx_total = tiempo_sin_dx_total,
-      costo_sano_testeo_total = costo_sano_testeo_total,
-      costo_prep_total = costo_prep_total,
-      costo_hiv_total = costo_hiv_total,
-      costo_total = costo_total,
-      costo_sano_testeo_total_d = costo_sano_testeo_total_d,
-      costo_prep_total_d = costo_prep_total_d,
-      costo_hiv_total_d = costo_hiv_total_d,
-      costo_total_d = costo_total_d,
-      Costo_incremental_Qaly = Costo_incremental_Qaly,
-      Costo_incremental_Qaly_d = Costo_incremental_Qaly_d,
-      Costo_incremental_Año_vida = Costo_incremental_Año_vida,
-      Costo_incremental_Año_vida_d = Costo_incremental_Año_vida_d,
-      ROI = ROI,
-      ROI_d = ROI_d
-    )
-    
-    # Convertir el dataframe a formato largo
-    lista_resultados <- stack(lista_resultados1)
-    
-    # Renombrar las columnas
-    names(lista_resultados) <- c("Valor", "Parametro")
-    
-    # Ordena las columnas para que "Parametro" esté primero
-    lista_resultados<- lista_resultados[, c("Parametro", "Valor")]
-    
-  })
+    ROI = ROI, #Retorno sobre inversión
+    ROI_d = ROI_d #Retorno sobre inversión
+  )
+  
+  # Convertir el dataframe a formato largo
+  lista_resultados <<- stack(lista_resultados1)
+  
+  # Renombrar las columnas
+  names(lista_resultados) <<- c("Valor", "Parametro")
+  
+  # Ordena las columnas para que "Parametro" esté primero
+  lista_resultados<<- lista_resultados[, c("Parametro", "Valor")]
+  
+  #})#[LEAN2 tuve que sacar esto.]
   
   
   return(lista_resultados)
 }
+
