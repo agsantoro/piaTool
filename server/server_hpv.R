@@ -3,17 +3,18 @@ server_hpv = function (input, output, session, parameterReactive, scenarios, res
     if (input$intervencion == "Vacuna contra el HPV") {
       if (is.null(input$birthCohortSizeFemale)) {NULL} else {paste(resultados())}
       tagList(
-        fluidRow(
+        fluidRow(class="shadow-xl ring-1 ring-gray-900/5 my-6 py-8",
           column(12,
                  ui_grafico_nuevo_hpv(resultados(),input, output)
                  )
         ),
-        fluidRow(
-          column(12,
-                 ui_grafico_hpv(resultados(),input)
-          )
-        ),
-        fluidRow(
+        br(),
+        # fluidRow(
+        #   column(12,
+        #          ui_grafico_hpv(resultados(),input)
+        #   )
+        # ),
+        fluidRow(class="shadow-xl ring-1 ring-gray-900/5 my-6 py-8",
           column(
             12,
             ui_tabla_hpv(resultados(),input)
@@ -27,19 +28,20 @@ server_hpv = function (input, output, session, parameterReactive, scenarios, res
       )  
     } else if (input$intervencion == "HEARTS") {
       tagList(
-        ui_resultados_hearts(input, output, run_hearts),
-      )
+        ui_resultados_hearts(input, output, run_hearts)
+        )
+      
     } else if (input$intervencion == "Hemorragia postparto") {
       tagList(
         ui_resultados_hpp(input, output, hpp_run),
       )
     } else if (input$intervencion == "Hepatitis C") {
       tagList(
-        fluidRow(
+        fluidRow(class="shadow-xl ring-1 ring-gray-900/5 my-6 py-8",
           column(12,
                  ui_grafico_nuevo_hepC(input, output, hepC_run))
         ),
-        fluidRow(
+        fluidRow(class="shadow-xl ring-1 ring-gray-900/5 my-6 py-8",
           column(12,
                  ui_resultados_hepC(input, output, hepC_run))
         )
@@ -51,11 +53,11 @@ server_hpv = function (input, output, session, parameterReactive, scenarios, res
       )
     } else if (input$intervencion == "Profilaxis Pre Exposición VIH") {
       tagList(
-        fluidRow(
+        fluidRow(class="shadow-xl ring-1 ring-gray-900/5 my-6 py-8",
           column(12,
                 ui_grafico_nuevo_prep(input, output, prep_run))
           ),
-        fluidRow(
+        fluidRow(class="shadow-xl ring-1 ring-gray-900/5 my-6 py-8",
           column(12,
                  ui_resultados_prep(input, output, prep_run))
           )
@@ -604,8 +606,6 @@ server_hpv = function (input, output, session, parameterReactive, scenarios, res
             } else if (sel_intervencion == "Profilaxis Pre Exposición VIH") {
               
               
-              ################################################
-              
               output$tbc_table_saved = renderReactable({
                 
                 if (length(sel_escenario)>0) {
@@ -614,19 +614,24 @@ server_hpv = function (input, output, session, parameterReactive, scenarios, res
                   
                   table$Valor = format(round(table$Valor,1),big.mark = ".",decimal.mark = ",")
                   
-                  cat_epi = 1:14
-                  cat_costos = 15:28
+                  cat_epi = 1:6
+                  cat_costos = 7:nrow(table)
                   
                   table$cat=""
                   table$cat[cat_epi] = "Resultados epidemiológicos"
                   table$cat[cat_costos] = "Resultados económicos"
                   
+                  # ocultamos descontados
+                  table = table[c(1,2,3,5,7,9,11,13,15,17,19),]
+                  
                   columns = list()
                   for (i in sel_escenario) {
                     scn_name = i
-                    table[[i]] = prep_scenarios$savedScenarios[[i]]$Valor
+                    table[[i]] = prep_scenarios$savedScenarios[[i]]$Valor[c(1,2,3,5,7,9,11,13,15,17,19)]
                     table[[i]] = format(round(table[[i]],2),big.mark = ".", decimal.mark = ",")
                   }
+                  
+                  
                   
                   columns[["cat"]] = colDef(name = "Categoría", align = "left")
                   columns[["Parametro"]] = colDef(name = "Parámetro", align = "left")
