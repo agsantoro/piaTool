@@ -691,7 +691,7 @@ get_tbc_params = function (input) {
              PARAMETRO == "Mediana de edad de paciente con tuberculosis:") %>%
     select(VALOR) %>%
     as.numeric()
-  params$cohorte <- 100000
+  params$cohorte <- 10000
   #Utilidad de la población general
   params$utilidad_pob_gral <- inputs_tbc %>%
     filter(PAIS==pais_seleccionado & tipo=="UTILIDADES" & PARAMETRO==inputs_tbc %>%

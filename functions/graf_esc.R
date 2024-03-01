@@ -11,7 +11,7 @@ graf_esc = function(table, output) {
                                      groupPadding = -1,  # Reduce el padding entre grupos de barras
                                      pointPadding = -4
                                      )) %>%  
-        hc_title(text = table[i,1]) %>%
+        hc_title(text = table[i,1], style = list(fontSize = '15px')) %>%
         hc_xAxis(title = list(text = ""), labels = list(enabled = FALSE),
                  startOnTick = FALSE, endOnTick = FALSE) %>% 
         hc_yAxis(title = list(text = "Valor"), labels = list(enabled = TRUE),

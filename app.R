@@ -992,8 +992,7 @@ server <- function(input, output, session) {
   })
   
   observeEvent(input$toggle_avanzado_prep, {
-
-    inputs_hide = names(get_prep_params())[!c(1:24) %in% c(3,5:7,15,17:19,23)]
+    inputs_hide = names(get_prep_params(input$country))[5:length(names(get_prep_params(input$country)))]
     
     
     for (i in inputs_hide) {

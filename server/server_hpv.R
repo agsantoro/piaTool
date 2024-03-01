@@ -51,8 +51,20 @@ server_hpv = function (input, output, session, parameterReactive, scenarios, res
       )
     } else if (input$intervencion == "Profilaxis Pre Exposición VIH") {
       tagList(
-        ui_resultados_prep(input, output, prep_run),
-      )
+        fluidRow(
+          column(12,
+                ui_grafico_nuevo_prep(input, output, prep_run))
+          ),
+        fluidRow(
+          column(12,
+                 ui_resultados_prep(input, output, prep_run))
+          )
+          
+        )
+        
+        
+        
+      
     }
     
   })
@@ -768,6 +780,15 @@ server_hpv = function (input, output, session, parameterReactive, scenarios, res
               ROI[[j]] = round(tbc_scenarios$savedScenarios[[j]]$vDOT[tbc_scenarios$savedScenarios[[j]]$Parametro=="Retorno de Inversión (%)"],1)
               RCEI_AVAD[[j]] = round(tbc_scenarios$savedScenarios[[j]]$vDOT[tbc_scenarios$savedScenarios[[j]]$Parametro=="Razon de costo-efectividad incremental por año de vida ajustado por discapacidad prevenido"],1)
             }
+            
+            for (j in escenarios_seleccionados[escenarios_seleccionados %in% summary_scenarios$table$scenarioName[summary_scenarios$table$intervencion=="Profilaxis Pre Exposición VIH"]]) {
+              AVAD[[j]] = round(prep_scenarios$savedScenarios[[j]]$Valor[prep_scenarios$savedScenarios[[j]]$Parametro=="Años de vida ajustados por discapacidad evitados"],1)
+              COSTO_TOTAL[[j]] = round(prep_scenarios$savedScenarios[[j]]$Valor[prep_scenarios$savedScenarios[[j]]$Parametro=="Costo total de la intervención (USD)"],1)
+              DIF_COSTO[[j]] = round(prep_scenarios$savedScenarios[[j]]$Valor[prep_scenarios$savedScenarios[[j]]$Parametro=="Diferencia de costos respecto al escenario basal (USD)"],1)
+              ROI[[j]] = round(prep_scenarios$savedScenarios[[j]]$Valor[prep_scenarios$savedScenarios[[j]]$Parametro=="Retorno de Inversión (ROI) (%)"],1)
+              RCEI_AVAD[[j]] = round(prep_scenarios$savedScenarios[[j]]$Valor[prep_scenarios$savedScenarios[[j]]$Parametro=="Razón de costo-efectividad incremental (RCEI) por Años de Vida Ajustados por Discapacidad (AVAD) Evitados (descontado)"],1)
+            }
+            
             escenarios = names(unlist(ROI))
             
             indicadores = c(

@@ -31,16 +31,16 @@ probabilidades <- readxl::read_excel("prep/data/probabilidades.xlsx")
 #parametros <- readxl::read_excel("prep/data/parametros.xlsx")
 #costos <- readxl::read_excel("prep/data/Costos.xlsx")
 #probabilidad_muerte <- readxl::read_excel("prep/data/PROBABILIDAD_MUERTE.xlsx")
-probabilidad_muerte <-input_prep %>% filter(PAIS==paisCol & tipo=="PROBABILIDAD_MUERTE") %>% select(VALOR) %>% as.data.frame()
+probabilidad_muerte <-input_prep %>% dplyr::filter(PAIS==paisCol & tipo=="PROBABILIDAD_MUERTE") %>% dplyr::select(VALOR) %>% as.data.frame()
 distribucion_cohortes <- readxl::read_excel("prep/data/DISTRIBUCION_COHORTES.xlsx")
-utilidades2 <- input_prep %>% filter(PAIS==paisCol & tipo=="UTILIDAD") %>% select(VALOR) %>% as.data.frame()
+utilidades2 <- input_prep %>% dplyr::filter(PAIS==paisCol & tipo=="UTILIDAD") %>% dplyr::select(VALOR) %>% as.data.frame()
 #[LEAN 17/1]
 
-#casosIncidentes = input_prep %>%  filter(PAIS==paisCol & PARAMETRO=="Nuevos casos HIV en poblacion") %>% select(VALOR) %>% as.numeric()
-#casosPrevalentes = input_prep %>% filter(PAIS==paisCol & PARAMETRO=="Casos Prevalentes HIV en poblacion") %>% select(VALOR) %>% as.numeric()
+#casosIncidentes = input_prep %>%  dplyr::filter(PAIS==paisCol & PARAMETRO=="Nuevos casos HIV en poblacion") %>% dplyr::select(VALOR) %>% as.numeric()
+#casosPrevalentes = input_prep %>% dplyr::filter(PAIS==paisCol & PARAMETRO=="Casos Prevalentes HIV en poblacion") %>% dplyr::select(VALOR) %>% as.numeric()
 
 
-esperanzaVida = input_prep %>% filter(PAIS==paisCol & PARAMETRO=="Esperanza de Vida") %>% select(VALOR) %>% as.numeric()
+esperanzaVida = input_prep %>% dplyr::filter(PAIS==paisCol & PARAMETRO=="Esperanza de Vida") %>% dplyr::select(VALOR) %>% as.numeric()
 
 
 ## PARAMETRO QUE NO ESTA EN LOS INPUTS
@@ -55,9 +55,9 @@ tasaDescuento = descuento / ciclosPorAno #Calculamos la tasa de descuento trimes
 
 
 uHIV = input_prep %>% 
-  filter(PAIS=="GLOBAL" & tipo=="UTILIDAD" & PARAMETRO=="Early HIV") %>%
-  select(VALOR) %>% as.numeric()
-uHIVTTO = input_prep %>% filter(PAIS=="GLOBAL" & tipo=="UTILIDAD" & PARAMETRO=="TTO") %>%  select(VALOR) %>% as.numeric()
+  dplyr::filter(PAIS=="GLOBAL" & tipo=="UTILIDAD" & PARAMETRO=="Early HIV") %>%
+  dplyr::select(VALOR) %>% as.numeric()
+uHIVTTO = input_prep %>% dplyr::filter(PAIS=="GLOBAL" & tipo=="UTILIDAD" & PARAMETRO=="TTO") %>%  dplyr::select(VALOR) %>% as.numeric()
   
 
 cuHIV = uHIV / ciclosPorAno 
@@ -92,8 +92,8 @@ for (z in 1:5) {
 # '////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 cDiagnostico =input_prep %>% 
-  filter(PAIS==paisCol & tipo=="COSTOS" & PARAMETRO=="DIAGNOSTICO") %>%
-  select(VALOR) %>% as.numeric()
+  dplyr::filter(PAIS==paisCol & tipo=="COSTOS" & PARAMETRO=="DIAGNOSTICO") %>%
+  dplyr::select(VALOR) %>% as.numeric()
 
 
 
@@ -1447,14 +1447,14 @@ get_prep_params = function (paisCol) {
     ###basicos
     duracionPrEP = 0,## parametro basico
     cPrEPTratamiento_anual = input_prep %>% 
-      filter(PAIS==paisCol & tipo=="COSTOS" & PARAMETRO=="PREP_TTO") %>%
-      select(VALOR) %>% 
+      dplyr::filter(PAIS==paisCol & tipo=="COSTOS" & PARAMETRO=="PREP_TTO") %>%
+      dplyr::select(VALOR) %>% 
       as.numeric(),## parametro basico
     
     duracionPrEP_nuevo = 5,## parametro basico
     cPrEPTratamiento_anual_nuevo = input_prep %>% 
-      filter(PAIS==paisCol & tipo=="COSTOS" & PARAMETRO=="PREP_TTO") %>%
-      select(VALOR) %>% 
+      dplyr::filter(PAIS==paisCol & tipo=="COSTOS" & PARAMETRO=="PREP_TTO") %>%
+      dplyr::select(VALOR) %>% 
       as.numeric(),## parametro basico
     
     ####
@@ -1466,52 +1466,52 @@ get_prep_params = function (paisCol) {
     edadFinPrEP = 50,
     
     prevalenciaHIV = input_prep %>%
-      filter(PAIS==paisCol & PARAMETRO=="% de HIV en la poblacion") %>%
-      select(VALOR) %>% as.numeric(),
+      dplyr::filter(PAIS==paisCol & PARAMETRO=="% de HIV en la poblacion") %>%
+      dplyr::select(VALOR) %>% as.numeric(),
     
     ratio = input_prep %>%
-      filter(PAIS==paisCol & PARAMETRO=="Razon Incidencia/Prevalencia") %>%
-      select(VALOR) %>% as.numeric(),
+      dplyr::filter(PAIS==paisCol & PARAMETRO=="Razon Incidencia/Prevalencia") %>%
+      dplyr::select(VALOR) %>% as.numeric(),
    
      pHIVDiagnosticado = input_prep %>% 
-      filter(PAIS==paisCol & PARAMETRO=="% de hiv diagnosticados") %>%
-      select(VALOR) %>% 
+      dplyr::filter(PAIS==paisCol & PARAMETRO=="% de hiv diagnosticados") %>%
+      dplyr::select(VALOR) %>% 
       as.numeric(),
     pHIVTratado =input_prep %>% 
-      filter(PAIS==paisCol & PARAMETRO=="% de hiv tratados") %>%
-      select(VALOR) %>% 
+      dplyr::filter(PAIS==paisCol & PARAMETRO=="% de hiv tratados") %>%
+      dplyr::select(VALOR) %>% 
       as.numeric(),
     
     pHIVControlado = input_prep %>%
-      filter(PAIS==paisCol & PARAMETRO=="% de hiv controlados") %>% 
-      select(VALOR) %>% 
+      dplyr::filter(PAIS==paisCol & PARAMETRO=="% de hiv controlados") %>% 
+      dplyr::select(VALOR) %>% 
       as.numeric(),
     
     #CoSTOS
     cPrEPSeguimiento_anual = input_prep %>% 
-      filter(PAIS==paisCol & tipo=="COSTOS" & PARAMETRO=="PREP_SEGUIMIENTO") %>%
-      select(VALOR) %>%
+      dplyr::filter(PAIS==paisCol & tipo=="COSTOS" & PARAMETRO=="PREP_SEGUIMIENTO") %>%
+      dplyr::select(VALOR) %>%
       as.numeric(),
     
     cPrEPTest_anual = input_prep %>% 
-      filter(PAIS==paisCol & tipo=="COSTOS" & PARAMETRO=="PREP_TEST") %>%
-      select(VALOR) %>% as.numeric(),
+      dplyr::filter(PAIS==paisCol & tipo=="COSTOS" & PARAMETRO=="PREP_TEST") %>%
+      dplyr::select(VALOR) %>% as.numeric(),
     
     cTratamientoHIV_anual =input_prep %>% 
-      filter(PAIS==paisCol & tipo=="COSTOS" & PARAMETRO=="TRATAMIENTO") %>%
-      select(VALOR) %>% as.numeric(),
+      dplyr::filter(PAIS==paisCol & tipo=="COSTOS" & PARAMETRO=="TRATAMIENTO") %>%
+      dplyr::select(VALOR) %>% as.numeric(),
     
     cSeguimientoHIV_anual = input_prep %>% 
-      filter(PAIS==paisCol & tipo=="COSTOS" & PARAMETRO=="SEGUIMIENTO") %>%
-      select(VALOR) %>% as.numeric(),
+      dplyr::filter(PAIS==paisCol & tipo=="COSTOS" & PARAMETRO=="SEGUIMIENTO") %>%
+      dplyr::select(VALOR) %>% as.numeric(),
     
     cConsulta = input_prep %>% 
-      filter(PAIS==paisCol & tipo=="COSTOS" & PARAMETRO=="CONSULTA") %>%
-      select(VALOR) %>% as.numeric(),
+      dplyr::filter(PAIS==paisCol & tipo=="COSTOS" & PARAMETRO=="CONSULTA") %>%
+      dplyr::select(VALOR) %>% as.numeric(),
     
     cComplicacionesHIV = input_prep %>% 
-      filter(PAIS==paisCol & tipo=="COSTOS" & PARAMETRO=="COMPLICACIONES") %>%
-      select(VALOR) %>% as.numeric(),
+      dplyr::filter(PAIS==paisCol & tipo=="COSTOS" & PARAMETRO=="COMPLICACIONES") %>%
+      dplyr::select(VALOR) %>% as.numeric(),
     
    
     descuento = 0.05,
@@ -1525,58 +1525,58 @@ get_prep_params = function (paisCol) {
     edadMaximaInicial_nuevo = 50,
     PrEPuptake_nuevo = 0.5,
     adherenciaPrEP_nuevo = 0.6,
-    eficaciaPrEP_nuevo = 0,
+    eficaciaPrEP_nuevo = 0.86,
     edadFinPrEP_nuevo = 50,
     
     prevalenciaHIV_nuevo = input_prep %>%
-      filter(PAIS==paisCol & PARAMETRO=="% de HIV en la poblacion") %>%
-      select(VALOR) %>% as.numeric(),
+      dplyr::filter(PAIS==paisCol & PARAMETRO=="% de HIV en la poblacion") %>%
+      dplyr::select(VALOR) %>% as.numeric(),
     
     ratio_nuevo = input_prep %>%
-      filter(PAIS==paisCol & PARAMETRO=="Razon Incidencia/Prevalencia") %>%
-      select(VALOR) %>% as.numeric(),
+      dplyr::filter(PAIS==paisCol & PARAMETRO=="Razon Incidencia/Prevalencia") %>%
+      dplyr::select(VALOR) %>% as.numeric(),
     
     pHIVDiagnosticado_nuevo = input_prep %>% 
-      filter(PAIS==paisCol & PARAMETRO=="% de hiv diagnosticados") %>%
-      select(VALOR) %>% 
+      dplyr::filter(PAIS==paisCol & PARAMETRO=="% de hiv diagnosticados") %>%
+      dplyr::select(VALOR) %>% 
       as.numeric(),
     
     pHIVTratado_nuevo = input_prep %>% 
-      filter(PAIS==paisCol & PARAMETRO=="% de hiv tratados") %>%
-      select(VALOR) %>% 
+      dplyr::filter(PAIS==paisCol & PARAMETRO=="% de hiv tratados") %>%
+      dplyr::select(VALOR) %>% 
       as.numeric(),
     
     pHIVControlado_nuevo = input_prep %>%
-      filter(PAIS==paisCol & PARAMETRO=="% de hiv controlados") %>% 
-      select(VALOR) %>% 
+      dplyr::filter(PAIS==paisCol & PARAMETRO=="% de hiv controlados") %>% 
+      dplyr::select(VALOR) %>% 
       as.numeric(),
     
     #CoSTOS
     
     cPrEPSeguimiento_anual_nuevo = input_prep %>% 
-      filter(PAIS==paisCol & tipo=="COSTOS" & PARAMETRO=="PREP_SEGUIMIENTO") %>%
-      select(VALOR) %>%
+      dplyr::filter(PAIS==paisCol & tipo=="COSTOS" & PARAMETRO=="PREP_SEGUIMIENTO") %>%
+      dplyr::select(VALOR) %>%
       as.numeric(),
     
     cPrEPTest_anual_nuevo = input_prep %>% 
-      filter(PAIS==paisCol & tipo=="COSTOS" & PARAMETRO=="PREP_TEST") %>%
-      select(VALOR) %>% as.numeric(),
+      dplyr::filter(PAIS==paisCol & tipo=="COSTOS" & PARAMETRO=="PREP_TEST") %>%
+      dplyr::select(VALOR) %>% as.numeric(),
     
     cTratamientoHIV_anual_nuevo =input_prep %>% 
-      filter(PAIS==paisCol & tipo=="COSTOS" & PARAMETRO=="TRATAMIENTO") %>%
-      select(VALOR) %>% as.numeric(),
+      dplyr::filter(PAIS==paisCol & tipo=="COSTOS" & PARAMETRO=="TRATAMIENTO") %>%
+      dplyr::select(VALOR) %>% as.numeric(),
     
     cSeguimientoHIV_anual_nuevo = input_prep %>% 
-      filter(PAIS==paisCol & tipo=="COSTOS" & PARAMETRO=="SEGUIMIENTO") %>%
-      select(VALOR) %>% as.numeric(),
+      dplyr::filter(PAIS==paisCol & tipo=="COSTOS" & PARAMETRO=="SEGUIMIENTO") %>%
+      dplyr::select(VALOR) %>% as.numeric(),
     
     cConsulta_nuevo = input_prep %>% 
-      filter(PAIS==paisCol & tipo=="COSTOS" & PARAMETRO=="CONSULTA") %>%
-      select(VALOR) %>% as.numeric(),
+      dplyr::filter(PAIS==paisCol & tipo=="COSTOS" & PARAMETRO=="CONSULTA") %>%
+      dplyr::select(VALOR) %>% as.numeric(),
     
     cComplicacionesHIV_nuevo = input_prep %>% 
-      filter(PAIS==paisCol & tipo=="COSTOS" & PARAMETRO=="COMPLICACIONES") %>%
-      select(VALOR) %>% as.numeric(),
+      dplyr::filter(PAIS==paisCol & tipo=="COSTOS" & PARAMETRO=="COMPLICACIONES") %>%
+      dplyr::select(VALOR) %>% as.numeric(),
     
     
     descuento_nuevo = 0.05,
