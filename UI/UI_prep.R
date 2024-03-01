@@ -45,6 +45,35 @@ ui_prep = function (input) {
 }
 
 
+ui_grafico_nuevo_prep = function(input,output,resultados) {
+  table = resultados()
+  table$Parametro = prep_outcomes_labels()
+  
+  if (length(table)>1) {
+    table$Parametro = prep_outcomes_labels()
+    colnames(table) = c("indicador","valor")
+    
+    indicadores = c(
+      'Años de vida ajustados por discapacidad evitados',
+      'Costo total de la intervención (USD)',
+      'Diferencia de costos respecto al escenario basal (USD)',
+      'Retorno de Inversión (ROI) (%)',
+      'Razón de costo-efectividad incremental (RCEI) por Años de Vida Ajustados por Discapacidad (AVAD) Evitados'
+    )
+    table = table[table$indicador %in% indicadores,]
+    renderUI({
+      graf_esc(table,output)
+    })
+    
+    
+    
+    
+  }
+  
+  
+}
+
+
 ui_resultados_prep = function(input,output,resultados) {
   
   prep_run = resultados()
@@ -63,6 +92,10 @@ ui_resultados_prep = function(input,output,resultados) {
       table$cat=""
       table$cat[cat_epi] = "Resultados epidemiológicos"
       table$cat[cat_costos] = "Resultados económicos"
+      
+      # ocultamos descontados
+      table = table[c(1,2,3,5,7,9,11,13,15,17,19),]
+      
       reactable(
         table,
         groupBy = "cat",

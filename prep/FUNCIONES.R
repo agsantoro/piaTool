@@ -223,7 +223,7 @@ crearParametros <- function(linea) {
 funcionCalculos <- function(parametros,pais) {
   
   
-  #withProgress(message = "Ejecutando modelo", value=0, {#[LEAN2 tuve que sacar esto.]
+  withProgress(message = "Ejecutando modelo", value=0, {#[LEAN2 tuve que sacar esto.]
   parametro1 <- list()
   parametro2 <- list()
   
@@ -240,12 +240,15 @@ funcionCalculos <- function(parametros,pais) {
   tipoDuracion=1
   
   # Aplica funcionPrincipal para ambos escenarios
-  #incProgress(0.2)
+  incProgress(0.2)
+  
   funcionPrincipal("Baseline", pais, parametro1)
   resultados_baseline <<- resultados
   casosTotalesHIV <- resultados$CasosTotales[1]
   nuevosCasosHivDx <- resultados$CasosHIVDx[1]
-  #incProgress(0.2)[LEAN2 tuve que sacar esto.]
+  
+  incProgress(0.2)
+  
   funcionPrincipal("Nuevo", pais, parametro2)
   resultados_nuevo <<- resultados
   casosTotalesHIV2 <- resultados$CasosTotales[1]
@@ -297,7 +300,9 @@ funcionCalculos <- function(parametros,pais) {
   
   #31d
   qalysVividos_total_d <- resultados_nuevo$QALYsVividos[2]-resultados_baseline$QALYsVividos[2]
-  #incProgress(0.2)[LEAN2 tuve que sacar esto.]
+  
+  incProgress(0.2) #[LEAN2 tuve que sacar esto.]
+  
   #32
   
   LY_perdidos_MP_total <- resultados_nuevo$LyPerdidos[1]-resultados_baseline$LyPerdidos[1]
@@ -329,7 +334,8 @@ funcionCalculos <- function(parametros,pais) {
   
   #39
   nuevos_casos_HIV_dx_total= nuevosCasosHivDx2 - nuevosCasosHivDx
-  #incProgress(0.2)[LEAN2 tuve que sacar esto.]
+  
+  incProgress(0.2) #[LEAN2 tuve que sacar esto.]
   
   # 40
   casos_totales_HIV_total <- casosTotalesHIV2 - casosTotalesHIV
@@ -353,7 +359,7 @@ funcionCalculos <- function(parametros,pais) {
   costo_hiv_total_d <- resultados_nuevo$CostoHIV[2]-resultados_baseline$CostoHIV[2]
   costo_total_d <- resultados_nuevo$CostoTotal[2] - resultados_baseline$CostoTotal[2]
   
-  #incProgress(0.2)
+  incProgress(0.2)
   
   #46
   
@@ -412,7 +418,7 @@ funcionCalculos <- function(parametros,pais) {
   # Ordena las columnas para que "Parametro" esté primero
   lista_resultados<<- lista_resultados[, c("Parametro", "Valor")]
   
-  #})#[LEAN2 tuve que sacar esto.]
+  })#[LEAN2 tuve que sacar esto.]
   
   
   return(lista_resultados)
