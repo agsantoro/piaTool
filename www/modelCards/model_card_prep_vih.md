@@ -1,40 +1,22 @@
-<style>
-table {
-    font-family: 'Istok Web';
-}
-body {
-        font-family: 'Istok Web', sans-serif;
-    }
 
-</style>
-
-
-<head>
-    <!-- Otros elementos del head aquí -->
-
-    <!-- Enlace a la fuente Istok Web -->
-    <link href="https://fonts.googleapis.com/css2?family=Istok+Web" rel="stylesheet">
-    
-</head>
-
-# Model Card: Profilaxis prexposición oral para la prevención del VIH
+## Model Card: Profilaxis prexposición oral para la prevención del VIH
 
 
 ---
 
 
-## Introducción
+### Introducción
 
 En las últimas décadas, la pandemia del Virus de la Inmunodeficiencia Humana (VIH) ha planteado desafíos considerables a la comunidad científica y médica, instándole a idear estrategias efectivas para prevenir la transmisión de este virus. La profilaxis pre exposición (PrEP, su sigla del inglés _Pre-Exposure Prophylaxis_) oral es una estrategia fundamental en el enfoque de prevención combinada, que abarca un espectro de métodos preventivos adaptados a las necesidades de las personas en riesgo de contraer el virus del VIH. Este enfoque holístico incluye educación, el uso consistente de preservativos, pruebas y tratamiento del VIH, junto con otras estrategias de prevención de enfermedades de transmisión sexual. 
 
 La PrEP oral, que implica que las personas VIH seronegativas utilicen medicamentos antirretrovirales, ha demostrado ser altamente eficaz para reducir significativamente el riesgo de infección por el VIH.<sup><a href="https://paperpile.com/c/usbJYy/ejmXr">1</a></sup> La integración de la PrEP en este enfoque integral permite abordar la epidemia del VIH considerando las diversas necesidades y contextos de las personas en riesgo. Esta estrategia ha demostrado su eficacia, especialmente en poblaciones con un alto riesgo de exposición al virus, como hombres que tienen sexo con hombres (HSH), parejas serodiscordantes y trabajadores sexuales. Aunque la PrEP oral diaria fue recomendada para personas con un riesgo sustancial de VIH por la OMS en 2014, la disponibilidad de PrEP es aún limitada en América Latina.<sup><a href="https://paperpile.com/c/usbJYy/SHlHN">2</a></sup> Dentro de las opciones de PrEP disponibles,<sup><a href="https://paperpile.com/c/usbJYy/ejmXr">1</a></sup> la PrEP oral, que implica la toma de comprimidos, es a la fecha, la más ampliamente disponible en paises de América Latina. 
 
 
-## Nombre del Modelo
+### Nombre del Modelo
 
 PrEP oral para la prevención del VIH.
 
-Descripción del Modelo y Asunciones
+### Descripción del Modelo y Asunciones
 
 Se desarrolló un modelo de transición de estados con ciclos trimestrales para estudiar una población con alto riesgo de infección por VIH. Este modelo utiliza datos de transmisión basados en la prevalencia e incidencia de casos conocidos.<sup><a href="https://paperpile.com/c/usbJYy/a63iD">3</a></sup> A lo largo del tiempo, sigue a una cohorte dinámica de pacientes con prevalencia conocida de VIH, hasta que todos sus miembros iniciales fallezcan o alcancen los 100 años. Esta cohorte incluye individuos de edades distribuidas según lo observado en estudios sobre el uso de PrEP, con nuevas incorporaciones anuales.
 
@@ -45,7 +27,7 @@ La probabilidad de contraer HIV se calcula cada ciclo, basándose en la prevalen
 La detección del VIH depende de la tasa de diagnósticos conocidos en cada país y del promedio de pruebas realizadas anualmente para identificar la enfermedad. Se asume que los individuos que se infectan mientras están bajo la PrEP son diagnosticados al término del ciclo debido a la frecuencia de las pruebas. Las personas infectadas reciben tratamiento en función de la disponibilidad y las prácticas médicas en cada país. Aquellos que no reciben tratamiento, así como los que están en tratamiento pero no logran controlar la infección, enfrentan un mayor riesgo de complicaciones y una probabilidad incrementada de morir a causa del VIH, en comparación con la población general. Por otro lado, la probabilidad de mortalidad para las personas sanas se considera igual a la del promedio de la población general.
 
 
-## Limitaciones y Consideraciones
+### Limitaciones y Consideraciones
 
 El modelo desarrollado para esta intervención tiene limitaciones epidemiológicas importantes que deben considerarse cuidadosamente en su interpretación y aplicación. Su enfoque se centra específicamente en los datos epidemiológicos relativos a HSH, una población clave en el riesgo de transmisión del VIH. Sin embargo, esta focalización puede restringir la aplicabilidad de los resultados a otras poblaciones. Al centrarse exclusivamente en HSH, el modelo no aborda todas las vías de transmisión del VIH ni contempla infecciones por fuera de la cohorte, lo que podría llevar a una subestimación de la efectividad de la PrEP en contextos donde la transmisión heterosexual es común. Esta limitación es particularmente relevante en el caso de las mujeres transgénero, otro grupo crítico en la epidemia del VIH. Es crucial reconocer y tener en cuenta esta limitación al interpretar los resultados del modelo y considerar la necesidad de investigaciones adicionales y adaptaciones para evaluar con mayor precisión la eficacia de la PrEP en diferentes poblaciones en riesgo de infección por el VIH. 
 
@@ -54,7 +36,7 @@ El propósito principal del modelo es evaluar una intervención de prevención, 
 Desde el punto de vista económico, la estimación de costos para países como Costa Rica, Ecuador, México y Perú se realizó mediante un método de estimación indirecta, basado en el PIB de cada país. Esto se debió a la falta de información específica sobre costos en estos lugares. Además, la definición de los regímenes de tratamiento y la cantidad de exámenes realizados durante el seguimiento se basaron en prácticas observadas específicamente en Argentina, asumiendo que estas serían similares en los demás países mencionados.
 
 
-## Descripción General de los Parámetros
+### Descripción General de los Parámetros
 
 
 <table>
@@ -137,6 +119,14 @@ Desde el punto de vista económico, la estimación de costos para países como C
    </td>
   </tr>
   <tr>
+   <td>Razón incidencia/prevalencia
+   </td>
+   <td>Cociente entre los nuevos casos de VIH diagnosticados  y los casos prevalentes en la población.
+   </td>
+   <td>UNAIDS<sup><a href="https://paperpile.com/c/usbJYy/0sobY">9</a></sup>
+   </td>
+  </tr>
+  <tr>
    <td>Personas que viven con VIH y que conocen su diagnóstico (%)
    </td>
    <td>Porcentaje de personas que conocen su diagnóstico entre la población de personas que viven con VIH.
@@ -158,18 +148,6 @@ Desde el punto de vista económico, la estimación de costos para países como C
    <td>Porcentaje de individuos que viven con VIH con carga viral negativa en la población entre la población que conoce su diagnóstico y recibe tratamiento. Es el porcentaje de individuos que han reducido a niveles muy bajos o indetectables la presencia de VIH en sangre gracias al tratamiento, indicando un control efectivo del virus.
    </td>
    <td>UNAIDS<sup><a href="https://paperpile.com/c/usbJYy/0sobY">9</a></sup>
-   </td>
-  </tr>
-  <tr>
-   <td>Probabilidad anual de muerte por VIH
-   </td>
-   <td>Indica la probabilidad anual de que una persona que vive con VIH fallezca debido a la enfermedad o a complicaciones asociadas.
-   </td>
-   <td>Global Burden of Disease<sup><a href="https://paperpile.com/c/usbJYy/ZqBxA">10</a></sup> 
-<p>
-CEPAL<sup><a href="https://paperpile.com/c/usbJYy/NT7y3">11</a></sup>
-<p>
-UNAIDS<sup><a href="https://paperpile.com/c/usbJYy/0sobY">9</a></sup>
    </td>
   </tr>
 </table>
@@ -283,7 +261,7 @@ Valores en USD oficial a tasa de cambio nominal de cada país para octubre de 20
 
 
 
-## Lista de indicadores
+### Lista de indicadores
 
 **Resultados epidemiológicos **
 
@@ -340,7 +318,7 @@ Valores en USD oficial a tasa de cambio nominal de cada país para octubre de 20
 
 
 
-## Referencias
+### Referencias
 
 
     1.	[Health Organization W. Differentiated and simplified pre-exposure prophylaxis for HIV prevention: update to WHO implementation guidance: technical brief. Accessed December 8, 2023. https://apps.who.int/iris/bitstream/handle/10665/360861/9789240053694-eng.pdf?sequence=1](http://paperpile.com/b/usbJYy/ejmXr)
