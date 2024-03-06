@@ -151,53 +151,19 @@ ui_resultados_tbc = function(input,output,resultados) {
   })
   
   tagList(
-    fluidRow(
+    fluidRow(class="shadow-xl ring-1 ring-gray-900/5 my-6 py-8",
       column(12,
              uiOutput("tbc_grafico"))
+    ),
+    fluidRow(class="shadow-xl ring-1 ring-gray-900/5 my-6 py-8",
+      column(12,
+             reactableOutput("tbc_summaryTable")
+             )
     )
-    ,
-    reactableOutput("tbc_summaryTable")
+    
+    
   )
-  # hpp_run = resultados()
-  # 
-  # output$hpp_summaryTable = renderReactable({
-  #   
-  #   if (length(hpp_run)>1) {
-  #     browser()
-  #     table = hpp_run
-  #     table$Valor = format(round(table$Valor,1),big.mark = ".",decimal.mark = ",")
-  #     
-  #     cat_epi = c(2,4:8)
-  #     cat_costos = c(1,3, 9:12)
-  #     
-  #     table$cat=""
-  #     table$cat[cat_epi] = "Resultados epidemiológicos"
-  #     table$cat[cat_costos] = "Resultados económicos"
-  #     reactable(
-  #       table,
-  #       groupBy = "cat",
-  #       defaultExpanded = T,
-  #       pagination = F,
-  #       defaultColDef = colDef(
-  #         align = "center",
-  #         minWidth = 70,
-  #         headerStyle = list(background = "#236292", color = "white")
-  #       ),
-  #       columns = list(
-  #         cat = colDef(name = "Categoría", align = "left"),
-  #         Indicador = colDef(name = "Indicador", align = "left"),
-  #         Valor = colDef(name = "Valor", align = "right")
-  #       ),
-  #       bordered = TRUE,
-  #       highlight = TRUE
-  #     )
-  #   }
-  #   
-  # })
-  # 
-  # tagList(
-  #   reactableOutput("hpp_summaryTable")
-  # )
+  
   
 }
 

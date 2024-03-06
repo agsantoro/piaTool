@@ -219,6 +219,8 @@ ui_tabla_hpv = function (resultados, input) {
       table[table$cat=="Resultados económicos",]
     )
     
+    table = table[,c("cat", "Outcomes","Undiscounted")]
+    
     reactable(
       table,
       groupBy = "cat",
@@ -231,9 +233,8 @@ ui_tabla_hpv = function (resultados, input) {
       ),
       columns = list(
         cat = colDef(name = "Categoría", align = "left"),
-        Outcomes = colDef(name = "Resultados", align = "left"),
-        Undiscounted = colDef(name = "Sin descontar", align = "right"),
-        Discounted = colDef(name = "Descontados", align = "right")
+        Outcomes = colDef(name = "Indicador", align = "left"),
+        Undiscounted = colDef(name = "Valor", align = "right")
       ),
       bordered = TRUE,
       highlight = TRUE

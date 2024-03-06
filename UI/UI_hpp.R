@@ -232,10 +232,12 @@ ui_resultados_hpp = function(input,output,resultados) {
   })
   
   tagList(
-    fluidRow(
+    fluidRow(class="shadow-xl ring-1 ring-gray-900/5 my-6 py-8",
       column(12,
              uiOutput("hpp_grafico")
-             ),
+             )
+      ),
+    fluidRow(class="shadow-xl ring-1 ring-gray-900/5 my-6 py-8",
       column(12,
              reactableOutput("hpp_summaryTable"))
     )

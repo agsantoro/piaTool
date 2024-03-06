@@ -527,19 +527,19 @@ ui_resultados_hearts = function(input,output,resultados) {
     })
     
     tagList(
-      fluidRow(
+      fluidRow(class="shadow-xl ring-1 ring-gray-900/5 my-6 py-8",
         column(12,
                uiOutput("hearts_grafico"))
       ),
-      fluidRow(
-        column(6,
-               plotlyOutput("hearts_grafico_1")),
-        column(6,
-               plotlyOutput("hearts_grafico_2"))
-      ),
-      br(),
-      br(),
-      fluidRow(
+      # fluidRow(
+      #   column(6,
+      #          plotlyOutput("hearts_grafico_1")),
+      #   column(6,
+      #          plotlyOutput("hearts_grafico_2"))
+      # ),
+      # br(),
+      # br(),
+      fluidRow(class="shadow-xl ring-1 ring-gray-900/5 my-6 py-8",
         column(12,
                reactableOutput("hearts_resultados"))
         

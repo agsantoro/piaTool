@@ -7,7 +7,7 @@ graf_esc = function(table, output) {
       
       hchart(object = table[i,], type = "bar", hcaes(x = indicador, y = valor)) %>%
         hc_colors(colors = c("#339BDF")) %>%
-       
+        
         hc_title(text = table[i,1], style = list(fontSize = '14px', fontFamily = 'sans-serif', fontWeight = 'bold')) %>%
         hc_xAxis(title = list(text = ""), labels = list(enabled = FALSE),
                  startOnTick = FALSE, endOnTick = FALSE) %>%
@@ -27,7 +27,7 @@ graf_esc = function(table, output) {
         hc_add_theme(hc_theme_hcrt())  # Aplica el tema 'hcrt'
       
       
-    
+      
       # titulo <- paste(table[i, "indicador"])
       # table$valor_formateado <- sapply(table$valor, function(x) {
       #   format(x, big.mark = ",", decimal.mark = ".", nsmall = 1)
